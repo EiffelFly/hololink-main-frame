@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+/lib/
+
+# Some python script files
+/bin/
+/Scripts/
+
+# Virtual environment config file
+/pyvenv.cfg
+
+# Mac things
+.DS_Store
+
+# Django things
+db.sqlite3
+**/migrations/*
+!**/migrations/__init__.py
+
+# VSCode things
+.vscode/settings.json
+
+# IIS things
+web.config
+
+# for this project only
+/hololink/secret/
+/hololink/static/
+/hololink/nginx/
+/hololink/uwsgi/
+
+# ubuntu 20.04 things
+share/python-wheels/ 
+/lib64

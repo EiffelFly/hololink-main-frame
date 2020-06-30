@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+    <div id='graph_overview'></div>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+
+    .links line {
+      stroke :#999;
+    }
+    
+    .nodes circle {
+      pointer-events: all;
+      stroke-width: 0px;
+      stroke:none;
+    }
+    
+    div {
+        background-color: #333;
+        width: 1500px;
+        height: 1500px;
+        position: fixed;
+    }
+
+    body {
+        position: fixed;
+    }
+
+</style>
+<script>
+    
+    var svg = d3.select("#graph_overview")
+        .append('svg')
+            .attr("width", '1500px')
+            .attr('height', '1500px')
+            .call(d3.zoom().on("zoom", function () {
+                svg.attr("transform", d3.event.transform)
+            }))
+            .append('g')
+
+    var width = 1500
+        height = 1500;
+
+    var simulation = d3.forceSimulation() //初始化force
+        .force("link", d3.forceLink().id(function(d) { return d.id; })) //可以使用自己定義的node-id來指定連結而不用使用編號
+        .force("charge", d3.forceManyBody().strength(-450))//開始限定force運行的方式
+        .force("r", d3.forceRadial(function(d){
+            if (d.level == 'tag' && d.connection>=3){
+                return 300
+            }
+            else if (d.level == 'tag' && d.connection<3){
+                return 600
+            }
+            else if (d.level == 'article'){
+                return 500
+            }
+            else if (d.level == 'media'){
+                return 700
+            }
+
+        }, width/2, height/2).strength(function(d){
+            if (d.level == 'tag' && d.connection>=3){
+                return 0
+            }
+            else if (d.level == 'tag' && d.connection<3){
+                return 1
+            }
+            else if (d.level == 'article'){
+                return 1
+            }
+            else {return 1}
+        }))
+            
+            /*
+            .strength(function(d){
+                if (d.level == 'article'){return 1}
+                else if(d.level == 'tag' && d.connection > 2){return 1}
+                else if(d.level == 'tag' && d.connection == 1){return 1}
+                else {return 0}
+            })*/
+        
+        //.force("center", d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide(1));
+
+    function getNodeColor(node) {
+        if (node.level == "tag"){return'#FCA311'}
+        else if (node.level == "article") {return '#FFFFFF'}
+        else {return '#00b4d8'}
+    }
+    function getNodeSize(node){
+        if (node.connection){
+            return node.connection*5
+        }
+        else if (node.tagAmount){
+            return node.tagAmount/2
+        }
+        else {return 10}
+    }
+
+    function getNodeTextPosition(node){
+        if (node.level == "tag"){return "middle"}
+        else if (node.level == "article"){return "end"}
+    }
+
+    function getTextDx(node){
+        if (node.level == "tag"){return "0"}
+        else if (node.level == "article"){return "1em"}
+    }
+
+    function getTextDy(node){
+        if (node.level == "tag"){return "0.3em"}
+        else if (node.level == "article"){return "0"}
+
+    }
+
+    function getTextColor(node){
+        if (node.level == "tag"){return "black"}
+        else if (node.level == "article"){return "white"}
+    }
+
+    function getTextFontSize(node){
+        if (node.level == "tag"){return node.connection*2}
+        else if (node.level == "article"){return 8}
+    }
+
+
+    d3.json('/static/China_India.json', function(error,graph){
+        console.log(graph)
+        if (error) {
+            console.log(error);
+        }
+
+        var linkElements = svg.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(graph.links)
+            .enter().append("line");
+
+        var nodeElements = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll("circle")
+            .data(graph.nodes)
+            .enter().append("circle")
+                .attr("r", getNodeSize)
+                .attr('fill', getNodeColor)
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+        var textElements = svg.append('g')
+            .attr("class", "texts")
+            .selectAll("text")
+            .data(graph.nodes)
+            .enter().append('text')
+                .text(node => node.id)
+                .attr('text-anchor', getNodeTextPosition)
+                .attr('dx', getTextDx)
+                .attr('dy', getTextDy)
+                .attr('font-size', getTextFontSize)
+                .style('fill', getTextColor)
+
+    
+        //讓滑鼠指向的 node 會浮現出它的 title
+        nodeElements.append("title")
+            .text(function(d) { return d.id; });
+
+        simulation
+            .nodes(graph.nodes)
+            .on("tick", ticked);
+        
+        simulation.force("link")
+            .links(graph.links);
+
+        function ticked() {
+            linkElements
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+            nodeElements
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+
+            textElements
+                .attr("x", node => node.x)
+                .attr("y", node => node.y)
+        };
+    });
+    
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+
+</script>

@@ -1,0 +1,26 @@
+{% extends 'registration/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="height: 4rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="text-center">
+                {% include 'brand.html' %}
+                <h1>{% trans 'Hololink' %}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 2rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 21.6rem">
+            <a class="btn btn-block btn-dark" href="{% url 'sign_up_with_email' %}">{% trans 'Sign up with Email.' %}</a>
+            <a class="btn btn-block border-dark text-secondary" href="#" data-toggle="modal" data-target="#modalAbout">{% trans 'My Email has been used.' %}</a>
+        </div>
+    </div>
+    <div class="row" style="height: 8rem"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'article/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 1.5rem;">
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto border-j3y-theme-1 bg-j3y-theme-1" style="padding: 1.5rem; min-width: 21.6rem;">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.errors|length == 1 %}
+                <p class="text-danger">{% trans "Please correct the error below." %}</p>
+                {% elif form.errors|length > 1 %}
+                <p class="text-danger">{% trans "Please correct the errors below." %}</p>
+                {% endif %}
+                {% for error in form.non_field_errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+                {% for field in form %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        {{ field.label_tag }}
+                        <br>
+                        {% if not field.errors %}
+                        {% render_field field class+='form-control-md' %}
+                        {% else %}
+                        {% render_field field class+='form-control border-danger' %}
+                        {% for error in field.errors %}
+                        <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-primary btn-block">{% trans 'Change' %}</button>
+                    </div>
+                    <div class="form-group col">
+                        <a href="{% url 'article:change_list' %}"
+                            class="btn btn-secondary btn-block">{% trans 'Get back' %}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 1.5rem;">
+        </div>
+    </div>
+</div>
+{% endblock %}

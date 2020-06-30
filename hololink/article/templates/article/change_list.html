@@ -1,0 +1,77 @@
+{% extends 'article/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="height: 4rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            {% if not articles %}
+            <div style="text-align: center;padding: 2rem;">
+                <p>{% trans "You don't have any article to show. " %}<a class="text-primary"
+                        href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a></p>
+            </div>
+            {% else %}
+            <div class="row my-0 mx-1">
+                <div class="py-2 px-1 ml-auto">
+                    <a class="btn btn-dark btn-block" style="width: 8rem; border-radius: .5rem"
+                        href="{% url 'article:add' %}">{% trans 'Add' %}{% trans '+' %}</a>
+                </div>
+            </div>
+            <div class="row my-0 mx-1">
+                <div class="py-2 px-1 mr-auto">
+                    <input type="text" class="form-control" id="filter-article" placeholder="{% trans 'Search..' %}">
+                </div>
+            </div>
+            <table class="table table-bordered border-light table-hover table-responsive article" id="table-article">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Action' %}</th>
+                        <th>{% trans 'Name' %}</th>
+                        <th>{% trans 'Content' %}</th>
+                        <th>{% trans 'From URL' %}</th>
+                        <th>{% trans 'Recommendation' %}</th>
+                        <th>{% trans 'Project' %}</th>
+                        <th>{% trans 'Created at' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                    <tr>
+                        <td>
+                            <div class="dropdown show">
+                                <button class="btn btn-light bg-light dropdown-toggle" href="#" role="button"
+                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    {% trans 'Choose' %}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item"
+                                        href="{% url 'article:change' id=article.id %}">{% trans 'Change' %}</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'article:delete' id=article.id %}">{% trans 'Delete' %}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ article.name }}</td>
+                        <td>{{ article.content }}</td>
+                        <td>{{ article.from_url }}</td>
+                        <td>{{ article.recommendation }}</td>
+                        <td>{{ article.project }}</td>
+                        <td>{{ article.created_at|date:"Y-m-d" }} {{ article.created_at|time:"H:i:s" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row" style="height: 8rem"></div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{% static 'js/article/change_list.js' %}"></script>
+{% endblock %}

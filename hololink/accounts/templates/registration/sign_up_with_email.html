@@ -1,0 +1,55 @@
+{% extends 'registration/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="height: 4rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="text-center">
+                {% include 'brand.html' %}
+                <h1>{% trans 'Hololink' %}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 2rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 21.6rem">
+            <p>{% trans "Enter your email address, and we'll email instructions for setting a new one." %}</p>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.errors|length == 1 %}
+                <p class="text-danger">{% trans "Please correct the error below." %}</p>
+                {% elif form.errors|length > 1 %}
+                <p class="text-danger">{% trans "Please correct the errors below." %}</p>
+                {% endif %}
+                {% for error in form.non_field_errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+                {% for field in form %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        {% if not field.errors %}
+                        {% render_field field class+='form-control' placeholder=field.label %}
+                        {% else %}
+                        {% render_field field class+='form-control border-danger' placeholder=field.label %}
+                        {% for error in field.errors %}
+                        <small class="text-danger d-block">{{ error }}</small>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-danger btn-block">{% trans 'Reset' %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="height: 8rem"></div>
+</div>
+{% endblock %}

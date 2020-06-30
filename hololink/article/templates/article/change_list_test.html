@@ -1,0 +1,57 @@
+{% extends 'article/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container-fluid" style="max-width: 800px;">
+    <div class="row" style="height: 4rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col">
+            {% if not articles %}
+            <div style="text-align: center;padding: 2rem;">
+                <p>{% trans "You don't have any article to show. " %}<a class="text-primary"
+                        href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a></p>
+            </div>
+            {% else %}
+                <hr>
+                {% for article in articles %}
+                <div class="article_container d-block">
+                    <div class="row"> 
+                        <div class="article_title col-10 font-weight-bold" style="font-size: 18px;">
+                            {{ article.name }}
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="article_url col-8">
+                            <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" style="font-size: 10px; color: gray;">{{ article.from_url|truncatechars:60 }}</a>
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-10" style="font-size: 10px; color: gray;">
+                            {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row" style="height: 8rem"></div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{% static 'js/article/change_list.js' %}"></script>
+{% endblock %}
