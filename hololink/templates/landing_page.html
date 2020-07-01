@@ -4,6 +4,20 @@
 {% load widget_tweaks %}
 
 {% block content %}
+<style>
+    .howto_subheader {
+        font-weight: 500; 
+        font-size: 15px; 
+        font-family:'Noto Sans TC', sans-serif;
+    }
+
+    .howto_header {
+        font-weight: 900; 
+        font-size: 18px; 
+        font-family:'Noto Sans TC', sans-serif;
+    }
+
+</style>
 <div class="container-fluid" style="padding:0px;">
     <div class="header_container">
         <div class="row" style="height: 18rem"></div>
@@ -32,15 +46,48 @@
         </div>
         <div class="row" style="height: 18rem"></div>
     </div>
-    <div class="howto_container" style="background-color: #BFB9B8;">
+    <div class="howto_container" style="background-color: #BFB9B8; padding: 2rem 0">
         <div class="row" style="padding-left: 10rem;">
-            <h2>How it works</h2>
+            <h2 style="font-size: 2rem; font-family:'Noto Sans TC', sans-serif; font-weight: 900;">How it works</h2>
         </div>
-        <div class="row">
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col"></div>
+        <div class="row" style="height: 2rem"></div>
+        <div class="row d-flex flex-row" style="padding:0 10rem;">
+            <div class="col">
+                <div class="row"></div>
+                <div class="row" style="width:80%;">
+                    <h3 class="howto_header text-center">Collect all, don't need to bother which article should you take the note anymore</h3>
+                </div>
+                <div class="row" style="width:80%;">
+                    <h4 class="howto_subheader text-center">Use browser extension upload the article into Hololink, we will collect the right keyword for you</h4>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row"></div>
+                <div class="row" style="width:80%;">
+                    <h3 class="howto_header text-center">Relate everything, start small but end with big</h3>
+                </div>
+                <div class="row" style="width:80%;">
+                    <h4 class="howto_subheader text-center">Relate every keyword together in the graph database. You can search and memorize any meaningful information in your private graph database</h4>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row"></div>
+                <div class="row" style="width:80%;">
+                    <h3 class="howto_header text-center">Gain Insight, boost your efficiency of generating knowledge</h3>
+                </div>
+                <div class="row" style="width:80%;">
+                    <h4 class="howto_subheader text-center">Pick one topic, we will show you the bigger picture of it</h4>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row"></div>
+                <div class="row" style="width:80%;">
+                    <h3 class="howto_header text-center">Share & Export, share your knowledge with anyone</h3>
+                </div>
+                <div class="row" style="width:80%;">
+                    <h4 class="howto_subheader text-center">You can share your private graph anywhere, anytime with anyone. Knowledge is worth sharing.</h4>
+                </div>
+            </div>
         </div>
     </div>
 </div>
