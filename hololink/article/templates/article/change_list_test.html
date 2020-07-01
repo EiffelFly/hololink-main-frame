@@ -34,17 +34,17 @@
 
                         </div>
                     </div>
-                    <div class="row mt-1 justify-content-center d-flex flex-row" style="height: 30px; max-width: 100%;">
-                        <div class="article_created_at col-8" style="font-size: 10px; color: gray;">
+                    <div class="row mt-1 d-flex flex-row" style="height: 38px; max-width: 100%;">
+                        <div class="article_created_at col-8 m-auto" style="font-size: 10px; color: gray;">
                             {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
                         </div>
                         <div class="col">
-                            <div class="row">
-                                <div class="col" style="padding: 10px; background-color: indigo; border-radius: 5px;">
-
+                            <div class="row" style="height: 100%;">
+                                <div class="col d-flex justify-content-center align-items-center" style="margin: 3px; background-color: #BFB9B8; border-radius: 5px;">
+                                    <p class="text-center m-auto" style="color: black; font-weight: 400; font-size: 12px;">Stellar - {{article.stellar_keyword_amount}}</p> 
                                 </div>
-                                <div class="col">
-
+                                <div class="col d-flex justify-content-center align-items-center" style="margin: 3px; background-color: #BFB9B8; border-radius: 5px;">
+                                    <p class="text-center m-auto" style="color: black; font-weight: 400; font-size: 12px;">Basestone - {{article.basestone_keyword_amount}}</p> 
                                 </div>
                             </div>
                         </div>

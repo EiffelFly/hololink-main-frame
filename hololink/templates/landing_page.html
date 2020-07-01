@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="height: 2rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 48rem;">
+            <h2>Tired of taking note while reading and organizing information through separate documents?</h2>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container-fluid">
+    <div class="row" style="height: 2rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 18rem;">
+            <img src="{% static 'img/header_no_text.png' %}" class="img-fluid" alt="Responsive image">
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 48rem;">
+            <p>
+                <hr>
+                <h1 class="text-dark" style="text-align: center; font-size: 4.5rem;">{% trans 'Hololink' %}</h1>
+                <hr>
+            </p>
+            <p>
+                <h5 class="text-secondary" style="text-align: center;">{% trans 'Gather, relate, store and share.' %}</h5>
+            </p>
+        </div>
+    </div>
+    <div class="row" style="height: 6rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 2rem;width: 48rem;">
+            <p>
+                <h1 class="text-dark" style="text-align: center;">{% trans 'Built for everyone' %}</h1>
+                <br>
+            </p>
+            <p>
+                <h5 class="text-secondary">{% trans "It is a tool, helping you generate a series of structured data and useful analysis from your reading." %}
+                </h5>
+            </p>
+        </div>
+    </div>
+    <div class="row" style="height: 6rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 2rem;width: 48rem;">
+            <p>
+                <h1 class="text-dark" style="text-align: center;">{% trans 'Note without noting' %}</h1>
+                <br>
+            </p>
+            <p>
+                <h5 class="text-secondary">{% trans "You don't have to take note or to remember anything. You just do what you used to do, and we'll take care of the rest." %}
+                </h5>
+            </p>
+        </div>
+    </div>
+    <div class="row" style="height: 6rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 2rem; width: 48rem;">
+            <p>
+                <h1 class="text-dark" style="text-align: center;">{% trans 'Join us' %}</h1>
+            </p>
+            <p>
+                <h5 class="text-secondary" style="text-align: center;">{% trans 'Free yourself from taking note.' %}</h5>
+            </p>
+        </div>
+    </div>
+    <div class="row" style="height: 6rem;"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 2rem;width: 48rem;">
+            <p>
+                <h1 class="text-dark" style="text-align: center;">{% trans 'What does it look like?' %}</h1>
+                <br>
+            </p>
+            <p>
+                <h3 class="text-secondary text-center">
+                    <a class="text-decoration-none" href="{% url 'd3demo' %}">{% trans "See Demo" %}</a>
+                </h3>
+            </p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="padding: 2rem; width: 28rem;">
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        {% render_field field class+='form-control' placeholder=field.label style='text-align: center' required='true' %}
+                        {% if field.errors %}
+                        <p>{{ field.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-row">
+                    <div class="form-group col">
+                        {{ form.non_field_errors }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <button type="submit"
+                            class="btn btn-block btn-dark">{% trans 'Sign up' %}</button>
+                    </div>
+                </div>
+                <p class="text-secondary" style="text-align: center;">{% trans 'Already got an account? ' %}<a href="{% url 'login' %}" class="text-primary text-decoration-none">{% trans 'Login' %}</a>{% trans ' here.' %}</p>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="height: 12rem;"></div>
+</div>
+{% endblock %}
