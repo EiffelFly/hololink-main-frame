@@ -63,13 +63,13 @@ def sign_up_with_email(request):
             message = (
                 f'Hi {username},\n'
                 '\n'
-                'You have created a new account on Reminder. You could login and change it on Reminder later.\n'
+                'You have created a new account on Hololink. You could login and change it on Hololink later.\n'
                 '\n'
                 f'Your account: {username}\n'
                 f'Your password: {random_uuid_password}\n'
                 '\n'
                 'Sincerely,\n'
-                'Reminder\n'
+                'Hololink\n'
             )
             send_mail(
                 subject=subject,
