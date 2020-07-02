@@ -25,7 +25,7 @@ class Profile(models.Model):
 '''
     In order to use this kind of method, we are going to define
     "signal" to make model-Profile created/updated when model-User
-    created/updated
+    created/updated.
 '''
 
 @receiver(post_save, sender=User)
