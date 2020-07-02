@@ -16,10 +16,12 @@ class Profile(models.Model):
     stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
         null=True,
+        blank=True,
     )
     basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
         null=True,
+        blank=True,
     )
 
 '''
@@ -31,7 +33,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, stellar_keyword_sum=instance.profile.stellar_keyword_sum, basestone_keyword_sum=instance.profile.basestone_keyword_sum)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
