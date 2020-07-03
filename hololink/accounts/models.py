@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.admin.models import LogEntry
 
 '''
     We want to store extra information in existing User model 
@@ -15,13 +16,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
-        null=True,
-        blank=True,
+        default=0,
+        blank=True
     )
     basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
-        null=True,
-        blank=True,
+        default=0,
+        blank=True
     )
 
 '''
@@ -33,7 +34,9 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance, stellar_keyword_sum=instance.profile.stellar_keyword_sum, basestone_keyword_sum=instance.profile.basestone_keyword_sum)
+        if not getattr(instance, "profile", None):
+            Profile.objects.create(user=instance)
+        
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
