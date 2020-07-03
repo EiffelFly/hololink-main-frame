@@ -2,10 +2,13 @@ from django.contrib import admin
 from .models import Article
 
 
+    
+
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['hash', 'name', 'from_url_shortcut',
+    list_display = ['name', 'hash', 'from_url_shortcut',
                     'content_shortcut', 'created_by', 'created_at', ]
 
+    filter_horizontal = ('project',)
     # We don't display all the from_url
     def from_url_shortcut(self, obj):
         if len(obj.from_url) > 64:

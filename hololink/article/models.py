@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from project.models import Project
 from django.utils.translation import gettext_lazy as _
 import jsonfield
 
@@ -51,6 +52,12 @@ class Article(models.Model):
 
     ner_output = jsonfield.JSONField(
         verbose_name=_('NER Output'),
+        blank=True,
+    )
+
+    project = models.ManyToManyField(
+        Project,
+        verbose_name=_('Project'),
         blank=True,
     )
 
