@@ -34,11 +34,7 @@ class Article(models.Model):
         verbose_name=_('Recommendation'),
         default=False,
     )
-    project = models.ManyToManyField(
-        verbose_name=_('Project'),
-        to='Project',
-        blank=True,
-    )
+
     created_by = models.ForeignKey(
         verbose_name=_('Created by'),
         to=settings.AUTH_USER_MODEL,
@@ -75,11 +71,4 @@ class Article(models.Model):
     )
 
 
-class Project(models.Model):
-
-    name = models.CharField(
-        verbose_name=_('Name'),
-        max_length=256,
-        blank=True,
-    )
 
