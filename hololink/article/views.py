@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import hashlib
 from .models import Article
 from .forms import ArticleForm, ArticleChangeForm
+from django.contrib.auth.models import User
 
 
 def now():
@@ -22,6 +23,8 @@ def sha256_hash(content):
 def change_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
+    #user = get_object_or_404(User, username=username)
+    user = User.objects.get(username=request.user.username)
     articles = Article.objects.filter(created_by=request.user)
     for article in articles:
         if len(article.content) > 50:
