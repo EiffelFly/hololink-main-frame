@@ -9,7 +9,21 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 import uuid
 from .forms import SignUpWithEmailForm
+from django.contrib.auth.views import LoginView
 
+
+class CustomLoginView(LoginView):
+    template_name = 'base.html' 
+    redirect_field_name = None
+    
+    def get_success_url(self):
+        url = self.get_redirect_url() #method essential
+        return url or redirect(reverse('account_user_dashboard', kwargs={'username': self.username}))
+
+
+def user_dashboard(request, username):
+    print('iamhere')
+    return render(request, 'user_dashboard.html')
 
 def sign_up(request):
     """

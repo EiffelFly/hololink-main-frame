@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from .views import index, d3demo
+from .views import index, d3demo, user_dashboard
 from rest_framework import routers
 from api import views
 

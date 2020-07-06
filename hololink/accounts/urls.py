@@ -4,13 +4,13 @@ from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
     PasswordResetCompleteView)
-from .views import sign_up, sign_up_with_account_password, sign_up_with_email
+from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, user_dashboard
 from .forms import EmailValidationOnForgotPassword
 
 
 # we use many built-in auth-related views from django.contrib.auth.urls
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('password-change/', PasswordChangeView.as_view(), name='password_change'),
     path('password-change/done/', PasswordChangeDoneView.as_view(), name='password_change_done'),
@@ -18,7 +18,7 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view(form_class=EmailValidationOnForgotPassword), name='password_reset'),
     path('password-reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),    
 ]
 
 # some custom views

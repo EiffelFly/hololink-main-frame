@@ -65,3 +65,8 @@ def index(request):
         return render(request, 'landing_page.html', context)
     else:
         return render(request, 'user_dashboard.html', context)
+
+def user_dashboard(request, username):
+    return render(request, 'user_dashboard.html')
+
+
