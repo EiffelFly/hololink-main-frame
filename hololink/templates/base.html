@@ -117,39 +117,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="togglerTarget">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        {% trans 'Article' %}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'article:change_list' %}">{% trans 'View List' %}</a>
-                        <a class="dropdown-item" href="{% url 'article:add' %}">{% trans 'Add' %}</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        {% trans 'Help' %}
-                    </a>
-                    <div class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" data-toggle="modal" href="#" data-target="#modalHow">
-                            {% trans 'How' %}
-                        </a>
-                        <a class="dropdown-item" data-toggle="modal" href="#" data-target="#modalWhy">
-                            {% trans 'Why' %}
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" data-toggle="modal" href="#" data-target="#modalAbout">
-                            {% trans 'About' %}
-                        </a>
-                    </div>
-                    {% include 'modal_why.html' %}
-                    {% include 'modal_how.html' %}
-                    {% include 'modal_about.html' %}
-                </li>
-            </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
