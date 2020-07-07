@@ -18,12 +18,27 @@
                 <hr>
                 {% for article in articles %}
                 <div class="article_container d-block">
-                    <div class="row"> 
-                        <div class="article_title col-10 font-weight-bold" style="font-size: 18px;">
+                    <div class="row d-flex flex-row" style="max-width: 100%;"> 
+                        <div class="article_title col-8 font-weight-bold" style="font-size: 18px;">
                             {{ article.name }}
                         </div>
                         <div class="col">
-
+                            <div class='row' style="height: 100%;">
+                                <div class='col d-flex flex-row justify-content-end'>
+                                    <div style="margin: 0 10px">
+                                        {% if article.recommendation == True %}
+                                            <img src="{% static 'img/article-recommend-true.svg' %}" alt="article recommended" width="20" height="20">
+                                        {% else %}
+                                            <img src="{% static 'img/article-recommend-false.svg' %}" alt="article recommendation netural" width="20" height="20"> 
+                                        {% endif %}
+                                    </div>
+                                    <div style="margin: 0 0 0 10px">
+                                        <img src="{% static 'img/option.svg' %}" alt="article option" width="20" height="20">
+                                    </div>  
+                                    
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
