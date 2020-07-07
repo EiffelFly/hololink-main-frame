@@ -11,6 +11,14 @@
         font-family: 'Noto Sans TC', sans-serif;
         font-weight: 400;
     }
+    .dashboard-recentProject-container{
+        border: #8C8C8C; 
+        border-radius: 5px; 
+        border-style: solid; 
+        height: 6.5rem; 
+        border-width: 1px;
+    }
+
 </style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
@@ -24,8 +32,19 @@
                     </div>
                     <div class="col-4"></div>
                 </div>
-                <div class="row">
-                    
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 15rem;">
+                {% for project in projects %} 
+                        <div class="col dashboard-recentProject-container" style="margin-right: 10px;">
+                            <div class="row">
+                                <h3 class="dashboard-recentProject-title"> {{ project.name }} </h3>
+                            </div>
+                        </div>
+                {% if forloop.counter|divisibleby:2 %}
+                </div>  
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 15rem; margin-top: 20px;">
+                {% endif %}                
+                {% endfor %}
+                
                 </div>
             </div>
         </div>

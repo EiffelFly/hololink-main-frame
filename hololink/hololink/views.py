@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from accounts.forms import SignUpWithEmailForm
 from django.core.mail import send_mail
 from django.conf import settings
+from project.models import Project
 import uuid
 
 
@@ -69,11 +71,13 @@ def index(request):
 def user_dashboard(request, username):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
-
-    instance = get_object_or_404(Project, created_by=request.user)
-
     
+    
+    projects = Project.objects.filter(created_by=request.user).order_by('-created_at') #use -created_at to desc()
+    context = {
+        'projects': projects[:4],
+    }
+    return render(request, 'user_dashboard.html', context) 
 
-    return render(request, 'user_dashboard.html')
 
 

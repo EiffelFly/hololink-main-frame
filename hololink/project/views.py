@@ -10,6 +10,7 @@ def project_page(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
     projects = Project.objects.filter(created_by=request.user)
+    print(projects)
     context = {
         'projects': projects,
     }
