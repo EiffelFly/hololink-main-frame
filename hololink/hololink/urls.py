@@ -14,6 +14,7 @@ urlpatterns = [
     path('project/', include('project.urls')),
     path('', index, name='index'),
     path('d3demo/', d3demo, name='d3demo'),
+    path('<username>', user_dashboard, name='user_dashboard')
 ]
 
 

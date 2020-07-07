@@ -12,14 +12,18 @@ from .forms import SignUpWithEmailForm
 from django.contrib.auth.views import LoginView
 
 
+
+
 class CustomLoginView(LoginView):
-    template_name = 'base.html' 
+    '''
+    Inherit Login View to redirect to custom url
+    ''' 
+    #template_name = 'login.html' 
     redirect_field_name = None
     
     def get_success_url(self):
         url = self.get_redirect_url() #method essential
-        return url or redirect(reverse('account_user_dashboard', kwargs={'username': self.username}))
-
+        return url or reverse('user_dashboard', kwargs={'username': self.request.user.username})
 
 def user_dashboard(request, username):
     print('iamhere')
