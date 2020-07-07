@@ -8,7 +8,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ['name', 'hash', 'from_url_shortcut',
                     'content_shortcut', 'created_by', 'created_at']
 
-    filter_horizontal = ('project',)
+    filter_horizontal = ('article_belongto_project',)
     # We don't display all the from_url
     def from_url_shortcut(self, obj):
         if len(obj.from_url) > 64:
