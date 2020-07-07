@@ -24,6 +24,7 @@ class Project(models.Model):
         verbose_name=_('Created by'),
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        default=None
     )
 
     project_have_article = models.ManyToManyField(
@@ -31,6 +32,12 @@ class Project(models.Model):
         verbose_name=_('Articles'),
         blank=True,
     )
+
+    project_articles_sum = models.IntegerField(
+        verbose_name=_("Amount of Project's articles"),
+        blank=True,
+    )
+
 
     project_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),

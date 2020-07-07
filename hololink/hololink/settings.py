@@ -143,7 +143,7 @@ MEDIA_URL = '/uploads/'
 
 # build-in auth system
 
-LOGIN_REDIRECT_URL = '/'
+#LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
