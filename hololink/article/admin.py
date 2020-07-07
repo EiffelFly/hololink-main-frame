@@ -6,7 +6,7 @@ from .models import Article
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ['name', 'hash', 'from_url_shortcut',
-                    'content_shortcut', 'created_by', 'created_at', ]
+                    'content_shortcut', 'created_by', 'created_at']
 
     filter_horizontal = ('project',)
     # We don't display all the from_url

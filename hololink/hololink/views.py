@@ -67,6 +67,13 @@ def index(request):
         return render(request, 'user_dashboard.html', context)
 
 def user_dashboard(request, username):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    instance = get_object_or_404(Project, created_by=request.user)
+
+    
+
     return render(request, 'user_dashboard.html')
 
 

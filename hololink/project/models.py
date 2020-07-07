@@ -35,3 +35,6 @@ class Project(models.Model):
         verbose_name=_('Stellar Keyword Amount'),
         blank=True,
     )
+
+    def __str__(self):
+        return self.name
