@@ -25,3 +25,13 @@ class Project(models.Model):
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
+    basestone_keyword_sum = models.IntegerField(
+        verbose_name=_('Basestone Keyword Amount'),
+        blank=True,
+    )
+
+    stellar_keyword_sum = models.IntegerField(
+        verbose_name=_('Stellar Keyword Amount'),
+        blank=True,
+    )
