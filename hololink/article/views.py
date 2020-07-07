@@ -47,13 +47,13 @@ def add(request):
         form = ArticleForm(request.POST)
         context['form'] = form
         if form.is_valid():
-            Article.objects.create(
+            article = Article.objects.create(
                 hash=sha256_hash(form.cleaned_data.get('content')),
                 name=form.cleaned_data.get('name'),
                 content=form.cleaned_data.get('content'),
                 from_url=form.cleaned_data.get('from_url'),
                 recommendation=form.cleaned_data.get('recommendation'),
-                project=form.cleaned_data.get('project'),
+                #project=form.cleaned_data.get('project'),
                 created_by=request.user,
                 created_at=now(),
             )

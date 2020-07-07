@@ -61,14 +61,16 @@ class Article(models.Model):
         blank=True,
     )
 
-    basestone_keyword_sum = models.IntegerField(
+    article_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),
         blank=True,
+        default=0
     )
 
-    stellar_keyword_sum = models.IntegerField(
+    article_stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Amount'),
         blank=True,
+        default=0
     )
 
 

@@ -26,12 +26,12 @@ class Project(models.Model):
         on_delete=models.CASCADE,
     )
 
-    basestone_keyword_sum = models.IntegerField(
+    project_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),
         blank=True,
     )
 
-    stellar_keyword_sum = models.IntegerField(
+    project_stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Amount'),
         blank=True,
     )

@@ -14,12 +14,12 @@ from django.contrib.admin.models import LogEntry
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    stellar_keyword_sum = models.IntegerField(
+    user_stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
         default=0,
         blank=True
     )
-    basestone_keyword_sum = models.IntegerField(
+    user_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
         default=0,
         blank=True
