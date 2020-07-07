@@ -19,6 +19,13 @@
         border-width: 1px;
     }
 
+    .dashboard-recentProject-title{
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 1.1rem;
+        color: darkblue;
+
+    }
+
 </style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
@@ -35,7 +42,7 @@
                 <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 15rem;">
                 {% for project in projects %} 
                         <div class="col dashboard-recentProject-container" style="margin-right: 10px;">
-                            <div class="row">
+                            <div class="row" style="margin: 10px 0 0 5px">
                                 <h3 class="dashboard-recentProject-title"> {{ project.name }} </h3>
                             </div>
                         </div>
