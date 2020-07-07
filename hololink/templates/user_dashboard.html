@@ -4,18 +4,29 @@
 {% load widget_tweaks %}
 
 {% block content %}
+
 <style>
-    .dashboard-nav-item{
+    .dashboard-overview-headline{
+        font-size: 1.1rem;
         font-family: 'Noto Sans TC', sans-serif;
-        font-size: 0.5rem;
-        color: black !important;
-        
+        font-weight: 400;
     }
 </style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
     <div class="content_container">
-
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <div class="row mt-4">
+                    <div class="col-8">
+                        <h3 class="dashboard-overview-headline">Most Recent Projects</h3>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 {% endblock %}
