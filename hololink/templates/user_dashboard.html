@@ -33,6 +33,7 @@
         border-width: 1px; 
         border-radius: 3px;
         padding: 2px 6px;
+        font-size: 13px;
     }
 
 </style>
@@ -48,34 +49,34 @@
                     </div>
                     <div class="col-4"></div>
                 </div>
-                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 15rem; padding-top: 10px;">
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; padding-top: 10px;">
                 {% for project in projects %} 
-                        <div class="col dashboard-recentProject-container" style="margin-right: 10px;">
+                        <div class="col dashboard-recentProject-container" style="margin-right: 20px;">
                             <div class="row" style="margin: 15px 0 0 5px">
                                 <h3 class="dashboard-recentProject-title"> {{ project.name }} </h3>
                             </div>
                             <div class="row" style="margin: 15px 0 0 5px">
                                 <p style="margin-top: 5px;">
                                     <span class="d-inline-block mr-2 dashboard-recentProject-container-badges" style="">
-                                        <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 2px;">
-                                        <span> {{project.project_articles_sum}} </span>
+                                        <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="12" height="12" style="margin-right:10px; margin-bottom: 2px;">
+                                        <span style="color: #2e1760;"> {{project.project_articles_sum}} </span>
                                     </span>
                                     <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
                                         <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
                                         <span>basestone -</span>
-                                        <span>{{project.project_basestone_keyword_sum}}</span>
+                                        <span style="color: #2e1760;">{{project.project_basestone_keyword_sum}}</span>
                                     </span>
                                     <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
                                         <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
-                                        <span>basestone -</span>
-                                        <span>{{project.project_stellar_keyword_sum}}</span>
+                                        <span>stellar -</span>
+                                        <span style="color: #2e1760;">{{project.project_stellar_keyword_sum}}</span>
                                     </span>
                                 </p>
                             </div>
                         </div>
                 {% if forloop.counter|divisibleby:2 %}
                 </div>  
-                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 15rem; margin-top: 20px;">
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; margin-top: 20px;">
     
                 {% endif %}                
                 {% endfor %}

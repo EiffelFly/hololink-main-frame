@@ -36,17 +36,21 @@ class Project(models.Model):
     project_articles_sum = models.IntegerField(
         verbose_name=_("Amount of Project's articles"),
         blank=True,
+        null=True,
     )
 
 
     project_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),
         blank=True,
+        null=True,
     )
+    
 
     project_stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Amount'),
         blank=True,
+        null=True,
     )
 
     def __str__(self):
