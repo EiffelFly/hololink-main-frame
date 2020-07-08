@@ -36,6 +36,35 @@
         font-size: 13px;
     }
 
+    .dashboard-overview-activities-container:before{
+        content: '';
+        border-left: 1px solid #BFB9B8;
+        position: absolute;
+        height: 100%;
+        z-index: -1;
+        left: 45px;
+        margin-top: 6px;
+        
+    }
+
+    .activities-timeline-date{
+        font-size: 12px;
+        background-color: white;
+        width: 4.5rem;
+        height: 1.5rem;
+        
+        
+    }
+
+    .activities-timeline-date:after{
+        content: '';
+        border-bottom: 1px solid #BFB9B8;
+        position: absolute;
+        width: 100%;
+        margin-top: 7px;
+        z-index: -1;
+    }
+
 </style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
@@ -82,6 +111,27 @@
                 {% endfor %}
                 
                 </div>
+                <div class="row mt-2" style="padding-right: 12rem;">
+                    <div class="col-8">
+                        <h3 class="dashboard-overview-headline">Recent activities</h3>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row dashboard-overview-activities-container">
+                    <div class="col">
+                        <div class="row dashboard-overview-activities" style="padding-right: 17.5rem;">
+                            <div class="col">
+                                <h4 class="d-inline-block activities-timeline-date">June 2020</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col dashboard-overview-activities-timeline">
+        
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
         
