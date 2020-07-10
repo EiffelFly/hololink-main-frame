@@ -25,6 +25,11 @@ class Profile(models.Model):
         blank=True
     )
 
+    image = models.ImageField(
+        upload_to='profile_image',
+        blank=True
+    )
+
 '''
     In order to use this kind of method, we are going to define
     "signal" to make model-Profile created/updated when model-User

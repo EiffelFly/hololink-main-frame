@@ -1,7 +1,7 @@
 # [START django_app]
 runtime: python37
 env: standard
-
+entrypoint: gunicorn -b :$PORT hololink.wsgi
 
 handlers:
 # This configures Google App Engine to serve the files in the app's static
@@ -13,5 +13,5 @@ handlers:
 # required when static routes are defined, but can be omitted (along with
 # the entire handlers section) when there are no static files defined.
 - url: /.*
-  script: hololink.wsgi.application
+  script: auto
 # [END django_app]

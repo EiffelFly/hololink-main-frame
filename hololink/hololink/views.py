@@ -4,6 +4,7 @@ from accounts.forms import SignUpWithEmailForm
 from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
+from accounts.models import Profile
 import uuid
 
 
@@ -73,10 +74,13 @@ def user_dashboard(request, username):
         return redirect(reverse('login'))
     
     
+    
     projects = Project.objects.filter(created_by=request.user).order_by('-created_at') #use -created_at to desc()
+
     context = {
         'projects': projects[:4],
     }
+
     return render(request, 'user_dashboard.html', context) 
 
 

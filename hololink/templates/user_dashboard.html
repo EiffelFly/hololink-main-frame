@@ -70,7 +70,7 @@
     {% include 'dashboard_navbar.html' %}
     <div class="content_container">
         <div class="row">
-            <div class="col-4"></div>
+            <div class="col-4">   <img src="{{ user.profile.image.url }}"> </div>
             <div class="col-8">
                 <div class="row mt-4">
                     <div class="col-8">
@@ -111,7 +111,7 @@
                 {% endfor %}
                 
                 </div>
-                <div class="row mt-2" style="padding-right: 12rem;">
+                <div class="row" style="padding-right: 12rem; margin-top: 3rem;">
                     <div class="col-8">
                         <h3 class="dashboard-overview-headline">Recent activities</h3>
                     </div>
