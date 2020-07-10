@@ -86,7 +86,6 @@ from secret.hololink.settings import (
     DATABASES,
 )
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 

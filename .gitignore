@@ -34,3 +34,7 @@ web.config
 # ubuntu 20.04 things
 share/python-wheels/ 
 /lib64
+
+
+# gcp things
+hololink/cloud_sql_proxy
