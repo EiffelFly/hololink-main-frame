@@ -3,19 +3,19 @@ from article.models import Article
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'groups']
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
 
 
-class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
@@ -24,3 +24,5 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
             'final_output'
         ]
+    
+    
