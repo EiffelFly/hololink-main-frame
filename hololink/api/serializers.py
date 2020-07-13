@@ -39,3 +39,4 @@ class ArticleSerializerForUpdate(serializers.ModelSerializer):
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
             'final_output'
         ]
+

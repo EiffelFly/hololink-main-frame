@@ -8,6 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
+import hashlib
+
+
+def sha256_hash(content):
+    sha = hashlib.sha256()
+    sha.update(content.encode())
+    return sha.hexdigest()
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -29,7 +36,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
 
-    queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
@@ -41,3 +47,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
             serializer_class = ArticleSerializerForUpdate
 
         return serializer_class
+
+    def get_queryset(self):
+        return Article.objects.filter(created_by=self.request.user)
