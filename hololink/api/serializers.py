@@ -38,5 +38,5 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommendation', 'article_belongto_project',
+            'recommendation'
         ]
