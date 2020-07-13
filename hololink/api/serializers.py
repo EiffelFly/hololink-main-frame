@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User, Group
 from article.models import Article
 from rest_framework import serializers
+import hashlib
 
+def sha256_hash(content):
+    sha = hashlib.sha256()
+    sha.update(content.encode())
+    return sha.hexdigest()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,19 +29,14 @@ class ArticleSerializer(serializers.ModelSerializer):
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
             'final_output'
         ]
+        read_only_fields = [
+            'hash', 'created_at', 'created_by'
+        ]
 
-'''
-    In this case, we don't want any situation that will update this value after object had been created:
-    hash, created_at, created_by
-'''
-
-class ArticleSerializerForUpdate(serializers.ModelSerializer):
+class ArticleSerializerForPost(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
             'name', 'content', 'from_url',
             'recommendation', 'article_belongto_project',
-            'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
-            'final_output'
         ]
-
