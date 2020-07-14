@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from article.models import Article
+from project.models import Project
 from rest_framework import serializers
 import hashlib
 
@@ -39,4 +40,22 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         fields = [
             'name', 'content', 'from_url',
             'recommendation'
+        ]
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = [
+            'name', 'created_at', 'created_by', 'project_have_article', 'project_articles_sum',
+            'project_basestone_keyword_sum', 'project_stellar_keyword_sum'
+        ]
+        read_only_fields = [
+            'created_at', 'created_by'
+        ]
+
+class ProjectSerializerForPost(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = [
+            'name'
         ]
