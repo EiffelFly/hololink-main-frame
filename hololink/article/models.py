@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import jsonfield
+from project.models import Project
 
 def now():
     return timezone.localtime(timezone.now())
@@ -54,8 +55,9 @@ class Article(models.Model):
         blank=True,
     )
 
-    article_belongto_project = models.ManyToManyField(
-        to='project.Project',
+    projects = models.ManyToManyField(
+        Project,
+        related_name='articles',
         verbose_name=_('Projects'),
         blank=True,
     )

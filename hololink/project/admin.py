@@ -3,6 +3,6 @@ from .models import Project
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['name']
-    filter_horizontal = ('project_have_article',)
+    filter_horizontal = ('articles',)
 
 admin.site.register(Project, ProjectAdmin)

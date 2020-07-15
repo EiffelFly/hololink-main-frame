@@ -27,12 +27,6 @@ class Project(models.Model):
         default=None
     )
 
-    project_have_article = models.ManyToManyField(
-        to='article.Article',
-        verbose_name=_('Articles'),
-        blank=True,
-    )
-
     project_articles_sum = models.IntegerField(
         verbose_name=_("Amount of Project's articles"),
         blank=True,
