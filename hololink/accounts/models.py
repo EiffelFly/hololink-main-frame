@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.admin.models import LogEntry
+from django.urls import reverse
+
 
 '''
     We want to store extra information in existing User model 
@@ -14,6 +17,7 @@ from django.contrib.admin.models import LogEntry
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
     user_stellar_keyword_sum = models.IntegerField(
         verbose_name=_('Stellar Keyword Sum'),
         default=0,
@@ -24,6 +28,14 @@ class Profile(models.Model):
         default=0,
         blank=True
     )
+
+    def get_absolute_url(self):
+        return reverse('user_dashboard', kwargs={'username': self.slug})
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user.username)
+         super(Profile, self).save(*args, **kwargs)
+
 
 
 '''

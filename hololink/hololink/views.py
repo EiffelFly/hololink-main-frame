@@ -64,10 +64,9 @@ def index(request):
     context = {
         'form': form,
     }
-    if not request.user.is_authenticated:
-        return render(request, 'landing_page.html', context)
-    else:
-        return render(request, 'user_dashboard.html', context)
+    
+    return render(request, 'landing_page.html', context)
+    
 
 def user_dashboard(request, username):
     if not request.user.is_authenticated:

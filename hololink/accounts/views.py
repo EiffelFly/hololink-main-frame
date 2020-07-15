@@ -20,10 +20,11 @@ class CustomLoginView(LoginView):
     ''' 
     #template_name = 'login.html' 
     redirect_field_name = None
-    
+    '''
     def get_success_url(self):
         url = self.get_redirect_url() #method essential
         return url or reverse('user_dashboard', kwargs={'username': self.request.user.username})
+    '''
 
 def user_dashboard(request, username):
     print('iamhere')
