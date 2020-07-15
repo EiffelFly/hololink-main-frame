@@ -100,3 +100,14 @@ def delete(request, id):
         messages.add_message(request, messages.SUCCESS, _('Deleted successfully.'))
         return redirect(reverse('article:change_list'))
     return render(request, 'article/delete.html')
+
+def articel_detail(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+    user = User.objects.get(username=request.user.username)
+    article = get_object_or_404(Article, slug=slug, created_by=request.user)
+    context = {
+        'article' : article,
+        'user' : user
+    }
+    return render(request, 'article/article_detail.html', context)
