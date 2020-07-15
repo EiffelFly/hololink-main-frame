@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 import jsonfield
 from project.models import Project
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 def now():
     return timezone.localtime(timezone.now())
@@ -80,8 +83,19 @@ class Article(models.Model):
         null=True
     )
 
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
     def __str__(self):
         return self.name
+
+@receiver(pre_save, sender=Article)
+def slug_generator(sender, instance, *args, **kwargs):
+    slug = slugify(instance.name)
+    exists = Article.objects.filter(slug=slug).exists()
+    if exists:
+        slug = f"{slug}-{instance.id}"
+    instance.slug = slug
+
 
 
 
