@@ -22,17 +22,17 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                      <th scope="col" style="width: 10%;">#</th>
-                                      <th scope="col" style="width: 50%;">Title</th>
-                                      <th scope="col" style="width: 20%;">Basestone keywords</th>
-                                      <th scope="col" style="width: 20%;">Stellar keyowrds</th>
+                                      <th scope="col" style="width: 2%;">#</th>
+                                      <th scope="col" style="width: 52%;">Title</th>
+                                      <th scope="col" style="width: 18%; font-size: 12px;">Basestone keywords</th>
+                                      <th scope="col" style="width: 18%; font-size: 12px;">Stellar keyowrds</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for article in articles %}
                                         <tr>
                                             <th scope="row">{{ forloop.counter }}</th>
-                                            <td style="font-style: ;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
+                                            <td style="; font-size: 14px;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
                                             <td>{{ article.article_basestone_keyword_sum }}</td>
                                             <td>{{ article.article_stellar_keyword_sum }}</td>
                                         </tr>
