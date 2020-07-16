@@ -3,16 +3,15 @@
 {% load static %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
     <div class="container-fluid">
-        {% include 'dashboard_navbar.html' %}
         <div class="content-container">
-            <div class="row">
-                <div class="col-4"></div>
+            <div class="row" style="padding: 0 10rem;">
                 <div class="col-8">
-                    <div class="row mt-4">
+                    <div class="row" style="margin-top: 4rem;">
                         <div class="col">
-                            <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.5rem;">{{ project.name }}</h1>
+                            <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 2rem;">{{ project.name }}</h1>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 2rem;">
@@ -31,10 +30,12 @@
                                 </thead>
                                 <tbody>
                                     {% for article in articles %}
-                                        <th scope="row">{{ forloop.counter }}</th>
-                                        <td>{{ article.name }}</td>
-                                        <td>{{ article.article_basestone_keyword_sum }}</td>
-                                        <td>{{ article.article_stellar_keyword_sum }}</td>
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td style="font-style: ;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
+                                            <td>{{ article.article_basestone_keyword_sum }}</td>
+                                            <td>{{ article.article_stellar_keyword_sum }}</td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -42,7 +43,9 @@
                     </div>
                     
                 </div>
+                <div class="col-4"></div>
             </div>
+           
         </div>
     </div>
     
