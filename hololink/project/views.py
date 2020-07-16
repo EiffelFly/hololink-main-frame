@@ -25,4 +25,4 @@ def project_detail(request, slug):
     context = {
         'project' : project, 
     }
-    return render(request, 'project/project_detail.html', context) 
+    return render(request, 'project_detail.html', context) 

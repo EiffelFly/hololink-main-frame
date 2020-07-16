@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="container-fluid">
+        {% include 'dashboard_navbar.html' %}
+        <div class="content-container">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.5rem;">{{ project.name }}</h1>
+                        </div>
+                    </div>
+                    <div class="row mt-6">
+                        <div class="col" style="background-color: black; height: 10rem;"></div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endif %}
+{% endblock %}
