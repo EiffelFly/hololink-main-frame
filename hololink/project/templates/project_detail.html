@@ -15,15 +15,37 @@
                             <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 1.5rem;">{{ project.name }}</h1>
                         </div>
                     </div>
-                    <div class="row mt-6">
-                        <div class="col" style="background-color: black; height: 10rem;"></div>
+                    <div class="row" style="margin-top: 2rem;">
+                        <div class="col" style="background-color: #BFB9B8; height: 10rem; margin:0 15px"></div>
+                    </div>
+                    <div class="row project-articles-list" style="margin-top: 2rem;">
+                        <div class="col">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                      <th scope="col" style="width: 10%;">#</th>
+                                      <th scope="col" style="width: 50%;">Title</th>
+                                      <th scope="col" style="width: 20%;">Basestone keywords</th>
+                                      <th scope="col" style="width: 20%;">Stellar keyowrds</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for article in articles %}
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ article.name }}</td>
+                                        <td>{{ article.article_basestone_keyword_sum }}</td>
+                                        <td>{{ article.article_stellar_keyword_sum }}</td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     
                 </div>
             </div>
         </div>
     </div>
-
+    
 
 
 {% endif %}

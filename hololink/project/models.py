@@ -54,7 +54,7 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
 
 
 def create_slug(instance, new_slug=None):

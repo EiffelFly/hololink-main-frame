@@ -84,7 +84,7 @@ class Article(models.Model):
         null=True
     )
 
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
 
     def __str__(self):
         return self.name
@@ -96,6 +96,7 @@ def slug_generator(sender, instance, *args, **kwargs):
     if exists:
         slug = f"{slug}-{instance.id}"
     instance.slug = slug
+    print(slug)
 
 
 

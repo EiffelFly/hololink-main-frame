@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
+from article.models import Article
 import hashlib
 
 
@@ -22,7 +23,13 @@ def project_detail(request, slug):
         return redirect(reverse('login'))  
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    articles = Article.objects.filter(projects=project)
     context = {
         'project' : project, 
+        'articles': articles,
     }
+
+    print(articles)
+    
+
     return render(request, 'project_detail.html', context) 
