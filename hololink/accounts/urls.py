@@ -4,7 +4,7 @@ from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
     PasswordResetCompleteView)
-from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, user_dashboard
+from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView
 from .forms import EmailValidationOnForgotPassword
 
 

@@ -68,7 +68,7 @@ def index(request):
     return render(request, 'landing_page.html', context)
     
 
-def user_dashboard(request, username):
+def user_dashboard(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     

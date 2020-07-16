@@ -82,7 +82,7 @@
                 {% for project in projects %} 
                         <div class="col dashboard-recentProject-container" style="margin-right: 20px;">
                             <div class="row" style="margin: 15px 0 0 5px">
-                                <h3 class="dashboard-recentProject-title"> {{ project.name }} </h3>
+                                <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_detail' project.slug %}"> {{ project.name }} </a></h3>
                             </div>
                             <div class="row" style="margin: 15px 0 0 5px">
                                 <p style="margin-top: 5px;">

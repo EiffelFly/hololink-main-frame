@@ -7,6 +7,7 @@ import jsonfield
 from project.models import Project
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from unidecode import unidecode
 
 def now():
     return timezone.localtime(timezone.now())
@@ -90,7 +91,7 @@ class Article(models.Model):
 
 @receiver(pre_save, sender=Article)
 def slug_generator(sender, instance, *args, **kwargs):
-    slug = slugify(instance.name)
+    slug = slugify(unidecode(instance.name))
     exists = Article.objects.filter(slug=slug).exists()
     if exists:
         slug = f"{slug}-{instance.id}"

@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from unidecode import unidecode
 
 def now():
     return timezone.localtime(timezone.now())
@@ -59,7 +60,7 @@ class Project(models.Model):
 def create_slug(instance, new_slug=None):
     '''
         Recursive function to check whether slug and instance has been created
-        Question whether we need this?
+        Question: whether we need this?
 
         @receiver(pre_save, sender=Project)
         def slug_generator(sender, instance, *args, **kwargs):
@@ -80,7 +81,7 @@ def create_slug(instance, new_slug=None):
 
 @receiver(pre_save, sender=Project)
 def slug_generator(sender, instance, *args, **kwargs):
-    slug = slugify(instance.name)
+    slug = slugify(unidecode(instance.name))
     exists = Project.objects.filter(slug=slug).exists()
     if exists:
         slug = f"{slug}-{instance.id}"
