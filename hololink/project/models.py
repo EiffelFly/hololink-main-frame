@@ -34,13 +34,6 @@ class Project(models.Model):
         default=None
     )
 
-    project_articles_sum = models.IntegerField(
-        verbose_name=_("Amount of Project's articles"),
-        blank=True,
-        null=True,
-    )
-
-
     project_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),
         blank=True,
