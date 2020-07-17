@@ -11,12 +11,11 @@ import hashlib
 def projects_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
-    projects = Project.objects.filter(created_by=request.user)
-    print(projects)
+    projects = Project.objects.filter(created_by=request.user).order_by('-created_at')
     context = {
         'projects': projects,
     }
-    return render(request, 'project/project_page.html', context)    
+    return render(request, 'projects_list.html', context)    
 
 def project_detail(request, slug):
     if not request.user.is_authenticated:

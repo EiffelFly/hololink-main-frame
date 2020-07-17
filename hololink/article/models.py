@@ -5,9 +5,11 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 import jsonfield
 from project.models import Project
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete, post_save
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from unidecode import unidecode
+import time
 
 def now():
     return timezone.localtime(timezone.now())
@@ -89,7 +91,7 @@ class Article(models.Model):
     def __str__(self):
         return self.name
 
-@receiver(pre_save, sender=Article)
+
 def slug_generator(sender, instance, *args, **kwargs):
     slug = slugify(unidecode(instance.name))
     exists = Article.objects.filter(slug=slug).exists()
@@ -98,6 +100,5 @@ def slug_generator(sender, instance, *args, **kwargs):
     instance.slug = slug
     print(slug)
 
-
-
+pre_save.connect(slug_generator, sender=Article, dispatch_uid='generate slug')
 

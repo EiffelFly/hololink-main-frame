@@ -5,8 +5,11 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import pre_save
+
+
 from django.dispatch import receiver
 from unidecode import unidecode
+
 
 def now():
     return timezone.localtime(timezone.now())
@@ -79,6 +82,7 @@ def create_slug(instance, new_slug=None):
 
 
 
+
 @receiver(pre_save, sender=Project)
 def slug_generator(sender, instance, *args, **kwargs):
     slug = slugify(unidecode(instance.name))
@@ -86,3 +90,5 @@ def slug_generator(sender, instance, *args, **kwargs):
     if exists:
         slug = f"{slug}-{instance.id}"
     instance.slug = slug
+
+
