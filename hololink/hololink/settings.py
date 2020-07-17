@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # This make it easier to integrate django templates with bootstrap things.
     'rest_framework',
     'widget_tweaks',
+    'tag_lib.apps.TagLibConfig',
     'accounts.apps.AccountsConfig',
     'article.apps.ArticleConfig',
     'project.apps.ProjectConfig',

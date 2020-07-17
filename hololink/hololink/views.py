@@ -73,11 +73,16 @@ def user_dashboard(request, slug):
         return redirect(reverse('login'))
     
     
-    
+    countArticles = []
     projects = Project.objects.filter(created_by=request.user).order_by('-created_at') #use -created_at to desc()
+    projects = projects[:4]
+    for project in projects:
+        countArticles.append(project.articles.count())
+
 
     context = {
-        'projects': projects[:4],
+        'projects': projects,
+        'countArticles' : countArticles
     }
 
     return render(request, 'user_dashboard.html', context) 
