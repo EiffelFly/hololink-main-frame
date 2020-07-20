@@ -4,11 +4,75 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<style>
+    .body {
+        height: 100%;
+    }
+</style>
     <div class="container-fluid">
         <div class="content-container">
-            <div class="row">
-                <div class="col"></div>
-                <div class="col"></div>
+            <div class="row" style="margin-top: 4rem;">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col" style="padding: 0;">
+                            <div class="accordion" id="article_detail_accordion">
+                                <div class="card">
+                                    <div class="card-header" id="article_detail_title">
+                                        <h1>
+                                            <button class="btn" type="button" data-toggle="collapse" data-target="#article_detail_description" aria-expanded="true" aria-controls="article_detail_description" style="font-size: 1.4rem; font-family: 'Noto Sans TC', sans-serif;;">
+                                                {{ article.name }}
+                                            </button>
+                                        </h1>
+                                    </div>
+                                    <div style="margin: 20px 0" id="article_detail_description" class="collapse" aria-labelledby="article_detail_title" data-parent="#article_detail_accordion">
+                                        <div class="row d-flex article_detail_description" style="padding-left: 2.9rem; height: 100%;">
+                                            <div style="margin-right: 10px;">
+                                                <img src="{% static 'img/link-external.svg' %}" alt=link_external width="15" height="15" class="align-self-center">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}">{{ article.from_url|truncatechars:60 }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex article_detail_description" style="padding-left: 2.9rem; height: 100%;">
+                                            <div style="margin-right: 10px;">
+                                                <img src="{% static 'img/clock.svg' %}" alt=created_at width="15" height="15" class="align-self-center">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <p style="margin-bottom:0;">created at: {{ article.created_at }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex article_detail_description" style="padding-left: 2.9rem; height: 100%;">
+                                            <div style="margin-right: 10px;">
+                                                <img src="{% static 'img/basestone.svg' %}" alt=basestone_keywords width="15" height="15" class="align-self-center">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <p style="margin-bottom:0;">basestone keywords: {{ article.article_basestone_keyword_sum }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex article_detail_description" style="padding-left: 2.9rem; height: 100%;">
+                                            <div style="margin-right: 10px;">
+                                                <img src="{% static 'img/stellar.svg' %}" alt=stelar_keywords width="15" height="15" class="align-self-center">
+                                            </div>
+                                            <div style="text-align: center;">
+                                                <p style="margin-bottom:0;">stellar keywords: {{ article.article_stellar_keyword_sum }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 2rem;">
+                        <div class="col-10 article_detail_content"  style="border:lightgray; border-style: solid; border-width: 1px; padding: 30px;">
+                            {{ article.content | safe}}
+                        </div>
+                        <div class="col-2"></div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

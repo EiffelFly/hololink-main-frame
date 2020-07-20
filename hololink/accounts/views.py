@@ -23,7 +23,7 @@ class CustomLoginView(LoginView):
     
     def get_success_url(self):
         url = self.get_redirect_url() #method essential
-        return url or reverse('user_dashboard', kwargs={'username': self.request.user.username})
+        return url or reverse('user_dashboard', kwargs={'slug': self.request.user.username})
 
 def sign_up(request):
     """

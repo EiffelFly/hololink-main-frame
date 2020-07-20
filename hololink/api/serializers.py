@@ -25,7 +25,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         ordering = ['-created_at']
         model = Project
         fields = [
-            'id','name', 'created_at', 'created_by', 'articles', 'project_articles_sum',
+            'id','name', 'created_at', 'created_by', 'articles',
             'project_basestone_keyword_sum', 'project_stellar_keyword_sum'
         ]
         read_only_fields = [
