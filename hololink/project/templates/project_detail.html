@@ -5,34 +5,62 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<style>
+
+    .articles_listTable{
+        overflow-y: auto; 
+        height: 80%;
+    }
+
+    .articles_listTable thead th { 
+        position: sticky; 
+        top: 0; 
+    }
+
+    table { 
+        table-layout: fixed; 
+        border-collapse: collapse; 
+        width: 100%; 
+    }
+
+    
+    th { 
+        background:#eee; 
+    }
+    
+</style>
     <div class="container-fluid">
         <div class="content-container">
-            <div class="row" style="padding: 0 10rem;">
-                <div class="col-8">
+            <div class="row" style="padding: 0 2rem 0 10rem;">
+                <div class="col-7">
                     <div class="row" style="margin-top: 4rem;">
                         <div class="col">
                             <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 2rem;">{{ project.name }}</h1>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 2rem;">
-                        <div class="col" style="background-color: #BFB9B8; height: 10rem; margin:0 15px"></div>
+                        <div class="col" style="background-color: #BFB9B8; height: 36rem; margin:0 15px"></div>
                     </div>
-                    <div class="row project-articles-list" style="margin-top: 2rem;">
+                    
+                    
+                </div>
+                <div class="col-5">
+                    <div class="row articles_listTable" style="margin-top: 8.8rem;">
                         <div class="col">
-                            <table class="table table-hover">
+                            <table class="table table-hover articles_listTable">
                                 <thead>
                                     <tr>
-                                      <th scope="col" style="width: 2%;">#</th>
-                                      <th scope="col" style="width: 52%;">Title</th>
-                                      <th scope="col" style="width: 18%; font-size: 12px;">Basestone keywords</th>
-                                      <th scope="col" style="width: 18%; font-size: 12px;">Stellar keyowrds</th>
+                                      <th scope="col w-10" style="width: 10%">#</th>
+                                      <th scope="col 2-70" style="width: 60%" >Title</th>
+                                      <th scope="col w-10" style="width: 15%; font-size: 10px;">Basestone keywords</th>
+                                      <th scope="col w-5" style="width: 15%; font-size: 10px;">Stellar keyowrds</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for article in articles %}
                                         <tr>
-                                            <th scope="row">{{ forloop.counter }}</th>
-                                            <td style="; font-size: 14px;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
+                                            <td scope="row">{{ forloop.counter }}</td>
+                                            <td style="font-size: 8px;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
                                             <td>{{ article.article_basestone_keyword_sum }}</td>
                                             <td>{{ article.article_stellar_keyword_sum }}</td>
                                         </tr>
@@ -41,9 +69,7 @@
                             </table>
                         </div>
                     </div>
-                    
                 </div>
-                <div class="col-4"></div>
             </div>
            
         </div>

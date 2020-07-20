@@ -5,16 +5,22 @@
 {% block content %}
 {% if user.is_authenticated %}
 <style>
-    .body {
-        height: 100%;
+    #article_detail_content div{
+        margin: 20px 0;
     }
+
+    #article_detail_content h1,h2,h3,h4,h5{
+        margin: 3rem 0;
+    }
+
+
 </style>
     <div class="container-fluid">
         <div class="content-container">
             <div class="row" style="margin-top: 4rem;">
                 <div class="col-4"></div>
-                <div class="col-8">
-                    <div class="row">
+                <div class="col-8" style="padding-right: 10rem;">
+                    <div class="row" >
                         <div class="col" style="padding: 0;">
                             <div class="accordion" id="article_detail_accordion">
                                 <div class="card">
@@ -65,11 +71,7 @@
                             
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 2rem;">
-                        <div class="col-10 article_detail_content"  style="border:lightgray; border-style: solid; border-width: 1px; padding: 30px;">
-                            {{ article.content | safe}}
-                        </div>
-                        <div class="col-2"></div>
+                    <div class="row" style="height: 35rem; background-color: #BFB9B8; margin-top: 3rem;">
 
                     </div>
                 </div>
