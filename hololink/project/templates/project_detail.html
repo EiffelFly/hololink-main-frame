@@ -9,7 +9,7 @@
 
     .articles_listTable{
         overflow-y: auto; 
-        height: 80%;
+        height: 65%;
     }
 
     .articles_listTable thead th { 
@@ -27,6 +27,11 @@
     th { 
         background:#eee; 
     }
+
+    .breadcrumb {
+        padding: 3px 15px;
+        font-size: 12px;
+    }
     
 </style>
     <div class="container-fluid">
@@ -35,17 +40,29 @@
                 <div class="col-7">
                     <div class="row" style="margin-top: 4rem;">
                         <div class="col">
-                            <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 2rem;">{{ project.name }}</h1>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#">Projects</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        
+                    </div>
+                    <div class="row" style="">
+                        <div class="col">
+                            <h1 class="project-title" style="font-family: 'Noto Sans TC', sans-serif; font-size: 2rem; padding-left: 15px;">{{ project.name }}</h1>
                         </div>
                     </div>
                     <div class="row" style="margin-top: 2rem;">
-                        <div class="col" style="background-color: #BFB9B8; height: 36rem; margin:0 15px"></div>
+                        <div class="col" style="background-color: #BFB9B8; height: 33rem; margin:0 15px"></div>
                     </div>
                     
                     
                 </div>
                 <div class="col-5">
-                    <div class="row articles_listTable" style="margin-top: 8.8rem;">
+                    <div class="row articles_listTable" style="margin-top: 11.3rem;">
                         <div class="col">
                             <table class="table table-hover articles_listTable">
                                 <thead>
