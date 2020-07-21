@@ -7,11 +7,24 @@ from .models import Project
 from article.models import Article
 import hashlib
 
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+def filter(request):
+    qs = Project.objects.filter(created_by=request.user).order_by('-created_at')
+    filterProjectsName = request.GET.get('project-filter')
+
+    if is_valid_queryparam(filterProjectsName):
+        qs = qs.filter(name__icontains=filterProjectsName)
+
+    return qs
 
 def projects_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
-    projects = Project.objects.filter(created_by=request.user).order_by('-created_at')
+
+    projects = filter(request)
+    
     context = {
         'projects': projects,
     }

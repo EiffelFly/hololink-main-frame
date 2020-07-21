@@ -4,13 +4,49 @@
 {% load widget_tweaks %}
 
 {% block content %}
+<style>
+    .Project-title{
+        font-size: 1.5rem;
+        font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    .Project-title a {
+        color: #222626 !important;
+    }
+
+</style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
     <div class="content_container">
         <div class="row">
             <div class="col-4"></div>
-            <div class="col-8">
-                
+            <div class="col-8"  style="padding-right: 8rem;">
+                <div class="row" style="margin-top: 2rem;">
+                    <div class="col-6">
+                        <div class="inpup-group">
+                            <input class="form-control py-2 border" type="search" name="project-filter" placeholder="Find a project" />
+                        </div>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-3"></div>
+                </div>
+                {% for project in projects %}
+                <div class="row">
+                    <div class="col-12">
+                        <hr>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h3 class="Project-title"><a href="{% url 'project:project_detail' project.slug %}"> {{ project.name }} </a></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
