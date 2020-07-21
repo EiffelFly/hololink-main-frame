@@ -23,11 +23,16 @@ def projects_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
+    countArticles = []
     projects = filter(request)
+    for project in projects:
+        countArticles.append(project.articles.count())
     
     context = {
         'projects': projects,
+        'countArticles' : countArticles
     }
+    
     return render(request, 'projects_list.html', context)    
 
 def project_detail(request, slug):

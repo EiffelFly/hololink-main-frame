@@ -43,7 +43,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Projects</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'project:projects_list' %}">Projects</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
                                 </ol>
                             </nav>
