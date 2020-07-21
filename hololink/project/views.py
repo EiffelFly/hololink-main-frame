@@ -12,7 +12,8 @@ def is_valid_queryparam(param):
 
 def filter(request):
     qs = Project.objects.filter(created_by=request.user).order_by('-created_at')
-    filterProjectsName = request.GET.get('project-filter')
+    filterProjectsName = request.GET.get('project_filter')
+    print(filterProjectsName)
 
     if is_valid_queryparam(filterProjectsName):
         qs = qs.filter(name__icontains=filterProjectsName)
@@ -32,7 +33,7 @@ def projects_list(request):
         'projects': projects,
         'countArticles' : countArticles
     }
-    
+
     return render(request, 'projects_list.html', context)    
 
 def project_detail(request, slug):

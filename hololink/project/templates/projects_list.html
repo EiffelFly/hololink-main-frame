@@ -27,13 +27,17 @@
             <div class="col-4"></div>
             <div class="col-8"  style="padding-right: 8rem;">
                 <div class="row" style="margin-top: 2rem;">
-                    <div class="col-6">
-                        <div class="inpup-group">
-                            <input class="form-control py-2 border" type="search" name="project-filter" placeholder="Find a project" />
-                        </div>
+                    <div class="col-8">
+                        <form method="GET" action=".">
+                            <div class="inpup-group">
+                                <input class="form-control py-2 border" type="search" name="project_filter" placeholder="Find a project" />
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-3"></div>
-                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-2" style="padding-right: 15px;">
+                        <button type="button" class="btn btn-secondary float-right" href="#"> New Project </button>
+                    </div>
                 </div>
                 {% for project in projects %}
                 <div class="row">
