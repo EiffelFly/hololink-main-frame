@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 import jsonfield
 from project.models import Project
+from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, pre_delete, post_save
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
@@ -47,6 +48,7 @@ class Article(models.Model):
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
     )

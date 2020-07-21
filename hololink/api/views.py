@@ -58,6 +58,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         '''
             Because we don't allow user post any sensitive content and some other i
             nformation to our api. We have to create it from server side.
+
         '''
 
         serializer.save(
