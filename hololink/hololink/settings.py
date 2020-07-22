@@ -79,6 +79,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hololink.wsgi.application'
 
+# Define new login validatiion backend
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
