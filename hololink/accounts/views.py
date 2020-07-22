@@ -85,6 +85,7 @@ def sign_up_with_email(request):
                 'Sincerely,\n'
                 'Hololink\n'
             )
+            #using sendgrid as SMTP server
             send_mail(
                 subject=subject,
                 message=message,
