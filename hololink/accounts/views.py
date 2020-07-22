@@ -14,6 +14,7 @@ from django.contrib.auth.views import LoginView
 
 
 
+
 class CustomLoginView(LoginView):
     '''
     Inherit Login View to redirect to custom url
@@ -66,7 +67,7 @@ def sign_up_with_email(request):
         if form.is_valid():
             # Create a user and save it to DB.
             email = form.cleaned_data.get('email')
-            username = email
+            username = form.cleaned_data.get('username')
             user = form.save(commit=False)
             user.username = username
             random_uuid_password = uuid.uuid4().hex[0:6]
@@ -79,7 +80,7 @@ def sign_up_with_email(request):
                 '\n'
                 'You have created a new account on Hololink. You could login and change it on Hololink later.\n'
                 '\n'
-                f'Your account: {username}\n'
+                f'Your account: {email}\n'
                 f'Your password: {random_uuid_password}\n'
                 '\n'
                 'Sincerely,\n'

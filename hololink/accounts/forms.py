@@ -17,9 +17,19 @@ class SignUpWithEmailForm(forms.ModelForm):
         ),
     )
 
+    username = forms.CharField(
+        label=_('Username'),
+        required = True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Username'),
+            },
+        ),
+    )
+
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['username', 'email']
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -33,6 +43,17 @@ class SignUpWithEmailForm(forms.ModelForm):
             )
         return email
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            self.add_error(
+                'username',
+                ValidationError(
+                    _('The Username has already been used.'),
+                    code='invalid'
+                )
+            )
+        return username
 
 class EmailValidationOnForgotPassword(PasswordResetForm):
 
