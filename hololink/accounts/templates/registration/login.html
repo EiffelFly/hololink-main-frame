@@ -39,7 +39,13 @@
                         <small class="text-danger">{{ error }}</small>
                         {% endfor %}
                         {% else %}
-                        {% render_field field class+='form-control' placeholder=field.label %}
+                            {% if field.label == 'Username' or field.label == '使用者名稱' %}
+                            <h5 style="font-size: 1rem;">{% trans "Username or email address" %}</h5>
+                            {% render_field field class+='form-control'%}
+                            {% else %}
+                            <h5 style="font-size: 1rem;">{% trans "Password" %}</h5>
+                            {% render_field field class+='form-control'%}
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

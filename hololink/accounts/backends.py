@@ -6,6 +6,12 @@ from django.contrib.auth.models import User
 UserModel = get_user_model()
 
 class EmailBackend(ModelBackend):
+    '''
+        Make django built-in user model can be verified with email and username
+        at same time.
+        https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#writing-an-authentication-backend
+    '''
+
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             # we are using username or email to login
