@@ -18,8 +18,9 @@ class EmailBackend(ModelBackend):
             user = UserModel.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username))
         except UserModel.DoesNotExist:
+            # when some hacker try to break this violently, we have to make sure every 
+            # request to database to be the same
             UserModel().set_password(password)
-            
         except MultipleObjectsReturned:
             return User.objects.filter(email=username).order_by('id').first()
         else:
