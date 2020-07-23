@@ -47,6 +47,11 @@ class Project(models.Model):
         null=True,
     )
 
+    private_project = models.BooleanField(
+        verbose_name=_('Private Project'),
+        default=True,
+    )
+
     def __str__(self):
         return self.name
 
