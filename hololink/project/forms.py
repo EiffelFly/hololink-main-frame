@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 class ProjectForm(forms.ModelForm):
 
     name = forms.CharField(
-        label='Project name',
+        label=_('Galaxy name'),
         required = True,
         widget=forms.TextInput(
             attrs={
@@ -27,6 +27,13 @@ class ProjectForm(forms.ModelForm):
             )
         return name
 
+    private = forms.BooleanField(
+        label=_('Private')
+    )
+
+    public = forms.BooleanField(
+        label=_('Public')
+    )
 
 
 

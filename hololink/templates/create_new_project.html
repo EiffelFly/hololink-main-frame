@@ -5,12 +5,17 @@
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: 95%;">
     <div class="row" style="height: 4rem"></div>
     <div class="row justify-content-center">
         <div class="col-auto"  style="width:50rem;  padding-left: 30px;">
-            <h1 style="font-size: 2rem;">Create new Project</h1>
-            <p>{% trans "Project will stores the article you upload to, article can be safed at different project at the same time" %}</p>
+            <h1 style="font-size: 2rem;">Create new Galaxy</h1>
+            <p>{% trans "Galaxy will store all the articles you upload from our chrome extension." %}</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto"  style="width:50rem;  padding-left: 30px;">
+            <hr>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -25,20 +30,57 @@
                 {% for error in form.non_field_errors %}
                 <p class="text-danger">{{ error }}</p>
                 {% endfor %}
-                {% for field in form %}
+                
                 <div class="form-row">
                     <div class="form-group col">
                         {% if not field.errors %}
-                        {% render_field field class+='form-control' %}
+
+                            <h5 style="font-size: 1rem; margin-top: 2rem;">{% trans "Galaxy name" %}</h5>
+                            {% render_field form.name class+='form-control' style="margin-top: 1rem" %}
+                            <hr style="margin-top: 2rem">
+
+                            <div class="row d-flex flex-row">
+                                <div class="col-1 d-flex">
+                                    {% render_field form.private class+='form-control-md' style="margin:auto;"%}
+                                </div>
+                                <div class="col-1 d-flex">
+                                    <img src="{% static 'img/key.svg' %}" width="36" height="36" style="margin:auto;">
+                                </div>
+                                <div class="col-10 d-flex flex-column">
+                                    <p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Private' %}</p>
+                                    <p style="font-size: 10px; margin-bottom: 0;">{% trans 'You choose who can see and edit this galaxy.' %}</p>
+                                </div>
+                            </div>
+                            <div class="row d-flex flex-row" style="margin-top: 1rem;">
+                                <div class="col-1 d-flex">
+                                    {% render_field form.public class+='form-control-md' style="margin:auto;"%}
+                                </div>
+                                <div class="col-1 d-flex">
+                                    <img src="{% static 'img/globe.svg' %}" width="36" height="36" style="margin:auto;">
+                                </div>
+                                <div class="col-10 d-flex flex-column">
+                                    <p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Public' %}</p>
+                                    <p style="font-size: 10px; margin-bottom: 0;">{% trans 'Anyone on the internet can enter this galaxy, but you choose who can create/edit/delete articles.' %}</p>
+                                </div>
+                            </div>
+                            
                         {% else %}
+                        {% for field in form %}
                         {% render_field field class+='form-control border-danger' %}
-                        {% for error in field.errors %}
-                        <small class="text-danger d-block">{{ error }}</small>
+                            {% for error in field.errors %}
+                            <small class="text-danger d-block">{{ error }}</small>
+                            {% endfor %}
                         {% endfor %}
                         {% endif %}
                     </div>
                 </div>
-                {% endfor %}
+                <hr style="margin-bottom: 4rem;">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-primary btn-block" style="width:20%">{% trans 'Create Galaxy' %}</button>
+                    </div>
+                </div>
+                
         </div>
     </div>
     
