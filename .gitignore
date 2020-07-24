@@ -38,5 +38,4 @@ share/python-wheels/
 
 # gcp things
 hololink/cloud_sql_proxy
-
 hololink/uploads
