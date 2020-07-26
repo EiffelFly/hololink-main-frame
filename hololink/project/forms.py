@@ -15,6 +15,21 @@ class ProjectForm(forms.ModelForm):
         ),
     )
 
+    project_visibility = forms.ChoiceField(
+        required=True,
+        label=_('Project Visibility'),
+        choices=Project.PROJECT_PRIVACY_CHOICES
+
+    )
+
+    private = forms.BooleanField(
+        label=_('Private')
+    )
+
+    public = forms.BooleanField(
+        label=_('Public')
+    )
+
     def clean_name(self):
         name = self.cleaned_data['name']
         if Project.objects.filter(name=name).exists():
@@ -26,14 +41,6 @@ class ProjectForm(forms.ModelForm):
                 )
             )
         return name
-
-    private = forms.BooleanField(
-        label=_('Private')
-    )
-
-    public = forms.BooleanField(
-        label=_('Public')
-    )
 
     class Meta:
         model = Project

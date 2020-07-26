@@ -78,4 +78,4 @@ def create_newproject(request):
         form = ProjectForm()
         context['form'] = form
         context['tips'] += [_('Fill in the following form to create a new project.')]
-    return render(request, 'create_new_project.html', context)
+    return render(request, 'create_new_project_test.html', context)

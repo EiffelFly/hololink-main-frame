@@ -16,6 +16,14 @@ def now():
 
 class Project(models.Model):
 
+    Private = 'Private'
+    Public = 'Public'
+
+    PROJECT_PRIVACY_CHOICES = (
+        (Private,_('Private')),
+        (Public, _('Public'))
+    )
+
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=256,
@@ -47,9 +55,11 @@ class Project(models.Model):
         null=True,
     )
 
-    private_project = models.BooleanField(
-        verbose_name=_('Private Project'),
-        default=True,
+    project_visbility = models.CharField(
+        verbose_name=_('Private Visibility'),
+        max_length=100,
+        choices=PROJECT_PRIVACY_CHOICES,
+        default='Private',
     )
 
     def __str__(self):
