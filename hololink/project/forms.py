@@ -10,14 +10,15 @@ class ProjectForm(forms.ModelForm):
         required = True,
         widget=forms.TextInput(
             attrs={
-                'style':''
+                'style':'',
+                'autocomplete':'off'
             },
         ),
     )
 
     project_visibility = forms.ChoiceField(
         required=True,
-        label=_('Project Visibility'),
+        label=_('Galaxy Visibility'),
         choices=Project.PROJECT_VISIBILITY_CHOICES,
         initial='Private',
         widget=forms.RadioSelect(
