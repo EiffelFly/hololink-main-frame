@@ -35,9 +35,6 @@ class ProjectForm(forms.ModelForm):
         label=_('Public')
     )
 
-
-
-
     class Meta:
         model = Project
         exclude = ['created_by', 'created_at', 'project_basestone_keyword_sum', 'project_stellar_keyword_sum', 'slug']

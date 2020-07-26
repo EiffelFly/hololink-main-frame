@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
+from .forms import ProjectForm
 from article.models import Article
 import hashlib
 
@@ -51,3 +52,30 @@ def project_detail(request, slug):
     
 
     return render(request, 'project_detail.html', context) 
+
+@csrf_exempt
+def create_newproject(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    context = {
+        'form': None,
+        'tips': []
+    }
+
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        context['form'] = form
+        if form.is_valid():
+            project = Project.objects.create(
+                name=form.cleaned_data.get('name'),
+                private_project=form.cleaned_data.get('name'),
+                created_by=request.user,
+                created_at=now(),
+            )
+            messages.add_message(request, messages.SUCCESS, _('Added successfully.'))
+    else:
+        form = ProjectForm()
+        context['form'] = form
+        context['tips'] += [_('Fill in the following form to create a new project.')]
+    return render(request, 'create_new_project.html', context)
