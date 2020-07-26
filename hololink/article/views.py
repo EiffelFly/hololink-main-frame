@@ -107,7 +107,7 @@ def articel_detail(request, slug):
     user = User.objects.get(username=request.user.username)
     article = get_object_or_404(Article, slug=slug, created_by=request.user)
     user_selected_project = request.session.get('user_selected_project')
-    print(user_selected_project)
+    
     context = {
         'article' : article,
         'user' : user,

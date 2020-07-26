@@ -20,6 +20,13 @@ class ProjectForm(forms.ModelForm):
         label=_('Project Visibility'),
         choices=Project.PROJECT_VISIBILITY_CHOICES,
         initial='Private',
+        widget=forms.RadioSelect(
+            choices=Project.PROJECT_VISIBILITY_CHOICES,
+            attrs={
+                'class':'custom-radio-list'
+            }
+            
+        )
     )
 
     def clean_name(self):
