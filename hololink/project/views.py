@@ -1,12 +1,17 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.contrib import messages
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
 from .forms import ProjectForm
 from article.models import Article
 import hashlib
+
+def now():
+    return timezone.localtime(timezone.now())
 
 def is_valid_queryparam(param):
     return param != '' and param is not None
@@ -69,11 +74,12 @@ def create_newproject(request):
         if form.is_valid():
             project = Project.objects.create(
                 name=form.cleaned_data.get('name'),
-                private_project=form.cleaned_data.get('name'),
+                project_visibility=form.cleaned_data.get('project_visibility'),
                 created_by=request.user,
                 created_at=now(),
             )
             messages.add_message(request, messages.SUCCESS, _('Added successfully.'))
+            return redirect(reverse('user_dashboard', kwargs={'slug': request.user.username}))
     else:
         form = ProjectForm()
         context['form'] = form

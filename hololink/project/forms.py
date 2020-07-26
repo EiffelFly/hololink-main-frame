@@ -18,16 +18,8 @@ class ProjectForm(forms.ModelForm):
     project_visibility = forms.ChoiceField(
         required=True,
         label=_('Project Visibility'),
-        choices=Project.PROJECT_PRIVACY_CHOICES
-
-    )
-
-    private = forms.BooleanField(
-        label=_('Private')
-    )
-
-    public = forms.BooleanField(
-        label=_('Public')
+        choices=Project.PROJECT_VISIBILITY_CHOICES,
+        initial='Private',
     )
 
     def clean_name(self):
@@ -44,4 +36,4 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        exclude = ['created_by', 'created_at', 'project_basestone_keyword_sum', 'project_stellar_keyword_sum', 'slug']
+        fields = ['name', 'project_visibility']

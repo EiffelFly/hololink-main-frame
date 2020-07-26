@@ -19,7 +19,7 @@ class Project(models.Model):
     Private = 'Private'
     Public = 'Public'
 
-    PROJECT_PRIVACY_CHOICES = (
+    PROJECT_VISIBILITY_CHOICES = (
         (Private,_('Private')),
         (Public, _('Public'))
     )
@@ -55,10 +55,10 @@ class Project(models.Model):
         null=True,
     )
 
-    project_visbility = models.CharField(
-        verbose_name=_('Private Visibility'),
+    project_visibility = models.CharField(
+        verbose_name=_('Project Visibility'),
         max_length=100,
-        choices=PROJECT_PRIVACY_CHOICES,
+        choices=PROJECT_VISIBILITY_CHOICES,
         default='Private',
     )
 
