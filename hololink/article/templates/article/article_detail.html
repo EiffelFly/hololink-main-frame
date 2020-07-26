@@ -22,15 +22,16 @@
 </style>
     <div class="container-fluid">
         <div class="content-container">
-            <div class="row" style="margin-top: 4rem;">
-                <div class="col-4"></div>
-                <div class="col-8" style="padding-right: 10rem;">
+            <div class="row" style="margin-top: 4rem; padding-right: 3rem; padding-left: 3rem;">
+                <div class="col-xl-6"></div>
+                <div class="col-xl-6">
                     <div class="row">
                         <div class="col" style="padding-left:0; padding-right: 0;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a href="{% url 'project:projects_list' %}">Projects</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'project:project_detail' user_selected_project %}">{{ user_selected_project }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ article.name }}</li>
                                 </ol>
                             </nav>

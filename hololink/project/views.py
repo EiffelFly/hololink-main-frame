@@ -48,6 +48,9 @@ def project_detail(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
+
+    #send message to article.views.article_detail
+    request.session['user_selected_project'] = project.name
     context = {
         'project' : project, 
         'articles': articles,

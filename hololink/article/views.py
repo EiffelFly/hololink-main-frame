@@ -106,8 +106,11 @@ def articel_detail(request, slug):
         return redirect(reverse('login'))
     user = User.objects.get(username=request.user.username)
     article = get_object_or_404(Article, slug=slug, created_by=request.user)
+    user_selected_project = request.session.get('user_selected_project')
+    print(user_selected_project)
     context = {
         'article' : article,
-        'user' : user
+        'user' : user,
+        'user_selected_project' : user_selected_project
     }
     return render(request, 'article/article_detail.html', context)
