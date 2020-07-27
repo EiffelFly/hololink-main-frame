@@ -112,10 +112,39 @@ def articel_detail(request, slug):
 
     user_selected_project = request.session.get('user_selected_project')
     print(user_selected_project)
-    
+
     context = {
         'article' : article,
         'user' : user,
         'user_selected_project' : user_selected_project
     }
     return render(request, 'article/article_detail.html', context)
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+def filter(request):
+    '''
+        implement articles search bar 
+    '''
+    qs = Article.objects.filter(created_by=request.user).order_by('-created_at')
+    filterArticlesName = request.GET.get('article_filter')
+    
+
+    if is_valid_queryparam(filterArticlesName):
+        qs = qs.filter(name__icontains=filterArticlesName)
+
+    return qs
+
+
+def articles_list(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    articles = filter(request)
+    
+    context = {
+        'articles' : articles
+    }
+
+    return render(request, 'article/articles_list.html', context)   

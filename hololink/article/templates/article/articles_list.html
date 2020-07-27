@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    .dashboard-articles-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 13px;
+    }
+</style>
+
+<div class="container-fluid" style="padding:0px;">
+    {% include 'dashboard_navbar.html' %}
+    <div class="content_container">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-8"  style="padding-right: 8rem;">
+                <div class="row" style="margin-top: 2rem;">
+                    <div class="col">
+                        <form method="GET" action=".">
+                            <div class="inpup-group">
+                                <input class="form-control py-2 border" type="search" name="article_filter" placeholder="Find a article" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 1rem;">
+                    {% if not articles %}
+                        <div class="col">
+                            <p>{% trans "You don't have any article to show. " %}<a class="text-primary"
+                                    href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a></p>
+                        </div>
+                    {% else %}
+                        {% for article in articles %}
+                        <div class="col-12">
+                            <hr style="border-color: #BFB9B8;">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="article-title" style="font-weight: bold;font-size: 18px; margin-bottom: 0;"><a href="{% url 'article:article_detail' article.slug %}" style="color: #222626;"> {{ article.name }} </a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" style="font-size: 10px; color: gray;">{{ article.from_url|truncatechars:60 }}</a>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 1rem;">
+                                <div class="col-6 d-flex">
+                                    <div class="article_created_at" style="font-size: 10px; color: gray; margin: auto 0">
+                                        {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
+                                    </div>
+                                </div>
+                                <div class="col-6 d-flex">
+                                    <p style="margin: 0 0 0 auto;">
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                            <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                            <span>basestone -</span>
+                                            <span style="color: #2e1760;">{{article.article_basestone_keyword_sum}}</span>
+                                        </span>
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                            <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                            <span>stellar -</span>
+                                            <span style="color: #2e1760;">{{article.article_stellar_keyword_sum}}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                    
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

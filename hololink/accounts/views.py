@@ -10,6 +10,7 @@ from django.urls import reverse
 import uuid
 from .forms import SignUpWithEmailForm
 from django.contrib.auth.views import LoginView
+from smtplib import SMTPException
 
 
 
@@ -72,6 +73,7 @@ def sign_up_with_email(request):
             user.username = username
             random_uuid_password = uuid.uuid4().hex[0:6]
             user.set_password(random_uuid_password)
+            
             user.save()
             # Send a login info Email.
             subject = "[Hololink] You have created an account."
@@ -87,13 +89,18 @@ def sign_up_with_email(request):
                 'Hololink\n'
             )
             #using sendgrid as SMTP server
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email],
-                fail_silently=False,
-            )
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+            except SMTPException as e:
+                print('There was an error sending an email: ', e) 
+
+            print(email)
             return redirect(reverse('password_reset_done'))
     else: 
         form = SignUpWithEmailForm()

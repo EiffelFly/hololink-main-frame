@@ -32,6 +32,7 @@ def projects_list(request):
 
     countArticles = []
     projects = filter(request)
+
     for project in projects:
         countArticles.append(project.articles.count())
     

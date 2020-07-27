@@ -82,7 +82,7 @@
                                     {% for article in articles %}
                                         <tr>
                                             <td scope="row">{{ forloop.counter }}</td>
-                                            <td style="font-size: 8px;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
+                                            <td style="font-size: 8px;"><a href="{% url 'article:article_detail' article.slug %}">{{ article.name }}</a></td>
                                             <td>{{ article.article_basestone_keyword_sum }}</td>
                                             <td>{{ article.article_stellar_keyword_sum }}</td>
                                         </tr>
