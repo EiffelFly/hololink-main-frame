@@ -50,15 +50,16 @@ def project_detail(request, slug):
     articles = Article.objects.filter(projects=project)
 
     #send message to article.views.article_detail
-    request.session['user_selected_project'] = project.slug
+    request.session['user_selected_project'] = {
+        'project_slug' : project.slug,
+        'project_name' : project.name,
+    }
+
     context = {
         'project' : project, 
         'articles': articles,
     }
-
-    print(articles)
     
-
     return render(request, 'project_detail.html', context) 
 
 @csrf_exempt
