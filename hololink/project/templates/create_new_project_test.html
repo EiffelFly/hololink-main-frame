@@ -41,7 +41,7 @@
                 <div class="form-row">
                     <div class="form-group col">
                         {% if field.label == 'Galaxy name' or field.label == '星系名' %}
-                            <h5 style="font-size: 1.5rem; margin-top: 2rem;">{% trans "Galaxy name" %}</h5>
+                            <h5 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">{% trans "Galaxy name" %}</h5>
                             {% if not field.errors %}
                                 {% render_field field class+='form-control' %}
                             {% else %}

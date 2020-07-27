@@ -8,6 +8,9 @@ import hashlib
 from .models import Article
 from .forms import ArticleForm, ArticleChangeForm
 from django.contrib.auth.models import User
+from unidecode import unidecode
+from django.utils.text import slugify
+
 
 
 def now():

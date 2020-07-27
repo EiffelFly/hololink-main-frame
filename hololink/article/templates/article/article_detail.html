@@ -32,7 +32,7 @@
                                     <li class="breadcrumb-item"><a href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a href="{% url 'project:projects_list' %}">Projects</a></li>
                                     <li class="breadcrumb-item"><a href="{% url 'project:project_detail' user_selected_project %}">{{ user_selected_project }}</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">{{ article.name }}</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ article.name|truncatechars:30 }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -54,7 +54,7 @@
                                                 <img src="{% static 'img/link-external.svg' %}" alt=link_external width="15" height="15" class="align-self-center">
                                             </div>
                                             <div style="text-align: center;">
-                                                <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}">{{ article.from_url|truncatechars:60 }}</a>
+                                                <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}">{{ article.from_url|truncatechars:40 }}</a>
                                             </div>
                                         </div>
                                         <div class="row d-flex article_detail_description" style="padding-left: 2.9rem; height: 100%;">

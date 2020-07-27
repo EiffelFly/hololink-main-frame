@@ -50,7 +50,7 @@ def project_detail(request, slug):
     articles = Article.objects.filter(projects=project)
 
     #send message to article.views.article_detail
-    request.session['user_selected_project'] = project.name
+    request.session['user_selected_project'] = project.slug
     context = {
         'project' : project, 
         'articles': articles,
