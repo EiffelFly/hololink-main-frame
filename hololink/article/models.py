@@ -23,6 +23,7 @@ class Article(models.Model):
         max_length=128,
         blank=True,
     )
+
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=256,
@@ -95,12 +96,14 @@ class Article(models.Model):
 
 
 def slug_generator(sender, instance, *args, **kwargs):
-    slug = slugify(unidecode(instance.name))
-    exists = Article.objects.filter(slug=slug).exists()
-    if exists:
-        slug = f"{slug}-{instance.id}"
+    slug = slugify(instance.name)
+    slug = f"{slug}-{instance.hash[:30]}"
+    article = Article.objects.filter(slug=slug)
+    
+    if article.exists():
+        slug = f"{slug}-{instance.hash[:30]}-{instance.id}"
+    
     instance.slug = slug
-    print(slug)
-
+    
 pre_save.connect(slug_generator, sender=Article, dispatch_uid='generate slug')
 
