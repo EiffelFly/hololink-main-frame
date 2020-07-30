@@ -42,6 +42,11 @@ class Project(models.Model):
         default=None
     )
 
+    last_edited_time = models.DateTimeField(
+        verbose_name=_('Last edited time'),
+        auto_now=True
+    )
+
     project_basestone_keyword_sum = models.IntegerField(
         verbose_name=_('Basestone Keyword Amount'),
         blank=True,

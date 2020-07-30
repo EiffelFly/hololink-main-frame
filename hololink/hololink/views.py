@@ -81,7 +81,7 @@ def user_dashboard(request, slug):
     
     
     countArticles = []
-    projects = Project.objects.filter(created_by=request.user).order_by('-created_at') #use -created_at to desc()
+    projects = Project.objects.filter(created_by=request.user).order_by('-last_edited_time') #use -created_at to desc()
     projects = projects[:4]
     for project in projects:
         countArticles.append(project.articles.count())
