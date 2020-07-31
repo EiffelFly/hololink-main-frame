@@ -94,5 +94,24 @@ def user_dashboard(request, slug):
 
     return render(request, 'user_dashboard.html', context) 
 
+def user_public_profile(request, slug):
+    
+    '''
+        BE CAREFUL!! This section is user public area, can't let any not aloowed info leak out.
+    '''
+    countArticles = []
+    projects = Project.objects.filter(created_by=request.user).filter(project_visibility='Public').order_by('-last_edited_time') #use -created_at to desc()
+    print(projects)
+    projects = projects[:4]
+    for project in projects:
+        countArticles.append(project.articles.count())
+
+
+    context = {
+        'projects': projects,
+        'countArticles' : countArticles
+    }
+
+    return render(request, 'user_dashboard.html', context) 
 
 

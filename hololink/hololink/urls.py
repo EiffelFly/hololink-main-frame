@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from .views import index, d3demo, user_dashboard
+from .views import index, d3demo, user_dashboard, user_public_profile
 from rest_framework import routers
 from api import views
 
@@ -14,7 +14,8 @@ urlpatterns = [
     path('projects/', include('project.urls')),
     path('', index, name='index'),
     path('d3demo/', d3demo, name='d3demo'),
-    path('<slug:slug>/', user_dashboard, name='user_dashboard'),
+    path('@<slug:slug>/', user_public_profile, name='user_public_profile'),
+    path('@<slug:slug>/dashboard', user_dashboard, name='user_dashboard'),
     #path('<username>/', user_dashboard, name='user_dashboard')
     
 ]
