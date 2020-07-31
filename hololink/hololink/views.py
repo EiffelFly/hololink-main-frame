@@ -115,4 +115,13 @@ def user_public_profile(request, slug):
 
 
 def explore(request):
-    pass
+    projects = Project.objects.filter(project_visibility='Public')
+    project_sortby_stars = projects.order_by('-project_stars')
+
+
+    context = {
+        'project_sortby_stars':project_sortby_stars,
+        'projects':projects
+    }
+
+    return render(request, 'explore.html', context) 
