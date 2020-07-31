@@ -12,7 +12,7 @@
 </style>
 
 <div class="container-fluid" style="min-height: 95%;">
-    <div class="row" style="height: 4rem"></div>
+    <div class="row" style="height: 2rem"></div>
     <div class="row justify-content-center">
         <div class="col-auto"  style="width:50rem;  padding-left: 30px;">
             <h1 style="font-size: 2rem;">Create new Galaxy</h1>
@@ -40,8 +40,8 @@
                 {% for field in form %}
                 <div class="form-row">
                     <div class="form-group col">
-                        {% if field.label == 'Galaxy name' or field.label == '星系名' %}
-                            <h5 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">{% trans "Galaxy name" %}</h5>
+                        {% if field.label == 'Galaxy Name' or field.label == '星系名' %}
+                            <h5 style="font-size: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem;">{% trans "Galaxy name" %}</h5>
                             {% if not field.errors %}
                                 {% render_field field class+='form-control' %}
                             {% else %}
@@ -49,10 +49,20 @@
                                 {% for error in field.errors %}  
                                 <small class="text-danger d-block">{{ error }}</small>
                                 {% endfor %}
-                            {% endif %}    
+                            {% endif %} 
+                        {% elif field.label == 'Galaxy Description' or field.label == '星系介紹'%}
+                            <h5 style="font-size: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem;">{% trans "Galaxy Description" %}</h5>
+                            {% if not field.errors %}
+                                {% render_field field class+='form-control' %}
+                            {% else %}
+                                {% render_field field class+='form-control border-danger' %}
+                                {% for error in field.errors %}  
+                                <small class="text-danger d-block">{{ error }}</small>
+                                {% endfor %}
+                            {% endif %} 
                         {% elif field.label == 'Galaxy Visibility' or field.label == '星系可視度' %}
                             <hr style="margin-bottom: 2rem;">
-                            {% for radio in form.project_visibility %}
+                            {% for radio in form.galaxy_visibility %}
                             <div class="row" style="margin-top: 1rem;">
                                 <div class="col">
                                     {% if radio.choice_label == 'Private' %}
@@ -99,7 +109,7 @@
                 </div>
                 {% endfor %}
                 
-                <hr style="margin-bottom: 4rem;">
+                <hr style="margin-bottom: 2rem;">
                 <div class="form-row">
                     <div class="form-group col">
                         <button type="submit" class="btn btn-primary btn-block" style="width:20%">{% trans 'Create Galaxy' %}</button>

@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 class ProjectForm(forms.ModelForm):
 
     name = forms.CharField(
-        label=_('Galaxy name'),
+        label=_('Galaxy Name'),
         required = True,
         widget=forms.TextInput(
             attrs={
@@ -16,7 +16,19 @@ class ProjectForm(forms.ModelForm):
         ),
     )
 
-    project_visibility = forms.ChoiceField(
+    galaxy_description = forms.CharField(
+        label=_('Galaxy Description'),
+        required = False,
+        widget=forms.Textarea(
+            attrs={
+                'style':'',
+                'autocomplete':'off',
+                'rows':3,
+            },
+        ),
+    )
+
+    galaxy_visibility = forms.ChoiceField(
         required=True,
         label=_('Galaxy Visibility'),
         choices=Project.PROJECT_VISIBILITY_CHOICES,
@@ -29,6 +41,8 @@ class ProjectForm(forms.ModelForm):
             
         )
     )
+
+    
 
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -44,4 +58,4 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'project_visibility']
+        fields = ['name', 'galaxy_description', 'galaxy_visibility']

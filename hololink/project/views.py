@@ -79,7 +79,8 @@ def create_newproject(request):
         if form.is_valid():
             project = Project.objects.create(
                 name=form.cleaned_data.get('name'),
-                project_visibility=form.cleaned_data.get('project_visibility'),
+                description=form.cleaned_data.get('galaxy_description'),
+                project_visibility=form.cleaned_data.get('galaxy_visibility'),
                 created_by=request.user,
                 created_at=now(),
             )
