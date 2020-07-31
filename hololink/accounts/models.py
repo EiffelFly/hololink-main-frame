@@ -29,6 +29,13 @@ class Profile(models.Model):
         blank=True
     )
 
+    followers = models.ManyToManyField(
+        User,
+        related_name='followings',
+        verbose_name=_('Followers'),
+        blank=True,
+    )
+
     def get_absolute_url(self):
         return reverse('user_dashboard', kwargs={'username': self.slug})
 
@@ -36,6 +43,7 @@ class Profile(models.Model):
          self.slug = slugify(self.user.username)
          super(Profile, self).save(*args, **kwargs)
 
+   
 
 
 '''

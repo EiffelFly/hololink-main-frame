@@ -17,6 +17,7 @@ from .models import Profile
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
+    filter_horizontal = ('followers',)
     #verbose_name_plural = 'profile'
 
 # Define a new User admin
