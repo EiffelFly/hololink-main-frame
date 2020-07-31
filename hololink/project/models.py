@@ -30,6 +30,12 @@ class Project(models.Model):
         blank=True,
     )
 
+    description = models.TextField(
+        verbose_name=_('Project description'),
+        max_length=262144,
+        blank=True,
+    )
+
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
         auto_now_add=True
