@@ -101,7 +101,6 @@ def user_public_profile(request, slug):
     '''
     countArticles = []
     projects = Project.objects.filter(created_by=request.user).filter(project_visibility='Public').order_by('-last_edited_time') #use -created_at to desc()
-    print(projects)
     projects = projects[:4]
     for project in projects:
         countArticles.append(project.articles.count())
@@ -115,3 +114,5 @@ def user_public_profile(request, slug):
     return render(request, 'user_dashboard.html', context) 
 
 
+def explore(request):
+    pass

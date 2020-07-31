@@ -33,7 +33,7 @@
 </style>
 <div class="container-fluid" style="padding:0px;">
     <div class="header_container">
-        <div class="row" style="height: 18rem"></div>
+        <div class="row" style="height: 18rem; width: 100%;"></div>
         <div class="row" style="padding-left: 10rem;">
             <div class="col">
                 <div class="row" style="width:75%">
@@ -57,14 +57,14 @@
                 <img src="{% static 'img/Hololink_article.png' %}" class="img-fluid" alt="Responsive image" style="width:36rem">
             </div> 
         </div>
-        <div class="row" style="height: 18rem"></div>
+        <div class="row" style="height: 18rem; width:100%;"></div>
     </div>
     <div class="howto_container" style="background-color: #BFB9B8; padding: 2rem 0">
-        <div class="row" style="padding-left: 10rem;">
+        <div class="row" style="padding-left: 10rem; width: 100%;">
             <h2 style="font-size: 2rem; font-family:'Noto Sans TC', sans-serif; font-weight: 900; font-size: 3rem;">How it works</h2>
         </div>
-        <div class="row" style="height: 5rem"></div>
-        <div class="row d-flex flex-row" style="padding:0 10rem;">
+        <div class="row" style="height: 5rem; width: 100%;"></div>
+        <div class="row d-flex flex-row" style="padding:0 10rem; width: 100%;">
             <div class="col">
                 <div class="row" style="width:80%;">
                     <img src="{% static 'img/collect-relate-gainInsight-share_01.svg' %}" class="img-fluid" alt="Responsive image" style="width:15rem">
@@ -175,9 +175,9 @@
             </div>
         </div>
     </div>
-    <div class="row" style="height: 5rem;"></div>
-    <div class="calltoAction">
-        <div class="row justify-content-center">
+    <div class="row" style="height: 5rem; width: 100%;"></div>
+    <div class="calltoAction" style="width: 100%;">
+        <div class="row justify-content-center" style="width: 100%;">
             <div class="col-auto" style="padding: 2rem; width: 48rem;">
                 <p>
                     <h1 class="text-dark" style="text-align: center;">{% trans 'Join us' %}</h1>
@@ -187,7 +187,7 @@
                 </p>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" style="width: 100%;">
             <div class="col-auto" style="padding: 2rem; width: 28rem;">
                 <form method="post">
                     {% csrf_token %}
@@ -216,7 +216,7 @@
                 </form>
             </div>
         </div>
-        <div class="row" style="height: 12rem;"></div>
+        <div class="row" style="height: 12rem; width: 100%;"></div>
     </div>
         
     
