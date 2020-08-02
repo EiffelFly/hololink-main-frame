@@ -31,7 +31,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a href="{% url 'project:projects_list' %}">Projects</a></li>
-                                    <li class="breadcrumb-item"><a href="{% url 'project:project_detail' user_selected_project.project_slug %}">{{ user_selected_project.project_name }}</a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'project:project_dashboard' user_selected_project.project_slug %}">{{ user_selected_project.project_name }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{ article.name|truncatechars:30 }}</li>
                                 </ol>
                             </nav>

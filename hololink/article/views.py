@@ -104,7 +104,7 @@ def delete(request, id):
         return redirect(reverse('article:change_list'))
     return render(request, 'article/delete.html')
 
-def articel_detail(request, slug):
+def article_detail(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     user = User.objects.get(username=request.user.username)

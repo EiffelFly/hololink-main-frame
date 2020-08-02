@@ -32,7 +32,6 @@ def projects_list(request):
 
     countArticles = []
     projects = filter(request)
-
     for project in projects:
         countArticles.append(project.articles.count())
     
@@ -51,17 +50,61 @@ def project_detail(request, slug):
     articles = Article.objects.filter(projects=project)
 
     #send message to article.views.article_detail
-    request.session['user_selected_project'] = {
-        'project_slug' : project.slug,
-        'project_name' : project.name,
-    }
-
+    request.session['user_selected_project'] = project.name
     context = {
         'project' : project, 
         'articles': articles,
     }
+
+    return render(request, 'project_detail.html', context)
+
+def project_articles(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))  
     
-    return render(request, 'project_detail.html', context) 
+    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    articles = Article.objects.filter(projects=project)
+    countArticles = project.articles.count()
+
+    context = {
+        'project' : project, 
+        'articles': articles,
+        'countArticles':countArticles,
+    }  
+
+    return render(request, 'project_dashboard_articles.html', context)
+
+def project_dashboard(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))  
+    
+    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    articles = Article.objects.filter(projects=project)
+    countArticles = project.articles.count()
+
+    context = {
+        'project' : project, 
+        'articles': articles,
+        'countArticles':countArticles,
+    }
+
+    return render(request, 'project_dashboard.html', context) 
+
+def project_hologram(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login')) 
+
+    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    articles = Article.objects.filter(projects=project)
+    countArticles = project.articles.count()
+
+    context = {
+        'project' : project, 
+        'articles': articles,
+        'countArticles':countArticles,
+    }
+
+    return render(request, 'project_dashboard_hologram.html', context) 
 
 @csrf_exempt
 def create_newproject(request):
@@ -79,8 +122,7 @@ def create_newproject(request):
         if form.is_valid():
             project = Project.objects.create(
                 name=form.cleaned_data.get('name'),
-                description=form.cleaned_data.get('galaxy_description'),
-                project_visibility=form.cleaned_data.get('galaxy_visibility'),
+                project_visibility=form.cleaned_data.get('project_visibility'),
                 created_by=request.user,
                 created_at=now(),
             )

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    .dashboard-recentProject-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 1rem;
+    }
+</style>
+<div class="container-fluid" style="height: 100%; padding:0">
+    {% include 'project_dashboard_navbar.html' %}
+    <div class="hologram-container" style="height: 90%; background-color: #BFB9B8;"></div>
+</div>
+
+{% endblock %}
