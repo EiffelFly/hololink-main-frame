@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
 from accounts.models import Profile
+from django.contrib.auth.models import User
 import uuid
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -125,3 +126,17 @@ def explore(request):
     }
 
     return render(request, 'explore.html', context) 
+
+def explore_users(request):
+    '''
+        BE CAREFUL! This will demo some user public info.
+    '''
+    #profiles = Profile.objects.all()
+
+    profile = Profile.objects.all().order_by('-followers')
+
+    context = {
+        'profile':profile,
+    }
+    
+    return render(request, 'explore_users.html', context)
