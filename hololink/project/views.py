@@ -107,6 +107,23 @@ def project_hologram(request, slug):
     return render(request, 'project_dashboard_hologram.html', context) 
 
 @csrf_exempt
+def project_setting(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    context = {
+        'form': None,
+        'tips': []
+    }
+
+    if request.method == 'POST':
+        pass
+    else:
+        #form = 
+
+
+
+@csrf_exempt
 def create_newproject(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
