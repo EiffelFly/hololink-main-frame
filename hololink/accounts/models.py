@@ -42,6 +42,13 @@ class Profile(models.Model):
         blank=True
     )
 
+    self_introduction = models.TextField(
+        verbose_name=_('Self Introduction'),
+        max_length=262144,
+        blank=True,
+    )
+    
+
     def get_absolute_url(self):
         return reverse('user_dashboard', kwargs={'username': self.slug})
 

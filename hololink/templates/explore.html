@@ -5,8 +5,8 @@
 
 {% block content %}
 
-<div class="explore-container" style="height: 100%;" >
-    <div class="row" style="height: 40%; background-color: #E4E4E4;">
+<div class="explore-container" style="margin-bottom: 5rem;">
+    <div class="row" style="height: 16rem; background-color: #E4E4E4;">
         <div class="col-md-2" style="margin-top: 5.5rem;"></div>
         <div class="col-md-8" style="margin-top: 5.5rem;">
             <h1 style="font-size: 3vw; font-weight: 900;">Welcome to the Hololink Universe</h1>
@@ -31,6 +31,46 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin: 3rem 10rem; border-bottom: #E4E4E4 solid 1px"></div>
+    <div class="row d-flex flex-row" style="margin-top: 3rem; padding: 0 10rem;">
+        {% for project in project_sortby_stars%}
+            <div class="col">
+                <div class="card" style="height: 12rem;">
+                    <img class="card-img-top" src="">
+                    <div class="card-body">
+                        <div class="row" style="padding: 10px 20px 0 20px;">
+                            <div class="col-8 d-flex">
+                                <h5 class="card-title" style="margin:auto 0">{{ project.name }}</h5>
+                            </div>
+                            <div class="col-4 d-flex">
+                                <div class="row ml-auto d-flex">
+                                    <img src="{% static 'img/heart-fill.svg' %}" class="ml-auto">
+                                    <p style="margin: auto 0 auto 10px;">{{ project.project_stars }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 10px 20px 0 20px; height: 3rem;">
+                            <div class="col">
+                                <p class="card-text" style="font-size: 14px;">{{ project.description|truncatechars:60 }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row d-flex flex-row" style="padding: 10px 20px 0 20px;">
+                            <div class="col">
+                                <img>
+                                <p style="font-weight: 900;">{{project.created_by}}</p>
+                            </div>          
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row d-flex flex-row" style="margin-top: 3rem; padding: 0 10rem;">
+    {% endif %}
+    {% endfor %}
+    </div>
+
 </div>
 
 {% endblock %}
