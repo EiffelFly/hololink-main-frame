@@ -27,7 +27,7 @@
 <div class="row d-flex" style="padding: 2rem 4rem">
     <div class="col mr-auto d-flex">
         <img src="{% static 'img/archive.svg' %}" width="25" height="25" style="margin: auto 1rem auto 0">
-        <span><a href="#" style="font-size: 1.5rem;">{{ user.username }}</a></span>
+        <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.5rem;">{{ user.username }}</a></span>
         <span style="padding: 0 0.5vw; font-size: 1.5rem;"> / </span>
         <span><a href="#" style="font-size: 1.5rem;">{{ project.name }}</a></span>
     </div>
