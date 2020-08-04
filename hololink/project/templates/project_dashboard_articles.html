@@ -35,18 +35,20 @@
                     <div class="row" style="font-size: 14px; font-weight: 500;">
                         {{ article.name }}
                     </div>
-                    <div class="row d-flex" style="margin-top: 10px;">
+                    <div class="row d-flex" style="margin-top: 20px;">
                         <img src="{% static 'img/package.svg' %}" width="13" height="13" style="margin: auto 10px auto 0">
                         <div style="font-size: 14px;">{{article.article_basestone_keyword_sum}} </div>
-                        <img src="{% static 'img/git-merge.svg' %}" width="13" height="13" style="margin: auto 10px auto 10px">
+                        <img src="{% static 'img/git-merge.svg' %}" width="13" height="13" style="margin: auto 10px auto 30px">
                         <div style="font-size: 14px;">{{article.article_stellar_keyword_sum}} </div>
+                        <img src="{% static 'img/person.svg' %}" width="13" height="13" style="margin: auto 10px auto 30px">
+                        <div style="font-size: 14px;">{{article.created_by}} </div>
                     </div>
                 </div>
                 <div class="col-5"></div>
             
             </div>
             {% if not forloop.last %}
-            <hr>
+            <hr style="margin: 15px 0">
             {% else %}
             {% endif %}
             {% endfor %}

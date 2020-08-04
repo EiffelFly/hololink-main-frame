@@ -61,15 +61,23 @@ def project_detail(request, slug):
 def project_articles(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
+
+    basestone=0
+    stellar=0
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
-    articles = Article.objects.filter(projects=project)
+    articles = Article.objects.filter(projects=project).order_by('-created_at')
+    for article in articles:
+        basestone = basestone + article.article_basestone_keyword_sum
+        stellar = stellar + article.article_stellar_keyword_sum
+
     countArticles = project.articles.count()
 
     context = {
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
+        'data':{'basestone':basestone, 'stellar':stellar}
     }  
 
     return render(request, 'project_dashboard_articles.html', context)
