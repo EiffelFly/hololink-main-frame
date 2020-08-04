@@ -124,6 +124,7 @@ def galaxy_setting(request, slug):
     else:
         form = GalaxySettingsForm()
         form.fields['name'].widget.attrs['placeholder'] = project.name #added placeholder
+        form.fields['galaxy_description'].initial = project.description
         context['form'] = form
     
     return render(request, 'project_dashboard_settings.html', context)
