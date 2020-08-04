@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+<div class="modal fade" id="modalChangeGalaxyVisibility" tabindex="-1" role="dialog" aria-labelledby="modalChangeGalaxyVisibilityLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalChangeGalaxyVisibilityLabel">Change galaxy visibility</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="padding:0;">
+            <div class="container-fluid">
+                <div class="row d-flex" style="border-top:solid #E6B0AA 1px; border-bottom: solid #E6B0AA 1px; background-color: #F2D7D5; height: 5rem;">
+                    <h5 style="margin: auto; font-size: 14px;">Warning: this action need to be careful.</h5>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
