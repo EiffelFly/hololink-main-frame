@@ -24,16 +24,16 @@
 
 </style>
 
-<div class="row d-flex" style="padding: 2rem 4rem; width: 100%;">
+<div class="row d-flex" style="padding: 1.5em 4rem; width: 100%;">
     <div class="col mr-auto d-flex">
         <img src="{% static 'img/archive.svg' %}" width="25" height="25" style="margin: auto 1rem auto 0">
-        <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.5rem;">{{ user.username }}</a></span>
-        <span style="padding: 0 0.5vw; font-size: 1.5rem;"> / </span>
-        <span><a href="#" style="font-size: 1.5rem;">{{ project.name }}</a></span>
+        <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
+        <span style="padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
+        <span><a href="#" style="font-size: 1.2rem;">{{ project.name }}</a></span>
     </div>
     <div class="ml-auto d-flex">
         <div style="margin: auto 0;">
-            <span class="d-inline-block mr-2 dashboard-recentProject-container-badges" style="">
+            <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
                 <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 2px;">
                 {% load index %}
                 <span style="color: #2e1760;"> {{ countArticles }} </span>

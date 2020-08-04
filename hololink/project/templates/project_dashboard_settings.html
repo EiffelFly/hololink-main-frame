@@ -15,18 +15,18 @@
     }
 
     .galaxy_name_field{
-        width: 30rem;
+        width: 45rem;
     }
 
     .galaxy_description_field{
-        width: 30rem;
+        width: 45rem;
     }
 
 </style>
 <div class="container-fluid" style="height: 100%; padding:0">
     {% include 'project_dashboard_navbar.html' %}
 
-        <div class="row" style="width: 50%; margin: 3rem auto 0 auto;">
+        <div class="row" style="width: 60%; margin: 3rem auto 0 auto;">
             <div class="col-auto">
                 <form method="post" novalidate>
                     {% csrf_token %}
@@ -43,7 +43,7 @@
                         <div class="form-row">
                             <div class="form-group col">
                             {% if field.label == 'Galaxy Name' or field.label == '星系名' %}
-                                <h5 style="font-size: 16px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy name" %}</h5>
+                                <h5 style="font-size: 20px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy name" %}</h5>
                                 {% if not field.errors %}
                                     <div class="row d-flex">
                                         <div class="col">
@@ -60,7 +60,7 @@
                                     {% endfor %}
                                 {% endif %} 
                             {% elif field.label == 'Galaxy Description' or field.label == '星系介紹' %}
-                                <h5 style="font-size: 16px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy description" %}</h5>
+                                <h5 style="font-size: 20px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy description" %}</h5>
                                 {% if not field.errors %}
                                     <div class="row d-flex">
                                         <div class="col">
@@ -70,18 +70,30 @@
                                             <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px; margin-top: auto;">{% trans 'Edit description' %}</button>
                                         </div>
                                     </div>
-                                    
                                 {% else %}
                                     {% render_field field class+='form-control border-danger' %}
                                     {% for error in field.errors %}  
                                         <small class="text-danger d-block">{{ error }}</small>
                                     {% endfor %}
-                                {% endif %} 
-                            {% endif %}
+                                {% endif %}
+                            {% endif %}          
                             </div>
                         </div>
                     {% endfor %}
                 </form>
+                <h5 style="font-size: 20px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900; margin-top: 3rem;">{% trans "Danger Zone" %}</h5>
+                    <div class="row">
+                        <div class="col" style="border: solid 1px red; margin: 0 15px; border-radius: 10px;">
+                            <div class="row" style="padding: 1rem 0">
+                                <div class="col">
+                                    <p style="margin:0; font-weight: 700; font-size: 14px;">Change galaxy visibility</p>
+                                    <p style="margin:0; font-weight: 300; font-size: 14px;">The galaxy is currently {{project.project_visibility|lower}}</p>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
                 
             </div>
         </div>
