@@ -50,7 +50,7 @@
                                 <small class="text-danger d-block">{{ error }}</small>
                                 {% endfor %}
                             {% endif %} 
-                        {% elif field.label == 'Galaxy Description' or field.label == '星系介紹'%}
+                        {% elif field.label == 'Galaxy Description' or field.label == '星系介紹' %}
                             <h5 style="font-size: 1.5rem; margin-top: 0.5rem; margin-bottom: 1rem;">{% trans "Galaxy Description" %}</h5>
                             {% if not field.errors %}
                                 {% render_field field class+='form-control' %}

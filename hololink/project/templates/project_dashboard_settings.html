@@ -18,6 +18,10 @@
         width: 30rem;
     }
 
+    .galaxy_description_field{
+        width: 30rem;
+    }
+
 </style>
 <div class="container-fluid" style="height: 100%; padding:0">
     {% include 'project_dashboard_navbar.html' %}
@@ -47,6 +51,23 @@
                                         </div>
                                         <div class="col">
                                             <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px;">{% trans 'Rename galaxy' %}</button>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% render_field field class+='form-control border-danger' %}
+                                    {% for error in field.errors %}  
+                                        <small class="text-danger d-block">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %} 
+                            {% elif field.label == 'Galaxy Description' or field.label == '星系介紹' %}
+                                <h5 style="font-size: 16px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy description" %}</h5>
+                                {% if not field.errors %}
+                                    <div class="row d-flex">
+                                        <div class="col">
+                                            {% render_field field class+='form-control galaxy_description_field' %}
+                                        </div>
+                                        <div class="col d-flex">
+                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px; margin-top: auto;">{% trans 'Edit description' %}</button>
                                         </div>
                                     </div>
                                     
