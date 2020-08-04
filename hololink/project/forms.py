@@ -11,13 +11,13 @@ class ProjectForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 'style':'',
-                'autocomplete':'off'
+                'autocomplete':'off',
             },
         ),
     )
 
     galaxy_description = forms.CharField(
-        label=_('Galaxyㄋ Description'),
+        label=_('Galaxy Description'),
         required = False,
         widget=forms.Textarea(
             attrs={
@@ -59,3 +59,47 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'galaxy_description', 'galaxy_visibility']
+
+
+class GalaxySettingsForm(forms.ModelForm):
+    name = forms.CharField(
+        label=_('Galaxy Name'),
+        required = True,
+        widget=forms.TextInput(
+            attrs={
+                'style':'',
+                'autocomplete':'off',
+            },
+        ),
+    )
+
+    galaxy_description = forms.CharField(
+        label=_('Galaxy Description'),
+        required = False,
+        widget=forms.Textarea(
+            attrs={
+                'style':'',
+                'autocomplete':'off',
+                'rows':3,
+            },
+        ),
+    )
+
+    galaxy_visibility = forms.ChoiceField(
+        required=True,
+        label=_('Galaxy Visibility'),
+        choices=Project.PROJECT_VISIBILITY_CHOICES,
+        initial='Private',
+        widget=forms.RadioSelect(
+            choices=Project.PROJECT_VISIBILITY_CHOICES,
+            attrs={
+                'class':'custom-radio-list'
+            }
+            
+        )
+    )
+
+    class Meta:
+        model = Project
+        fields = ['name', 'galaxy_description', 'galaxy_visibility']
+

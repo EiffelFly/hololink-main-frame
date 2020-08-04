@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, GalaxySettingsForm
 from article.models import Article
 import hashlib
 
@@ -107,20 +107,26 @@ def project_hologram(request, slug):
     return render(request, 'project_dashboard_hologram.html', context) 
 
 @csrf_exempt
-def project_setting(request, slug):
+def galaxy_setting(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
+    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+
     context = {
         'form': None,
-        'tips': []
+        'tips': [],
+        'project':project,
     }
 
     if request.method == 'POST':
         pass
     else:
-        pass
-        #form = 
+        form = GalaxySettingsForm()
+        form.fields['name'].widget.attrs['placeholder'] = project.name #added placeholder
+        context['form'] = form
+    
+    return render(request, 'project_dashboard_settings.html', context)
 
 
 

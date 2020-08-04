@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    .dashboard-recentProject-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 1rem;
+    }
+
+    .galaxy_name_field{
+        width: 30rem;
+    }
+
+</style>
+<div class="container-fluid" style="height: 100%; padding:0">
+    {% include 'project_dashboard_navbar.html' %}
+
+        <div class="row" style="width: 50%; margin: 3rem auto 0 auto;">
+            <div class="col-auto">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% if form.errors|length == 1 %}
+                        <p class="text-danger">{% trans "Please correct the error below." %}</p>
+                    {% elif form.errors|length > 1 %}
+                        <p class="text-danger">{% trans "Please correct the errors below." %}</p>
+                    {% endif %}
+                    {% for error in form.non_field_errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+
+                    {% for field in form %}
+                        <div class="form-row">
+                            <div class="form-group col">
+                            {% if field.label == 'Galaxy Name' or field.label == '星系名' %}
+                                <h5 style="font-size: 16px; margin-top: 0.5rem; margin-bottom: 10px; font-weight: 900;">{% trans "Galaxy name" %}</h5>
+                                {% if not field.errors %}
+                                    <div class="row d-flex">
+                                        <div class="col">
+                                            {% render_field field class+='form-control galaxy_name_field'%}
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px;">{% trans 'Rename galaxy' %}</button>
+                                        </div>
+                                    </div>
+                                    
+                                {% else %}
+                                    {% render_field field class+='form-control border-danger' %}
+                                    {% for error in field.errors %}  
+                                        <small class="text-danger d-block">{{ error }}</small>
+                                    {% endfor %}
+                                {% endif %} 
+                            {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+                
+            </div>
+        </div>
+</div>
+
+{% endblock %}
