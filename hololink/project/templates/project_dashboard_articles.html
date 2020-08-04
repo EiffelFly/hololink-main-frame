@@ -14,35 +14,42 @@
         font-size: 1rem;
     }
 
-</style>
-<div class="container-fluid" style="height: 100%; padding:0">
-    {% include 'project_dashboard_navbar.html' %}
-    <div class="row" style="margin: 4rem 2rem; padding:0 4rem">
-        <div class="col-7" style="background-color: #BFB9B8; width: 100%;"></div>
-        <div class="col-5" style="width: 100%;" >
+    .table{
+        border:1px solid #BFB9B8;
+        border-radius: 5px;
+        border-spacing: 0px;
+        border-collapse: separate;
+    }
 
-            <table class="table table-sm table-bordered " style="width: 100%; border-radius: 1rem;">
-                <thead>
-                    <tr>
-                        <th scope="col" style="width: 10%">##</th>
-                        <th scope="col" style="width: 50%" >Title</th>
-                        <th scope="col" style="width: 20%; font-size: 10px;">Basestone keywords</th>
-                        <th scope="col" style="width: 20%; font-size: 10px;">Stellar keyowrds</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for article in articles %}
-                        <tr>
-                            <td scope="row">{{ forloop.counter }}</td>
-                            <td style="font-size: 8px;"><a href="{% url 'article:article-detail' article.slug %}">{{ article.name }}</a></td>
-                            <td style="font-size: 8px;">{{ article.article_basestone_keyword_sum }}</td>
-                            <td style="font-size: 8px;">{{ article.article_stellar_keyword_sum }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-     
+</style>
+<div class="container-fluid" style="padding:0">
+    {% include 'project_dashboard_navbar.html' %}
+    <div class="row d-flex" style="margin: 4rem 2rem; padding:0 4rem">
+        <div class="col-6" style=" padding-right: 30px;">
+            <div class="row" style="background-color: #BFB9B8; border-radius: 6px; height: 100%;"></div>
+        </div>
+        <div class="col-6" style="border: 1px solid #BFB9B8; border-radius: 6px; margin-left: auto; padding: 0;">
+            {% for article in articles %}
+            <div class="row" style="margin: 10px;">
+                <div class="col-7">
+                    <div class="row" style="font-size: 14px; font-weight: 500;">
+                        {{ article.name }}
+                    </div>
+                    <div class="row d-flex" style="margin-top: 10px;">
+                        <img src="{% static 'img/package.svg' %}" width="13" height="13" style="margin: auto 10px auto 0">
+                        <div style="font-size: 14px;">{{article.article_basestone_keyword_sum}} </div>
+                        <img src="{% static 'img/git-merge.svg' %}" width="13" height="13" style="margin: auto 10px auto 10px">
+                        <div style="font-size: 14px;">{{article.article_stellar_keyword_sum}} </div>
+                    </div>
+                </div>
+                <div class="col-5"></div>
             
+            </div>
+            {% if not forloop.last %}
+            <hr>
+            {% else %}
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
