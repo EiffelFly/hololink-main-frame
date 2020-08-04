@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Project
 from .forms import ProjectForm, GalaxySettingsForm
 from article.models import Article
+from django.db.models import Sum
 import hashlib
 
 def now():
@@ -62,15 +63,12 @@ def project_articles(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
-    basestone=0
-    stellar=0
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project).order_by('-created_at')
-    for article in articles:
-        basestone = basestone + article.article_basestone_keyword_sum
-        stellar = stellar + article.article_stellar_keyword_sum
-
+    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
+    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
+    
     countArticles = project.articles.count()
 
     context = {
