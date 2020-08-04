@@ -24,7 +24,7 @@
 
 </style>
 
-<div class="row d-flex" style="padding: 2rem 4rem">
+<div class="row d-flex" style="padding: 2rem 4rem; width: 100%;">
     <div class="col mr-auto d-flex">
         <img src="{% static 'img/archive.svg' %}" width="25" height="25" style="margin: auto 1rem auto 0">
         <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.5rem;">{{ user.username }}</a></span>
@@ -51,7 +51,7 @@
         </div>
     </div>
 </div> 
-<div class="row border-bottom" style="margin-top:0; padding-right: 0;">
+<div class="row border-bottom" style="margin-top:0; padding-right: 0; width: 100%;">
     <nav class="navbar navbar-expand-lg navbar-light" style="padding-left: 5rem;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

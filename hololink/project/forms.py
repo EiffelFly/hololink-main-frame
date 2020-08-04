@@ -17,7 +17,7 @@ class ProjectForm(forms.ModelForm):
     )
 
     galaxy_description = forms.CharField(
-        label=_('Galaxy Description'),
+        label=_('Galaxyㄋ Description'),
         required = False,
         widget=forms.Textarea(
             attrs={

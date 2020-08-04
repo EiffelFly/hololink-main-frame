@@ -119,6 +119,7 @@ def project_setting(request, slug):
     if request.method == 'POST':
         pass
     else:
+        pass
         #form = 
 
 
