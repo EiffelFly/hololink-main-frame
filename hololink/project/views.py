@@ -10,6 +10,7 @@ from .forms import ProjectForm, GalaxySettingsForm
 from article.models import Article
 from django.db.models import Sum
 import hashlib
+from django.http import HttpResponseRedirect
 
 def now():
     return timezone.localtime(timezone.now())
@@ -150,7 +151,7 @@ def galaxy_setting(request, slug):
                     project.save()
                     messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
                     context['form'] = GalaxySettingsForm()
-                    return render(request, 'project_dashboard_settings.html', context)
+                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
                 else:
                     return render(request, 'project_dashboard_settings.html', context)
 
