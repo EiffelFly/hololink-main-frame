@@ -149,6 +149,7 @@ def galaxy_setting(request, slug):
                     project.project_visibility = form.cleaned_data.get('galaxy_visibility')
                     project.save()
                     messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
+                    context['form'] = GalaxySettingsForm()
                     return render(request, 'project_dashboard_settings.html', context)
                 else:
                     return render(request, 'project_dashboard_settings.html', context)
@@ -160,11 +161,9 @@ def galaxy_setting(request, slug):
         form.fields['galaxy_description'].initial = project.description 
         form.fields['galaxy_visibility'].initial = project.project_visibility
         context['form'] = form
+        print('i am here')
 
         return render(request, 'project_dashboard_settings.html', context)
-    
-    
-
 
 
 @csrf_exempt
