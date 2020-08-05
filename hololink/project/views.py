@@ -118,13 +118,13 @@ def galaxy_setting(request, slug):
         return redirect(reverse('login'))
 
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
-    change_visibility_confirmation_code = f'{request.user}/{project.name}'
+    confirmation_code = f'{request.user}/{project.name}'
 
     context = {
         'form': None,
         'tips': [],
         'project':project,
-        'change_visibility_confirmation_code':change_visibility_confirmation_code
+        'confirmation_code':confirmation_code
     }
 
     if request.method == 'POST':

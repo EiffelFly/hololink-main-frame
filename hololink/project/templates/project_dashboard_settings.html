@@ -51,7 +51,7 @@
                                             {% render_field field class+='form-control galaxy_name_field'%}
                                         </div>
                                         <div class="col">
-                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px;" name="action" value="rename_galaxy">{% trans 'Rename galaxy' %}</button>
+                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px; font-size: 14px;" name="action" value="rename_galaxy">{% trans 'Rename galaxy' %}</button>
                                         </div>
                                     </div>
                                 {% else %}
@@ -68,7 +68,7 @@
                                             {% render_field field class+='form-control galaxy_description_field'%}
                                         </div>
                                         <div class="col d-flex">
-                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px; margin-top: auto;" name="action" value="edit_description">{% trans 'Edit description' %}</button>
+                                            <button type="submit" class="btn btn-light btn-block" style="border: #BFB9B8 solid 1px; margin-top: auto; font-size: 14px;" name="action" value="edit_description">{% trans 'Edit description' %}</button>
                                         </div>
                                     </div>
                                 {% else %}
@@ -104,7 +104,8 @@
                                     <p style="margin:0; font-weight: 300; font-size: 14px;">{% trans 'Once you hit the button the galaxy will consumed by black hole, there is no going back.' %}</p>
                                 </div>
                                 <div class="col-4 d-flex">
-                                    <button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px;">{% trans 'Delete this galaxy' %}</button>
+                                    {% include 'modal_delete_galaxy.html' %}
+                                    <button type="button" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px;" data-toggle="modal" data-target="#modalDeleteGalaxy">{% trans 'Delete this galaxy' %}</button>
                                 </div>
                             </div>
                         </div>    

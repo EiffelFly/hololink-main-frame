@@ -6,11 +6,16 @@
 <div class="modal fade" id="modalChangeGalaxyVisibility" tabindex="-1" role="dialog" aria-labelledby="modalChangeGalaxyVisibilityLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="modalChangeGalaxyVisibilityLabel">Change galaxy visibility</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+				<div class="modal_header d-flex flex-row" style="padding: 1rem;">
+					<div class="col-8" style="padding-left: 0;">
+						<h5 class="modal-title" id="modalDeleteGalaxyLabel" style="font-size: 18px; font-weight: 700;">Change this galaxy visibility</h5>
+						<p style="margin: 2px 0 0 0; font-size: 14px;">{{project.name}}</p>
+					</div>
+					<div class="col-4" style="margin: auto 0 auto auto;">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
 				</div>
 				<div class="modal-body" style="padding:0;">
 						<div class="container-fluid">
@@ -34,7 +39,7 @@
 															<div class="col-1" style="margin:auto">
 																<img src="{% static 'img/key.svg' %}" width="30" height="30">
 															</div>
-															<div class="col-10 d-flex flex-column">
+															<div class="col-10 d-flex flex-column" style="padding-left: 2rem;">
 																<p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Private' %}</p>
 																<p style="font-size: 10px; margin-bottom: 0;">{% trans 'You choose who can see and edit this galaxy.' %}</p>
 															</div>
@@ -49,7 +54,7 @@
 															<div class="col-1" style="margin:auto;">
 																<img src="{% static 'img/globe.svg' %}" width="30" height="30">
 															</div>
-															<div class="col-10 d-flex flex-column">
+															<div class="col-10 d-flex flex-column" style="padding-left: 2rem;">
 																<p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Public' %}</p>
 																<p style="font-size: 10px; margin-bottom: 0;">{% trans 'Anyone on the internet can enter this galaxy, but you choose who can create/edit/delete articles.' %}</p>
 															</div>
@@ -65,7 +70,7 @@
 				<div class="modal_confirmation" style="padding: 1rem; border-top: 1px solid #dee2e6;">
 					<div class="row d-flex flex-column">
 						<div class="col">
-							<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{change_visibility_confirmation_code}}</span> to confirm. </p>
+							<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{confirmation_code}}</span> to confirm. </p>
 						</div>
 						<div class="col">
 							{% for field in form %}
@@ -75,7 +80,7 @@
 							{% endfor %}
 						</div>
 						<div class="col" style="margin-top: 1rem;">
-							<button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;">{% trans 'I understand, change this galaxy visibility' %}</button>
+							<button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;" name="action" value="change_galaxy_visibility">{% trans 'I understand, change this galaxy visibility' %}</button>
 						</div>
 					</div>
 				</div>
