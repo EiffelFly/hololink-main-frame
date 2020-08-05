@@ -63,8 +63,6 @@
                         {% elif field.label == 'Galaxy Visibility' or field.label == '星系可視度' %}
                             <hr style="margin-bottom: 2rem;">
                             {% for radio in form.galaxy_visibility %}
-                            <div class="row" style="margin-top: 1rem;">
-                                <div class="col">
                                     {% if radio.choice_label == 'Private' %}
                                         <label for="{{ radio.id_for_label }}" style="width: 100%;">
                                             <div class="row d-flex flex-row">
@@ -96,9 +94,6 @@
                                             </div>
                                         </label>
                                     {% endif %}    
-                                </div>
-                                
-                            </div>
                             {% endfor %}
 
                         {% for error in field.errors %}

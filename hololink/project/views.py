@@ -158,7 +158,6 @@ def galaxy_setting(request, slug):
         form = GalaxySettingsForm()
         form.fields['name'].widget.attrs['placeholder'] = project.name #added placeholder
         form.fields['galaxy_description'].initial = project.description 
-        print(project.project_visibility)
         form.fields['galaxy_visibility'].initial = project.project_visibility
         context['form'] = form
 
@@ -184,7 +183,7 @@ def create_newproject(request):
         if form.is_valid():
             project = Project.objects.create(
                 name=form.cleaned_data.get('name'),
-                project_visibility=form.cleaned_data.get('project_visibility'),
+                project_visibility=form.cleaned_data.get('galaxy_visibility'),
                 created_by=request.user,
                 created_at=now(),
             )
