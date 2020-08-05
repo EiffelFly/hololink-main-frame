@@ -1,27 +1,84 @@
+
 {% load i18n %}
 {% load static %}
 {% load widget_tweaks %}
 
 <div class="modal fade" id="modalChangeGalaxyVisibility" tabindex="-1" role="dialog" aria-labelledby="modalChangeGalaxyVisibilityLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalChangeGalaxyVisibilityLabel">Change galaxy visibility</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" style="padding:0;">
-            <div class="container-fluid">
-                <div class="row d-flex" style="border-top:solid #E6B0AA 1px; border-bottom: solid #E6B0AA 1px; background-color: #F2D7D5; height: 5rem;">
-                    <h5 style="margin: auto; font-size: 14px;">Warning: this action need to be careful.</h5>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalChangeGalaxyVisibilityLabel">Change galaxy visibility</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="padding:0;">
+						<div class="container-fluid">
+								<div class="row d-flex" style="border-top:solid #E6B0AA 1px; border-bottom: solid #E6B0AA 1px; background-color: #F2D7D5; height: 5rem;">
+										<div class="d-flex" style="margin: auto;" >
+											<img src="{% static 'img/alert.svg' %}" style="margin: auto 10px auto 0px;">
+											<h5 style="font-size: 14px; margin: auto;">Warning: this action need to be careful.</h5>
+										</div>
+								</div>
+								<div class="row" style="padding: 1.5rem">
+									{% csrf_token %}
+									{% for field in form %}
+										{% if field.label == 'Galaxy Visibility' or field.label == '星系可視度' %}									
+											{% for radio in form.galaxy_visibility %}
+												{% if radio.choice_label == 'Private' %}
+													<label class="" for="{{ radio.id_for_label }}" style="width:100%; height: 4rem;">
+														<div class="row d-flex flex-row">
+															<div class="col-1" style="margin: auto;">
+																{{ radio.tag }}
+															</div>
+															<div class="col-1" style="margin:auto">
+																<img src="{% static 'img/key.svg' %}" width="30" height="30">
+															</div>
+															<div class="col-10 d-flex flex-column">
+																<p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Private' %}</p>
+																<p style="font-size: 10px; margin-bottom: 0;">{% trans 'You choose who can see and edit this galaxy.' %}</p>
+															</div>
+														</div>
+													</label>
+												{% elif radio.choice_label == 'Public' %}
+													<label for="{{ radio.id_for_label }}" style="width: 100%; height: 4rem; margin-bottom: 0;">
+														<div class="row d-flex flex-row">
+															<div class="col-1" style="margin: auto;">
+																{{ radio.tag }}
+															</div>
+															<div class="col-1" style="margin:auto;">
+																<img src="{% static 'img/globe.svg' %}" width="30" height="30">
+															</div>
+															<div class="col-10 d-flex flex-column">
+																<p style="font-size: 1rem; margin-bottom: 0;">{% trans 'Public' %}</p>
+																<p style="font-size: 10px; margin-bottom: 0;">{% trans 'Anyone on the internet can enter this galaxy, but you choose who can create/edit/delete articles.' %}</p>
+															</div>
+														</div>
+													</label>
+												{% endif %}    																							
+											{% endfor %}
+										{% endif %}
+									{% endfor %}
+								</div>
+						</div>
+				</div>
+				<div class="modal_confirmation" style="padding: 1rem; border-top: 1px solid #dee2e6;">
+					<div class="row d-flex flex-column">
+						<div class="col">
+							<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{change_visibility_confirmation_code}}</span> to confirm. </p>
+						</div>
+						<div class="col">
+							{% for field in form %}
+								{% if field.label == 'Change galaxy visibility confirmation' or field.label == '更改星系可視度確認' %}
+									{% render_field field class+='form-control'%}
+								{% endif %}
+							{% endfor %}
+						</div>
+						<div class="col" style="margin-top: 1rem;">
+							<button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;">{% trans 'I understand, change this galaxy visibility' %}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

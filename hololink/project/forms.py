@@ -99,7 +99,19 @@ class GalaxySettingsForm(forms.ModelForm):
         )
     )
 
+    change_galaxy_visibility_confirmation = forms.CharField(
+        required=True,
+        label=_('Change galaxy visibility confirmation'),
+        widget=forms.TextInput(
+            attrs={
+                'style':'',
+                'autocomplete':'off',
+            },
+        ),
+
+    )
+
     class Meta:
         model = Project
-        fields = ['name', 'galaxy_description', 'galaxy_visibility']
+        fields = ['name', 'galaxy_description', 'galaxy_visibility', 'change_galaxy_visibility_confirmation']
 

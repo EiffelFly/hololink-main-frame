@@ -118,11 +118,13 @@ def galaxy_setting(request, slug):
         return redirect(reverse('login'))
 
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    change_visibility_confirmation_code = f'{request.user}/{project.name}'
 
     context = {
         'form': None,
         'tips': [],
         'project':project,
+        'change_visibility_confirmation_code':change_visibility_confirmation_code
     }
 
     if request.method == 'POST':
@@ -130,7 +132,7 @@ def galaxy_setting(request, slug):
     else:
         form = GalaxySettingsForm()
         form.fields['name'].widget.attrs['placeholder'] = project.name #added placeholder
-        form.fields['galaxy_description'].initial = project.description
+        form.fields['galaxy_description'].initial = project.description 
         context['form'] = form
     
     return render(request, 'project_dashboard_settings.html', context)
