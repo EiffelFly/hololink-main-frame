@@ -119,4 +119,12 @@
 {% endblock %}
 
 {% block extrajs %}
+<script>
+    $(function () {
+        $('body').on('click', '.change_galaxy_visibility', function (e) {
+            //$('#form_change_galaxy_visibility').submit();
+            //$('#form_change_galaxy_visibility_confirmation').submit();
+        });
+    });
+</script>
 {% endblock %}

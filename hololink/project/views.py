@@ -119,6 +119,7 @@ def galaxy_setting(request, slug):
 
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     confirmation_code = f'{request.user}/{project.name}'
+    print(project.project_visibility)
 
     context = {
         'form': None,
@@ -128,14 +129,42 @@ def galaxy_setting(request, slug):
     }
 
     if request.method == 'POST':
-        pass
+        form = GalaxySettingsForm(request.POST)
+        context['form'] = form
+        if form.is_valid():
+            if request.POST['action'] == "rename_galaxy":
+                project.name = form.cleaned_data.get('name')
+                project.save()
+                messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
+                return render(request, 'project_dashboard_settings.html', context)
+
+            elif request.POST['action'] == "edit_description":
+                project.description = form.cleaned_data.get('galaxy_description')
+                project.save()
+                messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
+                return render(request, 'project_dashboard_settings.html', context)
+
+            elif request.POST['action'] == "change_galaxy_visibility":
+                if form.cleaned_data.get('change_galaxy_visibility_confirmation') == confirmation_code:
+                    project.project_visibility = form.cleaned_data.get('galaxy_visibility')
+                    project.save()
+                    messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
+                    return render(request, 'project_dashboard_settings.html', context)
+                else:
+                    return render(request, 'project_dashboard_settings.html', context)
+
+        
     else:
         form = GalaxySettingsForm()
         form.fields['name'].widget.attrs['placeholder'] = project.name #added placeholder
         form.fields['galaxy_description'].initial = project.description 
+        print(project.project_visibility)
+        form.fields['galaxy_visibility'].initial = project.project_visibility
         context['form'] = form
+
+        return render(request, 'project_dashboard_settings.html', context)
     
-    return render(request, 'project_dashboard_settings.html', context)
+    
 
 
 

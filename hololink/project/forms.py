@@ -64,7 +64,7 @@ class ProjectForm(forms.ModelForm):
 class GalaxySettingsForm(forms.ModelForm):
     name = forms.CharField(
         label=_('Galaxy Name'),
-        required = True,
+        required = False,
         widget=forms.TextInput(
             attrs={
                 'style':'',
@@ -86,10 +86,9 @@ class GalaxySettingsForm(forms.ModelForm):
     )
 
     galaxy_visibility = forms.ChoiceField(
-        required=True,
+        required=False,
         label=_('Galaxy Visibility'),
         choices=Project.PROJECT_VISIBILITY_CHOICES,
-        initial='Private',
         widget=forms.RadioSelect(
             choices=Project.PROJECT_VISIBILITY_CHOICES,
             attrs={
@@ -100,7 +99,7 @@ class GalaxySettingsForm(forms.ModelForm):
     )
 
     change_galaxy_visibility_confirmation = forms.CharField(
-        required=True,
+        required=False,
         label=_('Change galaxy visibility confirmation'),
         widget=forms.TextInput(
             attrs={
@@ -112,7 +111,7 @@ class GalaxySettingsForm(forms.ModelForm):
     )
 
     delete_galaxy_confirmation = forms.CharField(
-        required=True,
+        required=False,
         label=_('Delete galaxy confirmation'),
         widget=forms.TextInput(
             attrs={

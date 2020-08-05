@@ -26,6 +26,7 @@
 										</div>
 								</div>
 								<div class="row" style="padding: 1.5rem">
+									<form class="form_change_galaxy_visibility" method="post" novalidate>
 									{% csrf_token %}
 									{% for field in form %}
 										{% if field.label == 'Galaxy Visibility' or field.label == '星系可視度' %}									
@@ -64,6 +65,7 @@
 											{% endfor %}
 										{% endif %}
 									{% endfor %}
+									</form>
 								</div>
 						</div>
 				</div>
@@ -73,15 +75,32 @@
 							<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{confirmation_code}}</span> to confirm. </p>
 						</div>
 						<div class="col">
-							{% for field in form %}
-								{% if field.label == 'Change galaxy visibility confirmation' or field.label == '更改星系可視度確認' %}
-									{% render_field field class+='form-control'%}
-								{% endif %}
-							{% endfor %}
-						</div>
-						<div class="col" style="margin-top: 1rem;">
-							<button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;" name="action" value="change_galaxy_visibility">{% trans 'I understand, change this galaxy visibility' %}</button>
-						</div>
+								{% csrf_token %}
+								{% for field in form %}
+									{% if field.label == 'Change galaxy visibility confirmation' or field.label == '更改星系可視度確認' %}
+										<div class="form-row">
+											<div class="form-group col">
+												<div class="row d-flex flex-column">
+													{% if not field.errors %}
+														<div class="col">
+															{% render_field field class+='form-control'%}
+														</div>
+														<div class="col" style="margin-top: 1rem;">
+															<button type="submit" class="btn btn-light change_galaxy_visibility" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;" name="action" value="change_galaxy_visibility">{% trans 'I understand, change this galaxy visibility' %}</button>
+														</div>
+													{% else %}
+														{% render_field field class+='form-control border-danger' %}
+														{% for error in field.errors %}  
+															<small class="text-danger d-block">{{ error }}</small>
+														{% endfor %}
+													{% endif %}											
+												</div>								
+											</div>
+										</div>
+									{% endif %} 
+								{% endfor %}
+							</form>
+						</div>						
 					</div>
 				</div>
 			</div>
