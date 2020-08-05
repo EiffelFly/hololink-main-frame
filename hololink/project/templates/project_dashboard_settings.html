@@ -120,9 +120,16 @@
 
 {% block extrajs %}
 <script>
-    $(function () {
-        $('#change_galaxy_visibility').click(function(){
-            $('#form_change_galaxy_visibility').submit();
+    $(document).ready(function() {
+        $('#change_galaxy_visibility').prop('disabled', true);
+        $('#id_change_galaxy_visibility_confirmation').keyup(function() {
+            var user_input_confirmation = $(this).val()
+            if( user_input_confirmation === '{{confirmation_code}}'){
+                $('#change_galaxy_visibility').prop('disabled', false);
+            }
+            else{
+                $('#change_galaxy_visibility').prop('disabled', true);
+            }
         });
     });
 </script>
