@@ -2,9 +2,15 @@
 {% load static %}
 
 <div class="col-4 d-flex flex-column">
-    <div class="row" style="margin: 2rem auto 0 auto">
-        <img src="{{ profile.user_avatar.url }}" width="300" height="300" style="border-radius: 50%;">
-    </div>
+    {% if profile.user_avatar %}
+        <div class="row" style="margin: 2rem auto 0 auto">
+            <img src="{{ profile.user_avatar.url }}" width="300" height="300" style="border-radius: 50%;">
+        </div>
+    {% else %}
+        <div class="row" style="margin: 2rem auto 0 auto">
+            <img src="{% static 'img/default-avatar.png' %}" width="300" height="300" style="border-radius: 50%;">
+        </div>
+    {% endif %}
     <div class="row" style="margin: 20px auto 0 auto; width: 300px;">
         <p style="font-size: 1.3rem;">{{ profile.user.username }}</p>
     </div>
