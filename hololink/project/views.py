@@ -87,12 +87,15 @@ def project_dashboard(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
+    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
+    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
     countArticles = project.articles.count()
 
     context = {
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
+        'data':{'basestone':basestone, 'stellar':stellar},
     }
 
     return render(request, 'project_dashboard.html', context) 
@@ -104,11 +107,14 @@ def project_hologram(request, slug):
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     countArticles = project.articles.count()
+    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
+    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
 
     context = {
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
+        'data':{'basestone':basestone, 'stellar':stellar},
     }
 
     return render(request, 'project_dashboard_hologram.html', context) 
@@ -119,14 +125,19 @@ def galaxy_setting(request, slug):
         return redirect(reverse('login'))
 
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    articles = Article.objects.filter(projects=project)
     confirmation_code = f'{request.user}/{project.name}'
-    print(project.project_visibility)
+    countArticles = project.articles.count()
+    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
+    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
 
     context = {
         'form': None,
         'tips': [],
         'project':project,
-        'confirmation_code':confirmation_code
+        'confirmation_code':confirmation_code,
+        'countArticles':countArticles,
+        'data':{'basestone':basestone, 'stellar':stellar},
     }
 
     if request.method == 'POST':
@@ -153,11 +164,19 @@ def galaxy_setting(request, slug):
                     context['form'] = GalaxySettingsForm()
                     return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
                 else:
-                    messages.error(request, messages.ERROR, _('Confirmation input not correct'))
-                    return render(request, 'project_dashboard_settings.html', context)
-            
-
-
+                    messages.error(request, messages.ERROR, _('Confirmation input is not correct'))
+                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
+            elif request.POST['action'] == 'delete_galaxy':
+                if form.cleaned_data.get('delete_galaxy_confirmation') == confirmation_code:
+                    project_name = project.name
+                    project.delete()
+                    print('Successfully delete galaxy')
+                    messages.add_message(request, messages.SUCCESS, _(f'Successfully delete galaxy {project_name}'))
+                    return HttpResponseRedirect(reverse('project:projects_list'))
+                else:
+                    messages.add_message(request, messages.ERROR, _('Confirmation input is not correct'))
+                    print('why')
+                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
         
     else:
         form = GalaxySettingsForm()
