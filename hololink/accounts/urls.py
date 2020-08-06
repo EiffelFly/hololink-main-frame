@@ -26,4 +26,4 @@ urlpatterns += [
     path('sign-up/', sign_up, name='sign_up'),
     path('sign-up/with-account-password/', sign_up_with_account_password, name='sign_up_with_account_password'), # not shown directly on web interface
     path('sign-up/sign-up-with-email/', sign_up_with_email, name='sign_up_with_email'),
-]
+] 

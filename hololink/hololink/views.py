@@ -80,7 +80,8 @@ def user_dashboard(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     
-    
+    profile = get_object_or_404(Profile, user=request.user)
+
     countArticles = []
     projects = Project.objects.filter(created_by=request.user).order_by('-last_edited_time') #use -created_at to desc()
     projects = projects[:4]
@@ -89,8 +90,9 @@ def user_dashboard(request, slug):
 
 
     context = {
-        'projects': projects,
-        'countArticles' : countArticles
+        'profile' : profile,
+        'projects' : projects,
+        'countArticles' : countArticles,
     }
 
     return render(request, 'user_dashboard.html', context) 

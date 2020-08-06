@@ -70,7 +70,9 @@
     {% include 'dashboard_navbar.html' %}
     <div class="content_container">
         <div class="row">
-            <div class="col-4">   <!--<img src="{{ user.profile.image.url }}"--> </div>
+            <div class="col-4">
+                <img src="{{ profile.user_avatar.url }}" width="250">
+            </div>
             <div class="col-8">
                 <div class="row" style="margin-top: 2rem;">
                     <div class="col-8">

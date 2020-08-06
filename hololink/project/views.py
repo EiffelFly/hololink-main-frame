@@ -33,13 +33,21 @@ def projects_list(request):
         return redirect(reverse('login'))  
 
     countArticles = []
+    countBasestoneKeywords = []
+    countStellarKeywords = []
+
     projects = filter(request)
     for project in projects:
+        articles = Article.objects.filter(projects=project).order_by('-created_at')
         countArticles.append(project.articles.count())
+        countBasestoneKeywords.append(articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0))
+        countStellarKeywords.append(articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0))
     
     context = {
-        'projects': projects,
-        'countArticles' : countArticles
+        'projects' : projects,
+        'countArticles' : countArticles,
+        'countBasestoneKeywords' : countBasestoneKeywords,
+        'countStellarKeywords' : countStellarKeywords,
     }
 
     return render(request, 'projects_list.html', context)    
@@ -170,12 +178,10 @@ def galaxy_setting(request, slug):
                 if form.cleaned_data.get('delete_galaxy_confirmation') == confirmation_code:
                     project_name = project.name
                     project.delete()
-                    print('Successfully delete galaxy')
                     messages.add_message(request, messages.SUCCESS, _(f'Successfully delete galaxy {project_name}'))
                     return HttpResponseRedirect(reverse('project:projects_list'))
                 else:
                     messages.add_message(request, messages.ERROR, _('Confirmation input is not correct'))
-                    print('why')
                     return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
         
     else:

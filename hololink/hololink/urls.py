@@ -3,7 +3,8 @@ from django.contrib import admin
 from .views import index, d3demo, user_dashboard, user_public_profile, explore, explore_users
 from rest_framework import routers
 from api import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -19,8 +20,7 @@ urlpatterns = [
     path('explore/', explore, name='explore'),
     path('explore/users', explore_users, name='explore_users'),
     #path('<username>/', user_dashboard, name='user_dashboard')
-    
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 router = routers.DefaultRouter()

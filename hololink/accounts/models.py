@@ -47,6 +47,11 @@ class Profile(models.Model):
         max_length=262144,
         blank=True,
     )
+
+    user_avatar = models.ImageField(
+        upload_to='user_avatar',
+        blank = True,
+    )
     
 
     def get_absolute_url(self):
