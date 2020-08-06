@@ -33,7 +33,7 @@
     </div>
     <div class="row" style="margin: 3rem 10rem; border-bottom: #E4E4E4 solid 1px"></div>
     <div class="row d-flex flex-row" style="margin-top: 3rem; padding: 0 10rem;">
-        {% for project in project_sortby_stars%}
+        {% for project in project_sortby_likes%}
             <div class="col">
                 <div class="card" style="height: 12rem;">
                     <img class="card-img-top" src="">
@@ -45,7 +45,7 @@
                             <div class="col-4 d-flex">
                                 <div class="row ml-auto d-flex">
                                     <img src="{% static 'img/heart-fill.svg' %}" class="ml-auto">
-                                    <p style="margin: auto 0 auto 10px;">{{ project.project_stars }}</p>
+                                    <p style="margin: auto 0 auto 10px;">{{ project.project_likes }}</p>
                                 </div>
                             </div>
                         </div>
@@ -56,9 +56,9 @@
                         </div>
                         
                         <div class="row d-flex flex-row" style="padding: 10px 20px 0 20px;">
-                            <div class="col">
-                                <img>
-                                <p style="font-weight: 900;">{{project.created_by}}</p>
+                            <div class="col d-flex flex-row">
+                                <img src="{{ project.created_by.profile.user_avatar.url }}" width="25" height="25" style="border-radius: 50%; margin: auto 0;">
+                                <p style="font-weight: 700; margin: auto 0 auto 15px; font-size: 18px;">{{project.created_by}}</p>
                             </div>          
                         </div>
                     </div>

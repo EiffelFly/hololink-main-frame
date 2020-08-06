@@ -127,11 +127,12 @@ def user_public_profile(request, slug):
 
 def explore(request):
     projects = Project.objects.filter(project_visibility='Public')
-    project_sortby_stars = projects.order_by('-project_stars')
+    project_sortby_likes = projects.order_by('-project_likes')
+    
 
 
     context = {
-        'project_sortby_stars':project_sortby_stars,
+        'project_sortby_likes':project_sortby_likes,
         'projects':projects
     }
 
