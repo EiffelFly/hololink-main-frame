@@ -131,6 +131,17 @@
                 $('#change_galaxy_visibility').prop('disabled', true);
             }
         });
+
+        $('#delete_galaxy').prop('disabled', true);
+        $('#id_delete_galaxy_confirmation').keyup(function() {
+            var user_input_confirmation = $(this).val()
+            if( user_input_confirmation === '{{confirmation_code}}'){
+                $('#delete_galaxy').prop('disabled', false);
+            }
+            else{
+                $('#delete_galaxy').prop('disabled', true);
+            }
+        });
     });
 </script>
 {% endblock %}

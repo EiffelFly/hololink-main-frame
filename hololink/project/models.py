@@ -16,11 +16,12 @@ def now():
 
 class Project(models.Model):
 
-
+    private = 'Private'
+    public = 'public'
 
     PROJECT_VISIBILITY_CHOICES = (
-        ('Private',_('Private')),
-        ('Public', _('Public'))
+        (private,_('Private')),
+        (public, _('Public'))
     )
 
     name = models.CharField(

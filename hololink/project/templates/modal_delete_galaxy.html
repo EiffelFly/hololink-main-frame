@@ -8,7 +8,7 @@
 			<div class="modal-content">
 				<div class="modal_header d-flex flex-row" style="padding: 1rem;">
 					<div class="col-8" style="padding-left: 0;">
-						<h5 class="modal-title" id="modalDeleteGalaxyLabel">Delete this galaxy</h5>
+						<h5 class="modal-title" id="modalDeleteGalaxyLabel" style="font-size: 18px; font-weight: 700;">Change this galaxy visibility</h5>
 						<p style="margin: 2px 0 0 0; font-size: 14px;">{{project.name}}</p>
 					</div>
 					<div class="col-4" style="margin: auto 0 auto auto;">
@@ -18,35 +18,57 @@
 					</div>
 				</div>
 				<div class="modal-body" style="padding:0;">
-						<div class="container-fluid">
-								<div class="row d-flex" style="border-top:solid #E6B0AA 1px; border-bottom: solid #E6B0AA 1px; background-color: #F2D7D5; height: 5rem;">
-										<div class="d-flex" style="margin: auto;" >
-											<img src="{% static 'img/alert.svg' %}" style="margin: auto 10px auto 0px;">
-											<h5 style="font-size: 14px; margin: auto;">Warning: this action need to be careful.</h5>
-										</div>
+					<div class="container-fluid" style="padding: 0;">
+						<div style="padding: 0 15px">
+							<div class="row d-flex" style="border-top:solid #E6B0AA 1px; border-bottom: solid #E6B0AA 1px; background-color: #F2D7D5; height: 5rem;">
+								<div class="d-flex" style="margin: auto;" >
+									<img src="{% static 'img/alert.svg' %}" style="margin: auto 10px auto 0px;">
+									<h5 style="font-size: 14px; margin: auto;">Warning: this action need to be careful.</h5>
 								</div>
-								<div class="row" style="padding: 1.5rem">
-									<p style="font-size: 14px; margin-bottom: 0;">This action don't have any time machine, can't be undone. This will permanently delete <span style="font-weight: 700;">{{confirmation_code}}</span> galaxy, hologram, articles, collaborators and history.</p>
+							</div>
+						</div>
+						
+						<form class="form_change_galaxy_visibility" method="post" novalidate action="">
+							<div class="row" style="padding: 1.5rem 2.5rem">
+								<p style="font-size: 14px; margin-bottom: 0;">This action don't have any time machine, can't be undone. This will permanently delete <span style="font-weight: 700;">{{confirmation_code}}</span> galaxy, hologram, articles, collaborators and history.</p>
+							</div>
+							<div class="modal_confirmation" style="padding: 1rem; border-top: 1px solid #dee2e6;">
+								<div class="row d-flex flex-column">
+									<div class="col">
+										<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{confirmation_code}}</span> to confirm. </p>
+									</div>
+									<div class="col">
+										{% csrf_token %}
+										{% for field in form %}
+											{% if field.label == 'Delete galaxy confirmation' or field.label == '確認刪除星系' %}
+												<div class="row">
+													<div class="col">
+														<div class="row d-flex flex-column">
+															{% if not field.errors %}
+																<div class="col">
+																	{% render_field field class+='form-control'%}
+																</div>
+																<div class="col" style="margin-top: 1rem;">
+																	<button type="submit" id="delete_galaxy" class="btn btn-light change_galaxy_visibility" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;" name="action" value="change_galaxy_visibility">{% trans 'I understand, change this galaxy visibility' %}</button>
+																</div>
+															{% else %}
+																{% render_field field class+='form-control border-danger' %}
+																{% for error in field.errors %}  
+																	<small class="text-danger d-block">{{ error }}</small>
+																{% endfor %}
+															{% endif %}											
+														</div>								
+													</div>
+												</div>
+											{% endif %} 
+										{% endfor %}
+									</div>						
 								</div>
-						</div>
-				</div>
-				<div class="modal_confirmation" style="padding: 1rem; border-top: 1px solid #dee2e6;">
-					<div class="row d-flex flex-column">
-						<div class="col">
-							<p style="font-size: 14px; margin-bottom: 5px;">Please type <span style="font-size: 14px; font-weight: 700;">{{confirmation_code}}</span> to confirm. </p>
-						</div>
-						<div class="col">
-							{% for field in form %}
-								{% if field.label == 'Delete galaxy confirmation' or field.label == '刪除星系確認' %}
-									{% render_field field class+='form-control'%}
-								{% endif %}
-							{% endfor %}
-						</div>
-						<div class="col" style="margin-top: 1rem;">
-							<button type="submit" class="btn btn-light" style="border: #BFB9B8 solid 1px; margin: auto 10px auto auto; color: red; font-size: 14px; width: 100%;" name="action" value="delete_galaxy">{% trans 'I understand, delete this galaxy' %}</button>
-						</div>
+							</div>							
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+

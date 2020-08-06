@@ -153,7 +153,10 @@ def galaxy_setting(request, slug):
                     context['form'] = GalaxySettingsForm()
                     return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
                 else:
+                    messages.error(request, messages.ERROR, _('Confirmation input not correct'))
                     return render(request, 'project_dashboard_settings.html', context)
+            
+
 
         
     else:
