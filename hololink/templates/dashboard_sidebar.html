@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load static %}
+
+<div class="col-4 d-flex flex-column">
+    <div class="row" style="margin: 2rem auto 0 auto">
+        <img src="{{ profile.user_avatar.url }}" width="300" height="300" style="border-radius: 50%;">
+    </div>
+    <div class="row" style="margin: 20px auto 0 auto; width: 300px;">
+        <p style="font-size: 1.3rem;">{{ profile.user.username }}</p>
+    </div>
+    <div class="row" style="margin: 0 auto; width: 300px;">
+        <a href='#' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
+    </div>
+    <div class="row d-flex" style="margin: 10px auto 0 auto; width: 300px;">
+        <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
+        <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowers}}</span>
+        <span style="font-size: 14px; margin-right: 5px;">followers - </span>
+        <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowings}}</span>
+        <span style="font-size: 14px; margin-right: 5px;">followings - </span>
+        <img src="{% static 'img/heart.svg' %}" style="margin-right: 5px;" width="15">
+        <span style="font-size: 14px; margin-right: 5px;">{{countlikes}}</span>
+    </div>
+</div>

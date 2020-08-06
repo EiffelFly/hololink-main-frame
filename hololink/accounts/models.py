@@ -29,10 +29,10 @@ class Profile(models.Model):
         blank=True
     )
 
-    followers = models.ManyToManyField(
+    followings = models.ManyToManyField(
         User,
-        related_name='followings',
-        verbose_name=_('Followers'),
+        related_name='followers',
+        verbose_name=_('Followings'),
         blank=True,
     )
 

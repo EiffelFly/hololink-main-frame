@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from django.db.models import Sum
 
 
 def now():
@@ -81,6 +82,7 @@ def user_dashboard(request, slug):
         return redirect(reverse('login'))
     
     profile = get_object_or_404(Profile, user=request.user)
+    user = get_object_or_404(User, username=request.user)
 
     countArticles = []
     projects = Project.objects.filter(created_by=request.user).order_by('-last_edited_time') #use -created_at to desc()
@@ -88,11 +90,17 @@ def user_dashboard(request, slug):
     for project in projects:
         countArticles.append(project.articles.count())
 
+    countFollowings = profile.followings.count()
+    countFollowers = user.followers.count()
+    countlikes = projects.aggregate(Sum('project_likes')).get('project_likes__sum', 0)
 
     context = {
         'profile' : profile,
         'projects' : projects,
         'countArticles' : countArticles,
+        'countFollowings' : countFollowings,
+        'countFollowers' : countFollowers,
+        'countlikes' : countlikes,
     }
 
     return render(request, 'user_dashboard.html', context) 

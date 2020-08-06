@@ -59,8 +59,8 @@ class Project(models.Model):
         null=True,
     )
     
-    project_stars = models.IntegerField(
-        verbose_name=_('Project Stars'),
+    project_likes = models.IntegerField(
+        verbose_name=_('Project Likes'),
         blank=True,
         null=True
     )
