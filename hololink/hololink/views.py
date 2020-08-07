@@ -151,3 +151,12 @@ def explore_users(request):
     }
     
     return render(request, 'explore_users.html', context)
+
+def user_settings(request, slug):
+    profile = get_object_or_404(Profile, user=request.user)
+
+    context = {
+        'profile' : profile,
+    }
+
+    return render(request, 'user_settings.html', context)
