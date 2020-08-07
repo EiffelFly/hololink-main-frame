@@ -15,7 +15,7 @@
         <p style="font-size: 1.3rem;">{{ profile.user.username }}</p>
     </div>
     <div class="row" style="margin: 0 auto; width: 300px;">
-        <a href='#' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
+        <a href='{% url "user_settings" user.profile.slug %}' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
     </div>
     <div class="row d-flex" style="margin: 10px auto 0 auto; width: 300px;">
         <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
