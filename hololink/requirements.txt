@@ -1,5 +1,6 @@
 asgiref==3.2.10
 Django==3.0.7
+django-email-verification==0.0.7
 django-jsonfield==1.4.0
 django-mysql==3.7.1
 django-widget-tweaks==1.4.8
