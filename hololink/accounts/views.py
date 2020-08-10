@@ -108,3 +108,5 @@ def sign_up_with_email(request):
         'form': form,
     }
     return render(request, 'registration/sign_up_with_email.html', context)
+
+

@@ -32,8 +32,6 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     # This make it easier to integrate django templates with bootstrap things.
-    'rest_framework',
-    'widget_tweaks',
     'tag_lib.apps.TagLibConfig',
     'accounts.apps.AccountsConfig',
     'article.apps.ArticleConfig',
@@ -44,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd parties
+    'rest_framework',
+    'widget_tweaks',
+    'django_email_verification',
 
 ]
 
