@@ -8,5 +8,15 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hololink.settings")
 django.setup()
 
 
-for k, v in get_resolver(None).reverse_dict.items():
-    print(k)
+#for k, v in get_resolver(None).reverse_dict.items():
+
+
+
+
+a = ([('@%(slug)s/', ['slug'])], '@(?P<slug>[-a-zA-Z0-9_]+)/$', {}, {'slug': 'django'})
+
+print(a[0][0][1][0])
+addr = str(a[0][0][0])
+print(addr)
+link = 'https://hololink.co/' + addr[0: addr.index('%')] + '1265554'
+print(link)

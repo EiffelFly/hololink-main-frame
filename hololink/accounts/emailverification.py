@@ -5,6 +5,8 @@ from threading import Thread
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
+from .views import verify
+from django.urls import get_resolver
 
 '''
     This python file is especially for verify user signup.
@@ -57,8 +59,18 @@ def sendVerification_thread(email, token):
         Generate verification link
         get_resolver(None) 會將 settings.ROOT_URLCONF 下 url 叫出來，而由於
         此專案的 settings.ROOT_URLCONF 設定為 hololink.urls get_resolver(None) 會叫出所有 url
+
+        k : <function user_public_profile at 0x000000000413F168>
+        v : ([('@%(slug)s/', ['slug'])], '@(?P<slug>[-a-zA-Z0-9_]+)/$', {}, {'slug': <django.urls.converters.SlugConverter object at 0x000000000393D688>})
+
+        v[0][0][1][0] 為判斷該 url 有沒有 pass 任何 args 
+        所以 if k is verify and v[0][0][1][0]: 這一行在做的事情就是判斷 k 是不是我們特別定義出來給 verify email 使用的 view 同時判斷它是否有正確丟出 args
+
+        addr = str(v[0][0][0]) 則會取出 '@%(slug)s/'
+        addr[0: addr.index('%')] 則會拿第零個到%之間的字串
+
     '''
-    from .views import verify
+    
     link = ''
     for k, v in get_resolver(None).reverse_dict.items():
         if k is verify and v[0][0][1][0]:
@@ -85,7 +97,7 @@ def sendVerification_thread(email, token):
         except AttributeError:
             pass 
 
-
+    msg.send()
     
     
 
