@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     # 3rd parties
     'rest_framework',
     'widget_tweaks',
-    'django_email_verification',
 
 ]
 
@@ -154,6 +153,9 @@ MEDIA_URL = '/uploads/'
 LOGOUT_REDIRECT_URL = '/'
 
 # SMTP things
+SIGNUP_VERIFICATION_EMAIL_TEXT = 'singup_verification_email.txt'
+SIGNUP_VERIFICATION_EMAIL_HTML = 'singup_verification_email.html'
+EMAIL_VERIFICATION_PAGE_DOMAIN = 'https://hololink.co/'
 from secret.hololink.settings import (
     EMAIL_BACKEND,
     EMAIL_HOST,
