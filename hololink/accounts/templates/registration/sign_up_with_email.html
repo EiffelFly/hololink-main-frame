@@ -53,27 +53,3 @@
     <div class="row" style="height: 8rem"></div>
 </div>
 {% endblock %}
-
-{% block extrajs %}
-<script>
-
-    var password1 = ''
-
-    $(document).ready(function() {
-        $('#signupNewUser').prop('disabled', true);
-        $('#id_password').keyup(function() {
-            password1 = $(this).val()
-        });
-        
-        $('#id_confirm_password').keyup(function() {
-            var password2 = $(this).val()
-            if( password1 === password2){
-                $('#signupNewUser').prop('disabled', false);
-            }
-            else{
-                $('#signupNewUser').prop('disabled', true);
-            }
-        });
-    });
-</script>
-{% endblock %}

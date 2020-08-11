@@ -28,7 +28,7 @@ class SignUpWithEmailForm(forms.ModelForm):
     )
 
     password = forms.CharField(
-        label=_('Password1'),
+        label=_('Password'),
         required = True,
         widget=forms.PasswordInput(
             attrs={
@@ -49,7 +49,7 @@ class SignUpWithEmailForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'password', 'confirm_password']
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -74,6 +74,28 @@ class SignUpWithEmailForm(forms.ModelForm):
                 )
             )
         return username
+
+    def clean(self):
+        '''
+            If we want to 
+            ref:https://docs.djangoproject.com/en/3.0/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
+        '''
+        cleaned_data = super().clean()
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            self.add_error(
+                'confirm_password',
+                ValidationError(
+                    _("Those passwords didn't match. Please try again")
+                )
+            )
+            self.add_error(
+                'password',
+                ValidationError(
+                    ("")
+                )
+            )
 
 class EmailValidationOnForgotPassword(PasswordResetForm):
 
