@@ -12,6 +12,10 @@ from .forms import SignUpWithEmailForm
 from django.contrib.auth.views import LoginView
 from smtplib import SMTPException
 
+from .emailverification import verifyToken
+from .errors import NotAllFieldCompiled
+
+
 
 
 
@@ -109,4 +113,9 @@ def sign_up_with_email(request):
     }
     return render(request, 'registration/sign_up_with_email.html', context)
 
-
+def verify(request, email, emailToken):
+    try:
+        template = settings.EMAIL_PAGE_TEMPLATE
+        return render(request, template, {'success': verifyToken(email, emailToken)})
+    except AttributeError:
+        raise NotAllFieldCompiled('EMAIL_PAGE_TEMPLATE field not found')

@@ -1,12 +1,16 @@
 from django.conf import settings
+from binascii import Error as b64Error
 from django.contrib.auth.tokens import default_token_generator
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from threading import Thread
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
-from .views import verify
 from django.urls import get_resolver
+from django.utils import timezone
+
+from .errors import InvalidUserModel, EmailTemplateNotFound, NotAllFieldCompiled
+from .views import verify
 
 '''
     This python file is especially for verify user signup.
@@ -23,6 +27,7 @@ def sendVerification(user, **kwargs):
 
         token = default_token_generator.make_token(user)
 
+        #  使用 urlsafe_b64encode 的原因在於這個 email 的資料會透過公開的網域傳遞，需要以此保障使用者的隱私
         email = urlsafe_b64encode(str(kwargs['email']).encode('utf-8'))
         print(urlsafe_b64encode('eric525282@gmail.com'.encode('utf-8')))
 
@@ -85,14 +90,14 @@ def sendVerification_thread(email, token):
 
     if signup_verification_email_text:
         try:
-            text = render_to_string(signup_verification_email_text, {'link': link})
+            text = render_to_string(signup_verification_email_text, {'link': link, 'username':username_readable})
             msg.attach_alternative(text, "text/plain")
         except AttributeError:
             pass
     
     if signup_verification_email_html:
         try:
-            html = render_to_string(signup_verification_email_html, {'link': link})
+            html = render_to_string(signup_verification_email_html, {'link': link, 'username':username_readable})
             msg.attach_alternative(html, "text/html")
         except AttributeError:
             pass 
@@ -114,11 +119,25 @@ def GetFieldAndValidate(field, raise_error=True, default_type=str):
         return None
 
 
+def verifyToken(email, emailToken):
+    try:
+        users = get_user_model().objects.filter(email=urlsafe_b64decode(email).decode("utf-8"))
+        for user in users:
+
+            # check_token 會確認該 token 是否過期 （由設定值 PASSWORD_RESET_TIMEOUT 而定）
+            # 可以以此施作該 token expire 的時間
+             
+            valid = default_token_generator.check_token(user, emailToken)
+            if valid:
+                setattr(user, 'is_active', True)
+                user.last_login = timezone.now() 
+                user.save()
+                return valid
+                
+    except b64Error:
+        pass
+    return False
 
 
 
 
-
-class NotAllFieldCompiled(Exception):
-    """Compile all the fields in the settings"""
-    pass

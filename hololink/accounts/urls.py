@@ -4,7 +4,7 @@ from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
     PasswordResetCompleteView)
-from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView
+from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, verify
 from .forms import EmailValidationOnForgotPassword
 
 
@@ -27,3 +27,8 @@ urlpatterns += [
     path('sign-up/with-account-password/', sign_up_with_account_password, name='sign_up_with_account_password'), # not shown directly on web interface
     path('sign-up/sign-up-with-email/', sign_up_with_email, name='sign_up_with_email'),
 ] 
+
+# signup_email_verification_view
+urlpatterns += [
+    path('<str:email>/<str:emailToken>', verify)
+]
