@@ -8,9 +8,12 @@ from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 from django.urls import get_resolver
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from smtplib import SMTPException
 
 from .errors import InvalidUserModel, EmailTemplateNotFound, NotAllFieldCompiled
-from .views import verify
+
 
 '''
     This python file is especially for verify user signup.
@@ -28,8 +31,8 @@ def sendVerification(user, **kwargs):
         token = default_token_generator.make_token(user)
 
         #  使用 urlsafe_b64encode 的原因在於這個 email 的資料會透過公開的網域傳遞，需要以此保障使用者的隱私
-        email = urlsafe_b64encode(str(kwargs['email']).encode('utf-8'))
-        print(urlsafe_b64encode('eric525282@gmail.com'.encode('utf-8')))
+        email = urlsafe_b64encode(str(user.email).encode('utf-8'))
+        print(email.decode("utf-8"))
 
         t = Thread(target=sendVerification_thread, args=(user.email, f'{email.decode("utf-8")}/{token}'))
         t.start()
@@ -38,8 +41,8 @@ def sendVerification(user, **kwargs):
 
 
 def sendVerification_thread(email, token):
-
-    user = get_user_model().objects.filter(email=urlsafe_b64decode(email).decode("utf-8"))
+    print(email)
+    user = get_object_or_404(User, email=email)
 
     subject = 'Welcome to Hololink, please verify your E-mail address'
     signup_verification_email_text = GetFieldAndValidate('SIGNUP_VERIFICATION_EMAIL_TEXT', raise_error=False)
@@ -75,7 +78,9 @@ def sendVerification_thread(email, token):
         addr[0: addr.index('%')] 則會拿第零個到%之間的字串
 
     '''
+    # put in function to avoid circullar import 
     
+    from .views import verify
     link = ''
     for k, v in get_resolver(None).reverse_dict.items():
         if k is verify and v[0][0][1][0]:
@@ -85,28 +90,35 @@ def sendVerification_thread(email, token):
     '''
         render data into email template and form multi-type email
     '''
-
-    msg = EmailMultiAlternatives(subject, from_email, [user.email])
+    print('before sending', user.email)
+    print(link)
+    msg = EmailMultiAlternatives(
+        subject=subject,
+        from_email=from_email,
+        to=[user.email]
+    )
 
     if signup_verification_email_text:
         try:
             text = render_to_string(signup_verification_email_text, {'link': link, 'username':username_readable})
             msg.attach_alternative(text, "text/plain")
+            print('attach text')
         except AttributeError:
-            pass
+            pass  
     
     if signup_verification_email_html:
         try:
             html = render_to_string(signup_verification_email_html, {'link': link, 'username':username_readable})
             msg.attach_alternative(html, "text/html")
+            print('attach html')
         except AttributeError:
             pass 
 
-    msg.send()
+    try:
+        msg.send()
+    except SMTPException as e:
+        print('There was an error sending an email: ', e) 
     
-    
-
-
 def GetFieldAndValidate(field, raise_error=True, default_type=str):
     try:
         d = getattr(settings, field)
@@ -133,7 +145,7 @@ def verifyToken(email, emailToken):
                 user.last_login = timezone.now() 
                 user.save()
                 return valid
-                
+
     except b64Error:
         pass
     return False
