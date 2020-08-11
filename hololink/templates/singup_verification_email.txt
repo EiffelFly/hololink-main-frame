@@ -1,0 +1,7 @@
+Hi {{username}}!
+We are glad that you apply our services, final step before you onboard. 
+Please click link below to activate your accounct!
+{{link}}
+
+Wish you have a safe journey toward unknown galaxy.
+Hololink
