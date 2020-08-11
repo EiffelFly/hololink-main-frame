@@ -4,7 +4,7 @@ from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
     PasswordResetCompleteView)
-from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, verify, sign_up_with_email_verification, sign_up_success
+from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, verify, sign_up_with_email_verification, sign_up_success, sign_up_verification_failed
 from .forms import EmailValidationOnForgotPassword
 
 
@@ -19,7 +19,8 @@ urlpatterns = [
     path('password-reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('verification/<str:email>/<str:emailToken>/', verify, name='verify_user_token'),    
+    path('verification/<str:email>/<str:emailToken>/', verify, name='verify_user_token'), 
+    path('verification/failed', sign_up_verification_failed, name='verify_user_token_failed') 
 ]
 
 # some custom views

@@ -1,7 +1,7 @@
 Hi {{username}}!
-We are glad that you apply our services, final step before you onboard. 
-Please click link below to activate your accounct!
+We are glad that you apply our services, final step before onboard. 
+Please click the link below to activate your accounct!
 {{link}}
 
-Wish you have a safe journey toward unknown galaxy.
+Wish you have a safe journey toward Hololink galaxy.
 Hololink

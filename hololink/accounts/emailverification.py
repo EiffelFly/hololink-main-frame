@@ -133,18 +133,19 @@ def GetFieldAndValidate(field, raise_error=True, default_type=str):
 
 def verifyToken(email, emailToken):
     try:
-        users = get_user_model().objects.filter(email=urlsafe_b64decode(email).decode("utf-8"))
-        for user in users:
-
-            # check_token 會確認該 token 是否過期 （由設定值 PASSWORD_RESET_TIMEOUT 而定）
-            # 可以以此施作該 token expire 的時間
-             
-            valid = default_token_generator.check_token(user, emailToken)
-            if valid:
-                setattr(user, 'is_active', True)
-                user.last_login = timezone.now() 
-                user.save()
-                return valid
+        user = get_object_or_404(User, email=urlsafe_b64decode(email).decode("utf-8"))
+        
+        # check_token 會確認該 token 是否過期 （由設定值 PASSWORD_RESET_TIMEOUT 而定）
+        # 可以以此施作該 token expire 的時間
+            
+        valid = default_token_generator.check_token(user, emailToken)
+        if valid:
+            setattr(user, 'is_active', True)
+            user.last_login = timezone.now() # default_token_generator generate token based on user login timestamp, reset it will automatically make token invalid
+            user.save()
+            return True
+        else:
+            return False
 
     except b64Error:
         pass

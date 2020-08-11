@@ -1,0 +1,25 @@
+{% extends 'registration/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="height: 4rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="text-center">
+                {% include 'brand.html' %}
+                <h1>{% trans 'Hololink' %}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 2rem"></div>
+    <div class="row justify-content-center">
+        <div class="col-auto" style="width: 21.6rem">
+            <p>{% trans "Your accounct verification failed. Please resend verification email" %}</p>
+            <a class="btn btn-block btn-dark" href="#">{% trans 'Resend verification email' %}</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

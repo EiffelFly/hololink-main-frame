@@ -115,10 +115,14 @@ def sign_up_with_email(request):
     return render(request, 'registration/sign_up_with_email.html', context)
 
 def verify(request, email, emailToken):
-    try:
-        return render(request, 'registration/sign_up_verification_successfully.html', {'success': verifyToken(email, emailToken)})
-    except AttributeError:
-        raise NotAllFieldCompiled('EMAIL_PAGE_TEMPLATE field not found')
+    valid = verifyToken(email, emailToken)
+    if valid:
+        try:
+            return render(request, 'registration/sign_up_verification_successfully.html', {'success': verifyToken(email, emailToken)})
+        except AttributeError:
+            raise NotAllFieldCompiled('EMAIL_PAGE_TEMPLATE field not found')
+    else:
+        return render(request, 'registration/sign_up_verification_failed.html')
 
 def sign_up_with_email_verification(request):
     
@@ -159,3 +163,6 @@ def sign_up_with_email_verification(request):
 
 def sign_up_success(request):
     return render(request, 'registration/signup_success.html')
+
+def sign_up_verification_failed(request):
+    return render(request, 'registration/sign_up_verification_failed.html')
