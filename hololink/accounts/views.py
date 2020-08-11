@@ -14,6 +14,7 @@ from smtplib import SMTPException
 
 from .emailverification import verifyToken
 from .errors import NotAllFieldCompiled
+from .emailverification import sendVerification
 
 
 
@@ -115,7 +116,46 @@ def sign_up_with_email(request):
 
 def verify(request, email, emailToken):
     try:
-        template = settings.EMAIL_PAGE_TEMPLATE
-        return render(request, template, {'success': verifyToken(email, emailToken)})
+        return render(request, 'registration/sign_up_verification_successfully.html', {'success': verifyToken(email, emailToken)})
     except AttributeError:
         raise NotAllFieldCompiled('EMAIL_PAGE_TEMPLATE field not found')
+
+def sign_up_with_email_verification(request):
+    
+    if request.method == 'POST': 
+        form = SignUpWithEmailForm(request.POST) 
+        if form.is_valid():
+            # Create a user and save it to DB.
+            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('username')
+            user = form.save(commit=False)
+            user.username = username
+            password = form.cleaned_data.get('password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+            if password == confirm_password:
+                user.set_password(password)
+                user.save()
+
+            #寄送認證信件
+            
+            sendVerification(user)
+
+            return render(request, 'registration/signup_success.html')
+
+        else:
+            context = {
+                'form':form
+            }
+            return render(request, 'registration/sign_up_with_email.html', context)
+                
+    else:
+        form = SignUpWithEmailForm()
+    
+    context = {
+        'form':form
+    }
+
+    return render(request, 'registration/sign_up_with_email.html', context)
+
+def sign_up_success(request):
+    return render(request, 'registration/signup_success.html')

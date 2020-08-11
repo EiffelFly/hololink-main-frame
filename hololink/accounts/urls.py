@@ -4,7 +4,7 @@ from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
     PasswordResetCompleteView)
-from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, verify
+from .views import sign_up, sign_up_with_account_password, sign_up_with_email, CustomLoginView, verify, sign_up_with_email_verification, sign_up_success
 from .forms import EmailValidationOnForgotPassword
 
 
@@ -18,17 +18,15 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view(form_class=EmailValidationOnForgotPassword), name='password_reset'),
     path('password-reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),    
+    path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('verification/<str:email>/<str:emailToken>/', verify, name='verify_user_token'),    
 ]
 
 # some custom views
 urlpatterns += [
     path('sign-up/', sign_up, name='sign_up'),
     path('sign-up/with-account-password/', sign_up_with_account_password, name='sign_up_with_account_password'), # not shown directly on web interface
-    path('sign-up/sign-up-with-email/', sign_up_with_email, name='sign_up_with_email'),
+    path('sign-up/sign-up-with-email/', sign_up_with_email_verification, name='sign_up_with_email'),
+    path('sign-up/success', sign_up_success, name='sign_up_success'), 
 ] 
 
-# signup_email_verification_view
-urlpatterns += [
-    path('<str:email>/<str:emailToken>', verify)
-]

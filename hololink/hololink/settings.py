@@ -155,7 +155,7 @@ LOGOUT_REDIRECT_URL = '/'
 # SMTP things
 SIGNUP_VERIFICATION_EMAIL_TEXT = 'singup_verification_email.txt'
 SIGNUP_VERIFICATION_EMAIL_HTML = 'singup_verification_email.html'
-EMAIL_VERIFICATION_PAGE_DOMAIN = 'https://hololink.co/'
+EMAIL_VERIFICATION_PAGE_DOMAIN = 'http://127.0.0.1:8000/'
 from secret.hololink.settings import (
     EMAIL_BACKEND,
     EMAIL_HOST,
