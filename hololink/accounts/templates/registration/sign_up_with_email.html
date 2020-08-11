@@ -32,9 +32,9 @@
                 <div class="form-row">
                     <div class="form-group col">
                         {% if not field.errors %}
-                        {% render_field field class+='form-control' placeholder=field.label %}
+                        {% render_field field class+='form-control'%}
                         {% else %}
-                        {% render_field field class+='form-control border-danger' placeholder=field.label %}
+                        {% render_field field class+='form-control border-danger'%}
                         {% for error in field.errors %}
                         <small class="text-danger d-block">{{ error }}</small>
                         {% endfor %}
@@ -44,7 +44,7 @@
                 {% endfor %}
                 <div class="form-row">
                     <div class="form-group col">
-                        <button type="submit" class="btn btn-primary btn-block"> Sign up</button>
+                        <button type="submit" id="signupNewUser" class="btn btn-primary btn-block">Sign up</button>
                     </div>
                 </div>
             </form>
@@ -52,4 +52,28 @@
     </div>
     <div class="row" style="height: 8rem"></div>
 </div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+
+    var password1 = ''
+
+    $(document).ready(function() {
+        $('#signupNewUser').prop('disabled', true);
+        $('#id_password').keyup(function() {
+            password1 = $(this).val()
+        });
+        
+        $('#id_confirm_password').keyup(function() {
+            var password2 = $(this).val()
+            if( password1 === password2){
+                $('#signupNewUser').prop('disabled', false);
+            }
+            else{
+                $('#signupNewUser').prop('disabled', true);
+            }
+        });
+    });
+</script>
 {% endblock %}

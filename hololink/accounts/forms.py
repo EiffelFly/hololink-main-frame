@@ -27,6 +27,26 @@ class SignUpWithEmailForm(forms.ModelForm):
         ),
     )
 
+    password = forms.CharField(
+        label=_('Password1'),
+        required = True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder':_('Password')
+            }
+        )
+    )
+
+    confirm_password = forms.CharField(
+        label=_('Confirm password'),
+        required = True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder':_('Confirm')
+            }
+        )
+    )
+
     class Meta:
         model = User
         fields = ['username', 'email']
