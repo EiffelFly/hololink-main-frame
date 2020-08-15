@@ -3,7 +3,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-import jsonfield
 from project.models import Project
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, pre_delete, post_save
@@ -54,12 +53,12 @@ class Article(models.Model):
         verbose_name=_('Created at'),
     )
 
-    tokenize_output = jsonfield.JSONField(
+    tokenize_output = models.JSONField(
         verbose_name=_('Tokenize Output'),
         null=True
     )
 
-    ner_output = jsonfield.JSONField(
+    ner_output = models.JSONField(
         verbose_name=_('NER Output'),
         blank=True,
     )
@@ -84,8 +83,13 @@ class Article(models.Model):
     )
 
 
-    final_output = jsonfield.JSONField(
+    final_output = models.JSONField(
         verbose_name=_('Final Output'),
+        null=True
+    )
+
+    D3_data_format = models.JSONField(
+        verbose_name=_('D3 data'),
         null=True
     )
 
