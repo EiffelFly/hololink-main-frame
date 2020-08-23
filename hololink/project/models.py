@@ -78,6 +78,11 @@ class Project(models.Model):
         default='Private',
     )
 
+    project_d3_json = models.JSONField(
+        verbose_name=_('D3 data'),
+        null=True
+    )
+
     def __str__(self):
         return self.name
 
