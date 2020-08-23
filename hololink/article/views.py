@@ -10,6 +10,7 @@ from .forms import ArticleForm, ArticleChangeForm
 from django.contrib.auth.models import User
 from unidecode import unidecode
 from django.utils.text import slugify
+from django.http import JsonResponse
 
 
 
@@ -111,7 +112,6 @@ def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug, created_by=request.user)
 
     user_selected_project = request.session.get('user_selected_project')
-    print(user_selected_project)
 
     context = {
         'article' : article,
@@ -148,3 +148,11 @@ def articles_list(request):
     }
 
     return render(request, 'article/articles_list.html', context)   
+
+def deliver_D3(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+    
+    article = get_object_or_404(Article, slug=slug, created_by=request.user)
+
+    return JsonResponse(article.D3_data_format, safe=False)
