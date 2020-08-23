@@ -11,6 +11,8 @@ from article.models import Article
 from django.db.models import Sum
 import hashlib
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+
 
 def now():
     return timezone.localtime(timezone.now())
@@ -222,3 +224,11 @@ def create_newproject(request):
         context['form'] = form
         context['tips'] += [_('Fill in the following form to create a new project.')]
     return render(request, 'create_new_project_test.html', context)
+
+def deliver_D3(request, slug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+    
+    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+
+    return JsonResponse(peoject.project_d3_json, safe=False)
