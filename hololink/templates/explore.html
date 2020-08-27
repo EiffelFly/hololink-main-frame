@@ -57,7 +57,11 @@
                         
                         <div class="row d-flex flex-row" style="padding: 10px 20px 0 20px;">
                             <div class="col d-flex flex-row">
+                                {% if profile.user_avatar %}
                                 <img src="{{ project.created_by.profile.user_avatar.url }}" width="25" height="25" style="border-radius: 50%; margin: auto 0;">
+                                {% else %}
+                                <img src="{% static 'img/default-avatar.png' %}" width="25" height="25" style="border-radius: 50%; margin: auto 0;">
+                                {% endif %}
                                 <p style="font-weight: 700; margin: auto 0 auto 15px; font-size: 18px;">{{project.created_by}}</p>
                             </div>          
                         </div>

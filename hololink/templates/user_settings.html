@@ -26,9 +26,15 @@
     <div class="row d-flex flex-column" style="height: 20rem; border-bottom: solid 1px #BFB9B8">
         <div class="col d-flex" style="margin:4rem auto 0 auto; max-width: 60%;">
             <div class="row d-flex flex-row">
+                {% if profile.user_avatar %}
                 <div class="col-4">
                     <img src="{{ profile.user_avatar.url }}" width="150" height="150" style="border-radius: 50%;">
                 </div>
+                {% else %}
+                <div class="col-4">
+                    <img src="{% static 'img/default-avatar.png' %}" width="150" height="150" style="border-radius: 50%;">
+                </div>
+                {% endif %}
                 <div class="col-8 d-flex flex-column" style="padding-left:3rem;">
                     <h1 style="margin: auto 0 0 0;">{{user.username}}</h1>
                     <h3 style="font-weight: 300; color: #8C8C8C;">Personal settings</h3>
