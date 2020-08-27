@@ -31,7 +31,7 @@
         <div class="col-6" style="border: 1px solid #BFB9B8; border-radius: 6px; margin-left: auto; padding: 0;">
             {% for article in articles %}
             <div class="row" style="margin: 10px;">
-                <div class="col-7">
+                <div class="col-8">
                     <div class="row" style="font-size: 14px; font-weight: 500;">
                         {{ article.name }}
                     </div>
@@ -44,7 +44,9 @@
                         <div style="font-size: 14px;">{{article.created_by}} </div>
                     </div>
                 </div>
-                <div class="col-5"></div>
+                <div class="col-4 d-flex">
+                    <button class="btn btn-link ml-auto"><img src="{% static 'img/three-bars.svg' %}" width="20" height="20"></button>
+                </div>
             
             </div>
             {% if not forloop.last %}
