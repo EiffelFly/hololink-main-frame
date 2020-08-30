@@ -4,6 +4,12 @@
 {% load widget_tweaks %}
 
 {% block content %}
+<style>
+    .imageInput{
+        height: 3rem
+    }
+</style>
+
 <div class="container-fluid">
     {% include 'user_settings_navbar.html' %}
     <div class="row">
@@ -33,12 +39,21 @@
                                     <h5 style="font-size: 1.5rem; ">{% trans "Username" %}</h5>
                                     {% render_field field class+='form-control'%}
                                 {% elif field.label == 'Bio' or field.label == '自我介紹' %}
+                                    <h5 style="font-size: 1.5rem; margin-top: 1rem;">{% trans "Bio" %}</h5>
+                                    {% render_field field class+='form-control'%}
                                 {% elif field.label == 'Avatar' or field.label == '大頭貼' %}
+                                    <h5 style="font-size: 1.5rem; margin-top: 1rem;">{% trans "Avatar" %}</h5>
+                                    {% render_field field class+='form-control'%}
                                 {% endif %}
                             {% endif %}
                         </div>
                     </div>
                     {% endfor %}
+                    <div class="form-row" style="margin-top: 1rem;">
+                        <div class="form-group col">
+                            <button type="submit" class="btn btn-primary">{% trans 'Update profile' %}</button>
+                        </div>
+                    </div>
                 {% endif %}
             </form>
         </div>

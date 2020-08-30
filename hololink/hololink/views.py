@@ -168,5 +168,7 @@ def user_settings(request, slug):
     else:
         form = UserSettingsForm()
         context['form'] = form
+        form.fields['username'].widget.attrs['placeholder'] = profile.user #added placeholder
+        form.fields['bio'].initial = profile.bio 
 
     return render(request, 'user_settings_publicprofile.html', context)

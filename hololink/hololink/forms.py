@@ -31,7 +31,11 @@ class UserSettingsForm(forms.ModelForm):
     avatar = forms.ImageField(
         label=_('Avatar'),
         required = False,
-        widget = forms.FileInput()
+        widget = forms.FileInput(
+            attrs={
+                'class':'imageInput'
+            }
+        )
     )
 
     class Meta:
