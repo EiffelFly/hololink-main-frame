@@ -42,8 +42,8 @@ class Profile(models.Model):
         blank=True
     )
 
-    self_introduction = models.TextField(
-        verbose_name=_('Self Introduction'),
+    bio = models.TextField(
+        verbose_name=_('Bio'),
         max_length=262144,
         blank=True,
     )
