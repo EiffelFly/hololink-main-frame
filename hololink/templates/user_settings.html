@@ -4,60 +4,7 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<style>
-    a.dashboard-nav-item{
-        font-family: 'Noto Sans TC', sans-serif;
-        font-size: 1rem;
-        border-bottom: 3px solid transparent;
-    }
-    
-    a.active{
-        border-bottom: 3px solid rgba(0, 0, 0, 0.3) !important; /* make sure active link style won't get overwrote when hove */
-        color: rgba(0, 0, 0, 0.7) !important; 
-    }
-
-    a.dashboard-nav-item:hover{
-        border-bottom: 3px solid rgba(0, 0, 0, 0.1);
-    }
-
-
-</style>
 <div class="container-fluid">
-    <div class="row d-flex flex-column" style="height: 20rem; border-bottom: solid 1px #BFB9B8">
-        <div class="col d-flex" style="margin:4rem auto 0 auto; max-width: 60%;">
-            <div class="row d-flex flex-row">
-                {% if profile.user_avatar %}
-                <div class="col-4">
-                    <img src="{{ profile.user_avatar.url }}" width="150" height="150" style="border-radius: 50%;">
-                </div>
-                {% else %}
-                <div class="col-4">
-                    <img src="{% static 'img/default-avatar.png' %}" width="150" height="150" style="border-radius: 50%;">
-                </div>
-                {% endif %}
-                <div class="col-8 d-flex flex-column" style="padding-left:3rem;">
-                    <h1 style="margin: auto 0 0 0;">{{user.username}}</h1>
-                    <h3 style="font-weight: 300; color: #8C8C8C;">Personal settings</h3>
-                </div>
-            </div>   
-        </div>
-        <div class="col d-flex" style="margin:3.3rem auto 0 auto; max-width: 60%;">
-            <nav class="navbar navbar-expand-lg navbar-light" style="padding: 0;">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent" style="height: 100%;">
-                    <ul class="navbar-nav mr-auto text-center d-flex" style="height:100%">
-                        <li class="nav-item text-center mt-auto" style="width: 8rem;">
-                            <a class="nav-link dashboard-nav-item active" href="#">Public profile</a>
-                        </li>
-                        <li class="nav-item text-center mt-auto" style="width: 8rem;">
-                            <a class="nav-link dashboard-nav-item" href="#">Account</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
+    {% include 'user_settings_navbar.html' %}
 </div>
 {% endblock %}
