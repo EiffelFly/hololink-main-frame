@@ -159,4 +159,4 @@ def user_settings(request, slug):
         'profile' : profile,
     }
 
-    return render(request, 'user_settings.html', context)
+    return render(request, 'user_settings_publicprofile.html', context)
