@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 class UserSettingsForm(forms.ModelForm):
 
-    name = forms.CharField(
-        label=_('User Name'),
+    username = forms.CharField(
+        label=_('Username'),
         required = False,
         widget=forms.TextInput(
             attrs={
@@ -17,7 +17,7 @@ class UserSettingsForm(forms.ModelForm):
     )
 
     bio = forms.CharField(
-        label=_('User Bio'),
+        label=_('Bio'),
         required = False,
         widget=forms.Textarea(
             attrs={
@@ -28,16 +28,12 @@ class UserSettingsForm(forms.ModelForm):
         ),
     )
 
-    avatar = forms.imagefield(
-        upolads_to='user_avatar'
+    avatar = forms.ImageField(
+        label=_('Avatar'),
         required = False,
-        widget = forms.FileInput(
-            attrs={
-                'style'='',
-            }
-        )
+        widget = forms.FileInput()
     )
 
     class Meta:
         model = User
-        fields = ['name', 'bio', 'avatar']
+        fields = ['username', 'bio', 'avatar']

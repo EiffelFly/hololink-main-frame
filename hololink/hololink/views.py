@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from accounts.forms import SignUpWithEmailForm
+from .forms import UserSettingsForm
 from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
@@ -12,6 +13,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.db.models import Sum
+
 
 
 def now():
@@ -156,7 +158,15 @@ def user_settings(request, slug):
     profile = get_object_or_404(Profile, user=request.user)
 
     context = {
-        'profile' : profile,
+        'form': None,
+        'tips': [],
+        'profile':profile,
     }
+
+    if request.method == 'POST':
+        pass
+    else:
+        form = UserSettingsForm()
+        context['form'] = form
 
     return render(request, 'user_settings_publicprofile.html', context)

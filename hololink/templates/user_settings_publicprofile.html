@@ -7,7 +7,7 @@
 <div class="container-fluid">
     {% include 'user_settings_navbar.html' %}
     <div class="row">
-        <div class="col">
+        <div class="col" style="max-width: 60%; margin: 2rem auto 0 auto;">
             <form method="post" novalidate>
                 {% csrf_token %}
                 {% if form.errors %}
@@ -29,9 +29,11 @@
                                 <small class="text-danger">{{ error }}</small>
                                 {% endfor %}
                             {% else %}
-                                {% if field.label == 'name' or field.label == '使用者名稱' %}
-                                {% elif field.label == 'bio' or field.label == '自我介紹' %}
-                                {% elif field.label == 'avatar' or field.label == '大頭貼' %}
+                                {% if field.label == 'Username' or field.label == '使用者名稱' %}
+                                    <h5 style="font-size: 1.5rem; ">{% trans "Username" %}</h5>
+                                    {% render_field field class+='form-control'%}
+                                {% elif field.label == 'Bio' or field.label == '自我介紹' %}
+                                {% elif field.label == 'Avatar' or field.label == '大頭貼' %}
                                 {% endif %}
                             {% endif %}
                         </div>
