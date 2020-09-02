@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from article.models import Article
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
@@ -62,6 +63,15 @@ class Profile(models.Model):
          super(Profile, self).save(*args, **kwargs)
 
    
+class Recommendation(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    article = models.OneToOneField(Article, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(
+        verbose_name=_('Created at'),
+        auto_now_add= True,
+    )
+
 
 
 '''
