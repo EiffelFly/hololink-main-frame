@@ -38,8 +38,8 @@ class Article(models.Model):
         max_length=1024,
         blank=True,
     )
-    recommendation = models.BooleanField(
-        verbose_name=_('Recommendation'),
+    recommended = models.BooleanField(
+        verbose_name=_('Recommended'),
         default=False,
     )
 
@@ -61,6 +61,7 @@ class Article(models.Model):
     ner_output = models.JSONField(
         verbose_name=_('NER Output'),
         blank=True,
+        null=True
     )
 
     projects = models.ManyToManyField(
