@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from article.models import Article
 from project.models import Project
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 import hashlib
 
 def sha256_hash(content):
@@ -55,7 +56,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = [
             'hash', 'name', 'content', 'from_url',
-            'recommendation', 'projects', 'created_by', 'created_at',
+            'recommended', 'projects', 'created_by', 'created_at',
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
             'final_output'
         ]
@@ -69,6 +70,23 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommendation','projects'
+            'recommended','projects'
         ]
+    
+    def validate(self, data):
+        print('working now')
+        print(data)
+        duplication_list = []
+        for project in data['projects']:
+            try:
+                article = get_object_or_404(Article, name=data['name'], projects=project)
+                duplication_list.append(project)
+                print('duplicate')
+            except Exception as e:
+                print(e)
 
+        if duplication_list:
+            raise serializers.ValidationError({"Duplication Error": duplication_list})
+        
+        return data
+    
