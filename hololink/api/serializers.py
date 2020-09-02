@@ -66,20 +66,30 @@ class ArticleSerializer(serializers.ModelSerializer):
         extra_kwargs = {'authors': {'required': False}}
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
+
     class Meta:
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommended','projects'
+            'recommended','projects',
         ]
-    
+    '''
+        user upload data -> 
+        check if article is duplicated in the same galaxy
+        yes -> raise Duplication Error
+        no -> perform validated_data 
+        ->
+        activate create() to create object ->
+        
+
+    '''
+
     def validate(self, data):
         duplication_list = []
         for project in data['projects']:
             try:
                 article = get_object_or_404(Article, from_url=data['from_url'], projects=project)
                 duplication_list.append(project)
-                print('duplicate')
             except Exception as e:
                 print(e)
 
@@ -98,24 +108,11 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         try:
             article = Article.objects.get(name=name, from_url=from_url)
             for project in projects:
-                article.projects.set(project)
-
+                article.projects.add(project)
+            return article
         except Article.DoesNotExist:
-            article = Article.objects.create(name=name, from_url=from_url, content=content, recommended=recommended, projects=projects)
+            article = Article.objects.create(name=name, from_url=from_url, content=content, recommended=recommended)
+            article.projects.add(*projects)
+            return article
 
-        ''' 
-            We are using django create_or_update method to make sure every article only have one object in database
-            https://docs.djangoproject.com/en/3.1/ref/models/querysets/#update-or-create
-        
-        print('iamhere', validated_data)
-        article, created = Article.objects.get_or_create(
-            
-            content = validated_data.get('content', None),
-            
-            recommended = validated_data.get('recommended', None),
-            created_by = validated_data.get('User', None),
-        )
-        article.projects.add(validated_data.get('projects', None))
-        return article
-        '''
     
