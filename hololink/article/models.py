@@ -47,6 +47,7 @@ class Article(models.Model):
         verbose_name=_('Created by'),
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True,
     )
 
     created_at = models.DateTimeField(
