@@ -52,6 +52,7 @@ class Article(models.Model):
 
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
+        null=True,
     )
 
     tokenize_output = models.JSONField(
