@@ -3,6 +3,7 @@ from article.models import Article
 from project.models import Project
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 import hashlib
 from django.utils import timezone
 
@@ -74,22 +75,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             'name', 'content', 'from_url',
             'recommended','projects'
         ]
-    '''
-        user upload data -> 
-        check if article is duplicated in the same galaxy
-        yes -> raise Duplication Error
-        no -> export validated_data 
-        ->
-        activate create() to create object ->
-        view call perform_create to save object
-
-    '''
-
-    def get_current_user(self, obj):
-        username = self.context['request'].user
-        user = get_object_or_404(User, username=username)
-        self.username = user.username
-        return user.username
 
     def validate(self, data):
         duplication_list = []
@@ -99,7 +84,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             try:
                 article = get_object_or_404(Article, from_url=data['from_url'], projects=project, created_by=user)
                 duplication_list.append(project)
-            except Exception as e:
+            except Http404:
                 pass
 
         if duplication_list:
@@ -110,13 +95,12 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
     def create(self, validated_data):
         username = self.context['request'].user
         user = get_object_or_404(User, username=username)
+
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
         recommended = validated_data.get('recommended', None)
         projects = validated_data.get('projects', None)
-
-        print('ser_create', validated_data)
         
         try:
             article = Article.objects.get(name=name, from_url=from_url, created_by=user)
