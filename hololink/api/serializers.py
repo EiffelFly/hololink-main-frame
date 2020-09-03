@@ -69,6 +69,13 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
 
+    '''
+        We use validate() method to check whether an article is duplicated in the galaxy
+        then we use create() method to get the existing object and update it or create it.
+
+        *many to many fields will first be removed from fieldlist by DRF.
+    '''
+
     class Meta:
         model = Article
         fields = [
@@ -95,7 +102,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
     def create(self, validated_data):
         username = self.context['request'].user
         user = get_object_or_404(User, username=username)
-
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
@@ -117,7 +123,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 created_by=user, 
                 created_at = timezone.localtime(timezone.now())
             )
-            article.projects.add(*projects)
+            article.projects.add(*projects) 
             return article
 
     
