@@ -4,6 +4,7 @@ from project.models import Project
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 import hashlib
+from django.utils import timezone
 
 def sha256_hash(content):
     sha = hashlib.sha256()
@@ -71,27 +72,35 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommended','projects',
+            'recommended','projects'
         ]
     '''
         user upload data -> 
         check if article is duplicated in the same galaxy
         yes -> raise Duplication Error
-        no -> perform validated_data 
+        no -> export validated_data 
         ->
         activate create() to create object ->
-        
+        view call perform_create to save object
 
     '''
 
+    def get_current_user(self, obj):
+        username = self.context['request'].user
+        user = get_object_or_404(User, username=username)
+        self.username = user.username
+        return user.username
+
     def validate(self, data):
         duplication_list = []
-        for project in data['projects']:
+        username = self.context['request'].user
+        user = get_object_or_404(User, username=username)
+        for project in data['projects']:  
             try:
-                article = get_object_or_404(Article, from_url=data['from_url'], projects=project)
+                article = get_object_or_404(Article, from_url=data['from_url'], projects=project, created_by=user)
                 duplication_list.append(project)
             except Exception as e:
-                print(e)
+                pass
 
         if duplication_list:
             raise serializers.ValidationError({"Duplication Error": duplication_list})
@@ -99,19 +108,31 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        username = self.context['request'].user
+        user = get_object_or_404(User, username=username)
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
         recommended = validated_data.get('recommended', None)
         projects = validated_data.get('projects', None)
 
+        print('ser_create', validated_data)
+        
         try:
-            article = Article.objects.get(name=name, from_url=from_url)
+            article = Article.objects.get(name=name, from_url=from_url, created_by=user)
             for project in projects:
                 article.projects.add(project)
             return article
         except Article.DoesNotExist:
-            article = Article.objects.create(name=name, from_url=from_url, content=content, recommended=recommended)
+            article = Article.objects.create(
+                hash = sha256_hash(content),
+                name=name, 
+                from_url=from_url, 
+                content=content, 
+                recommended=recommended, 
+                created_by=user, 
+                created_at = timezone.localtime(timezone.now())
+            )
             article.projects.add(*projects)
             return article
 

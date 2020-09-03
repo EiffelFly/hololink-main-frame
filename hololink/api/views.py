@@ -59,11 +59,14 @@ class ArticleViewSet(viewsets.ModelViewSet):
             Because we don't allow user post any sensitive content and some other i
             nformation to our api. We have to create it from server side.
         '''
+        
         serializer.save(
             hash = sha256_hash(self.request.data['content']),
             created_by = self.request.user,
             created_at = timezone.localtime(timezone.now())
         )
+        
+        print('perform', type(serializer))
     
 class ProjectViewSet(viewsets.ModelViewSet):
     """
