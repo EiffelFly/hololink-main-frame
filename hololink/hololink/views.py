@@ -169,26 +169,35 @@ def user_settings(request, slug):
 
     if request.method == 'POST':
         form = UserSettingsFormForPublicProfile(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data.get('username'))
-            setattr(user, 'username', form.cleaned_data.get('username'))
-            setattr(profile, 'bio', form.cleaned_data.get('bio'))
+        print(form)
+        if form.has_changed(): 
+            if 'username' not in form.changed_data:
+                pass
+            if form.is_valid():
+                print(form.cleaned_data.get('username'))
+                setattr(user, 'username', form.cleaned_data.get('username'))
+                setattr(profile, 'bio', form.cleaned_data.get('bio'))
 
-            if request.FILES.get('avatar', None) != None:
-                try:
-                    os.remove(BASE_DIR + user.profile.user_avatar.url)
-                except Exception as e:
-                    print('Exception in removing old profile image: ', e)
-                profile.user_avatar = request.FILES['avatar']
-            
-            profile.save()
-            #user.save()
-            return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
+                if request.FILES.get('avatar', None) != None:
+                    try:
+                        os.remove(BASE_DIR + user.profile.user_avatar.url)
+                    except Exception as e:
+                        print('Exception in removing old profile image: ', e)
+                    profile.user_avatar = request.FILES['avatar']
+                print(form.changed_data)
+                profile.save()
+                #user.save()
+                return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
+            else:
+                form = UserSettingsFormForPublicProfile(request.POST)
+                context['form'] = form
+                return render(request, 'user_settings_publicprofile.html', context)
         else:
-            form = UserSettingsFormForPublicProfile(request.POST)
+            form = UserSettingsFormForPublicProfile()
             context['form'] = form
+            form.fields['username'].widget.attrs['placeholder'] = profile.user #added placeholder
+            form.fields['bio'].initial = profile.bio
             return render(request, 'user_settings_publicprofile.html', context)
-           
 
     else:
         form = UserSettingsFormForPublicProfile()
@@ -196,4 +205,4 @@ def user_settings(request, slug):
         form.fields['username'].widget.attrs['placeholder'] = profile.user #added placeholder
         form.fields['bio'].initial = profile.bio 
 
-    return render(request, 'user_settings_publicprofile.html', context)
+        return render(request, 'user_settings_publicprofile.html', context)
