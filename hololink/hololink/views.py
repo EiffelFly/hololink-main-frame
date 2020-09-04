@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from accounts.forms import SignUpWithEmailForm
-from .forms import UserSettingsForm
+from .forms import UserSettingsFormForPublicProfile
 from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
@@ -13,7 +13,9 @@ from django.utils import timezone
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.db.models import Sum
-
+from django.http import HttpResponseRedirect
+import os
+from .settings import BASE_DIR
 
 
 def now():
@@ -154,8 +156,10 @@ def explore_users(request):
     
     return render(request, 'explore_users.html', context)
 
+@csrf_exempt
 def user_settings(request, slug):
     profile = get_object_or_404(Profile, user=request.user)
+    user = get_object_or_404(User, username=request.user)
 
     context = {
         'form': None,
@@ -164,11 +168,31 @@ def user_settings(request, slug):
     }
 
     if request.method == 'POST':
-        pass
+        form = UserSettingsFormForPublicProfile(request.POST)
+        if form.is_valid():
+            setattr(user, 'username', form.cleaned_data.get('username'))
+            setattr(profile, 'bio', form.cleaned_data.get('bio'))
+
+            if request.FILES.get('avatar', None) != None:
+                try:
+                    os.remove(BASE_DIR + user.profile.user_avatar.url)
+                except Exception as e:
+                    print('Exception in removing old profile image: ', e)
+                profile.user_avatar = request.FILES['avatar']
+            
+            profile.save()
+            user.save()
+            return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
+        else:
+            form = UserSettingsFormForPublicProfile(request.POST)
+            context['form'] = form
+            return render(request, 'user_settings_publicprofile.html', context)
+           
+
     else:
-        form = UserSettingsForm()
+        form = UserSettingsFormForPublicProfile()
         context['form'] = form
-        form.fields['username'].widget.attrs['placeholder'] = profile.user #added placeholder
+        form.fields['username'].initial = profile.user #added placeholder
         form.fields['bio'].initial = profile.bio 
 
     return render(request, 'user_settings_publicprofile.html', context)
