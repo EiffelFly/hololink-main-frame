@@ -56,7 +56,7 @@ class Profile(models.Model):
     
 
     def get_absolute_url(self):
-        return reverse('user_dashboard', kwargs={'username': self.slug})
+        return reverse('user_dashboard', args=(self.slug,))
 
     def save(self, *args, **kwargs):
          self.slug = slugify(self.user.username)
