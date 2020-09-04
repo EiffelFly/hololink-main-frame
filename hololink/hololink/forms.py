@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
-class UserSettingsForm(forms.ModelForm):
+class UserSettingsFormForPublicProfile(forms.ModelForm):
 
     username = forms.CharField(
         label=_('Username'),
@@ -41,3 +41,14 @@ class UserSettingsForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'bio', 'avatar']
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if username is '' or username.isspace() is True:
+            self.add_error(
+                'username',
+                ValidationError(
+                    _("Username can't be empty nor whitespaces"),
+                    code='invalid'
+                )
+            )
