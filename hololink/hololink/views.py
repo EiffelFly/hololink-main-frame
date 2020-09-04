@@ -170,6 +170,7 @@ def user_settings(request, slug):
     if request.method == 'POST':
         form = UserSettingsFormForPublicProfile(request.POST)
         if form.is_valid():
+            print(form.cleaned_data.get('username'))
             setattr(user, 'username', form.cleaned_data.get('username'))
             setattr(profile, 'bio', form.cleaned_data.get('bio'))
 
@@ -181,7 +182,7 @@ def user_settings(request, slug):
                 profile.user_avatar = request.FILES['avatar']
             
             profile.save()
-            user.save()
+            #user.save()
             return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
         else:
             form = UserSettingsFormForPublicProfile(request.POST)
@@ -192,7 +193,7 @@ def user_settings(request, slug):
     else:
         form = UserSettingsFormForPublicProfile()
         context['form'] = form
-        form.fields['username'].initial = profile.user #added placeholder
+        form.fields['username'].widget.attrs['placeholder'] = profile.user #added placeholder
         form.fields['bio'].initial = profile.bio 
 
     return render(request, 'user_settings_publicprofile.html', context)
