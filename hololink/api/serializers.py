@@ -67,6 +67,16 @@ class ArticleSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {'authors': {'required': False}}
 
+
+class ArticleSerializerForNEREngine(serializers.ModelSerializer):
+
+    class Meta:
+        model = Article
+        fields = [
+            'name', 'from_url', 'ner_output'
+        ]
+
+
 class ArticleSerializerForPost(serializers.ModelSerializer):
 
     '''

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from article.models import Article
 from project.models import Project
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +12,8 @@ from rest_framework import status
 from django.utils import timezone
 import hashlib
 
+def requestNEREngine(serializer):
+    pass
 
 def sha256_hash(content):
     sha = hashlib.sha256()
@@ -61,12 +63,23 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
             perform_create will init serializer with this additional data.
         '''
+
+        print(serializer)
         
         serializer.save(
             hash = sha256_hash(self.request.data['content']),
             created_by = self.request.user,
             created_at = timezone.localtime(timezone.now())
         )
+
+class ArticleViewSetForNEREngine(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = ArticleSerializerForNEREngine
+
+    def get_queryset(self):
+        return Article.objects.filter(created_by=self.request.user)
+    
     
 class ProjectViewSet(viewsets.ModelViewSet):
     """
