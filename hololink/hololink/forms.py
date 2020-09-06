@@ -44,7 +44,7 @@ class UserSettingsFormForPublicProfile(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if username is '' or username.isspace() is True or username is None:
+        if username.isspace() is True:
             self.add_error(
                 'username',
                 ValidationError(
