@@ -50,6 +50,13 @@ class Article(models.Model):
         null=True,
     )
 
+    owned_by = models.ManyToManyField(
+        User,
+        related_name='articles',
+        verbose_name='Owned by',
+        blank=True,
+    )
+
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
         null=True,
