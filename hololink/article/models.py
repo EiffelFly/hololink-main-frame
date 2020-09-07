@@ -15,6 +15,26 @@ def now():
     return timezone.localtime(timezone.now())
 
 
+class Highlight(models.Model):
+    created_at = models.DateTimeField(
+        verbose_name=_('Created at'),
+        auto_now_add=True,
+    )
+
+    highlighted_by = models.ManyToManyField(
+        User,
+        related_name='highlight',
+        verbose_name=_('Highlighted by'),
+        blank=True,
+    )
+
+    highlighted_words = models.TextField(
+        verbose_name=_('Highlighted words'),
+        max_length=262144,
+        blank=True,
+    )
+
+
 class Article(models.Model):
 
     hash = models.CharField(
@@ -54,7 +74,7 @@ class Article(models.Model):
         User,
         related_name='articles',
         verbose_name='Owned by',
-        blank=True,
+        blank=True
     )
 
     created_at = models.DateTimeField(
