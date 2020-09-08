@@ -76,8 +76,19 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
             'name', 'from_url', 'ner_output'
         ]
 
-    
-
+    def create(self, validated_data):
+        name = validated_data.get('name', None)
+        from_url = validated_data.get('from_url', None)
+        ner_output = validated_data.get('ner_output', None)
+        print(ner_output)
+        
+        article = Article.objects.get(name=name, from_url=from_url)
+        print('before',article.ner_output)
+        setattr(article, 'ner_output', ner_output)
+        print('after',article.ner_output)
+        return article
+        
+        
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
 

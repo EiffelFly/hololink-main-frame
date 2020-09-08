@@ -51,7 +51,7 @@ class Article(models.Model):
 
     owned_by = models.ManyToManyField(
         User,
-        related_name='articles',
+        related_name='articles_user_owned',
         verbose_name='Owned by',
         blank=True
     )
@@ -74,7 +74,7 @@ class Article(models.Model):
 
     projects = models.ManyToManyField(
         Project,
-        related_name='articles',
+        related_name='articles_project_owned',
         verbose_name=_('Projects'),
         blank=True,
     )

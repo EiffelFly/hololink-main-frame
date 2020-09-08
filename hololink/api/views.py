@@ -73,12 +73,15 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 class ArticleViewSetForNEREngine(viewsets.ModelViewSet):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication, BasicAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ArticleSerializerForNEREngine
 
     def get_queryset(self):
-        return Article.objects.filter(created_by=self.request.user)
+        return Article.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
     
     
 class ProjectViewSet(viewsets.ModelViewSet):
