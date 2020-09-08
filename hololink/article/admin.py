@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Article
+from .models import Highlight
 
 
     
@@ -24,4 +25,11 @@ class ArticleAdmin(admin.ModelAdmin):
             return obj.content
 
 
+
+
+class HighlightAdmin(admin.ModelAdmin):
+    list_display = ['highlighted_at', 'created_at', 'highlighted_words']
+    filter_horizontal = ('highlighted_by',)
+
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Highlight, HighlightAdmin)

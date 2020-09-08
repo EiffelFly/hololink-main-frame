@@ -14,27 +14,6 @@ import time
 def now():
     return timezone.localtime(timezone.now())
 
-
-class Highlight(models.Model):
-    created_at = models.DateTimeField(
-        verbose_name=_('Created at'),
-        auto_now_add=True,
-    )
-
-    highlighted_by = models.ManyToManyField(
-        User,
-        related_name='highlight',
-        verbose_name=_('Highlighted by'),
-        blank=True,
-    )
-
-    highlighted_words = models.TextField(
-        verbose_name=_('Highlighted words'),
-        max_length=262144,
-        blank=True,
-    )
-
-
 class Article(models.Model):
 
     hash = models.CharField(
@@ -141,3 +120,28 @@ def slug_generator(sender, instance, *args, **kwargs):
     
 pre_save.connect(slug_generator, sender=Article, dispatch_uid='generate slug')
 
+class Highlight(models.Model):
+    created_at = models.DateTimeField(
+        verbose_name=_('Created at'),
+        auto_now_add=True,
+    )
+
+    highlighted_by = models.ManyToManyField(
+        User,
+        related_name='highlight',
+        verbose_name=_('Highlighted by'),
+        blank=True,
+    )
+
+    highlighted_words = models.TextField(
+        verbose_name=_('Highlighted words'),
+        max_length=262144,
+        blank=True,
+    )
+
+    highlighted_at = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        verbose_name='Highlighted at',
+        null=True
+    )
