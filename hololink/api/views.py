@@ -4,7 +4,7 @@ from project.models import Project
 from rest_framework import viewsets
 from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -73,7 +73,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 class ArticleViewSetForNEREngine(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ArticleSerializerForNEREngine
 
@@ -85,7 +85,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-
+    
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -100,7 +100,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return serializer_class
 
     def get_queryset(self):
-        return Project.objects.filter(created_by=self.request.user)
+        user = self.request.user
+        return Project.objects.filter(created_by=user)
+        
 
     
     def perform_create(self, serializer):

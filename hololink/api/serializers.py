@@ -28,7 +28,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         ordering = ['-created_at']
         model = Project
         fields = [
-            'id','name', 'created_at', 'created_by', 'articles',
+            'id','name', 'created_at', 'created_by', 'articles_project_owned',
             'project_basestone_keyword_sum', 'project_stellar_keyword_sum'
         ]
         read_only_fields = [
@@ -76,6 +76,8 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
             'name', 'from_url', 'ner_output'
         ]
 
+    
+
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
 
@@ -119,9 +121,15 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         projects = validated_data.get('projects', None)
         
         try:
-            article = Article.objects.get(name=name, from_url=from_url, created_by=user)
+            article = Article.objects.get(name=name, from_url=from_url)
             for project in projects:
-                article.projects.add(project)
+                try:
+                    target_project = Project.objects.get(name=project, created_by=username)
+                    article.projects.add(target_project)
+                except Project.DoesNotExist:
+                    print('There is no such project')
+            if user not in article.owned_by.all():
+                article.owned_by.add(user)
             return article
         except Article.DoesNotExist:
             article = Article.objects.create(
@@ -133,7 +141,13 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 created_by=user, 
                 created_at = timezone.localtime(timezone.now())
             )
-            article.projects.add(*projects) 
+            article.owned_by.add(user)
+            for project in projects:
+                try:
+                    target_project = Project.objects.get(name=project, created_by=username)
+                    article.projects.add(target_project)
+                except Project.DoesNotExist:
+                    print('There is no such project')
             return article
 
     
