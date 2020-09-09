@@ -97,6 +97,11 @@ class Article(models.Model):
         null=True
     )
 
+    ml_is_processing = models.BooleanField(
+        verbose_name=_('ML is processing'),
+        default=False,
+    )
+
     D3_data_format = models.JSONField(
         verbose_name=_('D3 data'),
         null=True
