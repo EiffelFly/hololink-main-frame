@@ -80,12 +80,14 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         ner_output = validated_data.get('ner_output', None)
-        print(ner_output)
         
-        article = Article.objects.get(name=name, from_url=from_url)
-        print('before',article.ner_output)
+        try:
+            article = Article.objects.get(name=name, from_url=from_url)
+        except Article.DoesNotExist:
+            raise serializers.ValidationError({"ValidationError": "Article doesn't exist, you must post exact the same name and url"})
+
         setattr(article, 'ner_output', ner_output)
-        print('after',article.ner_output)
+        article.save()
         return article
         
         
@@ -103,7 +105,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommended','projects'
+            'recommended','projects', 
         ]
 
     def validate(self, data):
@@ -142,6 +144,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             if user not in article.owned_by.all():
                 article.owned_by.add(user)
             return article
+
         except Article.DoesNotExist:
             article = Article.objects.create(
                 hash = sha256_hash(content),
@@ -152,13 +155,14 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 created_by=user, 
                 created_at = timezone.localtime(timezone.now())
             )
-            article.owned_by.add(user)
+            
             for project in projects:
                 try:
                     target_project = Project.objects.get(name=project, created_by=username)
                     article.projects.add(target_project)
                 except Project.DoesNotExist:
                     print('There is no such project')
+            article.owned_by.add(user)
             return article
 
     
