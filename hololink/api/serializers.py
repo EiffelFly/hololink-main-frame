@@ -70,16 +70,19 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url','D3_data_format', 'ner_output',
+            'name', 'from_url','D3_data_format', 'ner_output', 'projects'
         ]
         read_only_fields = [
             'D3_data_format'
         ]
 
     def create(self, validated_data):
+        username = self.context['request'].user
+        user = get_object_or_404(User, username=username)
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         ner_output = validated_data.get('ner_output', None)
+        projects = validated_data.get('projects', None)
         
         try:
             article = Article.objects.get(name=name, from_url=from_url)
@@ -89,7 +92,11 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         d3_data = json_to_d3(ner_output)   
         setattr(article, 'ner_output', ner_output)
         setattr(article, 'D3_data_format', d3_data)
+        setattr(article, 'ml_is_processing', False)
         article.save()
+
+        merge = merge_article_into_galaxy(username, projects)
+
 
         return article
         
@@ -218,3 +225,5 @@ def json_to_d3(data):
     }
 
     return processed_data
+
+def merge_article_into_galaxy():
