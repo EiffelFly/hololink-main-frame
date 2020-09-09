@@ -70,6 +70,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 class ArticleSerializerForNEREngine(serializers.ModelSerializer):
 
+    ner_output = serializers.JSONField()
+
     class Meta:
         model = Article
         fields = [
