@@ -107,7 +107,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommended','projects', 
+            'recommended','projects',
         ]
 
     def validate(self, data):
@@ -116,7 +116,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         user = get_object_or_404(User, username=username)
         for project in data['projects']:  
             try:
-                article = get_object_or_404(Article, from_url=data['from_url'], projects=project, created_by=user)
+                article = get_object_or_404(Article, from_url=data['from_url'], projects=project, owned_by=user) # owned_by=user this can work!
                 duplication_list.append(project)
             except Http404:
                 pass
@@ -148,15 +148,18 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             return article
 
         except Article.DoesNotExist:
-            article = Article.objects.create(
-                hash = sha256_hash(content),
-                name=name, 
-                from_url=from_url, 
-                content=content, 
-                recommended=recommended, 
-                created_by=user, 
-                created_at = timezone.localtime(timezone.now())
-            )
+
+            data = {
+                'hash':sha256_hash(content),
+                'name':name,
+                'from_url':from_url,
+                'content':content,
+                'recommended':recommended,
+                'created_by':user,
+                'created_at':timezone.localtime(timezone.now())
+            }
+
+            article = super().create(data)
             
             for project in projects:
                 try:
