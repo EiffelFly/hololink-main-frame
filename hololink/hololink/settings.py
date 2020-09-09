@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 3rd parties
     'rest_framework',
     'widget_tweaks',
+    'rest_framework.authtoken',
 
 ]
 
