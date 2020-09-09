@@ -7,11 +7,6 @@ from django.http import Http404
 import hashlib
 from django.utils import timezone
 
-def sha256_hash(content):
-    sha = hashlib.sha256()
-    sha.update(content.encode())
-    return sha.hexdigest()
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -75,7 +70,10 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url', 'ner_output'
+            'name', 'from_url','D3_data_format', 'ner_output',
+        ]
+        read_only_fields = [
+            'D3_data_format'
         ]
 
     def create(self, validated_data):
@@ -88,8 +86,11 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         except Article.DoesNotExist:
             raise serializers.ValidationError({"ValidationError": "Article doesn't exist, you must post exact the same name and url"})
 
+        d3_data = json_to_d3(ner_output)   
         setattr(article, 'ner_output', ner_output)
+        setattr(article, 'D3_data_format', d3_data)
         article.save()
+
         return article
         
         
@@ -171,3 +172,49 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             return article
 
     
+def sha256_hash(content):
+    sha = hashlib.sha256()
+    sha.update(content.encode())
+    return sha.hexdigest()
+
+def json_to_d3(data):
+
+    
+    article_title = data['title']
+    article_galaxy = data['galaxy']
+    article_url = data['url']
+
+    nodejson = []
+    basestoneNum = 0
+    stellarNum = 0
+    nodevalidator = []
+
+    for key,value in data['Final'].items():
+        title = value['Title']
+        frequency = value['Frequency']
+        keyword_type = value['POS']
+
+        if keyword_type == 'Na' or keyword_type == 'Nb' or keyword_type == 'Nc':            
+            nodejson.append({"title":title, "frequency":frequency, "group":"stellar", "type":keyword_type})
+            stellarNum += 1
+            nodevalidator.append(title)
+        else:
+            if keyword_type == 'DATE' or keyword_type == 'ORDINAL' or keyword_type == 'CARDINAL':
+                pass
+            else:
+                nodejson.append({"title":title, "frequency":frequency, "group":"basestone", "type":keyword_type})
+                basestoneNum += 1
+                nodevalidator.append(title)
+
+
+    processed_data = {
+        "article":article_title, 
+        "galaxy":article_galaxy, 
+        "url":article_url, 
+        "basestoneNum":basestoneNum, 
+        "stellarNum":stellarNum, 
+        "nodes":nodejson,
+        "nodesvlaidator": nodevalidator,
+    }
+
+    return processed_data
