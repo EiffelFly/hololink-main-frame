@@ -16,7 +16,7 @@ headers = {
     "X-CSRFToken": get_csrf_token,
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "Authorization":"Token dc7a52ed89a638ec3236685a1d2005b1b242b262"
+    "Authorization":"Token dc7a52ed89a638ec3236685a1d2005b1b242b262" #this token is for demo
 }
 
 ner_endpoint = 'https://127.0.0.1:8000/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
