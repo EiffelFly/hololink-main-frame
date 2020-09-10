@@ -24,10 +24,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = [
             'id','name', 'created_at', 'created_by', 'articles_project_owned',
-            'project_basestone_keyword_sum', 'project_stellar_keyword_sum'
+            'project_basestone_keyword_sum', 'project_stellar_keyword_sum', 'article_list', 'keyword_list', 'project_d3_json'
         ]
         read_only_fields = [
-            'id', 'created_at', 'created_by'
+            'id', 'created_at', 'created_by', 'article_list', 'keyword_list', 'project_d3_json'
         ]
         extra_kwargs = {'books': {'required': False}}
 
@@ -70,7 +70,7 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url','D3_data_format', 'ner_output', 'projects'
+            'name', 'from_url','D3_data_format', 'ner_output', 'projects', 
         ]
         read_only_fields = [
             'D3_data_format'
@@ -101,7 +101,7 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         }
 
         merge = merge_article_into_galaxy(username, data_for_merging)
-
+        merge.save()
 
         return article    
 
@@ -227,32 +227,87 @@ def json_to_d3(data):
         "basestoneNum":basestoneNum, 
         "stellarNum":stellarNum, 
         "nodes":nodejson,
-        "nodesvlaidator": nodevalidator,
+        "nodes_validator": nodevalidator,
     }
 
     return processed_data
 
 def merge_article_into_galaxy(username, data_for_merging):
     user = get_object_or_404(User, username=username)
-    article_d3_data = data_for_merging['d3']
+    article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
+    article_name = data_for_merging['d3']['name']
+    article_nodes_validator = data_for_merging['d3']['nodes_validator']
+    print(projects)
+    print(article_data)
 
     for target_project in projects:
         project = Project.objects.get(name=target_project, created_by=user)
-
+        # Nodes
+        # Append new article node
         if article_name not in project.article_list['articles']:
             project.article_list['articles'].append(article_name)
             project.project_d3_json['nodes'].append(
                 {
-                    "id":article_d3_data['names'],
-                    "url":article_d3_data['url'],
+                    "id":article_data['name'],
+                    "url":article_data['url'],
                     "level":"article",
-                    "basestoneNum":article_d3_data['basestoneNum'],
-                    "stellarNum":article_d3_data['stellarNum'],
+                    "basestoneNum":article_data['basestoneNum'],
+                    "stellarNum":article_data['stellarNum'],
                 }
             )
+            for article_node in article_data['nodes']:         
+                # Append new keyword
+                if article_node['title'] not in project.keyword_list['total']:
+                    project.keyword_list['total'].append(article_node['title'])
+                    if article_node['group'] is 'basestone':
+                        project.keyword_list['basestone'].append(article_node['title'])
+                    else:
+                        project.keyword_list['stellar'].append(article_node['title'])
+                    project.project_d3_json['nodes'].append(
+                        {
+                            "id":article_node['title'],
+                            "level":article_node['group'],
+                            "connection":1,
+                        }
+                    )
+                # Make existed node's connection plus 1
+                else:
+                    for project_node in project.project_d3_json['nodes']:
+                        if project_node['id'] is article_node['title'] and project_node['level'] is article_node['group']:
+                            project_node['connection'] = project_node['connection'] + 1
+            return project
         else:
-            pass
+            # else: mean article already exist in the project
+            for article_node in article_d3_data['nodes']:    
+                # Append new keyword
+                if article_node['title'] not in project.keyword_list['total']:
+                    project.keyword_list['total'].append(article_node['title'])
+                    if article_node['group'] is 'basestone':
+                        project.keyword_list['basestone'].append(article_node['title'])
+                    else:
+                        project.keyword_list['stellar'].append(article_node['title'])
+                    project.project_d3_json['nodes'].append(
+                        {
+                            "id":article_node['title'],
+                            "level":article_node['group'],
+                            "connection":1,
+                        }
+                    )
+                else:
+                    # else: mean there is existed node in this project, but we don't know which grout it belonged to (base or stellar) 
+                    keyword_type = article_node['group']
+                    if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
+                        project.keyword_list[f'{keyword_type}'].append(article_node['title'])
+                        project.project_d3_json['nodes'].append(
+                        {
+                            "id":article_node['title'],
+                            "level":article_node['group'],
+                            "connection":1,
+                        }
+                    )
+            return project
+
 
 
         
