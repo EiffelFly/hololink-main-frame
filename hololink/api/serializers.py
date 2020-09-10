@@ -55,10 +55,10 @@ class ArticleSerializer(serializers.ModelSerializer):
             'hash', 'name', 'content', 'from_url',
             'recommended', 'projects', 'created_by', 'created_at',
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
-            'final_output'
+            'final_output', 'D3_data_format'
         ]
         read_only_fields = [
-            'hash', 'created_at', 'created_by'
+            'hash', 'created_at', 'created_by', 'D3_data_format'
         ]
         extra_kwargs = {'authors': {'required': False}}
 
@@ -84,8 +84,6 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         ner_output = validated_data.get('ner_output', None)
         projects = validated_data.get('projects', None)
 
-        print(ner_output)
-
         try:
             article = Article.objects.get(name=name, from_url=from_url)
         except Article.DoesNotExist:
@@ -98,6 +96,8 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         article.save()
 
         data_for_merging = {
+            "name":name,
+            "from_url":from_url,
             "d3":d3_data,
             "projects":projects,
         }
@@ -223,13 +223,10 @@ def json_to_d3(data):
 
 
     processed_data = {
-        "name":article_title, 
-        "galaxy":article_galaxy, 
-        "url":article_url, 
-        "basestoneNum":basestoneNum, 
-        "stellarNum":stellarNum, 
         "nodes":nodejson,
         "nodes_validator": nodevalidator,
+        "basestoneNum":basestoneNum,
+        "stellarNum":stellarNum,
     }
 
     return processed_data
@@ -238,10 +235,8 @@ def merge_article_into_galaxy(username, data_for_merging):
     user = get_object_or_404(User, username=username)
     article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
-    article_name = data_for_merging['d3']['name']
-    article_nodes_validator = data_for_merging['d3']['nodes_validator']
-    print(projects)
-    print(article_data)
+    article_name = data_for_merging['name']
+    article_url = data_for_merging['from_url']
 
     '''
         --- 確認該 article 是否存在 project
@@ -266,16 +261,17 @@ def merge_article_into_galaxy(username, data_for_merging):
             project.article_list['articles'].append(article_name)
             project.project_d3_json['nodes'].append(
                 {
-                    "id":article_data['name'],
-                    "url":article_data['url'],
+                    "id":article_name,
+                    "url":article_url,
                     "level":"article",
                     "basestoneNum":article_data['basestoneNum'],
                     "stellarNum":article_data['stellarNum'],
                 }
             )
-            for article_node in article_data['nodes']:         
+            for article_node in article_data['nodes']:        
                 # Append new keyword
                 if article_node['title'] not in project.keyword_list['total']:
+                    print('new article, new keywords', article_node, project.keyword_list['total'])
                     project.keyword_list['total'].append(article_node['title'])
                     if article_node['group'] is 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
@@ -290,15 +286,20 @@ def merge_article_into_galaxy(username, data_for_merging):
                     )
                 # Make existed node's connection plus 1
                 else:
+                    print('new article, old keywords', article_node, project.keyword_list['total'])
                     for project_node in project.project_d3_json['nodes']:
+                        print('project_node', project_node)
                         if project_node['id'] is article_node['title'] and project_node['level'] is article_node['group']:
-                            project_node.update((project_node["connection"], project_node['connection'] + 1))
+                            project_node.update({project_node["connection"], project_node['connection'] + 1})
+                            #project.project_d3_json['nodes'].update({project_node["connection"], project_node['connection'] + 1})
+                            print('new article, old keyword',project_node)
             return project
         else:
             # else: mean article already exist in the project
             for article_node in article_data['nodes']:    
                 # Append new keyword
                 if article_node['title'] not in project.keyword_list['total']:
+                    print("old article, new keywords")
                     project.keyword_list['total'].append(article_node['title'])
                     if article_node['group'] is 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
@@ -315,6 +316,7 @@ def merge_article_into_galaxy(username, data_for_merging):
                     # else: mean the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
                     keyword_type = article_node['group']
                     if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
+                        print("old article, old keywords")
                         project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                         project.project_d3_json['nodes'].append(
                         {
