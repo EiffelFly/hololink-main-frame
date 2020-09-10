@@ -251,7 +251,7 @@ def merge_article_into_galaxy(username, data_for_merging):
                     --- 存在：將原有 keyword connection + 1
             --- 存在
                 --- 確認 article_keyword 是否存在於 project_keyword
-                    --- 不存在：增加該 keyword
+                    --- 不存在：增加該 keyword (check)
                     --- 存在
                         --- 確認該 article_keyword_group 是否存在於 project_keyword_group
                             --- 是：pass
@@ -292,7 +292,7 @@ def merge_article_into_galaxy(username, data_for_merging):
                 else:
                     for project_node in project.project_d3_json['nodes']:
                         if project_node['id'] is article_node['title'] and project_node['level'] is article_node['group']:
-                            project_node['connection'] = project_node['connection'] + 1
+                            project_node.update((project_node["connection"], project_node['connection'] + 1))
             return project
         else:
             # else: mean article already exist in the project
