@@ -70,7 +70,7 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url','D3_data_format', 'ner_output', 'projects', 
+            'name', 'from_url', 'D3_data_format', 'ner_output', 'projects', 
         ]
         read_only_fields = [
             'D3_data_format'
@@ -83,7 +83,9 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         from_url = validated_data.get('from_url', None)
         ner_output = validated_data.get('ner_output', None)
         projects = validated_data.get('projects', None)
-        
+
+        print(ner_output)
+
         try:
             article = Article.objects.get(name=name, from_url=from_url)
         except Article.DoesNotExist:
@@ -241,6 +243,21 @@ def merge_article_into_galaxy(username, data_for_merging):
     print(projects)
     print(article_data)
 
+    '''
+        --- 確認該 article 是否存在 project
+            --- 不存在：將 article 加入 node
+                --- 確認 article_keyword 是否存在於 project_keyword
+                    --- 不存在：增加該 keyword
+                    --- 存在：將原有 keyword connection + 1
+            --- 存在
+                --- 確認 article_keyword 是否存在於 project_keyword
+                    --- 不存在：增加該 keyword
+                    --- 存在
+                        --- 確認該 article_keyword_group 是否存在於 project_keyword_group
+                            --- 是：pass
+                            --- 否：增加該 keyword 於相對應的 group
+    '''
+
     for target_project in projects:
         project = Project.objects.get(name=target_project, created_by=user)
         # Nodes
@@ -279,7 +296,7 @@ def merge_article_into_galaxy(username, data_for_merging):
             return project
         else:
             # else: mean article already exist in the project
-            for article_node in article_d3_data['nodes']:    
+            for article_node in article_data['nodes']:    
                 # Append new keyword
                 if article_node['title'] not in project.keyword_list['total']:
                     project.keyword_list['total'].append(article_node['title'])
@@ -295,7 +312,7 @@ def merge_article_into_galaxy(username, data_for_merging):
                         }
                     )
                 else:
-                    # else: mean there is existed node in this project, but we don't know which grout it belonged to (base or stellar) 
+                    # else: mean the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
                     keyword_type = article_node['group']
                     if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
                         project.keyword_list[f'{keyword_type}'].append(article_node['title'])
