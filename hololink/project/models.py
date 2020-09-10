@@ -10,6 +10,14 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from unidecode import unidecode
 
+def get_project_d3_json_default():
+    return {"nodes":[],"links":[]}
+
+def get_article_list_default():
+    return {"articles":[]}
+
+def get_keyword_list_default():
+    return {"total":[],"basestone":[],"stellar":[]}
 
 def now():
     return timezone.localtime(timezone.now())
@@ -80,17 +88,20 @@ class Project(models.Model):
 
     project_d3_json = models.JSONField(
         verbose_name=_('D3 data'),
-        null=True
+        null=True,
+        default=get_project_d3_json_default,
     )
 
     article_list = models.JSONField(
         verbose_name=_('Article list'),
         null=True,
+        default=get_article_list_default,
     )
 
     keyword_list = models.JSONField(
         verbose_name=_('Keyword list'),
         null=True,
+        default=get_keyword_list_default,
     )
 
     def __str__(self):
