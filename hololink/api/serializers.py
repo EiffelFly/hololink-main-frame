@@ -95,12 +95,15 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         setattr(article, 'ml_is_processing', False)
         article.save()
 
-        merge = merge_article_into_galaxy(username, projects)
+        data_for_merging = {
+            "d3":d3_data,
+            "projects":projects,
+        }
+
+        merge = merge_article_into_galaxy(username, data_for_merging)
 
 
-        return article
-        
-        
+        return article    
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
 
@@ -109,6 +112,10 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         then we use create() method to get the existing object and update it or create it.
 
         *many to many fields will first be removed from fieldlist by DRF.
+
+        修整處：
+        1. 不要覆蓋 create() 而是覆蓋 save() 就好
+        2. add owned_by 和 peoject 的寫法修整成相同的
     '''
 
     class Meta:
@@ -177,7 +184,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                     print('There is no such project')
             article.owned_by.add(user)
             return article
-
     
 def sha256_hash(content):
     sha = hashlib.sha256()
@@ -215,7 +221,7 @@ def json_to_d3(data):
 
 
     processed_data = {
-        "article":article_title, 
+        "name":article_title, 
         "galaxy":article_galaxy, 
         "url":article_url, 
         "basestoneNum":basestoneNum, 
@@ -226,4 +232,27 @@ def json_to_d3(data):
 
     return processed_data
 
-def merge_article_into_galaxy():
+def merge_article_into_galaxy(username, data_for_merging):
+    user = get_object_or_404(User, username=username)
+    article_d3_data = data_for_merging['d3']
+    projects = data_for_merging['projects']
+
+    for target_project in projects:
+        project = Project.objects.get(name=target_project, created_by=user)
+
+        if article_name not in project.article_list['articles']:
+            project.article_list['articles'].append(article_name)
+            project.project_d3_json['nodes'].append(
+                {
+                    "id":article_d3_data['names'],
+                    "url":article_d3_data['url'],
+                    "level":"article",
+                    "basestoneNum":article_d3_data['basestoneNum'],
+                    "stellarNum":article_d3_data['stellarNum'],
+                }
+            )
+        else:
+            pass
+
+
+        
