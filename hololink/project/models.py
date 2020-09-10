@@ -83,6 +83,16 @@ class Project(models.Model):
         null=True
     )
 
+    article_list = models.JSONField(
+        verbose_name=_('Article list'),
+        null=True,
+    )
+
+    keyword_list = models.JSONField(
+        verbose_name=_('Keyword list'),
+        null=True,
+    )
+
     def __str__(self):
         return self.name
 
