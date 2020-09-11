@@ -294,11 +294,10 @@ def merge_article_into_galaxy(username, data_for_merging):
                 else:
                     print('new article, old keywords', article_node, project.keyword_list['total'])
                     for project_node in project.project_d3_json['nodes']:
-                        print('project_node', project_node)
-                        if project_node['id'] is article_node['title'] and project_node['level'] is article_node['group']:
-                            project_node.update({project_node["connection"], project_node['connection'] + 1})
-                            #project.project_d3_json['nodes'].update({project_node["connection"], project_node['connection'] + 1})
-                            print('new article, old keyword',project_node)
+                        # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
+                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['group']:
+                            print(project_node['connection'])
+                            project_node.update({"connection":project_node['connection'] + 1})
             return project
         else:
             # else: mean article already exist in the project
