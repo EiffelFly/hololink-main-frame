@@ -90,6 +90,12 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
             raise serializers.ValidationError({"ValidationError": "Article doesn't exist, you must post exact the same name and url"})
 
         d3_data = json_to_d3(ner_output)   
+
+        ner_output.pop('url', None)
+        ner_output.pop('title', None)
+        ner_output.pop('content', None)
+        ner_output.pop('galaxy', None)
+
         setattr(article, 'ner_output', ner_output)
         setattr(article, 'D3_data_format', d3_data)
         setattr(article, 'ml_is_processing', False)
