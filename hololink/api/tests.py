@@ -13,7 +13,7 @@ class DRFWorkflowTest(APITestCase):
     def testMergeArticleIntoGalaxy(self):
 
         # init user object and token
-        user = User.objects.create(username="eiffelfly")
+        user = User.objects.create(username="eiffelfly", email="eric525282@gmail.com")
         token = Token.objects.create(user=user)
 
         # init Project.object ner_test
@@ -32,6 +32,8 @@ class DRFWorkflowTest(APITestCase):
         # content_tpye -> HTTP_CONTENT_TYPE
         # https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META
         # the way setting up token auth: https://stackoverflow.com/questions/53107824/how-to-write-django-unit-test-for-authentication-protected-rest-apis
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
         headers = {
             "HTTP_CONTENT_TYPE": "application/json",
