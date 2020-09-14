@@ -48,10 +48,12 @@ class DRFWorkflowTest(APITestCase):
         new_article_old_keywords_data = {
             "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", 
             "from_url": "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance", 
+            "projects": [1],
+            "owned_by": [1],
             "ner_output": {
-                "title": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
+                "title": "蘋果、Epic Games 與爭奪虛構宇宙入口",
                 "url": "https://udn.com/news/story/7240/4604445",
-                "galaxy": "台積電三奈米",
+                "galaxy": "merge_article_into_galaxy_test",
                 "content": "美國擴大對華為技術封鎖，台積電也決定延後五奈米擴建及三奈米試產，延後時間長達二季，順延至明年第一季，將待美中貿易戰明朗化後再做定奪。",
                 "POS": {
                     "二奈米": {

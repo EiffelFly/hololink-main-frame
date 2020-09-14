@@ -102,6 +102,7 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         article.save()
 
         data_for_merging = {
+            "username":username,
             "name":name,
             "from_url":from_url,
             "projects":projects,
@@ -237,7 +238,9 @@ def json_to_d3(data):
 
     return processed_data
 
-def merge_article_into_galaxy(username, data_for_merging):
+def merge_article_into_galaxy(data_for_merging):
+
+    username = data_for_merging['username']
     article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
     article_url = data_for_merging['from_url']
