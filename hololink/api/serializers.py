@@ -70,14 +70,14 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url', 'D3_data_format', 'ner_output', 'projects', 
+            'name', 'from_url', 'D3_data_format', 'ner_output', 'projects', 'owned_by'
         ]
         read_only_fields = [
             'D3_data_format'
         ]
 
     def create(self, validated_data):
-        username = self.context['request'].user
+        username = validated_data.get('owned_by', None)
         user = get_object_or_404(User, username=username)
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
@@ -244,7 +244,7 @@ def merge_article_into_galaxy(username, data_for_merging):
     article_name = data_for_merging['name']
 
     user = get_object_or_404(User, username=username)
-    trt:
+    try:
         article = Article.objects.get(name=article_name, from_url=article_url)
     except Article.DoesNotExist:
         pass
