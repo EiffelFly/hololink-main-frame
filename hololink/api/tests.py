@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from project.models import Project
 from article.models import Article
 from django.contrib.auth.models import User
-
+import json
 # Create your tests here.
 
 
@@ -14,10 +14,13 @@ class DRFWorkflowTest(APITestCase):
 
         # init user object and token
         user = User.objects.create(username="eiffelfly", email="eric525282@gmail.com")
+        user.save()
         token = Token.objects.create(user=user)
+        token.save()
 
         # init Project.object ner_test
         project = Project.objects.create(name="merge_article_into_galaxy_test", created_by=user, project_visibility='private')
+        project.save()
 
         # init a set of Article.object 
         article = Article.objects.create(
@@ -26,6 +29,7 @@ class DRFWorkflowTest(APITestCase):
             content = "美國擴大對華為技術封鎖，台積電也決定延後五奈米擴建及三奈米試產，延後時間長達二季，順延至明年第一季，將待美中貿易戰明朗化後再做定奪。",
             created_by = user,
         )
+        article.save()
 
         # With django native request object map additional headers in a specific way: converted every data in headers into META
         # we have to follow that
@@ -33,12 +37,10 @@ class DRFWorkflowTest(APITestCase):
         # https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META
         # the way setting up token auth: https://stackoverflow.com/questions/53107824/how-to-write-django-unit-test-for-authentication-protected-rest-apis
 
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-
         headers = {
             "HTTP_CONTENT_TYPE": "application/json",
             "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-            "Authorization":f"Token {token.key}" #this token is for demo
+            "HTTP_AUTHORIZATION":f"Token {token.key}" #this token is for demo
         }
 
         print(token.key)
@@ -236,7 +238,9 @@ class DRFWorkflowTest(APITestCase):
             }
         }
 
-        response = self.client.post('https://hololink.co/api/ner-result/',content_type='application/json' ,data=new_article_old_keywords_data, **headers)
+        response = self.client.post("https://hololink.co/api/ner-result/",content_type="application/json" ,data=json.dumps(new_article_old_keywords_data), **headers)
+        print(response.client)
         print(response.content)
+        print(response.request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
