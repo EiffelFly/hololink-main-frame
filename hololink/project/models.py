@@ -92,12 +92,6 @@ class Project(models.Model):
         default=get_project_d3_json_default,
     )
 
-    article_list = models.JSONField(
-        verbose_name=_('Article list'),
-        null=True,
-        default=get_article_list_default,
-    )
-
     keyword_list = models.JSONField(
         verbose_name=_('Keyword list'),
         null=True,

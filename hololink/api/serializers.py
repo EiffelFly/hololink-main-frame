@@ -104,8 +104,8 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         data_for_merging = {
             "name":name,
             "from_url":from_url,
-            "d3":d3_data,
             "projects":projects,
+            "d3":d3_data,  
         }
 
         merge = merge_article_into_galaxy(username, data_for_merging)
@@ -238,11 +238,16 @@ def json_to_d3(data):
     return processed_data
 
 def merge_article_into_galaxy(username, data_for_merging):
-    user = get_object_or_404(User, username=username)
     article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
-    article_name = data_for_merging['name']
     article_url = data_for_merging['from_url']
+    article_name = data_for_merging['name']
+
+    user = get_object_or_404(User, username=username)
+    trt:
+        article = Article.objects.get(name=article_name, from_url=article_url)
+    except Article.DoesNotExist:
+        pass
 
     '''
         --- 確認該 article 是否存在 project
@@ -263,8 +268,7 @@ def merge_article_into_galaxy(username, data_for_merging):
         project = Project.objects.get(name=target_project, created_by=user)
         # Nodes
         # Append new article node
-        if article_name not in project.article_list['articles']:
-            project.article_list['articles'].append(article_name)
+        if article not in project.articles_project_owned.all():
             project.project_d3_json['nodes'].append(
                 {
                     "id":article_name,
