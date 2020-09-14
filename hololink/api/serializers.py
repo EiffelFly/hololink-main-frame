@@ -24,10 +24,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = [
             'id','name', 'created_at', 'created_by', 'articles_project_owned',
-            'project_basestone_keyword_sum', 'project_stellar_keyword_sum', 'article_list', 'keyword_list', 'project_d3_json'
+            'project_basestone_keyword_sum', 'project_stellar_keyword_sum', 'keyword_list', 'project_d3_json'
         ]
         read_only_fields = [
-            'id', 'created_at', 'created_by', 'article_list', 'keyword_list', 'project_d3_json'
+            'id', 'created_at', 'created_by', 'keyword_list', 'project_d3_json'
         ]
         extra_kwargs = {'books': {'required': False}}
 
