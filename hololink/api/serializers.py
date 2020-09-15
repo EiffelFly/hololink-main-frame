@@ -77,8 +77,11 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        username = validated_data.get('owned_by', None)
-        user = get_object_or_404(User, username=username)
+        users = validated_data.get('owned_by', None)
+        
+        for user in users:
+            user = get_object_or_404(User, username=user)
+
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         ner_output = validated_data.get('ner_output', None)
@@ -102,14 +105,14 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         article.save()
 
         data_for_merging = {
-            "username":username,
+            "username":user,
             "name":name,
             "from_url":from_url,
             "projects":projects,
             "d3":d3_data,  
         }
 
-        merge = merge_article_into_galaxy(username, data_for_merging)
+        merge = merge_article_into_galaxy(data_for_merging)
         merge.save()
 
         return article    
