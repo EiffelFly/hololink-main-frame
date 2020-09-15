@@ -242,14 +242,20 @@ class DRFWorkflowTest(APITestCase):
             }
         }
 
-        project_result = Project.objects.get(name="merge_article_into_galaxy_test")
-
-        new_article_new_keywords_result = {
-
-        }
-
         response = self.client.post("http://127.0.0.1:8000/api/ner-result/",content_type="application/json" ,data=json.dumps(new_article_new_keywords_data), **headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(project.)
+
+
+        # Test condition: new article and new keywords
+        project_result = Project.objects.get(name="merge_article_into_galaxy_test")
+        result_keywords_list = {
+            "total":["美國", "華", "技術", "台積電"],
+            "stellar":["技術"],
+            "basestone":["美國", "華", "台積電"],
+        }
+
+        self.assertEqual(json.dumps(project_result.keyword_list), json.dumps(result_keywords_list))
+
+
         
         
