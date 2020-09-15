@@ -289,7 +289,7 @@ def merge_article_into_galaxy(data_for_merging):
                 if article_node['title'] not in project.keyword_list['total']:
                     print('new article, new keywords', article_node, project.keyword_list['total'])
                     project.keyword_list['total'].append(article_node['title'])
-                    if article_node['level'] is 'basestone':
+                    if article_node['level'] == 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
                     else:
                         project.keyword_list['stellar'].append(article_node['title'])
@@ -306,7 +306,6 @@ def merge_article_into_galaxy(data_for_merging):
                     for project_node in project.project_d3_json['nodes']:
                         # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
                         if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
-                            print(project_node['connection'])
                             project_node.update({"connection":project_node['connection'] + 1})
             project.save()
             return project
