@@ -29,7 +29,9 @@ class DRFWorkflowTest(APITestCase):
             content = "美國擴大對華為技術封鎖，台積電也決定延後五奈米擴建及三奈米試產，延後時間長達二季，順延至明年第一季，將待美中貿易戰明朗化後再做定奪。",
         )
         article.owned_by.add(user)
+        article.projects.add(project)
         article.save()
+
 
         # With django native request object map additional headers in a specific way: converted every data in headers into META
         # we have to follow that
@@ -246,8 +248,8 @@ class DRFWorkflowTest(APITestCase):
         project_result = Project.objects.get(name="merge_article_into_galaxy_test")
         result_keywords_list = {
             "total":["美國", "華", "技術", "台積電"],
-            "stellar":["技術"],
             "basestone":["美國", "華", "台積電"],
+            "stellar":["技術"],
         }
 
         self.assertEqual(json.dumps(project_result.keyword_list), json.dumps(result_keywords_list))
@@ -465,8 +467,10 @@ class DRFWorkflowTest(APITestCase):
         second_project_result = Project.objects.get(name="merge_article_into_galaxy_test")
         second_result_keywords_list = {
             "total":["美國", "華", "技術", "台積電", "test"],
-            "stellar":["技術", "test"],
             "basestone":["美國", "華", "台積電"],
+            "stellar":["技術", "test"],    
         }
 
         self.assertEqual(json.dumps(second_project_result.keyword_list), json.dumps(second_result_keywords_list))
+
+        # Test condition: 

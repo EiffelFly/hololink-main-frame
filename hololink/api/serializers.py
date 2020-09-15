@@ -310,11 +310,12 @@ def merge_article_into_galaxy(data_for_merging):
             project.save()
             return project
         else:
-            # else: mean article already exist in the project
+            # else: article already exist in the project
             for article_node in article_data['nodes']:    
                 # Append new keyword
+                print(project.keyword_list['total'])
                 if article_node['title'] not in project.keyword_list['total']:
-                    print("old article, new keywords")
+                    print("old article, new keywords", article_node['title'])
                     project.keyword_list['total'].append(article_node['title'])
                     if article_node['level'] is 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
@@ -328,10 +329,10 @@ def merge_article_into_galaxy(data_for_merging):
                         }
                     )
                 else:
-                    # else: mean the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
+                    # else: the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
                     keyword_type = article_node['level']
                     if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
-                        print("old article, old keywords")
+                        print("old article, old keywords", article_node['title'])
                         project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                         project.project_d3_json['nodes'].append(
                         {
