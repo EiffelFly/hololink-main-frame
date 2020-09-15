@@ -27,9 +27,11 @@ class DRFWorkflowTest(APITestCase):
             name = "蘋果、Epic Games 與爭奪虛構宇宙入口",
             from_url = "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance",
             content = "美國擴大對華為技術封鎖，台積電也決定延後五奈米擴建及三奈米試產，延後時間長達二季，順延至明年第一季，將待美中貿易戰明朗化後再做定奪。",
-            created_by = user,
         )
+        article.owned_by.add(user)
         article.save()
+
+        print(project.id)
 
         # With django native request object map additional headers in a specific way: converted every data in headers into META
         # we have to follow that
@@ -45,11 +47,11 @@ class DRFWorkflowTest(APITestCase):
 
         print(token.key)
 
-        new_article_old_keywords_data = {
+        new_article_new_keywords_data = {
             "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", 
             "from_url": "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance", 
-            "projects": [1],
-            "owned_by": [1],
+            "projects": [1,],
+            "owned_by": [1,],
             "ner_output": {
                 "title": "蘋果、Epic Games 與爭奪虛構宇宙入口",
                 "url": "https://udn.com/news/story/7240/4604445",
@@ -240,7 +242,7 @@ class DRFWorkflowTest(APITestCase):
             }
         }
 
-        response = self.client.post("https://hololink.co/api/ner-result/",content_type="application/json" ,data=json.dumps(new_article_old_keywords_data), **headers)
+        response = self.client.post("http://127.0.0.1:8000/api/ner-result/",content_type="application/json" ,data=json.dumps(new_article_new_keywords_data), **headers)
         print(response.client)
         print(response.content)
         print(response.request)
