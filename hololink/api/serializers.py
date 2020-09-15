@@ -220,14 +220,14 @@ def json_to_d3(data):
         keyword_type = value['POS']
 
         if keyword_type == 'Na' or keyword_type == 'Nb' or keyword_type == 'Nc':            
-            nodejson.append({"title":title, "frequency":frequency, "group":"stellar", "type":keyword_type})
+            nodejson.append({"title":title, "frequency":frequency, "level":"stellar", "type":keyword_type})
             stellarNum += 1
             nodevalidator.append(title)
         else:
             if keyword_type == 'DATE' or keyword_type == 'ORDINAL' or keyword_type == 'CARDINAL':
                 pass
             else:
-                nodejson.append({"title":title, "frequency":frequency, "group":"basestone", "type":keyword_type})
+                nodejson.append({"title":title, "frequency":frequency, "level":"basestone", "type":keyword_type})
                 basestoneNum += 1
                 nodevalidator.append(title)
 
@@ -265,7 +265,7 @@ def merge_article_into_galaxy(data_for_merging):
                 --- 確認 article_keyword 是否存在於 project_keyword
                     --- 不存在：增加該 keyword (check)
                     --- 存在
-                        --- 確認該 article_keyword_group 是否存在於 project_keyword_group
+                        --- 確認該 article_keyword_level 是否存在於 project_keyword_level
                             --- 是：pass
                             --- 否：增加該 keyword 於相對應的 group
     '''
@@ -289,14 +289,14 @@ def merge_article_into_galaxy(data_for_merging):
                 if article_node['title'] not in project.keyword_list['total']:
                     print('new article, new keywords', article_node, project.keyword_list['total'])
                     project.keyword_list['total'].append(article_node['title'])
-                    if article_node['group'] is 'basestone':
+                    if article_node['level'] is 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
                     else:
                         project.keyword_list['stellar'].append(article_node['title'])
                     project.project_d3_json['nodes'].append(
                         {
                             "id":article_node['title'],
-                            "level":article_node['group'],
+                            "level":article_node['level'],
                             "connection":1,
                         }
                     )
@@ -305,9 +305,10 @@ def merge_article_into_galaxy(data_for_merging):
                     print('new article, old keywords', article_node, project.keyword_list['total'])
                     for project_node in project.project_d3_json['nodes']:
                         # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
-                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['group']:
+                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
                             print(project_node['connection'])
                             project_node.update({"connection":project_node['connection'] + 1})
+            project.save()
             return project
         else:
             # else: mean article already exist in the project
@@ -316,30 +317,31 @@ def merge_article_into_galaxy(data_for_merging):
                 if article_node['title'] not in project.keyword_list['total']:
                     print("old article, new keywords")
                     project.keyword_list['total'].append(article_node['title'])
-                    if article_node['group'] is 'basestone':
+                    if article_node['level'] is 'basestone':
                         project.keyword_list['basestone'].append(article_node['title'])
                     else:
                         project.keyword_list['stellar'].append(article_node['title'])
                     project.project_d3_json['nodes'].append(
                         {
                             "id":article_node['title'],
-                            "level":article_node['group'],
+                            "level":article_node['level'],
                             "connection":1,
                         }
                     )
                 else:
                     # else: mean the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
-                    keyword_type = article_node['group']
+                    keyword_type = article_node['level']
                     if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
                         print("old article, old keywords")
                         project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                         project.project_d3_json['nodes'].append(
                         {
                             "id":article_node['title'],
-                            "level":article_node['group'],
+                            "level":article_node['level'],
                             "connection":1,
                         }
                     )
+            project.save()
             return project
 
 
