@@ -10,7 +10,7 @@ import json
 
 
 class DRFWorkflowTest(APITestCase):
-    def testMergeArticleIntoGalaxy(self):
+    def testMergeNewArticleIntoGalaxy(self):
 
         # init user object and token
         user = User.objects.create(username="eiffelfly", email="eric525282@gmail.com")
@@ -242,9 +242,14 @@ class DRFWorkflowTest(APITestCase):
             }
         }
 
+        project_result = Project.objects.get(name="merge_article_into_galaxy_test")
+
+        new_article_new_keywords_result = {
+
+        }
+
         response = self.client.post("http://127.0.0.1:8000/api/ner-result/",content_type="application/json" ,data=json.dumps(new_article_new_keywords_data), **headers)
-        print(response.client)
-        print(response.content)
-        print(response.request)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(project.)
+        
         
