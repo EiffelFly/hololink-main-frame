@@ -260,7 +260,10 @@ def merge_article_into_galaxy(data_for_merging):
         不需要確認 project 是否擁有該 article 這件事在單純 POST article 就會做完了
                 --- 確認 article_keyword 是否存在於 project_keyword
                     --- 不存在：增加該 keyword
-                    --- 存在：將原有 keyword connection + 1
+                    --- 存在：
+                        --- 判斷是否位於同一個 level
+                            --- 是：將原有 keyword connection + 1
+                            --- 否：新建 keyword
     '''
 
     for target_project in projects:
@@ -283,10 +286,10 @@ def merge_article_into_galaxy(data_for_merging):
                     }
                 )
             else:
-                # else: the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
+                # else: the node exist in this project, but we don't know which level it belonged to (base or stellar) 
                 keyword_type = article_node['level']
                 if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
-                    print("old keywords", article_node['title'])
+                    print("old keywords with new level", article_node['title'])
                     project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                     project.project_d3_json['nodes'].append(
                     {
@@ -295,6 +298,12 @@ def merge_article_into_galaxy(data_for_merging):
                         "connection":1,
                     }
                 )
+                else:
+                    for project_node in project.project_d3_json['nodes']:
+                        # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
+                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
+                            project_node.update({"connection":project_node['connection'] + 1})
+                            print(project_node['id'], project_node['connection'])
         project.save()
         return project
 
