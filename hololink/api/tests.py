@@ -259,8 +259,8 @@ class DRFWorkflowTest(APITestCase):
         print(project_result.articles_project_owned.all())
 
         new_article_old_keywords_data = {
-            "name": "蘋果、Epic Games 與爭奪虛構宇宙入口",
-            "from_url": "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance",
+            "name": "螞蟻集團上市 — 無法複製的中國超級平台",
+            "from_url": "https://daodu.tech/09-03-2020-ant-group-file-ipo-the-uncopyable-super-app",
             "projects": [1],
             "owned_by": [1],
             "ner_output": {
