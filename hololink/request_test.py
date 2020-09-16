@@ -1,7 +1,7 @@
 import requests
 
 
-'''
+
 url = "http://35.221.178.255:8080/predict"
 
 data = [
@@ -46,3 +46,4 @@ post_target = request_session.post(url=ner_endpoint, json = data, headers=header
 
 print(post_target.status_code)
 print(post_target.text)
+'''

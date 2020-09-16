@@ -35,6 +35,8 @@ web.config
 share/python-wheels/ 
 /lib64
 
+/hololink/key
+/hololink/test_local.py
 
 # gcp things
 hololink/cloud_sql_proxy

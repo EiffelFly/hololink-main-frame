@@ -6,6 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 import hashlib
 from django.utils import timezone
+import requests
+from rest_framework import status
+from timeit import default_timer as timer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -118,7 +121,7 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         return article    
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
-
+    
     '''
         We use validate() method to check whether an article is duplicated in the galaxy
         then we use create() method to get the existing object and update it or create it.
@@ -171,8 +174,9 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 except Project.DoesNotExist:
                     print('There is no such project')
             if user not in article.owned_by.all():
+                article.ml_is_processing = True
                 article.owned_by.add(user)
-            return article
+            
 
         except Article.DoesNotExist:
 
@@ -183,7 +187,8 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'content':content,
                 'recommended':recommended,
                 'created_by':user,
-                'created_at':timezone.localtime(timezone.now())
+                'created_at':timezone.localtime(timezone.now()),
+                'ml_is_processing':True,
             }
 
             article = super().create(data)
@@ -195,7 +200,28 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 except Project.DoesNotExist:
                     print('There is no such project')
             article.owned_by.add(user)
-            return article
+            
+
+        prepare_data_for_ml = {
+            "content":content
+        }
+
+        url = "http://35.221.178.255:8080/predict"
+        print(content)
+        start = timer()
+        ml_result = requests.post(url, json=prepare_data_for_ml)
+        end = timer()
+        print(ml_result.status_code)
+        if ml_result.status_code == 200:
+            article = Article.objects.get(name=name, from_url=from_url)
+            article.ml_is_processing = False
+            article.ner_output = ml_result
+            article.save()
+        
+        print(start-end)
+        return article
+
+
     
 def sha256_hash(content):
     sha = hashlib.sha256()
