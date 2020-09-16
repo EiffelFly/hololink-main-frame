@@ -29,7 +29,7 @@ class DRFWorkflowTest(APITestCase):
             content = "美國擴大對華為技術封鎖，台積電也決定延後五奈米擴建及三奈米試產，延後時間長達二季，順延至明年第一季，將待美中貿易戰明朗化後再做定奪。",
         )
         article.owned_by.add(user)
-        article.projects.add(project)
+        article.projects.add(project) # Article 在首次由使用者 post 上來時已經存入該使用者指定的 project 裡
         article.save()
 
 
@@ -45,7 +45,7 @@ class DRFWorkflowTest(APITestCase):
             "HTTP_AUTHORIZATION":f"Token {token.key}" #this token is for demo
         }
 
-        # Test condition: new article and new keywords
+        # Test condition: new keywords
 
         new_article_new_keywords_data = {
             "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", 
@@ -248,14 +248,16 @@ class DRFWorkflowTest(APITestCase):
         project_result = Project.objects.get(name="merge_article_into_galaxy_test")
         result_keywords_list = {
             "total":["美國", "華", "技術", "台積電"],
-            "basestone":["美國", "華", "台積電"],
             "stellar":["技術"],
+            "basestone":["美國", "華", "台積電"],
         }
 
         self.assertEqual(json.dumps(project_result.keyword_list), json.dumps(result_keywords_list))
 
-        # Test condition: old article and new keywords
+        # Test condition: old keywords with some new keywords
         
+        print(project_result.articles_project_owned.all())
+
         new_article_old_keywords_data = {
             "name": "蘋果、Epic Games 與爭奪虛構宇宙入口",
             "from_url": "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance",
@@ -467,10 +469,8 @@ class DRFWorkflowTest(APITestCase):
         second_project_result = Project.objects.get(name="merge_article_into_galaxy_test")
         second_result_keywords_list = {
             "total":["美國", "華", "技術", "台積電", "test"],
-            "basestone":["美國", "華", "台積電"],
             "stellar":["技術", "test"],    
+            "basestone":["美國", "華", "台積電"],
         }
 
         self.assertEqual(json.dumps(second_project_result.keyword_list), json.dumps(second_result_keywords_list))
-
-        # Test condition: 
