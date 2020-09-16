@@ -55,7 +55,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             'hash', 'name', 'content', 'from_url',
             'recommended', 'projects', 'created_by', 'created_at',
             'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
-            'final_output', 'D3_data_format'
+            'final_output', 'D3_data_format', 'owned_by'
         ]
         read_only_fields = [
             'hash', 'created_at', 'created_by', 'D3_data_format'
@@ -204,11 +204,6 @@ def sha256_hash(content):
 
 def json_to_d3(data):
 
-    
-    article_title = data['title']
-    article_galaxy = data['galaxy']
-    article_url = data['url']
-
     nodejson = []
     basestoneNum = 0
     stellarNum = 0
@@ -256,6 +251,8 @@ def merge_article_into_galaxy(data_for_merging):
         pass
 
     '''
+        Question: 我該如何防止使用者上傳同一篇文章到同一個 project 複數次造成的舊有的 keywords 被無意義的增加 connection 數量
+        -> 這個問題應該在使用者 post 該文章時就解決掉，post ner, ner post me，這些都是 lazy 的。
 
         不需要確認 project 是否擁有該 article 這件事在單純 POST article 就會做完了
                 --- 確認 article_keyword 是否存在於 project_keyword
