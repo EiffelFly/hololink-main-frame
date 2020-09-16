@@ -256,93 +256,47 @@ def merge_article_into_galaxy(data_for_merging):
         pass
 
     '''
-        --- 確認該 article 是否存在 project
-            --- 不存在：將 article 加入 node
+
+        不需要確認 project 是否擁有該 article 這件事在單純 POST article 就會做完了
                 --- 確認 article_keyword 是否存在於 project_keyword
                     --- 不存在：增加該 keyword
                     --- 存在：將原有 keyword connection + 1
-            --- 存在
-                --- 確認 article_keyword 是否存在於 project_keyword
-                    --- 不存在：增加該 keyword (check)
-                    --- 存在
-                        --- 確認該 article_keyword_level 是否存在於 project_keyword_level
-                            --- 是：pass
-                            --- 否：增加該 keyword 於相對應的 group
     '''
 
     for target_project in projects:
         project = Project.objects.get(name=target_project, created_by=user)
-        # Nodes
-        # Append new article node
-        if article not in project.articles_project_owned.all():
-            project.project_d3_json['nodes'].append(
-                {
-                    "id":article_name,
-                    "url":article_url,
-                    "level":"article",
-                    "basestoneNum":article_data['basestoneNum'],
-                    "stellarNum":article_data['stellarNum'],
-                }
-            )
-            for article_node in article_data['nodes']:        
-                # Append new keyword
-                if article_node['title'] not in project.keyword_list['total']:
-                    print('new article, new keywords', article_node, project.keyword_list['total'])
-                    project.keyword_list['total'].append(article_node['title'])
-                    if article_node['level'] == 'basestone':
-                        project.keyword_list['basestone'].append(article_node['title'])
-                    else:
-                        project.keyword_list['stellar'].append(article_node['title'])
-                    project.project_d3_json['nodes'].append(
-                        {
-                            "id":article_node['title'],
-                            "level":article_node['level'],
-                            "connection":1,
-                        }
-                    )
-                # Make existed node's connection plus 1
+        for article_node in article_data['nodes']:    
+            # Append new keyword
+            print(project.keyword_list['total'])
+            if article_node['title'] not in project.keyword_list['total']:
+                print("new keywords", article_node['title'])
+                project.keyword_list['total'].append(article_node['title'])
+                if article_node['level'] is 'basestone':
+                    project.keyword_list['basestone'].append(article_node['title'])
                 else:
-                    print('new article, old keywords', article_node, project.keyword_list['total'])
-                    for project_node in project.project_d3_json['nodes']:
-                        # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
-                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
-                            project_node.update({"connection":project_node['connection'] + 1})
-            project.save()
-            return project
-        else:
-            # else: article already exist in the project
-            for article_node in article_data['nodes']:    
-                # Append new keyword
-                print(project.keyword_list['total'])
-                if article_node['title'] not in project.keyword_list['total']:
-                    print("old article, new keywords", article_node['title'])
-                    project.keyword_list['total'].append(article_node['title'])
-                    if article_node['level'] is 'basestone':
-                        project.keyword_list['basestone'].append(article_node['title'])
-                    else:
-                        project.keyword_list['stellar'].append(article_node['title'])
+                    project.keyword_list['stellar'].append(article_node['title'])
+                project.project_d3_json['nodes'].append(
+                    {
+                        "id":article_node['title'],
+                        "level":article_node['level'],
+                        "connection":1,
+                    }
+                )
+            else:
+                # else: the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
+                keyword_type = article_node['level']
+                if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
+                    print("old keywords", article_node['title'])
+                    project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                     project.project_d3_json['nodes'].append(
-                        {
-                            "id":article_node['title'],
-                            "level":article_node['level'],
-                            "connection":1,
-                        }
-                    )
-                else:
-                    # else: the node exist in this project, but we don't know which grout it belonged to (base or stellar) 
-                    keyword_type = article_node['level']
-                    if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
-                        print("old article, old keywords", article_node['title'])
-                        project.keyword_list[f'{keyword_type}'].append(article_node['title'])
-                        project.project_d3_json['nodes'].append(
-                        {
-                            "id":article_node['title'],
-                            "level":article_node['level'],
-                            "connection":1,
-                        }
-                    )
-            project.save()
-            return project
+                    {
+                        "id":article_node['title'],
+                        "level":article_node['level'],
+                        "connection":1,
+                    }
+                )
+        project.save()
+        return project
 
 
 
