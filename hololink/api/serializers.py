@@ -9,6 +9,8 @@ from django.utils import timezone
 import requests
 from rest_framework import status
 from timeit import default_timer as timer
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -191,25 +193,31 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'ml_is_processing':True,
             }
 
-            article = super().create(data)
+            #article = super().create(data)
             
             for project in projects:
                 try:
                     target_project = Project.objects.get(name=project, created_by=username)
-                    article.projects.add(target_project)
+                    #article.projects.add(target_project)
                 except Project.DoesNotExist:
                     print('There is no such project')
-            article.owned_by.add(user)
+            #article.owned_by.add(user)
             
+        # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
 
-        prepare_data_for_ml = {
+        prepare_data_for_ml = [{
             "content":content
-        }
+        }]
 
         url = "http://35.221.178.255:8080/predict"
         print(content)
         start = timer()
-        ml_result = requests.post(url, json=prepare_data_for_ml)
+        ml_result = session.post(url, json=prepare_data_for_ml)
         end = timer()
         print(ml_result.status_code)
         if ml_result.status_code == 200:
