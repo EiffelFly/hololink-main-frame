@@ -11,6 +11,8 @@ from rest_framework import status
 from timeit import default_timer as timer
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+import json
+import threading
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -171,10 +173,10 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             article = Article.objects.get(name=name, from_url=from_url)
             for project in projects:
                 try:
-                    target_project = Project.objects.get(name=project, created_by=username)
+                    target_project = Project.objects.get(name=project, created_by=user)
                     article.projects.add(target_project)
                 except Project.DoesNotExist:
-                    print('There is no such project')
+                    print('178','There is no such project')
             if user not in article.owned_by.all():
                 article.ml_is_processing = True
                 article.owned_by.add(user)
@@ -193,15 +195,16 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'ml_is_processing':True,
             }
 
-            #article = super().create(data)
+            article = super().create(data)
             
             for project in projects:
                 try:
-                    target_project = Project.objects.get(name=project, created_by=username)
-                    #article.projects.add(target_project)
+                    print(project, user)
+                    target_project = Project.objects.get(name=project, created_by=user)
+                    article.projects.add(target_project)
                 except Project.DoesNotExist:
-                    print('There is no such project')
-            #article.owned_by.add(user)
+                    print('204','There is no such project')
+            article.owned_by.add(user)
             
         # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
         session = requests.Session()
@@ -215,15 +218,14 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         }]
 
         url = "http://35.221.178.255:8080/predict"
-        print(content)
-        start = timer()
+        start = timer()  
         ml_result = session.post(url, json=prepare_data_for_ml)
         end = timer()
-        print(ml_result.status_code)
         if ml_result.status_code == 200:
             article = Article.objects.get(name=name, from_url=from_url)
             article.ml_is_processing = False
-            article.ner_output = ml_result
+            ner_output = ml_result.json()
+            article.ner_output = json.dumps(ner_output[0])
             article.save()
         
         print(start-end)
