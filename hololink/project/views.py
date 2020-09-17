@@ -41,7 +41,7 @@ def projects_list(request):
     projects = filter(request)
     for project in projects:
         articles = Article.objects.filter(projects=project).order_by('-created_at')
-        countArticles.append(project.articles.count())
+        countArticles.append(project.articles_project_owned.all().count())
         countBasestoneKeywords.append(articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0))
         countStellarKeywords.append(articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0))
     
@@ -80,7 +80,7 @@ def project_articles(request, slug):
     basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
     stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
     
-    countArticles = project.articles.count()
+    countArticles = project.articles_project_owned.all().count()
 
     context = {
         'project' : project, 
@@ -99,7 +99,7 @@ def project_dashboard(request, slug):
     articles = Article.objects.filter(projects=project)
     basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
     stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
-    countArticles = project.articles.count()
+    countArticles = project.articles_project_owned.all().count()
 
     context = {
         'project' : project, 
@@ -116,7 +116,7 @@ def project_hologram(request, slug):
 
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
-    countArticles = project.articles.count()
+    countArticles = project.articles_project_owned.all().count()
     basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
     stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
 
@@ -137,7 +137,7 @@ def galaxy_setting(request, slug):
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     confirmation_code = f'{request.user}/{project.name}'
-    countArticles = project.articles.count()
+    countArticles = project.articles_project_owned.all().count()
     basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
     stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
 
