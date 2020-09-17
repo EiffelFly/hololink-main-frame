@@ -205,30 +205,18 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 except Project.DoesNotExist:
                     print('204','There is no such project')
             article.owned_by.add(user)
-            
-        # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
-        session = requests.Session()
-        retry = Retry(connect=3, backoff_factor=0.5)
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
 
         prepare_data_for_ml = [{
-            "content":content
+            "username":username,
+            "content":content,
+            "projects":projects,
+            "article_name":name,
+            "from_url":from_url
         }]
 
-        url = "http://35.221.178.255:8080/predict"
-        start = timer()  
-        ml_result = session.post(url, json=prepare_data_for_ml)
-        end = timer()
-        if ml_result.status_code == 200:
-            article = Article.objects.get(name=name, from_url=from_url)
-            article.ml_is_processing = False
-            ner_output = ml_result.json()
-            article.ner_output = json.dumps(ner_output[0])
-            article.save()
-        
-        print(start-end)
+        t = threading.Thread(target=request_ml_thread, args=prepare_data_for_ml, daemon=True)
+        t.start()
+
         return article
 
 
@@ -277,14 +265,8 @@ def merge_article_into_galaxy(data_for_merging):
     username = data_for_merging['username']
     article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
-    article_url = data_for_merging['from_url']
-    article_name = data_for_merging['name']
 
     user = get_object_or_404(User, username=username)
-    try:
-        article = Article.objects.get(name=article_name, from_url=article_url)
-    except Article.DoesNotExist:
-        pass
 
     '''
         Question: 我該如何防止使用者上傳同一篇文章到同一個 project 複數次造成的舊有的 keywords 被無意義的增加 connection 數量
@@ -340,6 +322,27 @@ def merge_article_into_galaxy(data_for_merging):
         project.save()
         return project
 
+def request_ml_thread(prepare_data_for_ml):
+
+    # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
+    url = "http://35.221.178.255:8080/predict"
+    start = timer()  
+    ml_result = session.post(url, json=prepare_data_for_ml['content'])
+    end = timer()
+    if ml_result.status_code == 200:
+        article = Article.objects.get(name=prepare_data_for_ml['name'], from_url=prepare_data_for_ml['from_url'])
+        article.ml_is_processing = False
+        ner_output = ml_result.json()
+        article.ner_output = json.dumps(ner_output[0])
+        article.save()
+    
+    print(start-end)
 
 
         
