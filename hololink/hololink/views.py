@@ -92,7 +92,7 @@ def user_dashboard(request, slug):
     projects = Project.objects.filter(created_by=request.user).order_by('-last_edited_time') #use -created_at to desc()
     projects = projects[:4]
     for project in projects:
-        countArticles.append(project.articles.count())
+        countArticles.append(project.articles_project_owned.all().count())
 
     countFollowings = profile.followings.count()
     countFollowers = user.followers.count()
