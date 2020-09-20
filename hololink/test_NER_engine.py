@@ -1,6 +1,16 @@
 
 import requests
 
+c = {
+    "content":'aaaaa',
+    "test":'sddde'
+}
+
+a = "test"
+
+print(c[f'{a}'])
+
+'''
 data = [
     {
         "name":"台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網", #put in the name Hololink_mainframe post to you
@@ -16,3 +26,26 @@ post_target = requests.post(url=url, json = data)
 
 print(post_target.status_code)
 print(post_target.text)
+
+data = {'name': contents[0]['name'],
+                'from_url': contents[0]['from_url'],
+                'ner_output': contents[0],
+                }
+print('data process Done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+print(data)
+
+
+headers = {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization":"Token 7040fe57d322fdf29585595e39deea0c0badb4c1"
+        }
+ner_endpoint = 'https://hololink.co/api/ner-result/'
+post_target = requests.post(url=ner_endpoint, json=data, headers=headers)
+
+contents[0]['post_status']=post_target.status_code
+contents[0]['post_result']=post_target.reason
+
+print(post_target.status_code)
+print(post_target.text)
+'''

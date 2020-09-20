@@ -196,25 +196,27 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             }
 
             article = super().create(data)
-            
+            project_name_list = []
             for project in projects:
                 try:
                     print(project, user)
                     target_project = Project.objects.get(name=project, created_by=user)
+                    project_name_list.append(target_project.name)
                     article.projects.add(target_project)
                 except Project.DoesNotExist:
                     print('204','There is no such project')
             article.owned_by.add(user)
 
-        prepare_data_for_ml = [{
-            "username":username,
+
+        prepare_data_for_ml = {
+            "username":user.username,
             "content":content,
-            "projects":projects,
+            "projects":project_name_list,
             "article_name":name,
             "from_url":from_url
-        }]
+        }
 
-        t = threading.Thread(target=request_ml_thread, args=prepare_data_for_ml, daemon=True)
+        t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
         t.start()
 
         return article
@@ -322,7 +324,7 @@ def merge_article_into_galaxy(data_for_merging):
         project.save()
         return project
 
-def request_ml_thread(prepare_data_for_ml):
+def request_ml_thread(**kwargs):
 
     # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
     session = requests.Session()
@@ -333,14 +335,24 @@ def request_ml_thread(prepare_data_for_ml):
 
     url = "http://35.221.178.255:8080/predict"
     start = timer()  
-    ml_result = session.post(url, json=prepare_data_for_ml['content'])
+    ml_result = session.post(url, json=[kwargs])
     end = timer()
+    print(ml_result.status_code)
     if ml_result.status_code == 200:
-        article = Article.objects.get(name=prepare_data_for_ml['name'], from_url=prepare_data_for_ml['from_url'])
-        article.ml_is_processing = False
+        article = Article.objects.get(name=kwargs['article_name'], from_url=kwargs['from_url'])
+        print(article)
+        setattr(article, 'ml_is_processing', False)
         ner_output = ml_result.json()
-        article.ner_output = json.dumps(ner_output[0])
+        print(ner_output)
+        d3_data = json_to_d3(ner_output[0])
+        kwargs['d3'] = d3_data
+        merge = merge_article_into_galaxy(kwargs)
+        print(merge)
+        setattr(article, 'ner_output', json.dumps(ner_output[0]))
+        setattr(article, 'D3_data_format', d3_data)
+        setattr(article, 'D3_data_format', d3_data)
         article.save()
+        merge.save()
     
     print(start-end)
 
