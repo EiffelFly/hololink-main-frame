@@ -22,8 +22,8 @@ class Keyword(models.Model):
         blank=True,
     )
 
-    basestone = 'Basestone'
-    stellar = 'Stellar'
+    basestone = 'basestone'
+    stellar = 'stellar'
 
     KEYWORD_TYPE_CHOICES = (
         (basestone, _('Basestone')),
@@ -42,10 +42,11 @@ class Keyword(models.Model):
         auto_now_add=True,
     )
 
-    created_by = models.ManyToManyField(
-        User,
-        related_name='keyword_user_created',
-        verbose_name='Created by'
+    created_by = models.ForeignKey(
+        verbose_name=_('Created by'),
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
     )
 
     
