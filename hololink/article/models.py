@@ -16,6 +16,12 @@ def now():
 
 class Keyword(models.Model):
 
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=256,
+        blank=True,
+    )
+
     basestone = 'Basestone'
     stellar = 'Stellar'
 
