@@ -6,8 +6,6 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import pre_save
 
-from article.models import Keyword
-
 from django.dispatch import receiver
 from unidecode import unidecode
 
@@ -100,7 +98,7 @@ class Project(models.Model):
     )
 
     keyword = models.ManyToManyField(
-        Keyword,
+        'article.Keyword',
         related_name='owned_by_project',
         verbose_name=_('Keyword')
     )
