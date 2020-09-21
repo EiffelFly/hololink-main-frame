@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from article.models import Article
+from article.models import Keyword
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.admin.models import LogEntry
 from django.urls import reverse
-
 
 '''
     We want to store extra information in existing User model 
@@ -53,7 +53,12 @@ class Profile(models.Model):
         upload_to='user_avatar',
         blank = True,
     )
-    
+
+    keyword = models.ManyToManyField(
+        Keyword,
+        related_name='owned_by_user',
+        verbose_name=_('Keyword')
+    )
 
     def get_absolute_url(self):
         return reverse('user_dashboard', args=(self.slug,))

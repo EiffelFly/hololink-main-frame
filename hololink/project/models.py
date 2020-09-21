@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import pre_save
 
+from article.models import Keyword
 
 from django.dispatch import receiver
 from unidecode import unidecode
@@ -96,6 +97,12 @@ class Project(models.Model):
         verbose_name=_('Keyword list'),
         null=True,
         default=get_keyword_list_default,
+    )
+
+    keyword = models.ManyToManyField(
+        Keyword,
+        related_name='owned_by_project',
+        verbose_name=_('Keyword')
     )
 
     def __str__(self):

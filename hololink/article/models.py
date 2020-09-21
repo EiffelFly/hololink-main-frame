@@ -14,6 +14,36 @@ import time
 def now():
     return timezone.localtime(timezone.now())
 
+class Keyword(models.Model):
+
+    basestone = 'Basestone'
+    stellar = 'Stellar'
+
+    KEYWORD_TYPE_CHOICES = (
+        (basestone, _('Basestone')),
+        (stellar, _('Stellar'))
+    )
+
+    keyword_type = models.CharField(
+        max_length=20,
+        choices= KEYWORD_TYPE_CHOICES,
+        null=True,
+        verbose_name=_('Keyword type')
+    )
+
+    created_at = models.DateTimeField(
+        verbose_name=_('Created at'),
+        auto_now_add=True,
+    )
+
+    created_by = models.ManyToManyField(
+        User,
+        related_name='keyword_user_created',
+        verbose_name='Created by'
+    )
+
+    
+
 class Article(models.Model):
 
     hash = models.CharField(
@@ -107,6 +137,12 @@ class Article(models.Model):
         null=True
     )
 
+    keyword = models.ManyToManyField(
+        Keyword,
+        related_name='owned_by_article',
+        verbose_name=_('Keyword')
+    )
+
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
 
     def __str__(self):
@@ -150,3 +186,4 @@ class Highlight(models.Model):
         verbose_name='Highlighted at',
         null=True
     )
+
