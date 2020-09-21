@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Article
 from .models import Highlight
+from .models import Keyword
 
 
     
@@ -31,5 +32,10 @@ class HighlightAdmin(admin.ModelAdmin):
     list_display = ['highlighted_at', 'created_at', 'highlighted_words']
     filter_horizontal = ('highlighted_by',)
 
+class KeywordAdmin(admin.ModelAdmin):
+    list_display = ['name', 'keyword_type', 'created_at']
+    filter_horizontal = ['created_by']
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Highlight, HighlightAdmin)
+admin.site.register(Keyword, KeywordAdmin)
