@@ -78,7 +78,7 @@ def index(request):
         'form': form,
     }
     
-    return render(request, 'landing_page.html', context)
+    return render(request, 'landing_page_ver2.html', context)
     
 
 def user_dashboard(request, slug):
