@@ -13,6 +13,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import json
 import threading
+from article.models import Keyword
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -288,8 +289,18 @@ def merge_article_into_galaxy(data_for_merging):
         for article_node in article_data['nodes']:    
             # Append new keyword
             print(project.keyword_list['total'])
-            if article_node['title'] not in project.keyword_list['total']:
+            try:
+                keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
+            except Keyword.DoesNotExist:
+                keyword = Keyword.objects.create(
+                    name = article_node['title'],
+                    keyword_type = article_node['level'],
+                    created_by = user
+                )
+            # if article_node['title'] not in project.keyword_list['total']:
+            if keyword not in project.keyword.all():
                 print("new keywords", article_node['title'])
+                project.keyword.add(keyword)
                 project.keyword_list['total'].append(article_node['title'])
                 if article_node['level'] is 'basestone':
                     project.keyword_list['basestone'].append(article_node['title'])
@@ -303,10 +314,13 @@ def merge_article_into_galaxy(data_for_merging):
                     }
                 )
             else:
-                # else: the node exist in this project, but we don't know which level it belonged to (base or stellar) 
+                # else: the node exist in this project, but we don't know which type it belonged to (base or stellar) 
                 keyword_type = article_node['level']
-                if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
+                # if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
+                if not Project.objects.filter(keyword__keword_type=keyword_type).exists():
                     print("old keywords with new level", article_node['title'])
+                    keyword_with_correct_type = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
+                    project.keyword.add(keyword_with_correct_type)
                     project.keyword_list[f'{keyword_type}'].append(article_node['title'])
                     project.project_d3_json['nodes'].append(
                     {
