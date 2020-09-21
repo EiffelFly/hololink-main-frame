@@ -33,8 +33,7 @@ class HighlightAdmin(admin.ModelAdmin):
     filter_horizontal = ('highlighted_by',)
 
 class KeywordAdmin(admin.ModelAdmin):
-    list_display = ['name', 'keyword_type', 'created_at']
-    filter_horizontal = ['created_by']
+    list_display = ['name', 'keyword_type', 'created_at', 'created_by']
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Highlight, HighlightAdmin)
