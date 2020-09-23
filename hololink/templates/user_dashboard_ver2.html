@@ -28,6 +28,7 @@
         border-style: solid; 
         height: 6.5rem; 
         border-width: 1px;
+        margin-bottom: 15px;
     }
 
     .dashboard-recentProject-title{
@@ -72,43 +73,19 @@
         <div class="row">
             {% include 'dashboard_sidebar.html' %}
             <div class="col-12 col-md-8">
-                <div class="row recent-project-container" style="margin-top: 2rem;">
+                <div class="row recent-project-container" style="margin-top: 2rem; padding: 0 15px;">
                     <div class="col-8">
                         <h3 class="dashboard-overview-headline">Recent Projects</h3>
                     </div>
                     <div class="col-4"></div>
                 </div>
-                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; padding-top: 10px;">
+                <div class="row d-flex flex-row" style="padding: 10px 30px;">
                 {% for project in projects %} 
-                        <div class="col dashboard-recentProject-container" style="margin-right: 20px;">
-                            <div class="row" style="margin: 15px 0 0 5px">
-                                <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
-                            </div>
-                            <div class="row" style="margin: 15px 0 0 5px">
-                                <p style="margin-top: 5px;">
-                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges" style="">
-                                        <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 2px;">
-                                        {% load index %}
-                                        <span style="color: #2e1760;"> {{ countArticles|indexforloop:forloop.counter0 }} </span>
-                                    </span>
-                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
-                                        <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
-                                        <span>basestone -</span>
-                                        <span style="color: #2e1760;">{{project.project_basestone_keyword_sum}}</span>
-                                    </span>
-                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
-                                        <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
-                                        <span>stellar -</span>
-                                        <span style="color: #2e1760;">{{project.project_stellar_keyword_sum}}</span>
-                                    </span>
-                                </p>
-                            </div>
+                    <div class="col-12 col-md-6 dashboard-recentProject-container">
+                        <div class="row" style="margin: 15px 0 0 5px">
+                            <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
                         </div>
-                {% if forloop.counter|divisibleby:2 %}
-                </div>  
-                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; margin-top: 20px;">
-    
-                {% endif %}                
+                    </div>
                 {% endfor %}
                 
                 </div>
