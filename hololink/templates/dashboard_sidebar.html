@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<div class="col-4 d-flex flex-column">
+<div class="col-12 col-md-4 d-flex flex-column" style="padding: 0;">
     {% if profile.user_avatar %}
         <div class="row" style="margin: 2rem auto 0 auto">
             <img src="{{ profile.user_avatar.url }}" width="300" height="300" style="border-radius: 50%;">

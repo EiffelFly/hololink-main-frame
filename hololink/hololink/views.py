@@ -107,7 +107,7 @@ def user_dashboard(request, slug):
         'countlikes' : countlikes,
     }
 
-    return render(request, 'user_dashboard.html', context) 
+    return render(request, 'user_dashboard_ver2.html', context) 
 
 def user_public_profile(request, slug):
     

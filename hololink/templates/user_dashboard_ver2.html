@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<style>
+    .dashboard-overview-headline{
+        font-size: 1.1rem;
+        font-family: 'Noto Sans TC', sans-serif;
+        font-weight: 700;
+    }
+    .dashboard-recentProject-container{
+        border: #BFB9B8; 
+        border-radius: 5px; 
+        border-style: solid; 
+        height: 6.5rem; 
+        border-width: 1px;
+    }
+
+    .dashboard-recentProject-title{
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 1.1rem;
+        color: #393E40;
+        font-weight: 500;
+
+    }
+
+    .dashboard-recentProject-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 0.5rem;
+    }
+
+    .activities-timeline-date{
+        font-size: 12px;
+        background-color: white;
+        width: 4.5rem;
+        height: 1.5rem;
+        
+        
+    }
+
+</style>
+<div class="container-fluid">
+    {% include 'dashboard_navbar.html' %}
+    <div class="content_container">
+        <div class="row">
+            {% include 'dashboard_sidebar.html' %}
+            <div class="col-12 col-md-8">
+                <div class="row" style="margin-top: 2rem;">
+                    <div class="col-8">
+                        <h3 class="dashboard-overview-headline">Recent Projects</h3>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; padding-top: 10px;">
+                {% for project in projects %} 
+                        <div class="col dashboard-recentProject-container" style="margin-right: 20px;">
+                            <div class="row" style="margin: 15px 0 0 5px">
+                                <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
+                            </div>
+                            <div class="row" style="margin: 15px 0 0 5px">
+                                <p style="margin-top: 5px;">
+                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges" style="">
+                                        <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 2px;">
+                                        {% load index %}
+                                        <span style="color: #2e1760;"> {{ countArticles|indexforloop:forloop.counter0 }} </span>
+                                    </span>
+                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                                        <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                        <span>basestone -</span>
+                                        <span style="color: #2e1760;">{{project.project_basestone_keyword_sum}}</span>
+                                    </span>
+                                    <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                                        <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                        <span>stellar -</span>
+                                        <span style="color: #2e1760;">{{project.project_stellar_keyword_sum}}</span>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                {% if forloop.counter|divisibleby:2 %}
+                </div>  
+                <div class="row d-flex flex-row" style="padding-left:15px; padding-right: 12rem; margin-top: 20px;">
+    
+                {% endif %}                
+                {% endfor %}
+                
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
