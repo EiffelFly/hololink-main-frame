@@ -41,7 +41,7 @@
 
 
 <div class="col-12 col-md-4 d-flex flex-column dashboard-sidebar-container">
-    <div class="row d-flex" style="padding: 20px 10px; width: 100%; margin: 0;">
+    <div class="row d-flex" style="padding: 20px 0px; width: 100%; margin: 0;">
         <div class="col-2 col-md-12 col-lg-12 col-xl-12 d-flex">
             {% if profile.user_avatar %}
                 <img class="profile-avatar" src="{{ profile.user_avatar.url }}" style="border-radius: 50%; width: 15vw; height: 15vw;">
@@ -55,26 +55,26 @@
             </div>
         </div>
     </div>
-    <div class="row" style="margin: 0; width: 100%; padding: 10px 10px;">
+    <div class="row" style="margin: 0; width: 100%; padding: 10px 0px;">
         <div class="col">
             <a href='{% url "user_settings" user.profile.slug %}' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
         </div>
     </div>
-    <div class="row d-flex" style="margin:0; width: 100%; padding: 10px 10px 0px 10px;">
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 10px 10px 0px 0px;">
         <div class="col">
             <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
             <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowers}}</span>
             <span style="font-size: 14px; margin-right: 5px;">followers</span>
         </div>
     </div>
-    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 10px;">
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 0px;">
         <div class="col">
             <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
             <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowings}}</span>
             <span style="font-size: 14px; margin-right: 5px;">followings</span>
         </div>
     </div>
-    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 10px;">
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 0px;">
         <div class="col">
             <img src="{% static 'img/heart.svg' %}" style="margin-right: 5px;" width="15">
             <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countlikes}}</span>
