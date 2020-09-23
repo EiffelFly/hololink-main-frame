@@ -1,19 +1,51 @@
 {% load i18n %}
 {% load static %}
 
+<style>
+    @media (min-width: 576px) {}
+    @media (min-width: 768px) {
+        a.mainnavbar-link-vision{
+            padding: 0.6rem 0.5rem 0.6rem 1.5rem !important;
+        }
+        a.mainnavbar-link-explore{
+            padding: 0.6rem 0.5rem 0.6rem 0.5rem !important;
+        }
+        img.profile-avatar{
+            width: 20vw !important;
+            height: 20vw !important;
+        }
+    }
+    @media (min-width: 992px) {
+
+    }
+    @media (min-width: 1200px) {
+        img.profile-avatar{
+            width: 300px !important;
+            height: 300px !important;
+        }
+    }
+</style>
+
+
+
+
 <div class="col-12 col-md-4 d-flex flex-column" style="padding: 0;">
-    {% if profile.user_avatar %}
-        <div class="row" style="margin: 2rem auto 0 auto">
-            <img src="{{ profile.user_avatar.url }}" width="300" height="300" style="border-radius: 50%;">
+    <div class="row d-flex" style="padding: 20px 30px;">
+        <div class="col-2 ol-md-12 col-lg-12 col-xl-12 d-flex">
+            {% if profile.user_avatar %}
+                <img class="profile-avatar" src="{{ profile.user_avatar.url }}" style="border-radius: 50%; width: 15vw; height: 15vw;">
+            {% else %}
+                <img class="profile-avatar" src="{% static 'img/default-avatar.png' %}" style="border-radius: 50%; width: 15vw; height: 15vw;">
+            {% endif %}
         </div>
-    {% else %}
-        <div class="row" style="margin: 2rem auto 0 auto">
-            <img src="{% static 'img/default-avatar.png' %}" width="300" height="300" style="border-radius: 50%;">
+        <div class="col-10 col-md-12 col-lg-12 col-xl-12 d-flex">
+            <div class="row" style="margin: auto 20px; width: 300px;">
+                <p style="font-size: 1.3rem; margin: 0;">{{ profile.user.username }}</p>
+            </div>
         </div>
-    {% endif %}
-    <div class="row" style="margin: 20px auto 0 auto; width: 300px;">
-        <p style="font-size: 1.3rem;">{{ profile.user.username }}</p>
     </div>
+    
+    
     <div class="row" style="margin: 0 auto; width: 300px;">
         <a href='{% url "user_settings" user.profile.slug %}' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
     </div>
