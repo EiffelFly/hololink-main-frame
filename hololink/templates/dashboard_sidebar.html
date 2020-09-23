@@ -15,14 +15,24 @@
             height: 20vw !important;
             margin: auto !important;
         }
+        .username-container{
+            margin: 20px 0 0 0 !important;
+        }
     }
     @media (min-width: 992px) {
-
+        img.profile-avatar{
+            width: 20vw !important;
+            height: 20vw !important;
+            margin: auto !important;
+        }
     }
     @media (min-width: 1200px) {
         img.profile-avatar{
             width: 300px !important;
             height: 300px !important;
+        }
+        .dashboard-sidebar-container{
+            max-width: 500px;
         }
     }
 </style>
@@ -30,9 +40,9 @@
 
 
 
-<div class="col-12 col-md-4 d-flex flex-column" style="padding: 0;">
-    <div class="row d-flex" style="padding:0; width: 100%;">
-        <div class="col-2 ol-md-12 col-lg-12 col-xl-12 d-flex" style="padding: 0;">
+<div class="col-12 col-md-4 d-flex flex-column dashboard-sidebar-container">
+    <div class="row d-flex" style="padding: 20px 10px; width: 100%; margin: 0;">
+        <div class="col-2 col-md-12 col-lg-12 col-xl-12 d-flex">
             {% if profile.user_avatar %}
                 <img class="profile-avatar" src="{{ profile.user_avatar.url }}" style="border-radius: 50%; width: 15vw; height: 15vw;">
             {% else %}
@@ -40,8 +50,8 @@
             {% endif %}
         </div>
         <div class="col-10 col-md-12 col-lg-12 col-xl-12 d-flex">
-            <div class="row" style="margin: auto; width: 100%;">
-                <p style="font-size: 1.3rem; margin: 0;">{{ profile.user.username }}</p>
+            <div class="row d-flex username-container" style="margin:0 0 0 20px; width: 100%;">
+                <p style="font-size: 1.3rem; margin: auto 0; ">{{ profile.user.username }}</p>
             </div>
         </div>
     </div>
