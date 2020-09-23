@@ -30,7 +30,7 @@
 
 
 <div class="col-12 col-md-4 d-flex flex-column" style="padding: 0;">
-    <div class="row d-flex" style="padding: 20px 30px;">
+    <div class="row d-flex" style="padding: 20px 30px; width: 100%;">
         <div class="col-2 ol-md-12 col-lg-12 col-xl-12 d-flex">
             {% if profile.user_avatar %}
                 <img class="profile-avatar" src="{{ profile.user_avatar.url }}" style="border-radius: 50%; width: 15vw; height: 15vw;">
@@ -39,28 +39,34 @@
             {% endif %}
         </div>
         <div class="col-10 col-md-12 col-lg-12 col-xl-12 d-flex">
-            <div class="row" style="margin: auto 20px; width: 300px;">
+            <div class="row" style="margin: auto 20px; width: 100%;">
                 <p style="font-size: 1.3rem; margin: 0;">{{ profile.user.username }}</p>
             </div>
         </div>
     </div>
-    
-    
-    <div class="row" style="margin: 0 auto; width: 300px;">
-        <a href='{% url "user_settings" user.profile.slug %}' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
+    <div class="row" style="margin: 0; width: 100%; padding: 10px 10px;">
+        <div class="col">
+            <a href='{% url "user_settings" user.profile.slug %}' class="btn btn-block btn-light" style="width: 100%; padding: 6px; font-family:'Noto Sans TC', sans-serif; font-weight: 500; border: 1px solid #BFB9B8; font-size: 16px;">Edit profile</a>
+        </div>
     </div>
-    <div class="row d-flex" style="margin: 10px auto 0 auto; width: 300px;">
-        <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
-        <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowers}}</span>
-        <span style="font-size: 14px; margin-right: 5px;">followers</span>
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 10px 10px 0px 10px;">
+        <div class="col">
+            <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
+            <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowers}}</span>
+            <span style="font-size: 14px; margin-right: 5px;">followers</span>
+        </div>
     </div>
-    <div class="row d-flex" style="margin: 10px auto 0 auto; width: 300px;">
-        <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
-        <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowings}}</span>
-        <span style="font-size: 14px; margin-right: 5px;">followings</span>
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 10px;">
+        <div class="col">
+            <img src="{% static 'img/people.svg' %}" style="margin-right: 5px;" width="15">
+            <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countFollowings}}</span>
+            <span style="font-size: 14px; margin-right: 5px;">followings</span>
+        </div>
     </div>
-    <div class="row d-flex" style="margin: 10px auto 0 auto; width: 300px;">
-        <img src="{% static 'img/heart.svg' %}" style="margin-right: 5px;" width="15">
-        <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countlikes}}</span>
+    <div class="row d-flex" style="margin:0; width: 100%; padding: 0px 10px 0px 10px;">
+        <div class="col">
+            <img src="{% static 'img/heart.svg' %}" style="margin-right: 5px;" width="15">
+            <span style="font-size: 14px; margin-right: 5px; font-weight: 700;">{{countlikes}}</span>
+        </div>
     </div>
 </div>
