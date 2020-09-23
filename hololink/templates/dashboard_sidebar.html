@@ -13,6 +13,7 @@
         img.profile-avatar{
             width: 20vw !important;
             height: 20vw !important;
+            margin: auto !important;
         }
     }
     @media (min-width: 992px) {
@@ -30,8 +31,8 @@
 
 
 <div class="col-12 col-md-4 d-flex flex-column" style="padding: 0;">
-    <div class="row d-flex" style="padding: 20px 30px; width: 100%;">
-        <div class="col-2 ol-md-12 col-lg-12 col-xl-12 d-flex">
+    <div class="row d-flex" style="padding:0; width: 100%;">
+        <div class="col-2 ol-md-12 col-lg-12 col-xl-12 d-flex" style="padding: 0;">
             {% if profile.user_avatar %}
                 <img class="profile-avatar" src="{{ profile.user_avatar.url }}" style="border-radius: 50%; width: 15vw; height: 15vw;">
             {% else %}
@@ -39,7 +40,7 @@
             {% endif %}
         </div>
         <div class="col-10 col-md-12 col-lg-12 col-xl-12 d-flex">
-            <div class="row" style="margin: auto 20px; width: 100%;">
+            <div class="row" style="margin: auto; width: 100%;">
                 <p style="font-size: 1.3rem; margin: 0;">{{ profile.user.username }}</p>
             </div>
         </div>

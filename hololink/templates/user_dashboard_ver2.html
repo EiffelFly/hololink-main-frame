@@ -6,6 +6,17 @@
 {% block content %}
 
 <style>
+
+    {% comment %}
+        Extra small devices (portrait phones, less than 576px)
+        No media query for `xs` since this is the default in Bootstrap
+    {% endcomment %}
+
+    @media (min-width: 576px) {}
+    @media (min-width: 768px) {}
+    @media (min-width: 992px) {}
+    @media (min-width: 1200px) {}
+
     .dashboard-overview-headline{
         font-size: 1.1rem;
         font-family: 'Noto Sans TC', sans-serif;
@@ -41,9 +52,18 @@
         background-color: white;
         width: 4.5rem;
         height: 1.5rem;
-        
-        
+    
     }
+        
+    @media (max-width: 400px){
+        .punchline {
+            font-size: 2.6rem;
+            font-weight: 500;
+        }
+    }
+
+
+
 
 </style>
 <div class="container-fluid">
@@ -52,7 +72,7 @@
         <div class="row">
             {% include 'dashboard_sidebar.html' %}
             <div class="col-12 col-md-8">
-                <div class="row" style="margin-top: 2rem;">
+                <div class="row recent-project-container" style="margin-top: 2rem;">
                     <div class="col-8">
                         <h3 class="dashboard-overview-headline">Recent Projects</h3>
                     </div>
