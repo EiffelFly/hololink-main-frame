@@ -16,10 +16,26 @@ def now():
 
 
 class Domain(models.Model):
+
+    http = 'http'
+    https = 'https'
+
+    SCHEME_TYPE_CHOICES = (
+        (http, _('http')),
+        (https, _('https'))
+    )
+
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=256,
         blank=True,
+    )
+
+    scheme_type = models.CharField(
+        max_length=20,
+        choices= SCHEME_TYPE_CHOICES,
+        null=True,
+        verbose_name=_('Scheme type')
     )
 
     main_site = models.URLField(
