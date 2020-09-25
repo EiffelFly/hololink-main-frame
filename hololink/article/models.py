@@ -23,7 +23,7 @@ class Domain(models.Model):
     )
 
     main_site = models.URLField(
-        verbose_name=_('URL'),
+        verbose_name=_('Main URL'),
         max_length=1024,
         blank=True,
     )
@@ -39,6 +39,9 @@ class Domain(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    def __str__(self):
+        return self.name
 
 class Keyword(models.Model):
 
@@ -74,6 +77,9 @@ class Keyword(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    def __str__(self):
+        return self.name
 
     
 
