@@ -180,54 +180,13 @@ def user_settings(request, slug):
     if request.method == 'POST':
         form = UserSettingsFormForPublicProfile(request.POST)
         changedFieldforMessage = []
-        if form.has_changed() is True:
-            # make sure we don't update the username and cause error because
-            # cleaned_data.get('username') is '' right now
-            print(form.changed_data)
-            if 'username' not in form.changed_data:
-                if form.is_valid():
-                    # make sure user had changed the bio not the initial value we put in 
-                    if form.cleaned_data.get('bio') != profile.bio:
-                        setattr(profile, 'bio', form.cleaned_data.get('bio'))
-                        changedFieldforMessage.append('Bio')
-                        if request.FILES.get('avatar', None) != None:
-                            try:
-                                os.remove(BASE_DIR + user.profile.user_avatar.url)
-                            except Exception as e:
-                                print('Exception in removing old profile image: ', e)
-                            profile.user_avatar = request.FILES['avatar']
-                            changedFieldforMessage.append('Avatar')
-
-                        profile.save()
-                        changedFieldforMessage_str = '、'.join(changedFieldforMessage)
-                        messages.success(request, _(f'Profile updated successfully: {changedFieldforMessage_str}'))
-                        return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
-                    else:
-                        if request.FILES.get('avatar', None) != None:
-                            try:
-                                os.remove(BASE_DIR + user.profile.user_avatar.url)
-                            except Exception as e:
-                                print('Exception in removing old profile image: ', e)
-                            profile.user_avatar = request.FILES['avatar']
-                            changedFieldforMessage.append('Avatar')
-                            profile.save()
-                            changedFieldforMessage_str = '、'.join(changedFieldforMessage)
-                            messages.success(request, _(f'Profile updated successfully: {changedFieldforMessage_str}'))
-
-                        form = UserSettingsFormForPublicProfile()                 
-                        context['form'] = form
-                        form.fields['username'].widget.attrs['placeholder'] = profile.user 
-                        form.fields['bio'].initial = profile.bio
-                        return render(request, 'user_settings_publicprofile.html', context)
-                else:
-                    form = UserSettingsFormForPublicProfile(request.POST)
-                    context['form'] = form
-                    return render(request, 'user_settings_publicprofile.html', context)          
-            else:
-                if form.is_valid():
+        # make sure we don't update the username and cause error because
+        # cleaned_data.get('username') is '' right now
+        if 'username' not in form.changed_data:
+            if form.is_valid():
+                # make sure user had changed the bio not the initial value we put in 
+                if form.cleaned_data.get('bio') != profile.bio:
                     setattr(profile, 'bio', form.cleaned_data.get('bio'))
-                    setattr(user, 'username', form.cleaned_data.get('username'))
-                    changedFieldforMessage.append('Username')
                     changedFieldforMessage.append('Bio')
                     if request.FILES.get('avatar', None) != None:
                         try:
@@ -238,14 +197,54 @@ def user_settings(request, slug):
                         changedFieldforMessage.append('Avatar')
 
                     profile.save()
-                    user.save()
                     changedFieldforMessage_str = '、'.join(changedFieldforMessage)
                     messages.success(request, _(f'Profile updated successfully: {changedFieldforMessage_str}'))
                     return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
                 else:
-                    form = UserSettingsFormForPublicProfile(request.POST)
+                    if request.FILES.get('avatar', None) != None:
+                        try:
+                            os.remove(BASE_DIR + user.profile.user_avatar.url)
+                        except Exception as e:
+                            print('Exception in removing old profile image: ', e)
+                        profile.user_avatar = request.FILES['avatar']
+                        changedFieldforMessage.append('Avatar')
+                        profile.save()
+                        changedFieldforMessage_str = '、'.join(changedFieldforMessage)
+                        messages.success(request, _(f'Profile updated successfully: {changedFieldforMessage_str}'))
+
+                    form = UserSettingsFormForPublicProfile()                 
                     context['form'] = form
+                    form.fields['username'].widget.attrs['placeholder'] = profile.user 
+                    form.fields['bio'].initial = profile.bio
                     return render(request, 'user_settings_publicprofile.html', context)
+            else:
+                form = UserSettingsFormForPublicProfile(request.POST)
+                context['form'] = form
+                return render(request, 'user_settings_publicprofile.html', context)          
+        else:
+            if form.is_valid():
+                setattr(profile, 'bio', form.cleaned_data.get('bio'))
+                setattr(user, 'username', form.cleaned_data.get('username'))
+                changedFieldforMessage.append('Username')
+                changedFieldforMessage.append('Bio')
+                if request.FILES.get('avatar', None) != None:
+                    try:
+                        os.remove(BASE_DIR + user.profile.user_avatar.url)
+                    except Exception as e:
+                        print('Exception in removing old profile image: ', e)
+                    profile.user_avatar = request.FILES['avatar']
+                    changedFieldforMessage.append('Avatar')
+
+                profile.save()
+                user.save()
+                changedFieldforMessage_str = '、'.join(changedFieldforMessage)
+                messages.success(request, _(f'Profile updated successfully: {changedFieldforMessage_str}'))
+                return HttpResponseRedirect(reverse('user_settings', args=(slug,)))
+            else:
+                form = UserSettingsFormForPublicProfile(request.POST)
+                context['form'] = form
+                return render(request, 'user_settings_publicprofile.html', context)
+
     else:
         form = UserSettingsFormForPublicProfile()
         context['form'] = form
