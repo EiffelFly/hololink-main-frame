@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
 from accounts.models import Profile
+from article.models import Keyword
 from django.contrib.auth.models import User
 import uuid
 from django.views.decorators.csrf import csrf_exempt
@@ -88,23 +89,32 @@ def user_dashboard(request, slug):
     profile = get_object_or_404(Profile, user=request.user)
     user = get_object_or_404(User, username=request.user)
 
-    countArticles = []
+    count_articles = []
     projects = Project.objects.filter(created_by=request.user).order_by('-last_edited_time') #use -created_at to desc()
+    
     projects = projects[:4]
     for project in projects:
-        countArticles.append(project.articles_project_owned.all().count())
+        count_articles.append(project.articles_project_owned.all().count())
 
-    countFollowings = profile.followings.count()
-    countFollowers = user.followers.count()
-    countlikes = projects.aggregate(Sum('project_likes')).get('project_likes__sum', 0)
+    count_projects = projects.count()
+    count_followings = profile.followings.count()
+    count_followers = user.followers.count()
+    count_likes = projects.aggregate(Sum('project_likes')).get('project_likes__sum', 0)
+    count_basestone = Keyword.objects.filter(owned_by_user=profile, keyword_type='basestone')
+    count_stellar = Keyword.objects.filter(owned_by_user=profile, keyword_type='stellar')
+
+    data_for_insights = [count_projects, count_articles, count_basestone, count_stellar]
+
+    print(count_basestone)
 
     context = {
         'profile' : profile,
         'projects' : projects,
-        'countArticles' : countArticles,
-        'countFollowings' : countFollowings,
-        'countFollowers' : countFollowers,
-        'countlikes' : countlikes,
+        'countArticles' : count_articles,
+        'countFollowings' : count_followings,
+        'countFollowers' : count_followers,
+        'countlikes' : count_likes,
+        'data_for_insights' : data_for_insights,
     }
 
     return render(request, 'user_dashboard_ver2.html', context) 
