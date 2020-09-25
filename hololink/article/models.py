@@ -14,6 +14,32 @@ import time
 def now():
     return timezone.localtime(timezone.now())
 
+
+class Domain(models.Model):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=256,
+        blank=True,
+    )
+
+    main_site = models.URLField(
+        verbose_name=_('URL'),
+        max_length=1024,
+        blank=True,
+    )
+
+    created_at = models.DateTimeField(
+        verbose_name=_('Created at'),
+        auto_now_add=True,
+    )
+
+    created_by = models.ForeignKey(
+        verbose_name=_('Created by'),
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+
 class Keyword(models.Model):
 
     name = models.CharField(
@@ -74,6 +100,15 @@ class Article(models.Model):
         max_length=1024,
         blank=True,
     )
+
+    domain = models.ForeignKey(
+        verbose_name=_('Domain'),
+        to=Domain,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    
+
     recommended = models.BooleanField(
         verbose_name=_('Recommended'),
         default=False,

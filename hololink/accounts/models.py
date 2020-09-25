@@ -59,6 +59,12 @@ class Profile(models.Model):
         verbose_name=_('Keyword')
     )
 
+    source = models.ManyToManyField(
+        'article.Domain',
+        related_name='owned_by_user',
+        verbose_name=_('Source')
+    )
+
     def get_absolute_url(self):
         return reverse('user_dashboard', args=(self.slug,))
 
