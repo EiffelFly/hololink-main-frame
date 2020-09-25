@@ -100,10 +100,18 @@ def user_dashboard(request, slug):
     count_followings = profile.followings.count()
     count_followers = user.followers.count()
     count_likes = projects.aggregate(Sum('project_likes')).get('project_likes__sum', 0)
-    count_basestone = Keyword.objects.filter(owned_by_user=profile, keyword_type='basestone')
-    count_stellar = Keyword.objects.filter(owned_by_user=profile, keyword_type='stellar')
+    count_basestone = Keyword.objects.filter(owned_by_user=profile, keyword_type='basestone').count()
+    count_stellar = Keyword.objects.filter(owned_by_user=profile, keyword_type='stellar').count()
+    count_source = profile.source.count()
 
-    data_for_insights = [count_projects, count_articles, count_basestone, count_stellar]
+    data_for_insights = [
+        {'Title':'Article', 'count':count_projects},
+        {'Title':'Galaxy', 'count':count_projects},
+        {'Title':'Basestone', 'count':count_basestone},
+        {'Title':'Stellar', 'count':count_stellar},
+        {'Title':'Source', 'count':count_source},
+
+    ]
 
     print(count_basestone)
 
