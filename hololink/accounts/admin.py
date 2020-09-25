@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from .models import Profile
+from .models import Profile, Recommendation
 
 
 
@@ -24,6 +24,10 @@ class ProfileInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
 
+class RecommendationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'article', 'created_at']
+
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Recommendation, RecommendationAdmin)
