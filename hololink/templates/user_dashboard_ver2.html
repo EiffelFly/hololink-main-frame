@@ -95,7 +95,6 @@
                         <div class="insights-container" style="margin: 0px 0px 20px 0px;">
 
                         </div>
-                        
                     </div>
                     {% endfor %}
                 </div>
@@ -105,9 +104,9 @@
                     </div>
                     <div class="col-4"></div>
                 </div>
-                <div class="row d-flex flex-row" style="padding: 10px 30px;">
+                <div class="row d-flex flex-row" style="padding: 10px 10px 10px 30px;">
                 {% for project in projects %} 
-                    <div class="col-12 col-lg-6" style="padding:0 20px 20px 0px">
+                    <div class="col-12 col-lg-6" style="padding:0px 20px 20px 0px">
                         <div class="dashboard-recentProject-container">
                             <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
                         </div>     

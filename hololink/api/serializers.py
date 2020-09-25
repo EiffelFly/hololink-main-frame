@@ -341,6 +341,7 @@ def merge_article_into_galaxy(data_for_merging):
                     keyword_type = article_node['level'],
                     created_by = user
                 )
+                keyword.save()
             # if article_node['title'] not in project.keyword_list['total']:
             if keyword not in project.keyword.all():
                 print("new keywords", article_node['title'])
@@ -361,7 +362,17 @@ def merge_article_into_galaxy(data_for_merging):
                 # else: the node exist in this project, but we don't know which type it belonged to (base or stellar) 
                 keyword_type = article_node['level']
                 # if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
-                if not Project.objects.filter(keyword__keword_type=keyword_type).exists():
+                # if not Project.objects.filter(keyword__keword_type=keyword_type).exists():
+                try:
+                    Keyword.objects.get(keyword_type=keyword_type, owned_by_project=project, name=article_node['title'])
+                    for project_node in project.project_d3_json['nodes']:
+                        # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
+                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
+                            project_node.update({"connection":project_node['connection'] + 1})
+                            print(project_node['id'], project_node['connection'])
+                except Keyword.DoesNotExist:
+
+                if not .exists():
                     print("old keywords with new level", article_node['title'])
                     keyword_with_correct_type = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
                     project.keyword.add(keyword_with_correct_type)
@@ -374,11 +385,7 @@ def merge_article_into_galaxy(data_for_merging):
                     }
                 )
                 else:
-                    for project_node in project.project_d3_json['nodes']:
-                        # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
-                        if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
-                            project_node.update({"connection":project_node['connection'] + 1})
-                            print(project_node['id'], project_node['connection'])
+                    
         project.save()
         return project
 
