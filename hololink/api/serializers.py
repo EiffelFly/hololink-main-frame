@@ -14,6 +14,7 @@ from requests.packages.urllib3.util.retry import Retry
 import json
 import threading
 from article.models import Keyword, Domain
+from accounts.models import Recommendation
 
 # Notice: tldextract will update the TLD list first time running the module, beware of some limitation.
 import tldextract
@@ -177,6 +178,15 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         
         try:
             article = Article.objects.get(name=name, from_url=from_url)
+            if recommended == True:
+                try:
+                    recommendation = Recommendation.objects.get(user=user, article=article)
+                except Recommendation.DoesNotExist:
+                    recommendation = Recommendation.objects.create(
+                        user=user,
+                        article=article
+                    )
+                    recommendation.save()
             for project in projects:
                 try:
                     target_project = Project.objects.get(name=project, created_by=user)
@@ -231,6 +241,16 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 except Project.DoesNotExist:
                     print('204','There is no such project')
             article.owned_by.add(user)
+
+            if recommended == True:
+                try:
+                    recommendation = Recommendation.objects.get(user=user, article=article)
+                except Recommendation.DoesNotExist:
+                    recommendation = Recommendation.objects.create(
+                        user=user,
+                        article=article
+                    )
+                    recommendation.save()
 
 
         prepare_data_for_ml = {
