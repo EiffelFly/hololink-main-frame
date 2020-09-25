@@ -13,7 +13,11 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import json
 import threading
-from article.models import Keyword
+from article.models import Keyword, Domain
+
+# Notice: tldextract will update the TLD list first time running the module, beware of some limitation.
+import tldextract
+from urllib.parse import urlparse
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -164,6 +168,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
     def create(self, validated_data):
         username = self.context['request'].user
         user = get_object_or_404(User, username=username)
+
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
@@ -181,9 +186,22 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             if user not in article.owned_by.all():
                 article.ml_is_processing = True
                 article.owned_by.add(user)
-            
-
         except Article.DoesNotExist:
+            parse_url = tldextract.extract(from_url)
+            scheme = urlparse(from_url).scheme
+            site_main_url = scheme + '://' + parse_url.registered_domain + '/'
+        
+            try:
+                domain = Domain.objects.get(main_site=site_main_url, scheme_type=scheme)
+            except Domain.DoesNotExist:
+                domain = Domain.objects.create(
+                    name=parse_url.registered_domain,
+                    main_site=site_main_url,
+                    created_by=user,
+                    scheme_type=scheme,
+                )
+                domain.save()
+                print(domain)
 
             data = {
                 'hash':sha256_hash(content),
@@ -194,7 +212,13 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'created_by':user,
                 'created_at':timezone.localtime(timezone.now()),
                 'ml_is_processing':True,
+                'domain':domain,
             }
+
+            try: 
+                Domain.objects.get(main_site=site_main_url, scheme_type=scheme, owned_by_user=user.profile)
+            except Domain.DoesNotExist:
+                user.profile.source.add(domain)
 
             article = super().create(data)
             project_name_list = []

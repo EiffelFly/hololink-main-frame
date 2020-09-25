@@ -130,7 +130,6 @@ class Article(models.Model):
         null=True
     )
     
-
     recommended = models.BooleanField(
         verbose_name=_('Recommended'),
         default=False,
