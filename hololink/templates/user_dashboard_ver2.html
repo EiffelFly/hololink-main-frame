@@ -15,11 +15,6 @@
     @media (min-width: 576px) {}
     @media (min-width: 768px) {}
     @media (min-width: 992px) {
-        .dashboard-recentProject-container{
-            margin-top: 10px!important;
-            margin-bottom: 10px !important;
-            margin-right: 20px !important;
-        }
         
     }
     @media (min-width: 1200px) {}
@@ -35,7 +30,7 @@
         border-style: solid; 
         height: 6.5rem; 
         border-width: 1px;
-        margin-bottom: 15px;
+        padding:20px;
     }
 
     .insights-container{
@@ -112,10 +107,10 @@
                 </div>
                 <div class="row d-flex flex-row" style="padding: 10px 30px;">
                 {% for project in projects %} 
-                    <div class="col-12 col-lg-5 col-lg-offset-1 dashboard-recentProject-container">
-                        <div class="row" style="margin: 20px 0 0 5px">
+                    <div class="col-12 col-lg-6" style="padding:0 20px 20px 0px">
+                        <div class="dashboard-recentProject-container">
                             <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
-                        </div>
+                        </div>     
                     </div>
                 {% endfor %}
                 
