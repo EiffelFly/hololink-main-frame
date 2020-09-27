@@ -232,25 +232,26 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
             article = super().create(data)
             project_name_list = []
-            for project in projects:
-                try:
-                    print(project, user)
-                    target_project = Project.objects.get(name=project, created_by=user)
-                    project_name_list.append(target_project.name)
-                    article.projects.add(target_project)
-                except Project.DoesNotExist:
-                    print('204','There is no such project')
-            article.owned_by.add(user)
+            
+        for project in projects:
+            try:
+                print(project, user)
+                target_project = Project.objects.get(name=project, created_by=user)
+                project_name_list.append(target_project.name)
+                article.projects.add(target_project)
+            except Project.DoesNotExist:
+                print('204','There is no such project')
+        article.owned_by.add(user)
 
-            if recommended == True:
-                try:
-                    recommendation = Recommendation.objects.get(user=user, article=article)
-                except Recommendation.DoesNotExist:
-                    recommendation = Recommendation.objects.create(
-                        user=user,
-                        article=article
-                    )
-                    recommendation.save()
+        if recommended == True:
+            try:
+                recommendation = Recommendation.objects.get(user=user, article=article)
+            except Recommendation.DoesNotExist:
+                recommendation = Recommendation.objects.create(
+                    user=user,
+                    article=article
+                )
+                recommendation.save()
 
 
         prepare_data_for_ml = {
@@ -363,28 +364,33 @@ def merge_article_into_galaxy(data_for_merging):
                 keyword_type = article_node['level']
                 # if article_node['title'] not in project.keyword_list[f'{keyword_type}']:
                 # if not Project.objects.filter(keyword__keword_type=keyword_type).exists():
-                try:
-                    Keyword.objects.get(keyword_type=keyword_type, owned_by_project=project, name=article_node['title'])
+
+                if not Keyword.objects.filter(keyword_type=keyword_type, owned_by_project=project, name=article_node['title']).exists():
+                    print("old keywords with new level", article_node['title'])
+                    try:
+                        keyword_with_correct_type = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
+                    except Keyword.DoesNotExist:
+                        keyword_with_correct_type = Keyword.objects.create(
+                            name = article_node['title'],
+                            keyword_type = article_node['level'],
+                            created_by = user
+                        )
+                        keyword.save()
+                    project.keyword.add(keyword_with_correct_type)
+                    project.keyword_list[f'{keyword_type}'].append(article_node['title'])
+                    project.project_d3_json['nodes'].append(
+                        {
+                            "id":article_node['title'],
+                            "level":article_node['level'],
+                            "connection":1,
+                        }
+                    )
+                else:
                     for project_node in project.project_d3_json['nodes']:
                         # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
                         if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
                             project_node.update({"connection":project_node['connection'] + 1})
                             print(project_node['id'], project_node['connection'])
-                except Keyword.DoesNotExist:
-
-                if not .exists():
-                    print("old keywords with new level", article_node['title'])
-                    keyword_with_correct_type = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
-                    project.keyword.add(keyword_with_correct_type)
-                    project.keyword_list[f'{keyword_type}'].append(article_node['title'])
-                    project.project_d3_json['nodes'].append(
-                    {
-                        "id":article_node['title'],
-                        "level":article_node['level'],
-                        "connection":1,
-                    }
-                )
-                else:
                     
         project.save()
         return project
