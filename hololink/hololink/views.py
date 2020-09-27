@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
 from accounts.models import Profile, Recommendation
-from article.models import Keyword
+from article.models import Keyword, Article
 from django.contrib.auth.models import User
 import uuid
 from django.views.decorators.csrf import csrf_exempt
@@ -104,10 +104,11 @@ def user_dashboard(request, slug):
     count_stellar = Keyword.objects.filter(owned_by_user=profile, keyword_type='stellar').count()
     count_recommendation = Recommendation.objects.filter(user=user).count()
     count_source = profile.source.count()
+    count_user_owned_article = Article.objects.filter(owned_by=user).count()
 
 
     data_for_insights = [
-        {'title':'Articles', 'count':count_projects},
+        {'title':'Articles', 'count':count_user_owned_article},
         {'title':'Galaxies', 'count':count_projects},
         {'title':'Basestones', 'count':count_basestone},
         {'title':'Stellars', 'count':count_stellar},
