@@ -25,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
 
 class RecommendationAdmin(admin.ModelAdmin):
-    list_display = ['user', 'article', 'created_at']
+    list_display = ['id', 'user', 'article', 'created_at']
 
 # Re-register UserAdmin
 admin.site.unregister(User)

@@ -74,8 +74,22 @@ class Profile(models.Model):
 
    
 class Recommendation(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    article = models.OneToOneField(Article, on_delete=models.CASCADE)
+
+    id = models.AutoField(
+        verbose_name='Serial Number', primary_key=True,
+    )
+
+    user = models.ForeignKey(
+        to=User,
+        verbose_name=_('User'),
+        on_delete=models.CASCADE,
+    )
+
+    article = models.ForeignKey(
+        to=Article,
+        verbose_name=_('Article'),
+        on_delete=models.CASCADE,
+    )
 
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
