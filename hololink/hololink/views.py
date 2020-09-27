@@ -5,7 +5,7 @@ from .forms import UserSettingsFormForPublicProfile
 from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
-from accounts.models import Profile
+from accounts.models import Profile, Recommendation
 from article.models import Keyword
 from django.contrib.auth.models import User
 import uuid
@@ -102,15 +102,17 @@ def user_dashboard(request, slug):
     count_likes = projects.aggregate(Sum('project_likes')).get('project_likes__sum', 0)
     count_basestone = Keyword.objects.filter(owned_by_user=profile, keyword_type='basestone').count()
     count_stellar = Keyword.objects.filter(owned_by_user=profile, keyword_type='stellar').count()
+    count_recommendation = Recommendation.objects.filter(user=user).count()
     count_source = profile.source.count()
 
-    data_for_insights = [
-        {'Title':'Article', 'count':count_projects},
-        {'Title':'Galaxy', 'count':count_projects},
-        {'Title':'Basestone', 'count':count_basestone},
-        {'Title':'Stellar', 'count':count_stellar},
-        {'Title':'Source', 'count':count_source},
 
+    data_for_insights = [
+        {'title':'Articles', 'count':count_projects},
+        {'title':'Galaxies', 'count':count_projects},
+        {'title':'Basestones', 'count':count_basestone},
+        {'title':'Stellars', 'count':count_stellar},
+        {'title':'Sources', 'count':count_source},
+        {'title':'Recommended Articles', 'count':count_recommendation}
     ]
 
     print(count_basestone)
