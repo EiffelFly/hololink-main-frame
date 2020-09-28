@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
 from .forms import ProjectForm, GalaxySettingsForm
-from article.models import Article
+from article.models import Article, Keyword
 from django.db.models import Sum
 import hashlib
 from django.http import HttpResponseRedirect
@@ -34,22 +34,22 @@ def projects_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
-    countArticles = []
-    countBasestoneKeywords = []
-    countStellarKeywords = []
+    count_article = []
+    count_basestone = []
+    count_stellar = []
 
     projects = filter(request)
     for project in projects:
         articles = Article.objects.filter(projects=project).order_by('-created_at')
-        countArticles.append(project.articles_project_owned.all().count())
-        countBasestoneKeywords.append(articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0))
-        countStellarKeywords.append(articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0))
+        count_article.append(project.articles_project_owned.all().count())
+        count_basestone.append(Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count())
+        count_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count())
     
     context = {
         'projects' : projects,
-        'countArticles' : countArticles,
-        'countBasestoneKeywords' : countBasestoneKeywords,
-        'countStellarKeywords' : countStellarKeywords,
+        'countArticles' : count_article,
+        'countBasestoneKeywords' : count_basestone,
+        'countStellarKeywords' : count_stellar,
     }
 
     return render(request, 'projects_list.html', context)    
@@ -60,6 +60,7 @@ def project_detail(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
+
 
     #send message to article.views.article_detail
     request.session['user_selected_project'] = project.name
@@ -97,15 +98,17 @@ def project_dashboard(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
-    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
-    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
+    # basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
+    # stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
     countArticles = project.articles_project_owned.all().count()
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
     context = {
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
-        'data':{'basestone':basestone, 'stellar':stellar},
+        'data':{'basestone':count_basestone, 'stellar':count_stellar},
     }
 
     return render(request, 'project_dashboard.html', context) 
