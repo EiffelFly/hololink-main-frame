@@ -61,17 +61,18 @@
                                         {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
                                     </div>
                                 </div>
+                                {% load index %}
                                 <div class="col-6 d-flex">
                                     <p style="margin: 0 0 0 auto;">
                                         <span class="d-inline-block mr-2 dashboard-articles-container-badges">
                                             <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
                                             <span>basestone -</span>
-                                            <span style="color: #2e1760;">{{article.article_basestone_keyword_sum}}</span>
+                                            <span style="color: #2e1760;">{{count_basestone|indexforloop:forloop.counter0}}</span>
                                         </span>
                                         <span class="d-inline-block mr-2 dashboard-articles-container-badges">
                                             <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
                                             <span>stellar -</span>
-                                            <span style="color: #2e1760;">{{article.article_stellar_keyword_sum}}</span>
+                                            <span style="color: #2e1760;">{{count_stellar|indexforloop:forloop.counter0}}</span>
                                         </span>
                                     </p>
                                 </div>

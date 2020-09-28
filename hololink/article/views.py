@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
-from .models import Article
+from .models import Article, Keyword
 from .forms import ArticleForm, ArticleChangeForm
 from django.contrib.auth.models import User
 from unidecode import unidecode
@@ -141,10 +141,20 @@ def articles_list(request):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
+    count_basestone = []
+    count_stellar = []
+
     articles = filter(request)
     
+    for article in articles:
+        print(article)
+        count_basestone.append(Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count())
+        count_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
+
     context = {
-        'articles' : articles
+        'articles' : articles,
+        'count_basestone':count_basestone,
+        'count_stellar':count_stellar,
     }
 
     return render(request, 'article/articles_list.html', context)   
