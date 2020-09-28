@@ -20,7 +20,7 @@
     @media (min-width: 1200px) {}
 
     .dashboard-overview-headline{
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         font-family: 'Noto Sans TC', sans-serif;
         font-weight: 700;
     }
@@ -77,10 +77,10 @@
 
 
 </style>
-<div class="container-fluid">
+<div class="container-fluid" style="padding: 0">
     {% include 'dashboard_navbar.html' %}
-    <div class="content_container">
-        <div class="row">
+    <div class="content_container d-flex">
+        <div class="row m-auto">
             {% include 'dashboard_sidebar.html' %}
             <div class="col-12 col-md-8">
                 <div class="row recent-project-container" style="margin-top: 2rem; padding: 0 15px;">
@@ -95,7 +95,7 @@
                         <div class="insights-container" style="margin: 0px 0px 20px 0px;">
                             <div class="row" style="padding: 15px 0px 10px 20px">
                                 <div class="col">
-                                    <div style="font-size: 18px;">{{ data.title }}</div>
+                                    <div style="font-size: 18px; font-weight: 700;">{{ data.title }}</div>
                                 </div>
                             </div>
                             <div class="row" style="padding: 0px 0px 10px 20px">
