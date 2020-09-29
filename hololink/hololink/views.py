@@ -186,6 +186,7 @@ def user_settings(request, slug):
         'form': None,
         'tips': [],
         'profile':profile,
+        'active':'public_profile',
     }
 
     if request.method == 'POST':
@@ -262,3 +263,17 @@ def user_settings(request, slug):
         form.fields['username'].widget.attrs['placeholder'] = profile.user 
         form.fields['bio'].initial = profile.bio
         return render(request, 'user_settings_publicprofile.html', context)
+
+
+def user_settings_account(request,slug):
+    profile = get_object_or_404(Profile, user=request.user)
+    user = get_object_or_404(User, username=request.user)
+
+    context = {
+        'form': None,
+        'tips': [],
+        'profile':profile,
+        'active':'account',
+    }
+
+    return render(request, 'user_settings_account.html', context)
