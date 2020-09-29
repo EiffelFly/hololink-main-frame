@@ -189,7 +189,7 @@
                         .enter()
                         .append('text')
                         .text(node => {
-                            if (node.group == 'basestone'){
+                            if (node.level == 'basestone'){
                                 return node.type
                             }
                         })
@@ -209,7 +209,7 @@
         var YForce = simulation.force("y");
 
         XForce.strength(function(d){
-            if (d.group == "basestone"){
+            if (d.level == "basestone"){
                 return strengthScale(d.frequency) + 0.4
             }
             else { 
@@ -218,7 +218,7 @@
         });
 
         YForce.strength(function(d){
-            if (d.group == "basestone"){
+            if (d.level == "basestone"){
                 return strengthScale(d.frequency) + 0.4
             }
             else { 
@@ -287,8 +287,8 @@
     }
 
     function getNodeColor(node){
-        if (node.group == "basestone") {return'#FCA311'}
-        else if (node.group == "stellar") {return '#FFFFFF'}
+        if (node.level == "basestone") {return'#FCA311'}
+        else if (node.level == "stellar") {return '#FFFFFF'}
     }
 
     //Set up scale for Text and NERText Dy
@@ -298,7 +298,7 @@
             
 
     function getTextDy(node){
-        if (node.group == 'basestone'){
+        if (node.level == 'basestone'){
             
             textDyScale.domain([0, biggestNode])
             textdy = textDyScale(node.frequency);
@@ -306,13 +306,13 @@
             return `-${textdy}rem`;
         }
            
-        else if (node.group == 'stellar'){
+        else if (node.level == 'stellar'){
             return '0.35rem';
         }
     }
 
     function getNERTextDy(node){
-        if (node.group == 'basestone'){
+        if (node.level == 'basestone'){
             textDyScale.domain([0, biggestNode])
             textdy = textDyScale(node.frequency);
             return `${textdy}rem`;          
