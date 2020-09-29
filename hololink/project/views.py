@@ -78,8 +78,8 @@ def project_articles(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project).order_by('-created_at')
-    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
-    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
     
     countArticles = project.articles_project_owned.all().count()
 
@@ -87,7 +87,7 @@ def project_articles(request, slug):
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
-        'data':{'basestone':basestone, 'stellar':stellar}
+        'data':{'basestone':count_basestone, 'stellar':count_stellar}
     }  
 
     return render(request, 'project_dashboard_articles.html', context)
@@ -120,14 +120,14 @@ def project_hologram(request, slug):
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     countArticles = project.articles_project_owned.all().count()
-    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
-    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
     context = {
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
-        'data':{'basestone':basestone, 'stellar':stellar},
+        'data':{'basestone':count_basestone, 'stellar':count_stellar},
     }
 
     return render(request, 'project_dashboard_hologram.html', context) 
@@ -141,8 +141,8 @@ def galaxy_setting(request, slug):
     articles = Article.objects.filter(projects=project)
     confirmation_code = f'{request.user}/{project.name}'
     countArticles = project.articles_project_owned.all().count()
-    basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
-    stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
     context = {
         'form': None,
@@ -150,7 +150,7 @@ def galaxy_setting(request, slug):
         'project':project,
         'confirmation_code':confirmation_code,
         'countArticles':countArticles,
-        'data':{'basestone':basestone, 'stellar':stellar},
+        'data':{'basestone':count_basestone, 'stellar':count_stellar},
     }
 
     if request.method == 'POST':
