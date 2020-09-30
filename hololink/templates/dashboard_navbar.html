@@ -6,7 +6,16 @@
         font-family: 'Noto Sans TC', sans-serif;
         font-size: 0.8rem;
         color: black !important;
+        border-bottom: 3px solid transparent;
         
+    }
+
+    a.dashboard-nav-item:hover{
+        border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    }
+
+    a.dashboard-nav-item:active{
+        border-bottom: 3px solid rgba(0, 0, 0, 0.1);
     }
 </style>
 
@@ -14,19 +23,19 @@
     <div class="row border-bottom" style="height: 5rem; margin: 0 auto;">
         <div class="col-12 col-md-4 mt-auto" style="max-width: 800px;"></div>
         <div class="col-12 col-md-8 mt-auto">
-            <nav class="navbar navbar-expand navbar-light" style="padding: 0 0 10px 0;">
+            <nav class="navbar navbar-expand navbar-light mt-auto" style="padding: 0;">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto text-center">
-                        <li class="nav-item text-center mr-2">
+                        <li class="nav-item text-center mr-4">
                             <a class="nav-link dashboard-nav-item" href="{% url 'user_dashboard' user.profile.slug %}"><img src="{% static 'img/overview.svg' %}" class="d-inline-block text-center" width="12" height="12" style="margin-right:10px ;">Overview</a>
                         </li>
-                        <li class="nav-item text-center mr-2">
+                        <li class="nav-item text-center mr-4">
                             <a class="nav-link dashboard-nav-item" href="{% url 'project:projects_list' %}"><img src="{% static 'img/project.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Projects</a>
                         </li>
-                        <li class="nav-item text-center mr-2">
+                        <li class="nav-item text-center mr-4">
                             <a class="nav-link dashboard-nav-item" href="{% url 'article:articles_list' %}"><img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Articles</a>
                         </li>
                     </ul>
