@@ -155,6 +155,7 @@ def articles_list(request):
         'articles' : articles,
         'count_basestone':count_basestone,
         'count_stellar':count_stellar,
+        'active_nav':'article',
     }
 
     return render(request, 'article/articles_list.html', context)   

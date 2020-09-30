@@ -14,7 +14,7 @@
         border-bottom: 3px solid rgba(0, 0, 0, 0.1);
     }
 
-    a.dashboard-nav-item:active{
+    a.dashboard-nav-item.active{
         border-bottom: 3px solid rgba(0, 0, 0, 0.1);
     }
 </style>
@@ -30,13 +30,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto text-center">
                         <li class="nav-item text-center mr-4">
-                            <a class="nav-link dashboard-nav-item" href="{% url 'user_dashboard' user.profile.slug %}"><img src="{% static 'img/overview.svg' %}" class="d-inline-block text-center" width="12" height="12" style="margin-right:10px ;">Overview</a>
+                            <a class="nav-link dashboard-nav-item {% if active_nav == 'overview' %} active {% endif %}" href="{% url 'user_dashboard' user.profile.slug %}"><img src="{% static 'img/overview.svg' %}" class="d-inline-block text-center" width="12" height="12" style="margin-right:10px ;">Overview</a>
                         </li>
                         <li class="nav-item text-center mr-4">
-                            <a class="nav-link dashboard-nav-item" href="{% url 'project:projects_list' %}"><img src="{% static 'img/project.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Projects</a>
+                            <a class="nav-link dashboard-nav-item {% if active_nav == 'project' %} active {% endif %}" href="{% url 'project:projects_list' %}"><img src="{% static 'img/project.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Projects</a>
                         </li>
                         <li class="nav-item text-center mr-4">
-                            <a class="nav-link dashboard-nav-item" href="{% url 'article:articles_list' %}"><img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Articles</a>
+                            <a class="nav-link dashboard-nav-item {% if active_nav == 'article' %} active {% endif %}" href="{% url 'article:articles_list' %}"><img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Articles</a>
                         </li>
                     </ul>
                 </div>

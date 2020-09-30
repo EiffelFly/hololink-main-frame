@@ -126,6 +126,7 @@ def user_dashboard(request, slug):
         'countFollowers' : count_followers,
         'countlikes' : count_likes,
         'data_for_insights' : data_for_insights,
+        'active_nav':'overview'
     }
 
     return render(request, 'user_dashboard_ver2.html', context) 
@@ -133,7 +134,7 @@ def user_dashboard(request, slug):
 def user_public_profile(request, slug):
     
     '''
-        BE CAREFUL!! This section is user public area, can't let any not aloowed info leak out.
+        BE CAREFUL!! This section is user public area, can't let any not alowed info leak out.
     '''
     countArticles = []
     projects = Project.objects.filter(created_by=request.user).filter(project_visibility='Public').order_by('-last_edited_time') #use -created_at to desc()
@@ -186,7 +187,7 @@ def user_settings(request, slug):
         'form': None,
         'tips': [],
         'profile':profile,
-        'active':'public_profile',
+        'active_nav':'public_profile',
     }
 
     if request.method == 'POST':
@@ -273,7 +274,7 @@ def user_settings_account(request,slug):
         'form': None,
         'tips': [],
         'profile':profile,
-        'active':'account',
+        'active_nav':'account',
     }
 
     return render(request, 'user_settings_account.html', context)

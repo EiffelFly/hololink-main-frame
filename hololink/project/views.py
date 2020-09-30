@@ -50,6 +50,7 @@ def projects_list(request):
         'countArticles' : count_article,
         'countBasestoneKeywords' : count_basestone,
         'countStellarKeywords' : count_stellar,
+        'active_nav':'project',
     }
 
     return render(request, 'projects_list.html', context)    
