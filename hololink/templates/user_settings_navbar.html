@@ -53,10 +53,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" style="height: 100%;">
                 <ul class="navbar-nav mr-auto text-center d-flex" style="height:100%">
                     <li class="nav-item text-center mt-auto" style="width: 8rem;">
-                        <a class="nav-link dashboard-nav-item {% if active == 'public_profile' %} active {% endif %}" href="{% url 'user_settings' profile.slug %}">Public profile</a>
+                        <a class="nav-link dashboard-nav-item {% if active_nav == 'public_profile' %} active {% endif %}" href="{% url 'user_settings' profile.slug %}">Public profile</a>
                     </li>
                     <li class="nav-item text-center mt-auto" style="width: 8rem;">
-                        <a class="nav-link dashboard-nav-item {% if active == 'account' %} active {% endif %}" href="{% url 'user_settings_account' profile.slug %}">Account</a>
+                        <a class="nav-link dashboard-nav-item {% if active_nav == 'account' %} active {% endif %}" href="{% url 'user_settings_account' profile.slug %}">Account</a>
                     </li>
                 </ul>
             </div>
