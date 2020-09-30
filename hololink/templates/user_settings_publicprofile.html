@@ -13,7 +13,8 @@
 <div class="container-fluid" style="padding: 0;">
     {% include 'user_settings_navbar_2.html' %}
     <div class="row w-100">
-        <div class="col" style="max-width: 60%; margin: 2rem auto 4rem auto;">
+        <div class="col-12 col-md-2"></div>
+        <div class="col-12 col-md-10" style="max-width: 800px; ;margin: 2rem auto 4rem 0; padding: 0 25px;">
             <form method="post" novalidate enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if form.errors %}
@@ -36,13 +37,13 @@
                                 {% endfor %}
                             {% else %}
                                 {% if field.label == 'Username' or field.label == '使用者名稱' %}
-                                    <h5 style="font-size: 1.5rem; ">{% trans "Username" %}</h5>
+                                    <h5 style="font-size: 1.5rem; font-weight: 300;">{% trans "Username" %}</h5>
                                     {% render_field field class+='form-control'%}
                                 {% elif field.label == 'Bio' or field.label == '自我介紹' %}
-                                    <h5 style="font-size: 1.5rem; margin-top: 1rem;">{% trans "Bio" %}</h5>
+                                    <h5 style="font-size: 1.5rem; margin-top: 1rem; font-weight: 300;">{% trans "Bio" %}</h5>
                                     {% render_field field class+='form-control'%}
                                 {% elif field.label == 'Avatar' or field.label == '大頭貼' %}
-                                    <h5 style="font-size: 1.5rem; margin-top: 1rem;">{% trans "Avatar" %}</h5>
+                                    <h5 style="font-size: 1.5rem; margin-top: 1rem; font-weight: 300;">{% trans "Avatar" %}</h5>
                                     {% render_field field class+='form-control'%}
                                 {% endif %}
                             {% endif %}
