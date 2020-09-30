@@ -10,9 +10,9 @@
     }
 </style>
 
-<div class="container-fluid">
-    {% include 'user_settings_navbar.html' %}
-    <div class="row">
+<div class="container-fluid" style="padding: 0;">
+    {% include 'user_settings_navbar_2.html' %}
+    <div class="row w-100">
         <div class="col" style="max-width: 60%; margin: 2rem auto 4rem auto;">
             <form method="post" novalidate enctype="multipart/form-data">
                 {% csrf_token %}
