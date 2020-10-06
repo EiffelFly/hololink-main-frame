@@ -187,12 +187,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                         article=article
                     )
                     recommendation.save()
-            for project in projects:
-                try:
-                    target_project = Project.objects.get(name=project, created_by=user)
-                    article.projects.add(target_project)
-                except Project.DoesNotExist:
-                    print('178','There is no such project')
+            
             if user not in article.owned_by.all():
                 article.ml_is_processing = True
                 article.owned_by.add(user)
@@ -231,14 +226,21 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 user.profile.source.add(domain)
 
             article = super().create(data)
-            project_name_list = []
+            article.owned_by.add(user)
+
+        project_name_list = []
             
         for project in projects:
             try:
                 print(project, user)
                 target_project = Project.objects.get(name=project, created_by=user)
                 project_name_list.append(target_project.name)
-                article.projects.add(target_project)
+
+                try:
+                    article = Article.objects.get(projects=target_project, name=name)
+                except Article.DoesNotExist:
+                    article.projects.add(target_project)
+
             except Project.DoesNotExist:
                 print('204','There is no such project')
         article.owned_by.add(user)
@@ -313,7 +315,10 @@ def merge_article_into_galaxy(data_for_merging):
     username = data_for_merging['username']
     article_data = data_for_merging['d3']
     projects = data_for_merging['projects']
+    article_name = data_for_merging['article_name']
+    from_url = data_for_merging['from_url']
 
+    article = get_object_or_404(Article, name=article_name, from_url=from_url)
     user = get_object_or_404(User, username=username)
 
     '''
@@ -328,9 +333,39 @@ def merge_article_into_galaxy(data_for_merging):
                             --- 是：將原有 keyword connection + 1
                             --- 否：新建 keyword
     '''
+    
+    
 
     for target_project in projects:
+        # Create or Update article info in project_d3_json['nodes']
         project = Project.objects.get(name=target_project, created_by=user)
+
+        flag_for_creating_article_node = True
+
+        for node in project.project_d3_json['nodes']:
+            if node['level'] == 'article':
+                if node['id'] == article_name:
+                    node.update(
+                        {
+                            "basestoneNum":article_data['basestoneNum'],
+                            "stellarNum":article_data['stellarNum']
+                        }
+                    )
+                    flag_for_creating_article_node = False
+                    break
+                
+        if flag_for_creating_article_node == True:
+            print('create node')
+            project.project_d3_json['nodes'].append(
+                {
+                    "id":article_name,
+                    "url":from_url,
+                    "level":"article",
+                    "basestoneNum":article_data['basestoneNum'],
+                    "stellarNum":article_data['stellarNum'],
+                }
+            )        
+
         for article_node in article_data['nodes']:    
             # Append new keyword
             print(project.keyword_list['total'])
