@@ -401,6 +401,12 @@ def merge_article_into_galaxy(data_for_merging):
                         "connection":1,
                     }
                 )
+                project.project_d3_json['links'].append(
+                    {
+                        "source":article_name,
+                        "target":article_node['title']
+                    }
+                )
             else:
                 # else: the node exist in this project, but we don't know which type it belonged to (base or stellar) 
                 keyword_type = article_node['level']
@@ -426,6 +432,12 @@ def merge_article_into_galaxy(data_for_merging):
                             "level":article_node['level'],
                             "connection":1,
                         }
+                    )
+                    project.project_d3_json['links'].append(
+                        {
+                            "source":article_name,
+                            "target":article_node['title']
+                        }    
                     )
                 else:
                     for project_node in project.project_d3_json['nodes']:
