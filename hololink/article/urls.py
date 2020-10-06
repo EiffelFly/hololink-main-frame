@@ -11,5 +11,4 @@ urlpatterns = [
     path('list/', articles_list, name='articles_list'),
     path('<slug:slug>/', article_detail, name='article_detail'),
     path('<slug:slug>/deliverd3', deliver_D3, name='deliver_D3'),
-    
 ]

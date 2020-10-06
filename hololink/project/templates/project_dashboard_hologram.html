@@ -22,4 +22,368 @@
 {% endblock %}
 
 {% block extrajs %}
+<script>
+
+    //First step: prepare svg and add encompassing group-g for the zoom 
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+    
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var biggestNode_article = 0
+    var biggestNode_keyword = 0
+    
+
+    //Second step: set up simulation and force
+    var simulation = d3.forceSimulation()
+        .force("charge_force", d3.forceManyBody().strength(-300))
+        .force("x", d3.forceX(width / 2))
+        .force("y", d3.forceY(height / 2))
+        //.force("center_force", d3.forceCenter(width / 2, height / 2))
+        .force("link", d3.forceLink()
+            .id(function(d){return d.id})
+            .distance(400))
+        .force('Radial_force', d3.forceRadial(getNodeOrbit, width/2, height/2)
+            .strength(1)
+        )
+        .force(
+            "collision",
+            d3
+                .forceCollide()
+                .radius(function(d){
+                    radius = getNodeSize(d)
+                    return radius + 3
+                })
+                .strength(1)
+        );
+        
+
+    //Third step: LOAD DATA and create nodes/links element
+
+    d3.json('{% url "project:deliver_D3" project.slug%}', function(error,graph){
+        if (error) throw error;
+
+        calculateBiggestNum()
+
+        var linkElements = g.append("g")
+                .attr("class", "links")
+            .selectAll("line") //select svg-line element and use D3.data method
+                .data(graph.links)
+                .enter()
+                .append("line")
+                    .attr("stroke-width", 1)
+                    .style("stroke", getLinkColor)
+                    .style('stroke-opacity', 0.5); 
+
+        var nodeElements = g.append("g")
+                .attr("class", "nodes")         
+            .selectAll("circle")
+                .data(graph.nodes)
+                .enter()
+                .append("circle")
+                .attr("r", getNodeSize)
+                .attr("fill", getNodeColor)
+                .style("stroke", getLinkColor)
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+
+        var textContainer = g.append("g")
+            .attr("class", "text")
+                .selectAll("foreignObject")
+                .data(graph.nodes)                   
+                .enter()
+                .filter(function(d){
+                    return d.connection >= 2 || d.level == 'article'
+                })
+                    .append('foreignObject')
+                    .style('width', getTextWrapperSpace)
+                    .style('height', getTextWrapperSpace)
+        
+        var textElements = textContainer.append('xhtml:text')
+            .text(node => node.id)
+            .style('display', 'flex')
+            .style('width', '100%')
+            .style('height', '100%')
+            .style('justify-content', 'center')
+            .style('align-items','center')
+            .style('font-family', "'Noto Sans TC', sans-serif")
+            .style('font-weight', getTextFontWeight)
+            .style('font-size', getTextFontSize)
+            .style('fill', 'black')
+            
+            
+        //Fourth step: activate simulation and tick function
+        simulation
+            .nodes(graph.nodes)
+            //.alphaMin(0.01)
+            .alphaDecay(0.05)
+            .on("tick", tickActions)
+
+        simulation.force("link")
+            .links(graph.links)         
+
+        nodeElements.append("title")
+            .text(function(d) { return d.id; });
+
+        
+
+        //Fifth step: add drag capability
+        var drag_handler = d3.drag()
+            .on("start", drag_start)
+            .on("drag", drag_drag)
+            .on("end", drag_end);	
+
+        drag_handler(nodeElements);
+            
+        function tickActions(){
+            linkElements
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+            nodeElements
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+
+            textContainer
+                .attr("x", function(d) { 
+                    nodeR = getNodeSize(d);
+                    x = d.x - nodeR/Math.sqrt(2)
+                    return x 
+                })
+                .attr("y", function(d) { 
+                    nodeR = getNodeSize(d);
+                    y = d.y - nodeR/Math.sqrt(2)
+                    return y 
+                });                
+        }
+
+        //Implement FADE IN and OUT EFFECT ------------
+
+        function fade(opacity){
+            return d => {
+                //判斷 node 是否相連，若沒有則套用 opacity
+                nodeElements.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+                //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
+                linkElements.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+                //When mouseout reset opacity
+                if(opacity === 1){
+                    nodeElements.style('opacity', 1)
+                    linkElements.style('stroke-opacity', 0.5)
+                }
+            };
+        }
+
+        //create a index to allow constant-time lookup with good performance
+        const linkedByIndex = {};
+        graph.links.forEach(d => {
+            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+        });
+
+        function isConnected(a, b) {
+            return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+        }
+
+        //calculate biggest Num
+    
+        function calculateBiggestNum(){
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'article'){
+                    totalkeywordNum = parseInt(obj.basestoneNum) + parseInt(obj.stellarNum)
+                    if (totalkeywordNum > biggestNode_article){
+                        biggestNode_article = totalkeywordNum
+                    }
+                }
+                
+            });
+
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'stellar' || obj.level == 'basestone'){
+                    if (obj.connection > biggestNode_keyword){
+                        biggestNode_keyword = obj.connection
+                    }
+                }
+            });     
+        };
+
+        //Set up scale for forceX an Y
+        var strengthScale = d3.scalePow()
+            .exponent(2)
+            .range([0, 0.5])
+            .domain([0, d3.max(graph.nodes, function(d) {
+                return d.connection;
+            })]);
+
+        // Re-define x,y force strength to make bigger node at center
+        // And besides that, we make basestone at center and stellar at outer ring
+        var XForce = simulation.force("x");
+        var YForce = simulation.force("y");
+
+        XForce.strength(function(d){
+            if (d.level != 'article'){
+                if (d.connection >= 2){
+                    return strengthScale(d.connection) + 0.4
+                }
+                else{
+                    return 0
+                }
+            }
+            else {
+                return 0
+            }
+        });
+
+        YForce.strength(function(d){
+            if (d.level != 'article'){
+                if (d.connection >= 2){
+                    return strengthScale(d.connection) + 0.4
+                }
+                else{
+                    return 0
+                }
+            }
+            else{
+                return 0
+            }
+        });
+    });
+
+    //Sixth step: add zoom capability
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+
+    zoom_handler(svg);
+
+    //FUNCTIONS
+
+    //Set up scale for Text and NERText Dy
+    var textDyScale = d3.scalePow()
+            .exponent(2)
+            .range([0.5, 2])
+
+    function getTextDy(node){
+        return '0.45rem'
+    }
+
+    function getTextWrapperSpace(node){
+        nodeR = getNodeSize(node)
+        return nodeR * 0.7 * 2
+    }
+
+    function getTextFontSize(node){
+        if (node.level == 'article'){
+            var interpolator = d3.interpolateNumber(12,20);
+            articleTotalKeyword = parseInt(node.stellarNum) + parseInt(node.basestoneNum)
+            fontSize = interpolator(articleTotalKeyword/biggestNode_article) + 'px'
+            return fontSize
+        }
+        else {
+            var interpolator = d3.interpolateNumber(6,24);
+            return interpolator(node.connection/biggestNode_keyword) + 'px'
+        }
+        
+    }
+
+    function getTextFontWeight(node){
+        if (node.level == 'article'){
+            totalkeywordNum = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
+            if (totalkeywordNum/biggestNode_article > 0.8){
+                return 700
+            }
+            else if (0.8 > totalkeywordNum/biggestNode_article > 0.5){
+                return 500
+            }   
+            else if (totalkeywordNum/biggestNode_article < 0.5){
+                return 300
+            }
+        }
+        else {
+            if (node.connection/biggestNode_keyword > 0.8){
+                return 700
+            }
+            else if (0.8 > node.connection/biggestNode_keyword > 0.5){
+                return 500
+            }   
+            else if (node.connection/biggestNode_keyword < 0.5){
+                return 300
+            }
+        }
+        
+    }
+
+    function getNodeOrbit(node){
+        if (node.level == 'stellar' || node.level == 'basestone'){
+            if (node.connection >= 2){
+                return 100
+            }
+            else {
+                return 1000
+            }
+        }
+        else if (node.level == 'article'){
+            return 500
+        }
+    }
+
+    function getNodeSize(d){
+        //console.log(d)
+        var interpolatorForArticles = d3.interpolateNumber(50,150);
+        var interpolatorForTags = d3.interpolateNumber(8, 60);
+        if (d.level == 'article'){
+            totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
+            return interpolatorForArticles(totalkeywordNum/biggestNode_article)
+        }
+        else if (d.level == 'stellar'|| d.level == 'basestone'){
+            return interpolatorForTags(d.connection/biggestNode_keyword)
+        }
+    }
+
+
+    function linkdist(d){
+        if (d.countLinksTargetOwn > 1){
+            return d.countLinksTargetOwn * 15
+        }
+        else {
+            return 30
+        }
+    }
+
+    function getLinkColor(node){
+        return "grey"
+    }
+
+    function getNodeColor(node){
+        if (node.level == "stellar") {return'#FCA311'}
+        else if (node.level == "article") {return '#FFFFFF'}
+        else if (node.level == "basestone") {return '#00b4d8'}
+    }
+
+    //DRAG FUNCTION
+    function drag_start(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    //make sure you can't drag the circle outside the box
+    function drag_drag(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function drag_end(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = d.x; //sticky node
+        d.fy = d.y; //sticky node
+    }
+
+    //ZOOM FUNCTION
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }
+</script>
+
 {% endblock %}

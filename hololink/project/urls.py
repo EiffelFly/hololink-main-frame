@@ -11,5 +11,4 @@ urlpatterns = [
      path('<slug:slug>/hologram', project_hologram, name='project_hologram'),
      path('<slug:slug>/settings', galaxy_setting, name='galaxy_setting'),
      path('<slug:slug>/deliverd3', deliver_D3, name='deliver_D3')
-     
 ]

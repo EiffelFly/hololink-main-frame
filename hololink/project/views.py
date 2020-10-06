@@ -234,5 +234,6 @@ def deliver_D3(request, slug):
         return redirect(reverse('login'))
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    print(project, 'rr')
 
-    return JsonResponse(peoject.project_d3_json, safe=False)
+    return JsonResponse(project.project_d3_json, safe=False)
