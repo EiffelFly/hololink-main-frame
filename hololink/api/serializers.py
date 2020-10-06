@@ -373,6 +373,8 @@ def merge_article_into_galaxy(data_for_merging):
                 keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
                 if user.profile not in keyword.owned_by_user.all():
                     keyword.owned_by_user.add(user.profile)
+                if keyword not in keyword.owned_by_article.all():
+                    keyword.owned_by_article.add(article)
             except Keyword.DoesNotExist:
                 keyword = Keyword.objects.create(
                     name = article_node['title'],
@@ -380,7 +382,9 @@ def merge_article_into_galaxy(data_for_merging):
                     created_by = user
                 )
                 keyword.owned_by_user.add(user.profile)
+                keyword.owned_by_article.add(article)
                 keyword.save()
+
             # if article_node['title'] not in project.keyword_list['total']:
             if keyword not in project.keyword.all():
                 print("new keywords", article_node['title'])
