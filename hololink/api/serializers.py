@@ -414,12 +414,6 @@ def merge_article_into_galaxy(data_for_merging):
                         "connection":1,
                     }
                 )
-                project.project_d3_json['links'].append(
-                    {
-                        "source":article_name,
-                        "target":article_node['title']
-                    }
-                )
             else:
                 # else: the node exist in this project, but we don't know which type it belonged to (base or stellar) 
                 keyword_type = article_node['level']
@@ -446,19 +440,25 @@ def merge_article_into_galaxy(data_for_merging):
                             "connection":1,
                         }
                     )
-                    project.project_d3_json['links'].append(
-                        {
-                            "source":article_name,
-                            "target":article_node['title']
-                        }    
-                    )
+                    
                 else:
                     for project_node in project.project_d3_json['nodes']:
                         # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
                         if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
                             project_node.update({"connection":project_node['connection'] + 1})
                             print(project_node['id'], project_node['connection'])
-                    
+
+            # 現階段我們會限制同個 project 內不能有相同的文章，每成功上傳一個新的文章對資料庫內的 Project 而言都是新的
+            # 因此可以不使用任何判斷式直接一概增加 links 
+            # 若此前提改動，則這一項必須修改
+
+            project.project_d3_json['links'].append(
+                {
+                    "source":article_name,
+                    "target":article_node['title']
+                }    
+            )
+
         project.save()
         return project
 
@@ -474,7 +474,7 @@ def request_ml_thread(**kwargs):
     url = "http://35.221.178.255:8080/predict"
     start = timer()  
     ml_result = session.post(url, json=[kwargs])
-    end = timer()
+    ml_end = timer()
     print(ml_result.status_code)
     if ml_result.status_code == 200:
         article = Article.objects.get(name=kwargs['article_name'], from_url=kwargs['from_url'])
@@ -485,14 +485,17 @@ def request_ml_thread(**kwargs):
         d3_data = json_to_d3(ner_output[0])
         kwargs['d3'] = d3_data
         merge = merge_article_into_galaxy(kwargs)
+        merge_end = timer()
         print(merge)
         setattr(article, 'ner_output', json.dumps(ner_output[0]))
         setattr(article, 'D3_data_format', d3_data)
         setattr(article, 'D3_data_format', d3_data)
         article.save()
+        article_save_end = timer()
         merge.save()
+        merge_save_end = timer()
     
-    print(start-end)
+    print(start-ml_end, start-merge_end, start-article_save_end, start-merge_save_end)
 
 
         
