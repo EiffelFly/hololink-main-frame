@@ -63,7 +63,19 @@
                 .forceCollide()
                 .radius(function(d){
                     radius = getNodeSize(d)
-                    return radius + 2
+                    if (d.level == 'article'){
+                        return radius + 3
+                    }
+                    else {
+                        if (d.connection >= 2){
+                            return radius + 3
+                        }
+                        else {
+                            console.log('ggg')
+                            return radius + 1
+                        }
+                    }
+                    
                 })
                 .strength(1)
         );
