@@ -51,6 +51,19 @@ class ProjectSerializerForPost(serializers.ModelSerializer):
             'name'
         ]
 
+class ProjectSerializerForChrome(serializers.ModelSerializer):
+    class Meta:
+        ordering = ['-created_at']
+        model = Project
+
+        fields = [
+            'id', 'name'
+        ]
+
+        read_only_fields = [
+            'id', 'name'
+        ]
+
 class ArticleSerializer(serializers.ModelSerializer):
     '''
         Because the behavior of nested creates and updates can be ambiguous, and may require 

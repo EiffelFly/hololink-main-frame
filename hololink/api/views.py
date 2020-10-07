@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from article.models import Article
 from project.models import Project
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine, ProjectSerializerForChrome
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -118,4 +118,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
             created_by = self.request.user,
             created_at = timezone.localtime(timezone.now())
         )
+    
+class ProjectViewSetforChrome(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        serializer_class = ProjectSerializerForChrome
+        return serializer_class
+
+    def get_queryset(self):
+        user = self.request.user
+        return Project.objects.filter(created_by=user)
     

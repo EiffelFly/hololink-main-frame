@@ -32,6 +32,7 @@ router.register('groups', views.GroupViewSet)
 router.register('articles', views.ArticleViewSet, basename='articles')
 router.register('projects', views.ProjectViewSet, basename='projects')
 router.register('ner-result', views.ArticleViewSetForNEREngine, basename='nerResult')
+router.register('projects-chrome', views.ProjectViewSetforChrome, basename='projects_for_chrome')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
