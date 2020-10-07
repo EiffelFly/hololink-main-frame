@@ -13,10 +13,19 @@
         padding: 2px 6px;
         font-size: 1rem;
     }
+
+    .svg-container { 
+        overflow: hidden;
+
+    }
 </style>
-<div class="container-fluid" style="padding:0">
+<div class="container-fluid d-flex flex-column" style="padding:0">
     {% include 'project_dashboard_navbar.html' %}
-    <svg width="100%" height="100%"></svg>
+    <div class="row flex-grow-1 d-flex svg-container">
+        <div class="col">
+            <svg width="100%" height="100%"></svg>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -26,8 +35,8 @@
 
     //First step: prepare svg and add encompassing group-g for the zoom 
     var svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+        width = $("svg").width()
+        height = $("svg").height();
     
     var g = svg.append("g")
         .attr("class", "everything");
@@ -118,7 +127,7 @@
         simulation
             .nodes(graph.nodes)
             //.alphaMin(0.01)
-            .alphaDecay(0.05)
+            .alphaDecay(0.09)
             .on("tick", tickActions)
 
         simulation.force("link")
