@@ -340,13 +340,19 @@
     function getNodeSize(d){
         //console.log(d)
         var interpolatorForArticles = d3.interpolateNumber(50,150);
-        var interpolatorForTags = d3.interpolateNumber(8, 60);
+        var interpolatorForTags = d3.interpolateNumber(4, 20);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
         }
         else if (d.level == 'stellar'|| d.level == 'basestone'){
-            return interpolatorForTags(d.connection/biggestNode_keyword)
+            if (biggestNode_keyword == 1){
+                return interpolatorForTags(d.connection/5)
+            }
+            else {
+                return interpolatorForTags(d.connection/biggestNode_keyword)
+            }
+            
         }
     }
 
