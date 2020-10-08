@@ -51,7 +51,7 @@ class ProjectSerializerForPost(serializers.ModelSerializer):
             'name'
         ]
 
-class ProjectSerializerForChrome(serializers.ModelSerializer):
+class ProjectSerializerForBrowserExtension(serializers.ModelSerializer):
     class Meta:
         ordering = ['-created_at']
         model = Project
@@ -63,6 +63,21 @@ class ProjectSerializerForChrome(serializers.ModelSerializer):
         read_only_fields = [
             'id', 'name'
         ]
+
+class RecommendationSerializerForBrowserExtension(serializers.ModelSerializer):
+    class Meta:
+        ordering = ['-created_at']
+        model = Recommendation
+
+        fields = [
+            'id', 'created_at'
+        ]
+
+        read_only_fields = [
+            'id', 'created_at'
+        ]
+
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     '''

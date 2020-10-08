@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User, Group
 from article.models import Article
 from project.models import Project
+from accounts.models import Recommendation
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine, ProjectSerializerForChrome
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
 import hashlib
+
+
 
 def requestNEREngine(serializer):
     pass
@@ -119,15 +122,27 @@ class ProjectViewSet(viewsets.ModelViewSet):
             created_at = timezone.localtime(timezone.now())
         )
     
-class ProjectViewSetforChrome(viewsets.ModelViewSet):
+
+class DataViewforBrowser(viewsets.ViewSet):
+    '''
+        This endpoint is especially for chrome extension 
+    '''
+
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_serializer_class(self):
-        serializer_class = ProjectSerializerForChrome
-        return serializer_class
-
-    def get_queryset(self):
+    def list(self, request):
         user = self.request.user
-        return Project.objects.filter(created_by=user)
-    
+        recommendations = Recommendation.objects.filter(user=user, created_at__range=(timezone.localtime().replace(hour=0, minute=0, second=0), timezone.localtime().replace(hour=23, minute=59, second=59)))
+        projects = Project.objects.filter(created_by=user)
+        recommendations_serializer = RecommendationSerializerForBrowserExtension(recommendations, many=True)
+        projects_serializer = ProjectSerializerForBrowserExtension(projects, many=True)
+
+        return Response(
+            {
+                "recommendations": recommendations_serializer.data,
+                "projects" : projects_serializer.data
+            }
+        )
+        
+
