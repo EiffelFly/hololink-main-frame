@@ -112,7 +112,7 @@ def project_dashboard(request, slug):
         'data':{'basestone':count_basestone, 'stellar':count_stellar},
     }
 
-    return render(request, 'project_dashboard.html', context) 
+    return render(request, 'project_dashboard_hologram.html', context) 
 
 def project_hologram(request, slug):
     if not request.user.is_authenticated:
