@@ -53,7 +53,7 @@
         //.force("center_force", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink()
             .id(function(d){return d.id})
-            .distance(400))
+            .distance(500))
         .force('Radial_force', d3.forceRadial(getNodeOrbit, width/2, height/2)
             .strength(1)
         )
@@ -352,7 +352,8 @@
     function getNodeSize(d){
         //console.log(d)
         var interpolatorForArticles = d3.interpolateNumber(50,150);
-        var interpolatorForTags = d3.interpolateNumber(4, 20);
+        var interpolatorForSmallTags = d3.interpolateNumber(4, 20);
+        var interpolatorForBigTags = d3.interpolateNumber(25, 75);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
@@ -362,7 +363,12 @@
                 return interpolatorForTags(d.connection/5)
             }
             else {
-                return interpolatorForTags(d.connection/biggestNode_keyword)
+                if (d.connection >= 2){
+                    return interpolatorForBigTags(d.connection/biggestNode_keyword)
+                } else {
+                    return interpolatorForSmallTags(d.connection/biggestNode_keyword)
+                }
+                
             }
             
         }
