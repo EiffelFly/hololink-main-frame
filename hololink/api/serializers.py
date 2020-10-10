@@ -395,7 +395,7 @@ def merge_article_into_galaxy(data_for_merging):
             )        
 
         for article_node in article_data['nodes']: 
-            update_link_type_to_essential = False    
+            linked_keyword_have_multiple_links = False    
             # Append new keyword
             print(project.keyword_list['total'])
             try:
@@ -462,19 +462,19 @@ def merge_article_into_galaxy(data_for_merging):
                         # 這種放在不同 list, dict 的資料不能用 is 來比較，因為 is 除了比較值之外還會比較其 object 是否相等（不同記憶處的會不同）
                         if project_node['id'] == article_node['title'] and project_node['level'] == article_node['level']:
                             project_node.update({"connection":project_node['connection'] + 1})
-                            update_link_type_to_essential = True
+                            linked_keyword_have_multiple_links = True
                             print(project_node['id'], project_node['connection'])
 
             # 現階段我們會限制同個 project 內不能有相同的文章，每成功上傳一個新的文章對資料庫內的 Project 而言都是新的
             # 因此可以不使用任何判斷式直接一概增加 links 
             # 若此前提改動，則這一項必須修改
 
-            if update_link_type_to_essential == True:
+            if linked_keyword_have_multiple_links == True:
                 project.project_d3_json['links'].append(
                     {
                         "source":article_name,
                         "target":article_node['title'],
-                        "type":'True',
+                        "linked_keyword_have_multiple_links":'True',
                     }    
                 )
             else:
@@ -482,7 +482,7 @@ def merge_article_into_galaxy(data_for_merging):
                     {
                         "source":article_name,
                         "target":article_node['title'],
-                        "type":'False',
+                        "linked_keyword_have_multiple_links":'False',
                     }    
                 )
 
