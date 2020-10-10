@@ -394,7 +394,7 @@ def merge_article_into_galaxy(data_for_merging):
                 }
             )        
 
-        for article_node in article_data['nodes']:   
+        for article_node in article_data['nodes']:    
             # Append new keyword
             print(project.keyword_list['total'])
             try:
@@ -467,20 +467,14 @@ def merge_article_into_galaxy(data_for_merging):
             # 因此可以不使用任何判斷式直接一概增加 links 
             # 若此前提改動，則這一項必須修改
 
-            if linked_keyword_have_multiple_links == True:
-                project.project_d3_json['links'].append(
-                    {
-                        "source":article_name,
-                        "target":article_node['title'],
-                    }    
-                )
-            else:
-                project.project_d3_json['links'].append(
-                    {
-                        "source":article_name,
-                        "target":article_node['title'],
-                    }    
-                )
+
+            project.project_d3_json['links'].append(
+                {
+                    "source":article_name,
+                    "target":article_node['title'],
+                }    
+            )
+
 
 
         project.save()
