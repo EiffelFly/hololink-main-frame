@@ -1,0 +1,76 @@
+
+{% load i18n %}
+{% load static %}
+
+
+{% block content %}
+<style>
+
+    @media (min-width: 576px) {
+        
+    }
+    @media (min-width: 768px) {
+        .project-badges-container{
+            margin-top: 0 !important;
+        }
+        .project-badges-sub-container{
+            margin-left: auto !important;
+        }
+    }
+    @media (min-width: 992px) {
+       
+    }
+    @media (min-width: 1200px) {
+        
+    }
+    .dashboard-recentProject-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 1rem;
+    }
+
+    .dashboard-nav-item{
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 1rem;
+        color: black !important;
+        font-weight: 700;
+        
+    }
+
+</style>
+
+<div class="project-nav" style="margin: clamp(20px, 2vw, 30px) 0;">
+    <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 2vw, 30px)">
+        <div class="col-12 col-md-5">
+            <img src="{% static 'img/archive.svg' %}" width="25" height="25" style="margin: auto 1rem auto 0">
+            <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
+            <span style="padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
+            <span style="font-size: 1.2rem;">{{ project.name }}</span>
+        </div>
+        <div class="col-12 col-md-7 project-badges-container d-flex" style="margin-top: 20px;">
+            <div class="project-badges-sub-container">
+                <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                    <img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 2px;">
+                    <span style="color: #2e1760;"> {{ countArticles }} </span>
+                </span>
+                <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                    <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                    <span>basestone -</span>
+                    <span style="color: #2e1760;">{{data.basestone}}</span>
+                </span>
+                <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                    <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                    <span>stellar -</span>
+                    <span style="color: #2e1760;">{{data.stellar}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+    </div>
+</div>
+{% endblock %}
