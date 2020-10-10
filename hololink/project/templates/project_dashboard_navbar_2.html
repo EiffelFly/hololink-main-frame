@@ -43,7 +43,7 @@
 </style>
 
 <div class="project-nav" style="margin: clamp(20px, 2vw, 30px) 0;">
-    <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 2vw, 30px)">
+    <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 4vw, 60px)">
         <div class="col-12 col-md-5">
             <img src="{% static 'img/archive.svg' %}" width="25" height="25" style="margin: auto 1rem auto 0">
             <span><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
@@ -69,8 +69,25 @@
             </div>
         </div>
     </div>
-    <div class="row">
-
+    <div class="row w-100 border-bottom" style="margin: 30px 0; padding: 0 clamp(20px, 4vw, 60px)">
+        <nav class="navbar navbar-expand navbar-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto text-center">
+                    <li class="nav-item text-center mr-2">
+                        <a class="nav-link dashboard-nav-item" href="{% url 'project:project_hologram' project.slug %}"><img src="{% static 'img/telescope.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;"> Hologram </a>
+                    </li>
+                    <li class="nav-item text-center mr-2">
+                        <a class="nav-link dashboard-nav-item" href="{% url 'project:project_articles' project.slug %}"><img src="{% static 'img/book.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;"> Articles </a>
+                    </li>
+                    <li class="nav-item text-center mr-2">
+                        <a class="nav-link dashboard-nav-item" href="{% url 'project:galaxy_setting' project.slug %}"><img src="{% static 'img/gear.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;"> Settings </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
 </div>
 {% endblock %}
