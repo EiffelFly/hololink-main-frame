@@ -5,6 +5,24 @@
 
 {% block content %}
 <style>
+
+    {% comment %}
+        Extra small devices (portrait phones, less than 576px)
+        No media query for `xs` since this is the default in Bootstrap
+    {% endcomment %}
+
+    @media (min-width: 576px) {}
+    @media (min-width: 768px) {}
+    @media (min-width: 840px) {}
+
+
+    @media (min-width: 992px) {}
+    @media (min-width: 1200px) {
+        .content_sub_container {
+            max-width: 1300px !important;
+        }
+    }
+
     .dashboard-articles-container-badges{
         border: #BFB9B8; 
         border-style: dashed; 
@@ -18,7 +36,7 @@
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
     <div class="content_container d-flex">
-        <div class="row m-auto">
+        <div class="row m-auto content_sub_container">
             {% include 'dashboard_sidebar.html' %}
             <div class="col-12 col-md-8" style="padding: 0 25px;">
                 <div class="row" style="margin-top: 2rem;">
