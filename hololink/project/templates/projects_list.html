@@ -5,6 +5,36 @@
 
 {% block content %}
 <style>
+    
+    {% comment %}
+        Extra small devices (portrait phones, less than 576px)
+        No media query for `xs` since this is the default in Bootstrap
+    {% endcomment %}
+
+    @media (min-width: 576px) {}
+    @media (min-width: 768px) {
+        .content_sub_container {
+            min-width: 728px !important;
+        }
+    }
+    @media (min-width: 840px) {
+        .content_sub_container {
+            min-width: 800px !important;
+        }
+    }
+
+
+    @media (min-width: 992px) {
+        .content_sub_container {
+            min-width: 952px !important;
+        }
+    }
+    @media (min-width: 1200px) {
+        .content_sub_container {
+            min-width: 1200px !important;
+        }
+    }
+
     .Project-title{
         font-size: 1.5rem;
         font-family: 'Noto Sans TC', sans-serif;
@@ -22,21 +52,21 @@
 </style>
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
-    <div class="content_container">
-        <div class="row w-100">
-            <div class="col-4"></div>
-            <div class="col-8"  style="padding-right: 8rem;">
+    <div class="content_container d-flex" >
+        <div class="row m-auto content_sub_container">
+            {% include 'dashboard_sidebar.html' %}
+            <div class="col-12 col-md-8"  style="padding: 0 25px;">
                 <div class="row" style="margin-top: 2rem;">
-                    <div class="col-8">
+                    <div class="col-6 col-md-7">
                         <form method="GET" action=".">
-                            <div class="inpup-group">
+                            <div class="input-group">
                                 <input class="form-control py-2 border" type="search" name="project_filter" placeholder="Find a project" />
                             </div>
                         </form>
                     </div>
                     
-                    <div class="col-4 d-flex" style="padding-right: 15px">
-                        <a href="{% url 'project:create_newproject' %}" class="btn btn-primary active ml-auto" role="button" aria-pressed="true">Create new Galaxy</a>
+                    <div class="col-6 col-md-5 d-flex" style="padding-right: 15px">
+                        <a href="{% url 'project:create_newproject' %}" class="btn btn-primary active ml-auto" role="button" aria-pressed="true" style="font-size: clamp(14px, 2vw, 16px);">Create new Galaxy</a>
                     </div>
                 </div>
                 {% for project in projects %}
