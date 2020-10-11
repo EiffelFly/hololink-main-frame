@@ -17,10 +17,10 @@
 
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
-    <div class="content_container">
-        <div class="row w-100">
-            <div class="col-4"></div>
-            <div class="col-8"  style="padding-right: 8rem;">
+    <div class="content_container d-flex">
+        <div class="row m-auto">
+            {% include 'dashboard_sidebar.html' %}
+            <div class="col-12 col-md-8" style="padding: 0 25px;">
                 <div class="row" style="margin-top: 2rem;">
                     <div class="col">
                         <form method="GET" action=".">
@@ -56,20 +56,20 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 1rem;">
-                                <div class="col-6 d-flex">
+                                <div class="col-4 d-flex">
                                     <div class="article_created_at" style="font-size: 10px; color: gray; margin: auto 0">
                                         {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
                                     </div>
                                 </div>
                                 {% load index %}
-                                <div class="col-6 d-flex">
-                                    <p style="margin: 0 0 0 auto;">
-                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                <div class="col-8 d-flex">
+                                    <p style="margin: 0 0 0 auto; font-size: clamp(12px, 2vw, 16px);">
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges" style=" font-size: clamp(12px, 2vw, 14px);">
                                             <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
                                             <span>basestone -</span>
                                             <span style="color: #2e1760;">{{count_basestone|indexforloop:forloop.counter0}}</span>
                                         </span>
-                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges" style=" font-size: clamp(12px, 2vw, 14px);">
                                             <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
                                             <span>stellar -</span>
                                             <span style="color: #2e1760;">{{count_stellar|indexforloop:forloop.counter0}}</span>
