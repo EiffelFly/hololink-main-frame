@@ -27,6 +27,7 @@ class CustomLoginView(LoginView):
     ''' 
     #template_name = 'login.html' 
     redirect_field_name = None
+    redirect_authenticated_user = True 
     
     def get_success_url(self):
         url = self.get_redirect_url() #method essential
