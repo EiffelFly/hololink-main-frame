@@ -108,12 +108,14 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a>
+                        <a class="dropdown-item" href="{% url 'project:projects_list' %}">Galaxies</a>
+                        <a class="dropdown-item" href="{% url 'article:articles_list' %}">Articles</a>
                         <a class="dropdown-item" href="{% url 'user_settings' user.profile.slug %}">Settings</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
-                        <a class="dropdown-item" href="{% url 'password_change' %}">{% trans 'Password change' %}</a>
+                        <!--<a class="dropdown-item" href="{% url 'password_change' %}">{% trans 'Password change' %}</a>!-->
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'sign_up' %}">{% trans 'Sign up' %}</a>
-                        <a class="dropdown-item" href="{% url 'password_reset' %}">{% trans 'Password reset' %}</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
+                        <!--<a class="dropdown-item" href="{% url 'sign_up' %}">{% trans 'Sign up' %}</a> !-->
+                        <!--<a class="dropdown-item" href="{% url 'password_reset' %}">{% trans 'Password reset' %}</a> !-->
                     </div>
                 </li>
                 <li class="nav-item dropdown">
