@@ -124,6 +124,8 @@ def project_hologram(request, slug):
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
+    print(project.project_visibility)
+
     context = {
         'project' : project, 
         'articles': articles,
