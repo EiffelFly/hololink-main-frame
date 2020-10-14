@@ -79,8 +79,16 @@ def project_articles(request, slug):
     
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project).order_by('-created_at')
-    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
-    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
+    count_project_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_project_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
+
+    count_article_basestone = []
+    count_article_stellar = []
+    
+    for article in articles:
+        print(article)
+        count_article_basestone.append(Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count())
+        count_article_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
     
     countArticles = project.articles_project_owned.all().count()
 
@@ -88,7 +96,9 @@ def project_articles(request, slug):
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
-        'data':{'basestone':count_basestone, 'stellar':count_stellar}
+        'data':{'basestone':count_project_basestone, 'stellar':count_project_stellar},
+        'count_article_basestone':count_article_basestone,
+        'count_article_stellar':count_article_stellar,
     }  
 
     return render(request, 'project_dashboard_articles.html', context)
