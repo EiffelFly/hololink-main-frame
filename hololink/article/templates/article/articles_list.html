@@ -12,14 +12,26 @@
     {% endcomment %}
 
     @media (min-width: 576px) {}
-    @media (min-width: 768px) {}
-    @media (min-width: 840px) {}
+    @media (min-width: 768px) {
+        .content_sub_container {
+            min-width: 728px !important;
+        }
+    }
+    @media (min-width: 840px) {
+        .content_sub_container {
+            min-width: 800px !important;
+        }
+    }
 
 
-    @media (min-width: 992px) {}
+    @media (min-width: 992px) {
+        .content_sub_container {
+            min-width: 952px !important;
+        }
+    }
     @media (min-width: 1200px) {
         .content_sub_container {
-            max-width: 1300px !important;
+            min-width: 1300px !important;
         }
     }
 
