@@ -31,6 +31,10 @@ class PreAlphaTestToken(models.Model):
         default=random_num,
     )
 
+    used = models.BooleanField(
+        verbose_name=_('Used')
+    )
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
