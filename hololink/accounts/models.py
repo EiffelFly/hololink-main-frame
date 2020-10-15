@@ -32,7 +32,8 @@ class PreAlphaTestToken(models.Model):
     )
 
     used = models.BooleanField(
-        verbose_name=_('Used')
+        verbose_name=_('Used'),
+        default=False,
     )
 
 
