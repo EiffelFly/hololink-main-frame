@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.admin.models import LogEntry
 from django.urls import reverse
+import random
 
 '''
     We want to store extra information in existing User model 
@@ -14,6 +15,22 @@ from django.urls import reverse
     OnetoOneField to connect to user model.
     further information: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 '''
+
+def random_num():
+    return User.objects.make_random_password(length=8, allowed_chars='123456789')
+
+
+class PreAlphaTestToken(models.Model):
+
+    id = models.AutoField(
+        verbose_name='Serial Number', primary_key=True,
+    )
+
+    token = models.IntegerField(
+        verbose_name=_('token'),
+        default=random_num,
+    )
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -69,8 +86,8 @@ class Profile(models.Model):
         return reverse('user_dashboard', args=(self.slug,))
 
     def save(self, *args, **kwargs):
-         self.slug = slugify(self.user.username)
-         super(Profile, self).save(*args, **kwargs)
+        self.slug = slugify(self.user.username)
+        super(Profile, self).save(*args, **kwargs)
 
    
 class Recommendation(models.Model):
