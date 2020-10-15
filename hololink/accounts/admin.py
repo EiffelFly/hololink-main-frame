@@ -28,7 +28,7 @@ class RecommendationAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'article', 'created_at']
 
 class PreAlphaTestTokenAdmin(admin.ModelAdmin):
-    list_display = ['id', 'token']
+    list_display = ['id', 'token', 'used']
 
 # Re-register UserAdmin
 admin.site.unregister(User)
