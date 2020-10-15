@@ -144,6 +144,7 @@ def sign_up_with_email_verification(request):
                 user.save()
                 token_object = PreAlphaTestToken.objects.get(token=token)
                 setattr(token_object, 'used', True)
+                token_object.save()
 
 
             #寄送認證信件
