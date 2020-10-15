@@ -69,6 +69,7 @@ class GalaxySettingsForm(forms.ModelForm):
             attrs={
                 'style':'',
                 'autocomplete':'off',
+                'id':'rename_galaxy_input'
             },
         ),
     )
@@ -81,6 +82,7 @@ class GalaxySettingsForm(forms.ModelForm):
                 'style':'',
                 'autocomplete':'off',
                 'rows':3,
+                'id':'edit_galaxy_description_input',
             },
         ),
     )

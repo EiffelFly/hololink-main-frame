@@ -68,7 +68,7 @@
                                             {% render_field field class+='form-control galaxy_name_field'%}
                                         </div>
                                         <div class="col-12 col-md-4 submit-button-container d-flex" style="margin-top: 20px;">
-                                            <button type="submit" class="btn btn-light btn-block submit-btn" style="border: #BFB9B8 solid 1px; font-size: 14px;" name="action" value="rename_galaxy">{% trans 'Rename galaxy' %}</button>
+                                            <button type="submit"  id="rename_galaxy" class="btn btn-light btn-block submit-btn" style="border: #BFB9B8 solid 1px; font-size: 14px;" name="action" value="rename_galaxy">{% trans 'Rename galaxy' %}</button>
                                         </div>
                                     </div>
                                 {% else %}
@@ -85,7 +85,7 @@
                                             {% render_field field class+='form-control galaxy_description_field'%}
                                         </div>
                                         <div class="col-12 col-md-4 submit-button-container d-flex" style="margin-top: 20px;">
-                                            <button type="submit" class="btn btn-light btn-block submit-btn" style="border: #BFB9B8 solid 1px; margin-top: auto; font-size: 14px;" name="action" value="edit_description">{% trans 'Edit description' %}</button>
+                                            <button type="submit" id="edit_galaxy_description" class="btn btn-light btn-block submit-btn" style="border: #BFB9B8 solid 1px; margin-top: auto; font-size: 14px;" name="action" value="edit_description">{% trans 'Edit description' %}</button>
                                         </div>
                                     </div>
                                 {% else %}
@@ -139,7 +139,7 @@
     $(document).ready(function() {
         $('#change_galaxy_visibility').prop('disabled', true);
         $('#id_change_galaxy_visibility_confirmation').keyup(function() {
-            var user_input_confirmation = $(this).val()
+            var user_input_confirmation = $(this).val();
             if( user_input_confirmation === '{{confirmation_code}}'){
                 $('#change_galaxy_visibility').prop('disabled', false);
             }
@@ -150,12 +150,34 @@
 
         $('#delete_galaxy').prop('disabled', true);
         $('#id_delete_galaxy_confirmation').keyup(function() {
-            var user_input_confirmation = $(this).val()
+            var user_input_confirmation = $(this).val();
             if( user_input_confirmation === '{{confirmation_code}}'){
                 $('#delete_galaxy').prop('disabled', false);
             }
             else{
                 $('#delete_galaxy').prop('disabled', true);
+            }
+        });
+
+        $('#rename_galaxy').prop('disabled', true);
+        $('#rename_galaxy_input').keyup(function(){
+            var user_input_new_galaxy_name = $(this).val();
+            if( user_input_new_galaxy_name == '' || user_input_new_galaxy_name.replace(/\s/g, '').length == 0){
+                $('#rename_galaxy').prop('disabled', true);
+            }
+            else{
+                $('#rename_galaxy').prop('disabled', false);
+            }
+        });
+
+        $('#edit_galaxy_description').prop('disabled', true);
+        $('#edit_galaxy_description_input').keyup(function(){
+            var user_input_new_galaxy_description = $(this).val();
+            if( user_input_new_galaxy_description == '' || user_input_new_galaxy_description.replace(/\s/g, '').length == 0){
+                $('#edit_galaxy_description').prop('disabled', true);
+            }
+            else{
+                $('#edit_galaxy_description').prop('disabled', false);
             }
         });
     });
