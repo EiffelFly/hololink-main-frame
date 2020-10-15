@@ -143,7 +143,7 @@ def sign_up_with_email_verification(request):
                 user.set_password(password)
                 user.save()
                 token_object = PreAlphaTestToken.objects.get(token=token)
-                setattr(token_object, used, True)
+                setattr(token_object, 'used', True)
 
 
             #寄送認證信件
