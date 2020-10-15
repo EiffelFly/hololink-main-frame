@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-
+from accounts.models import PreAlphaTestToken
 
 class SignUpWithEmailForm(forms.ModelForm):
 
@@ -25,6 +25,17 @@ class SignUpWithEmailForm(forms.ModelForm):
                 'placeholder': _('Username'),
             },
         ),
+    )
+
+    token = forms.CharField(
+        label=_('Token'),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Token'),
+            },
+        ),
+
     )
 
     password = forms.CharField(
@@ -49,7 +60,7 @@ class SignUpWithEmailForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
+        fields = ['username', 'email', 'token', 'password', 'confirm_password']
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -74,6 +85,29 @@ class SignUpWithEmailForm(forms.ModelForm):
                 )
             )
         return username
+    
+    def clean_token(self):
+        token = self.cleaned_data['token']
+
+        if not token.isdigit():
+            self.add_error(
+                'token',
+                ValidationError(
+                    _('The token is invalid.'),
+                    code='invalid'
+                )
+            )
+        else:
+            if not PreAlphaTestToken.objects.filter(token=token).exists():
+                self.add_error(
+                    'token',
+                    ValidationError(
+                        _('The token is invalid.'),
+                        code='invalid'
+                    )
+                )
+        return token
+        
 
     def clean(self):
         '''
