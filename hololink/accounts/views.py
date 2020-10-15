@@ -15,6 +15,7 @@ from smtplib import SMTPException
 from .emailverification import verifyToken
 from .errors import NotAllFieldCompiled
 from .emailverification import sendVerification
+from .models import PreAlphaTestToken
 
 
 
@@ -132,6 +133,7 @@ def sign_up_with_email_verification(request):
         if form.is_valid():
             # Create a user and save it to DB.
             email = form.cleaned_data.get('email')
+            token = form.cleaned_data.get('token')
             username = form.cleaned_data.get('username')
             user = form.save(commit=False)
             user.username = username
@@ -140,6 +142,9 @@ def sign_up_with_email_verification(request):
             if password == confirm_password:
                 user.set_password(password)
                 user.save()
+                token_object = PreAlphaTestToken.objects.get(token=token)
+                setattr(token_object, used, True)
+
 
             #寄送認證信件
             
