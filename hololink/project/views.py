@@ -96,7 +96,7 @@ def project_articles(request, slug):
         count_article_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
     
     countArticles = project.articles_project_owned.all().count()
-
+    '''
     if request.method == 'POST':
         form = DeleteArticleForm(request.POST)
         if request.POST['action'].split("_delete_",1)[0] == "deleteArticle":
@@ -105,8 +105,24 @@ def project_articles(request, slug):
             project.articles_project_owned.remove(target_article)
             target_article.owned_by.remove(user)
             project.save()
-            return HttpResponseRedirect(reverse('project:project_articles', args=(project.slug,)))
+
+            delete_target_node[:] = [ node['id'] not in project.keyword_list['total']  ]
+
+            for node in project.project_d3_json['nodes']:
+                if node['id'] in project.keyword_list['total']:
+                    if node['connection'] == 1:
+                        project.project_d3_json['nodes'].pop()
+                    elif node['connection'] > 1:
+                        node.update({"connection":node['connection']-1})
             
+            for link in project.project_d3_json['links']:
+                if link['source'] == target_article_name:
+
+                pass
+                #if link['']
+
+            return HttpResponseRedirect(reverse('project:project_articles', args=(project.slug,)))
+    ''' 
             
 
     context = {
