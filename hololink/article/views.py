@@ -128,7 +128,7 @@ def filter(request):
     '''
         implement articles search bar 
     '''
-    qs = Article.objects.filter(created_by=request.user).order_by('-created_at')
+    qs = Article.objects.filter(owned_by=request.user).order_by('-created_at')
     filterArticlesName = request.GET.get('article_filter')
     
 

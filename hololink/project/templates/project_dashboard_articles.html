@@ -84,7 +84,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4"></div>
+                                <div class="col-4 d-flex">
+                                    <form method="post" novalidate style="margin: 0 0 0 auto;">
+                                        {% csrf_token %}
+                                        <button type="submit" name="action" value="deleteArticle_delete_{{ article.name }}" id="delete_article" class="btn btn-outline-danger d-flex justify-content-center" style="margin: 0 0 0 auto; width: 30px; height: 30px;" >
+                                            <img src="{% static 'img/trashcan.svg' %}" style="margin: auto;">
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col">

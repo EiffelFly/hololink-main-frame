@@ -1,7 +1,27 @@
 from django import forms
 from .models import Project
+from article.models import Article
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+
+
+class DeleteArticleForm(forms.ModelForm):
+
+    name = forms.CharField(
+        label=_('Article name'),
+        required = False,
+        widget=forms.TextInput(
+            attrs={
+                'style':'',
+                'autocomplete':'off',
+            },
+        ),
+    )
+
+    class Meta:
+        model = Article
+        fields = ['name']
+
 
 class ProjectForm(forms.ModelForm):
 
@@ -126,4 +146,5 @@ class GalaxySettingsForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'galaxy_description', 'galaxy_visibility', 'change_galaxy_visibility_confirmation', 'delete_galaxy_confirmation']
+
 

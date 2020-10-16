@@ -6,13 +6,14 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from .models import Project
-from .forms import ProjectForm, GalaxySettingsForm
+from .forms import ProjectForm, GalaxySettingsForm, DeleteArticleForm
 from article.models import Article, Keyword
 from django.db.models import Sum
 import hashlib
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from accounts.models import Profile
+from django.contrib.auth.models import User
 
 
 def now():
@@ -80,7 +81,7 @@ def project_articles(request, slug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
-    
+    user = get_object_or_404(User, username=request.user)
     project = get_object_or_404(Project, slug=slug, created_by=request.user)
     articles = Article.objects.filter(projects=project).order_by('-created_at')
     count_project_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
@@ -95,6 +96,18 @@ def project_articles(request, slug):
         count_article_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
     
     countArticles = project.articles_project_owned.all().count()
+
+    if request.method == 'POST':
+        form = DeleteArticleForm(request.POST)
+        if request.POST['action'].split("_delete_",1)[0] == "deleteArticle":
+            target_article_name = request.POST['action'].split("_delete_",1)[1]
+            target_article = get_object_or_404(Article, name=target_article_name)
+            project.articles_project_owned.remove(target_article)
+            target_article.owned_by.remove(user)
+            project.save()
+            return HttpResponseRedirect(reverse('project:project_articles', args=(project.slug,)))
+            
+            
 
     context = {
         'project' : project, 
