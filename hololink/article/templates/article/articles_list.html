@@ -63,8 +63,8 @@
                 <div class="row" style="margin-top: 1rem;">
                     {% if not articles %}
                         <div class="col">
-                            <p>{% trans "You don't have any article to show. " %}<a class="text-primary"
-                                    href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a></p>
+                            <p>{% trans "You don't have any article to show. " %}<!--<a class="text-primary"
+                                    href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a>!--></p>
                         </div>
                     {% else %}
                         {% for article in articles %}
