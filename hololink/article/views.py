@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from unidecode import unidecode
 from django.utils.text import slugify
 from django.http import JsonResponse
+from accounts.models import Profile
 
 
 
@@ -145,6 +146,8 @@ def articles_list(request):
     count_stellar = []
 
     articles = filter(request)
+
+    profile = get_object_or_404(Profile, user=request.user)
     
     for article in articles:
         print(article)
@@ -152,7 +155,8 @@ def articles_list(request):
         count_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
 
     context = {
-        'articles' : articles,
+        'profile':profile,
+        'articles':articles,
         'count_basestone':count_basestone,
         'count_stellar':count_stellar,
         'active_nav':'article',

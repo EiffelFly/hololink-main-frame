@@ -12,6 +12,7 @@ from django.db.models import Sum
 import hashlib
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from accounts.models import Profile
 
 
 def now():
@@ -38,6 +39,8 @@ def projects_list(request):
     count_basestone = []
     count_stellar = []
 
+    profile = get_object_or_404(Profile, user=request.user)
+
     projects = filter(request)
     for project in projects:
         articles = Article.objects.filter(projects=project).order_by('-created_at')
@@ -46,6 +49,7 @@ def projects_list(request):
         count_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count())
     
     context = {
+        'profile' : profile,
         'projects' : projects,
         'countArticles' : count_article,
         'countBasestoneKeywords' : count_basestone,
