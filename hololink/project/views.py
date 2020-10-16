@@ -96,6 +96,7 @@ def project_articles(request, slug):
         count_article_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
     
     countArticles = project.articles_project_owned.all().count()
+    
     '''
     if request.method == 'POST':
         form = DeleteArticleForm(request.POST)
@@ -104,25 +105,26 @@ def project_articles(request, slug):
             target_article = get_object_or_404(Article, name=target_article_name)
             project.articles_project_owned.remove(target_article)
             target_article.owned_by.remove(user)
-            project.save()
-
-            delete_target_node[:] = [ node['id'] not in project.keyword_list['total']  ]
-
-            for node in project.project_d3_json['nodes']:
-                if node['id'] in project.keyword_list['total']:
-                    if node['connection'] == 1:
-                        project.project_d3_json['nodes'].pop()
-                    elif node['connection'] > 1:
-                        node.update({"connection":node['connection']-1})
             
-            for link in project.project_d3_json['links']:
-                if link['source'] == target_article_name:
+            print(range(0, len(project.project_d3_json['nodes'])))
+            for i in range(len(project.project_d3_json['nodes'])):
+                print(i)
+                print(project.project_d3_json['nodes'][i]['id'])
+                if project.project_d3_json['nodes'][i]['id'] in project.keyword_list['total']:
+                    if project.project_d3_json['nodes'][i]['connection'] == 1:
+                        del project.project_d3_json['nodes'][i]
+                    elif project.project_d3_json['nodes'][i]['connection'] > 1:
+                        project.project_d3_json['nodes'][i].update({"connection":project.project_d3_json['nodes'][i]['connection']-1})
+            
+            for link in range(len(project.project_d3_json['links'])):
+                if project.project_d3_json['links'][i]['source'] == target_article_name:
+                    del project.project_d3_json['links'][i]
 
-                pass
-                #if link['']
+            project.save()
+            target_article.save()
 
             return HttpResponseRedirect(reverse('project:project_articles', args=(project.slug,)))
-    ''' 
+        '''
             
 
     context = {
