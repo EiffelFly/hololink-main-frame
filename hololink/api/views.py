@@ -141,7 +141,8 @@ class DataViewforBrowser(viewsets.ViewSet):
         return Response(
             {
                 "recommendations": recommendations_serializer.data,
-                "projects" : projects_serializer.data
+                "projects" : projects_serializer.data,
+                "user": user.username
             }
         )
         
