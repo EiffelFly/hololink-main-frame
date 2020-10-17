@@ -24,6 +24,10 @@ class DeleteArticleForm(forms.ModelForm):
 
 
 class ProjectForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(ProjectForm, self).__init__(*args, **kwargs)
 
     name = forms.CharField(
         label=_('Galaxy Name'),
@@ -66,7 +70,7 @@ class ProjectForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data['name']
-        if Project.objects.filter(name=name).exists():
+        if Project.objects.filter(name=name, created_by=self.user).exists():
             self.add_error(
                 'name',
                 ValidationError(

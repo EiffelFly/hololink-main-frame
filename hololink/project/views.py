@@ -259,7 +259,7 @@ def create_newproject(request):
     }
 
     if request.method == 'POST':
-        form = ProjectForm(request.POST)
+        form = ProjectForm(request.POST, user=request.user)
         context['form'] = form
         if form.is_valid():
             project = Project.objects.create(
@@ -271,7 +271,7 @@ def create_newproject(request):
             messages.add_message(request, messages.SUCCESS, _('Added successfully.'))
             return redirect(reverse('user_dashboard', kwargs={'slug': request.user.username}))
     else:
-        form = ProjectForm()
+        form = ProjectForm(user=request.user)
         context['form'] = form
         context['tips'] += [_('Fill in the following form to create a new project.')]
     return render(request, 'create_new_project_test.html', context)
