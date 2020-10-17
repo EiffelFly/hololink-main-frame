@@ -353,7 +353,7 @@
         //console.log(d)
         var interpolatorForArticles = d3.interpolateNumber(50,150);
         var interpolatorForSmallTags = d3.interpolateNumber(4, 20);
-        var interpolatorForBigTags = d3.interpolateNumber(25, 75);
+        var interpolatorForBigTags = d3.interpolateNumber(25, 40);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
