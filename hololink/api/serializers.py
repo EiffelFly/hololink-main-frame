@@ -262,6 +262,8 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             try:
                 print(project, user)
                 target_project = Project.objects.get(name=project, created_by=user)
+                setattr(target_project, 'ml_is_processing', True)
+                target_project.save()
                 project_name_list.append(target_project.name)
 
                 try:
@@ -476,7 +478,7 @@ def merge_article_into_galaxy(data_for_merging):
             )
 
 
-
+        setattr(project, 'ml_is_processing', False)
         project.save()
         return project
 

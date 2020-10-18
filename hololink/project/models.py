@@ -103,6 +103,11 @@ class Project(models.Model):
         verbose_name=_('Keyword')
     )
 
+    ml_is_processing = models.BooleanField(
+        default=False,
+        verbose_name=_('ML is processing'),
+    )
+
     def __str__(self):
         return self.name
 
