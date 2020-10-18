@@ -49,11 +49,18 @@
             <span style="margin: auto 0;" ><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
             <span style="margin: auto 0; padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
             <span style="margin: auto 0; font-size: 1.2rem;">{{ project.name }}</span>
-            <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px gray; padding: 1px 12px; font-size: 14px; color: gray;">
+            <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color:dimgray;">
                 {% if project.project_visibility == 'Private' %}
                 private 
                 {% else %}
                 public
+                {% endif %}
+            </span>
+            <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color: dimgray;">
+                {% if project.ml_is_processing == 'True' %}
+                model is processing 
+                {% else %}
+                clear
                 {% endif %}
             </span>
         </div>
