@@ -12,7 +12,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('articles/', include('article.urls')),
-    path('projects/', include('project.urls')),
+    path('@<slug:usernameslug>/projects/', include('project.urls')),
     path('', index, name='index'),
     path('d3demo/', d3demo, name='d3demo'),
     path('@<slug:slug>/', user_public_profile, name='user_public_profile'),

@@ -66,7 +66,7 @@
                     </div>
                     
                     <div class="col-6 col-md-5 d-flex" style="padding-right: 15px">
-                        <a href="{% url 'project:create_newproject' %}" class="btn btn-primary active ml-auto" role="button" aria-pressed="true" style="font-size: clamp(14px, 2vw, 16px);">Create new Galaxy</a>
+                        <a href="{% url 'project:create_newproject' usernameslug=user.profile.slug %}" class="btn btn-primary active ml-auto" role="button" aria-pressed="true" style="font-size: clamp(14px, 2vw, 16px);">Create new Galaxy</a>
                     </div>
                 </div>
                 {% for project in projects %}
@@ -77,7 +77,7 @@
                             <div class="col-8">
                                 <div class="row">
                                     <div class="col-12">
-                                        <h3 class="Project-title"><a href="{% url 'project:project_articles' project.slug %}"> {{ project.name }} </a></h3>
+                                        <h3 class="Project-title"><a href="{% url 'project:project_articles' projectnameslug=project.slug usernameslug=profile.slug %}"> {{ project.name }} </a></h3>
                                     </div>
                                 </div>
                             </div>

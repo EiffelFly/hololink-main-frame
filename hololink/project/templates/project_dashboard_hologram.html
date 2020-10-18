@@ -83,7 +83,7 @@
 
     //Third step: LOAD DATA and create nodes/links element
 
-    d3.json('{% url "project:deliver_D3" project.slug%}', function(error,graph){
+    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=profile.slug%}', function(error,graph){
         if (error) throw error;
 
         calculateBiggestNum()

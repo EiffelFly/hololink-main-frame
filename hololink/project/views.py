@@ -32,7 +32,7 @@ def filter(request):
 
     return qs
 
-def projects_list(request):
+def projects_list(request, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
@@ -60,11 +60,11 @@ def projects_list(request):
 
     return render(request, 'projects_list.html', context)    
 
-def project_detail(request, slug):
+def project_detail(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
     
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
 
 
@@ -77,12 +77,12 @@ def project_detail(request, slug):
 
     return render(request, 'project_detail.html', context)
 
-def project_articles(request, slug):
+def project_articles(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
 
     user = get_object_or_404(User, username=request.user)
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     articles = Article.objects.filter(projects=project).order_by('-created_at')
     count_project_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
     count_project_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
@@ -128,6 +128,7 @@ def project_articles(request, slug):
             
 
     context = {
+        'profile':user.profile,
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
@@ -138,11 +139,13 @@ def project_articles(request, slug):
 
     return render(request, 'project_dashboard_articles.html', context)
 
-def project_dashboard(request, slug):
+def project_dashboard(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))  
+
+    profile = get_object_or_404(Profile, user=request.user)
     
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     # basestone = articles.aggregate(Sum('article_basestone_keyword_sum')).get('article_basestone_keyword_sum__sum', 0)
     # stellar = articles.aggregate(Sum('article_stellar_keyword_sum')).get('article_stellar_keyword_sum__sum', 0)
@@ -151,6 +154,7 @@ def project_dashboard(request, slug):
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
     context = {
+        'profile':profile,
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
@@ -159,11 +163,13 @@ def project_dashboard(request, slug):
 
     return render(request, 'project_dashboard_hologram.html', context) 
 
-def project_hologram(request, slug):
+def project_hologram(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login')) 
+    
+    profile = get_object_or_404(Profile, user=request.user)
 
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     countArticles = project.articles_project_owned.all().count()
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
@@ -172,6 +178,7 @@ def project_hologram(request, slug):
     print(project.project_visibility)
 
     context = {
+        'profile':profile,
         'project' : project, 
         'articles': articles,
         'countArticles':countArticles,
@@ -181,18 +188,21 @@ def project_hologram(request, slug):
     return render(request, 'project_dashboard_hologram.html', context) 
 
 @csrf_exempt
-def galaxy_setting(request, slug):
+def galaxy_setting(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    profile = get_object_or_404(Profile, user=request.user)
+
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     articles = Article.objects.filter(projects=project)
     confirmation_code = f'{request.user}/{project.name}'
     countArticles = project.articles_project_owned.all().count()
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
-    context = {
+    context = {\
+        'profile':profile,
         'form': None,
         'tips': [],
         'project':project,
@@ -249,7 +259,7 @@ def galaxy_setting(request, slug):
 
 
 @csrf_exempt
-def create_newproject(request):
+def create_newproject(request, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
@@ -276,11 +286,11 @@ def create_newproject(request):
         context['tips'] += [_('Fill in the following form to create a new project.')]
     return render(request, 'create_new_project_test.html', context)
 
-def deliver_D3(request, slug):
+def deliver_D3(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     
-    project = get_object_or_404(Project, slug=slug, created_by=request.user)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     print(project, 'rr')
 
     return JsonResponse(project.project_d3_json, safe=False)

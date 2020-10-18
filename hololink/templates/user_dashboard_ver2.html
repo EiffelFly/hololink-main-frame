@@ -117,7 +117,7 @@
                 {% for project in projects %} 
                     <div class="col-12 col-lg-6" style="padding:0px 20px 20px 0px">
                         <div class="dashboard-recentProject-container">
-                            <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' project.slug %}"> {{ project.name }} </a></h3>
+                            <h3 class="dashboard-recentProject-title"><a href="{% url 'project:project_dashboard' projectnameslug=project.slug usernameslug=profile.slug %}"> {{ project.name }} </a></h3>
                         </div>     
                     </div>
                 {% endfor %}
