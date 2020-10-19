@@ -493,7 +493,7 @@
                 return interpolatorForSmallTags(d.connection/amount_of_articles)
             }
             else {
-                if (d.connection >= Math.ceil(amount_of_keywords/(100*amount_of_articles))){
+                if (d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles))){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
                 } else {
                     console.log(amount_of_articles)
