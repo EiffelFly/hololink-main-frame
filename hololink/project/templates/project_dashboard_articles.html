@@ -176,7 +176,6 @@
                             return radius + 2
                         }
                         else {
-                            console.log('ggg')
                             return radius + 1
                         }
                     }
@@ -195,11 +194,6 @@
         amount_of_keywords = data.amount_of_keywords
         amount_of_articles = data.amount_of_articles
 
-        console.log(Math.ceil(amount_of_keywords/(100*amount_of_articles)))
-        console.log(amount_of_keywords/(100*amount_of_articles))
-        console.log(100*amount_of_articles)
-
-        console.log(data, 'ohhh')
 
         calculateBiggestNum()
         
@@ -219,7 +213,7 @@
                 .data(graph.nodes)
                 .enter()
                 .filter(function(d){
-                    return d.connection >= 2 || d.level == "article"
+                    return d.connection > parseInt(amount_of_articles/2) || d.level == "article"
                 })
                 .append("circle")
                 .attr("r", getNodeSize)
@@ -234,7 +228,7 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles)) || d.level == 'article'
+                    return d.connection > parseInt(amount_of_articles/2) || d.level == 'article'
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -494,12 +488,11 @@
                 return interpolatorForSmallTags(d.connection/amount_of_articles)
             }
             else {
-                if (d.connection > Math.ceil(amount_of_keywords/(50*amount_of_articles))){
+                if (d.connection > parseInt(amount_of_articles/2)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
-                } else if (Math.ceil(amount_of_keywords/(50*amount_of_articles)) > d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles))){
+                } else if (parseInt(amount_of_articles/2) > d.connection > parseInt(amount_of_articles/4)){
                     return interpolatorForMediumTags(d.connection/biggestNode_keyword)
                 } else {
-                    console.log(amount_of_articles)
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)
                 }
                 
