@@ -147,6 +147,7 @@
     var biggestNode_article = 0
     var biggestNode_keyword = 0
     var amount_of_keywords = 0
+    var amount_of_articles = 0
     
 
     //Second step: set up simulation and force
@@ -192,6 +193,7 @@
 
         var graph = data.graph
         var amount_of_keywords = data.amount_of_keywords
+        var amount_of_articles = data.amount_of_articles
         console.log(data, 'ohhh')
 
         calculateBiggestNum()
@@ -227,7 +229,7 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection > Math.ceil(amount_of_keywords/500) || d.level == 'article'
+                    return d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles)) || d.level == 'article'
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -419,13 +421,13 @@
 
     function getTextFontSize(node){
         if (node.level == 'article'){
-            var interpolator = d3.interpolateNumber(12,20);
+            var interpolator = d3.interpolateNumber(12,25);
             articleTotalKeyword = parseInt(node.stellarNum) + parseInt(node.basestoneNum)
             fontSize = interpolator(articleTotalKeyword/biggestNode_article) + 'px'
             return fontSize
         }
         else {
-            var interpolator = d3.interpolateNumber(6,10);
+            var interpolator = d3.interpolateNumber(10,20);
             return interpolator(node.connection/biggestNode_keyword) + 'px'
         }
         
@@ -483,10 +485,10 @@
         }
         else if (d.level == 'stellar'|| d.level == 'basestone'){
             if (biggestNode_keyword == 1){
-                return interpolatorForSmallTags(d.connection/5)
+                return interpolatorForSmallTags(d.connection/amount_of_articles)
             }
             else {
-                if (d.connection > Math.ceil(amount_of_keywords/500)){
+                if (d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles))){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
                 } else {
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)

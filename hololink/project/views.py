@@ -295,5 +295,6 @@ def deliver_D3(request, projectnameslug, **kwargs):
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
     amount_of_keywords = count_basestone + count_stellar
+    amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
 
-    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords}, safe=False)
+    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
