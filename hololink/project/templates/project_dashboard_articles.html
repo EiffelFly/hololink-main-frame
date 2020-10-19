@@ -146,6 +146,7 @@
 
     var biggestNode_article = 0
     var biggestNode_keyword = 0
+    var amount_of_keywords = 0
     
 
     //Second step: set up simulation and force
@@ -186,11 +187,15 @@
 
     //Third step: LOAD DATA and create nodes/links element
 
-    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=profile.slug%}', function(error,graph){
+    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=profile.slug%}', function(error,data){
         if (error) throw error;
 
-        calculateBiggestNum()
+        var graph = data.graph
+        var amount_of_keywords = data.amount_of_keywords
+        console.log(data, 'ohhh')
 
+        calculateBiggestNum()
+        
         var linkElements = g.append("g")
                 .attr("class", "links")
             .selectAll("line") //select svg-line element and use D3.data method
@@ -222,7 +227,7 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection >= 2 || d.level == 'article'
+                    return d.connection >= Math.ceil(amount_of_keywords/500) || d.level == 'article'
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -420,7 +425,7 @@
             return fontSize
         }
         else {
-            var interpolator = d3.interpolateNumber(6,12);
+            var interpolator = d3.interpolateNumber(6,10);
             return interpolator(node.connection/biggestNode_keyword) + 'px'
         }
         
@@ -470,8 +475,8 @@
     function getNodeSize(d){
         //console.log(d)
         var interpolatorForArticles = d3.interpolateNumber(50,150);
-        var interpolatorForSmallTags = d3.interpolateNumber(4, 20);
-        var interpolatorForBigTags = d3.interpolateNumber(15, 20);
+        var interpolatorForSmallTags = d3.interpolateNumber(4, 8);
+        var interpolatorForBigTags = d3.interpolateNumber(15, 60);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
@@ -481,7 +486,7 @@
                 return interpolatorForSmallTags(d.connection/5)
             }
             else {
-                if (d.connection >= 2){
+                if (d.connection >= Math.ceil(amount_of_keywords/500)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
                 } else {
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)

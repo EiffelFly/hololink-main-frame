@@ -292,6 +292,8 @@ def deliver_D3(request, projectnameslug, **kwargs):
         return redirect(reverse('login'))
     
     project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
-    print(project, 'rr')
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
+    amount_of_keywords = count_basestone + count_stellar
 
-    return JsonResponse(project.project_d3_json, safe=False)
+    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords}, safe=False)
