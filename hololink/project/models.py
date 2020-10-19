@@ -111,7 +111,7 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-    slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
+    slug = models.SlugField(null=True, blank=True, max_length=255)
 
 
 def create_slug(instance, new_slug=None):
@@ -140,9 +140,6 @@ def create_slug(instance, new_slug=None):
 @receiver(pre_save, sender=Project)
 def slug_generator(sender, instance, *args, **kwargs):
     slug = slugify(unidecode(instance.name))
-    exists = Project.objects.filter(slug=slug).exists()
-    if exists:
-        slug = f"{slug}-{instance.id}"
     instance.slug = slug
 
 
