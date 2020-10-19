@@ -482,8 +482,9 @@
     function getNodeSize(d){
         //console.log(d)
         var interpolatorForArticles = d3.interpolateNumber(50,150);
-        var interpolatorForSmallTags = d3.interpolateNumber(4, 8);
-        var interpolatorForBigTags = d3.interpolateNumber(15, 60);
+        var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
+        var interpolatorForMediumTags = d3.interpolateNumber(15, 25);
+        var interpolatorForBigTags = d3.interpolateNumber(30, 75);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
@@ -493,8 +494,10 @@
                 return interpolatorForSmallTags(d.connection/amount_of_articles)
             }
             else {
-                if (d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles))){
+                if (d.connection > Math.ceil(amount_of_keywords/(50*amount_of_articles))){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
+                } else if (Math.ceil(amount_of_keywords/(50*amount_of_articles)) > d.connection > Math.ceil(amount_of_keywords/(100*amount_of_articles))){
+                    return interpolatorForMediumTags(d.connection/biggestNode_keyword)
                 } else {
                     console.log(amount_of_articles)
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)
