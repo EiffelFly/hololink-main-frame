@@ -254,6 +254,7 @@ def galaxy_setting(request, projectnameslug, **kwargs):
         form.fields['galaxy_visibility'].initial = project.project_visibility
         context['form'] = form
         print('i am here')
+        
 
         return render(request, 'project_dashboard_settings.html', context)
 
