@@ -227,7 +227,7 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection >= Math.ceil(amount_of_keywords/500) || d.level == 'article'
+                    return d.connection > Math.ceil(amount_of_keywords/500) || d.level == 'article'
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -486,7 +486,7 @@
                 return interpolatorForSmallTags(d.connection/5)
             }
             else {
-                if (d.connection >= Math.ceil(amount_of_keywords/500)){
+                if (d.connection > Math.ceil(amount_of_keywords/500)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
                 } else {
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)
