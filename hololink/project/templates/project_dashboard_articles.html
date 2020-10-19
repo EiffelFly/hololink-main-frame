@@ -194,6 +194,11 @@
         var graph = data.graph
         var amount_of_keywords = data.amount_of_keywords
         var amount_of_articles = data.amount_of_articles
+
+        console.log(Math.ceil(amount_of_keywords/(100*amount_of_articles)))
+        console.log(amount_of_keywords/(100*amount_of_articles))
+        console.log(100*amount_of_articles)
+
         console.log(data, 'ohhh')
 
         calculateBiggestNum()
@@ -489,7 +494,6 @@
             }
             else {
                 if (d.connection >= Math.ceil(amount_of_keywords/(100*amount_of_articles))){
-                    console.log(Math.ceil(amount_of_keywords/(100*amount_of_articles)))
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
                 } else {
                     console.log(Math.ceil(amount_of_keywords/(100*amount_of_articles)))
