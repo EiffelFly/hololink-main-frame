@@ -152,14 +152,14 @@
 
     //Second step: set up simulation and force
     var simulation = d3.forceSimulation()
-        .force("charge_force", d3.forceManyBody().strength(20))
+        .force("charge_force", d3.forceManyBody().strength(-300))
         .force("x", d3.forceX(width / 2))
         .force("y", d3.forceY(height / 2))
         //.force("center_force", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink()
             .id(function(d){return d.id})
             .distance(100))
-        .force('Radial_force', d3.forceRadial(getNodeOrbit, width/2, height/2)
+        .force('Radial_force', d3.forceRadial(getNodeRadius, width/2, height/2)
             .strength(1)
         )
         .force(
@@ -168,12 +168,7 @@
                 .forceCollide()
                 .radius(function(d){
                     radius = getNodeSize(d)
-                    if (d.level == 'article'){
-                        return radius + 3
-                    }
-                    else {
-                        return radius + 1
-                    }
+                    return radius + 2
                 })
                 .strength(1)
         );
@@ -207,9 +202,9 @@
             .selectAll("circle")
                 .data(graph.nodes)
                 .enter()
-                .filter(function(d){
-                    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
-                })
+                //.filter(function(d){
+                //    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
+                //})
                 .append("circle")
                 .attr("r", getNodeSize)
                 .attr("fill", getNodeColor)
@@ -249,7 +244,7 @@
         simulation
             .nodes(graph.nodes)
             //.alphaMin(0.01)
-            .alphaDecay(0.01)
+            //.alphaDecay(0.01)
             .on("tick", tickActions)
 
         simulation.force("link")
@@ -271,21 +266,21 @@
         function tickActions(){
             linkElements
                 .attr("x1", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.x 
-                    }})
+                    //}})
                 .attr("y1", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.y
-                    }})
+                    //}})
                 .attr("x2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.x 
-                    }})
+                    //}})
                 .attr("y2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.y
-                    }})
+                    //}})
 
             nodeElements
                 .attr("cx", function(d) { return d.x; })
@@ -477,35 +472,14 @@
 
     function getNodeSize(d){
         //console.log(d)
-        if (amount_of_articles > 10){
-            var interpolatorForArticles = d3.interpolateNumber(50,150);
-            var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
-            var interpolatorForMediumTags = d3.interpolateNumber(15, 20);
-            var interpolatorForBigTags = d3.interpolateNumber(20, 75);
-        } else {
-            var interpolatorForArticles = d3.interpolateNumber(50,150);
-            var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
-            var interpolatorForMediumTags = d3.interpolateNumber(25, 50);
-            var interpolatorForBigTags = d3.interpolateNumber(50, 75);
-        }
-        
+        var interpolatorForArticles = d3.interpolateNumber(20,70);
+        var interpolatorForTags = d3.interpolateNumber(2 ,50);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
         }
         else if (d.level == 'stellar'|| d.level == 'basestone'){
-            if (biggestNode_keyword == 1){
-                return interpolatorForSmallTags(d.connection/amount_of_articles)
-            }
-            else {
-                if (d.connection > parseInt(amount_of_articles*2/3)){
-                    return interpolatorForBigTags(d.connection/biggestNode_keyword)
-                } else {
-                    console.log(d.connection)
-                    return interpolatorForMediumTags(d.connection/biggestNode_keyword)
-                }    
-            }
-            
+            return interpolatorForTags(d.connection/biggestNode_keyword)
         }
     }
 
