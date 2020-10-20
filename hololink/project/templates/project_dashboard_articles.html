@@ -158,7 +158,7 @@
         //.force("center_force", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink()
             .id(function(d){return d.id})
-            .distance(700))
+            .distance(400))
         .force('Radial_force', d3.forceRadial(getNodeOrbit, width/2, height/2)
             .strength(1)
         )
