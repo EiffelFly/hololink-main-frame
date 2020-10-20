@@ -418,7 +418,7 @@
 
     function getTextFontSize(node){
         if (node.level == 'article'){
-            var interpolator = d3.interpolateNumber(12,20);
+            var interpolator = d3.interpolateNumber(12,18);
             articleTotalKeyword = parseInt(node.stellarNum) + parseInt(node.basestoneNum)
             fontSize = interpolator(articleTotalKeyword/biggestNode_article) + 'px'
             return fontSize
@@ -483,7 +483,7 @@
             var interpolatorForMediumTags = d3.interpolateNumber(15, 20);
             var interpolatorForBigTags = d3.interpolateNumber(20, 75);
         } else {
-            var interpolatorForArticles = d3.interpolateNumber(50,100);
+            var interpolatorForArticles = d3.interpolateNumber(50,150);
             var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
             var interpolatorForMediumTags = d3.interpolateNumber(25, 50);
             var interpolatorForBigTags = d3.interpolateNumber(50, 75);
