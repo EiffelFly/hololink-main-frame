@@ -187,7 +187,8 @@
         var graph = data.graph
         amount_of_keywords = data.amount_of_keywords
         amount_of_articles = data.amount_of_articles
-
+        
+        console.log(parseInt(amount_of_articles/3))
 
         calculateBiggestNum()
         
@@ -420,7 +421,11 @@
             return fontSize
         }
         else {
-            var interpolator = d3.interpolateNumber(10,20);
+            if (d.connection > parseInt(amount_of_articles*2/3){
+                var interpolator = d3.interpolateNumber(12,20);
+            } else {
+                var interpolator = d3.interpolateNumber(8,12);
+            }
             return interpolator(node.connection/biggestNode_keyword) + 'px'
         }
         
