@@ -500,14 +500,10 @@
             else {
                 if (d.connection > parseInt(amount_of_articles*2/3)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
-                } else if (parseInt(amount_of_articles*2/3) > d.connection >= parseInt(amount_of_articles/3)){
+                } else {
                     console.log(d.connection)
                     return interpolatorForMediumTags(d.connection/biggestNode_keyword)
-                } else {
-                    console.log(d.connection, parseInt(amount_of_articles/3), parseInt(amount_of_articles*2/3))
-                    return interpolatorForSmallTags(d.connection/biggestNode_keyword)
-                }
-                
+                }    
             }
             
         }
