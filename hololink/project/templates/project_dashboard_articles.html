@@ -213,7 +213,9 @@
                 .append("circle")
                 .attr("r", getNodeSize)
                 .attr("fill", getNodeColor)
-                .attr('connection', d.connection)
+                .attr('connection', function(d){
+                    return d.connection
+                })
                 .style("stroke", getLinkColor)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
