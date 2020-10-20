@@ -158,7 +158,7 @@
         //.force("center_force", d3.forceCenter(width / 2, height / 2))
         .force("link", d3.forceLink()
             .id(function(d){return d.id})
-            .distance(400))
+            .distance(100))
         .force('Radial_force', d3.forceRadial(getNodeOrbit, width/2, height/2)
             .strength(1)
         )
@@ -249,7 +249,7 @@
         simulation
             .nodes(graph.nodes)
             //.alphaMin(0.01)
-            .alphaDecay(0.06)
+            .alphaDecay(0.001)
             .on("tick", tickActions)
 
         simulation.force("link")
