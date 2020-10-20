@@ -152,7 +152,7 @@
 
     //Second step: set up simulation and force
     var simulation = d3.forceSimulation()
-        .force("charge_force", d3.forceManyBody().strength(-100))
+        .force("charge_force", d3.forceManyBody().strength(-30))
         .force("x", d3.forceX(width / 2))
         .force("y", d3.forceY(height / 2))
         //.force("center_force", d3.forceCenter(width / 2, height / 2))
