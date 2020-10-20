@@ -172,14 +172,8 @@
                         return radius + 3
                     }
                     else {
-                        if (d.connection >= 2){
-                            return radius + 2
-                        }
-                        else {
-                            return radius + 1
-                        }
+                        return radius + 1
                     }
-                    
                 })
                 .strength(1)
         );
@@ -213,7 +207,7 @@
                 .data(graph.nodes)
                 .enter()
                 .filter(function(d){
-                    return d.connection > parseInt(amount_of_articles/2) || d.level == "article"
+                    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
                 })
                 .append("circle")
                 .attr("r", getNodeSize)
@@ -228,7 +222,7 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection > parseInt(amount_of_articles/2) || d.level == 'article'
+                    return d.connection > parseInt(amount_of_articles/3) || d.level == 'article'
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -273,19 +267,19 @@
         function tickActions(){
             linkElements
                 .attr("x1", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/2)){
+                    if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.x 
                     }})
                 .attr("y1", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/2)){
+                    if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.y
                     }})
                 .attr("x2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/2)){
+                    if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.x 
                     }})
                 .attr("y2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/2)){
+                    if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.y
                     }})
 
@@ -420,7 +414,7 @@
 
     function getTextFontSize(node){
         if (node.level == 'article'){
-            var interpolator = d3.interpolateNumber(12,30);
+            var interpolator = d3.interpolateNumber(12,20);
             articleTotalKeyword = parseInt(node.stellarNum) + parseInt(node.basestoneNum)
             fontSize = interpolator(articleTotalKeyword/biggestNode_article) + 'px'
             return fontSize
@@ -496,9 +490,9 @@
                 return interpolatorForSmallTags(d.connection/amount_of_articles)
             }
             else {
-                if (d.connection > parseInt(amount_of_articles/2)){
+                if (d.connection > parseInt(amount_of_articles*2/3)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
-                } else if (parseInt(amount_of_articles/2) > d.connection >= parseInt(amount_of_articles/4)){
+                } else if (parseInt(amount_of_articles*2/3) > d.connection >= parseInt(amount_of_articles/3)){
                     return interpolatorForMediumTags(d.connection/biggestNode_keyword)
                 } else {
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)
