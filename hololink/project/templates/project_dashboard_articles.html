@@ -420,7 +420,7 @@
 
     function getTextFontSize(node){
         if (node.level == 'article'){
-            var interpolator = d3.interpolateNumber(12,25);
+            var interpolator = d3.interpolateNumber(12,30);
             articleTotalKeyword = parseInt(node.stellarNum) + parseInt(node.basestoneNum)
             fontSize = interpolator(articleTotalKeyword/biggestNode_article) + 'px'
             return fontSize
@@ -475,10 +475,18 @@
 
     function getNodeSize(d){
         //console.log(d)
-        var interpolatorForArticles = d3.interpolateNumber(50,150);
-        var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
-        var interpolatorForMediumTags = d3.interpolateNumber(15, 25);
-        var interpolatorForBigTags = d3.interpolateNumber(30, 75);
+        if (amount_of_articles > 10){
+            var interpolatorForArticles = d3.interpolateNumber(50,150);
+            var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
+            var interpolatorForMediumTags = d3.interpolateNumber(15, 20);
+            var interpolatorForBigTags = d3.interpolateNumber(20, 75);
+        } else {
+            var interpolatorForArticles = d3.interpolateNumber(50,100);
+            var interpolatorForSmallTags = d3.interpolateNumber(12, 15);
+            var interpolatorForMediumTags = d3.interpolateNumber(15, 25);
+            var interpolatorForBigTags = d3.interpolateNumber(25, 45);
+        }
+        
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
@@ -490,7 +498,7 @@
             else {
                 if (d.connection > parseInt(amount_of_articles/2)){
                     return interpolatorForBigTags(d.connection/biggestNode_keyword)
-                } else if (parseInt(amount_of_articles/2) > d.connection > parseInt(amount_of_articles/4)){
+                } else if (parseInt(amount_of_articles/2) > d.connection >= parseInt(amount_of_articles/4)){
                     return interpolatorForMediumTags(d.connection/biggestNode_keyword)
                 } else {
                     return interpolatorForSmallTags(d.connection/biggestNode_keyword)
