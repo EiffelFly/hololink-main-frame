@@ -269,18 +269,22 @@
                     //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.x 
                     //}})
+                })
                 .attr("y1", function(d) { 
                     //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.y
                     //}})
+                })
                 .attr("x2", function(d) { 
                     //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.x 
                     //}})
+                })
                 .attr("y2", function(d) { 
                     //if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.target.y
                     //}})
+                })
 
             nodeElements
                 .attr("cx", function(d) { return d.x; })
@@ -297,7 +301,7 @@
                     y = d.y - nodeR/Math.sqrt(2)
                     return y 
                 });                
-        }
+        };
 
         //Implement FADE IN and OUT EFFECT ------------
 
