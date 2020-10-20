@@ -421,7 +421,7 @@
             return fontSize
         }
         else {
-            if (d.connection > parseInt(amount_of_articles*2/3)){
+            if (node.connection > parseInt(amount_of_articles*2/3)){
                 var interpolator = d3.interpolateNumber(12,20);
             } else {
                 var interpolator = d3.interpolateNumber(8,12);
