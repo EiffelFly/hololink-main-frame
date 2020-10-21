@@ -56,13 +56,6 @@ class Domain(models.Model):
         null=True,
     )
 
-    owned_by = models.ManyToManyField(
-        User,
-        related_name='domain_user_owned',
-        verbose_name='Owned by',
-        blank=True
-    )
-
     def __str__(self):
         return self.name
 
