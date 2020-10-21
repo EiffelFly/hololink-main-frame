@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
-from .views import index, d3demo, user_dashboard, user_public_profile, explore, explore_users, user_settings, user_settings_account
+from .views import index, d3demo, user_dashboard, user_public_profile, explore, explore_users, user_settings, user_settings_account, user_source
 from rest_framework import routers
 from api import views
 from django.conf import settings
@@ -17,6 +17,7 @@ urlpatterns = [
     path('d3demo/', d3demo, name='d3demo'),
     path('@<slug:slug>/', user_public_profile, name='user_public_profile'),
     path('@<slug:slug>/dashboard', user_dashboard, name='user_dashboard'),
+    path('@<slug:usernameslug>/source', user_source, name='user_source'),
     path('@<slug:slug>/settings', user_settings, name='user_settings'),
     path('@<slug:slug>/settings/account', user_settings_account, name='user_settings_account'),
     path('explore/', explore, name='explore'),

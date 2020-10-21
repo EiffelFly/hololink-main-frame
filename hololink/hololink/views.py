@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from project.models import Project
 from accounts.models import Profile, Recommendation
-from article.models import Keyword, Article
+from article.models import Keyword, Article, Domain
 from django.contrib.auth.models import User
 import uuid
 from django.views.decorators.csrf import csrf_exempt
@@ -166,6 +166,21 @@ def explore(request):
     }
 
     return render(request, 'explore.html', context) 
+
+def user_source(request, usernameslug):
+    
+    
+    profile = get_object_or_404(Profile, user=request.user)
+    domains = Domain.objects.filter(owned_by_user=profile)
+
+    context = {
+        'domains':domains,
+        'profile':profile,
+
+    }
+
+    return render(request, 'user_source.html', context)
+    
 
 def explore_users(request):
     '''

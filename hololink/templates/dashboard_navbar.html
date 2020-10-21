@@ -39,7 +39,7 @@
                             <a class="nav-link dashboard-nav-item {% if active_nav == 'article' %} active {% endif %}" href="{% url 'article:articles_list' %}"><img src="{% static 'img/article.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Articles</a>
                         </li>
                         <li class="nav-item text-center mr-4">
-                            <a class="nav-link dashboard-nav-item {% if active_nav == 'article' %} active {% endif %}" href="#"><img src="{% static 'img/broadcast.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Sources</a>
+                            <a class="nav-link dashboard-nav-item {% if active_nav == 'article' %} active {% endif %}" href="{% url 'user_source' usernameslug=user.profile.slug %}"><img src="{% static 'img/broadcast.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Sources</a>
                         </li>
                     </ul>
                 </div>
