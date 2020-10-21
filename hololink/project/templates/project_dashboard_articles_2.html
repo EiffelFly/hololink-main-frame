@@ -202,9 +202,9 @@
             .selectAll("circle")
                 .data(graph.nodes)
                 .enter()
-                //.filter(function(d){
-                //    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
-                //})
+                .filter(function(d){
+                    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
+                })
                 .append("circle")
                 .attr("r", getNodeSize)
                 .attr("fill", getNodeColor)
@@ -309,11 +309,13 @@
             return d => {
                 //判斷 node 是否相連，若沒有則套用 opacity
                 nodeElements.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+                textContainer.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
                 //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
                 linkElements.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
                 //When mouseout reset opacity
                 if(opacity === 1){
                     nodeElements.style('opacity', 1)
+                    textContainer.style('opacity', 1)
                     linkElements.style('stroke-opacity', 0.5)
                 }
             };
@@ -476,6 +478,10 @@
 
     function getNodeSize(d){
         //console.log(d)
+        var NodeSizeScaleforTag = d3.scalePow()
+            .exponent(2)
+            .range([10, 50])
+            .domain([0, biggestNode_keyword])
         var interpolatorForArticles = d3.interpolateNumber(20,70);
         var interpolatorForTags = d3.interpolateNumber(2 ,50);
         if (d.level == 'article'){
@@ -483,7 +489,7 @@
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
         }
         else if (d.level == 'stellar'|| d.level == 'basestone'){
-            return interpolatorForTags(d.connection/biggestNode_keyword)
+            return NodeSizeScaleforTag(d.connection)
         }
     }
 
