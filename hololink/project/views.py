@@ -284,7 +284,7 @@ def create_newproject(request, **kwargs):
     else:
         form = ProjectForm(user=request.user)
         context['form'] = form
-        context['tips'] += [_('Fill in the following form to create a new project.')]
+        context['tips'] += [_('Fill in the following form to create a new galaxy.')]
     return render(request, 'create_new_project_test.html', context)
 
 def deliver_D3(request, projectnameslug, **kwargs):
