@@ -46,7 +46,7 @@
     <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 4vw, 60px)">
         <div class="col-12 col-md-6 d-flex">
             <img src="{% static 'img/archive.svg' %}" width="20" height="20" style="margin: auto 1rem auto 0">
-            <span style="margin: auto 0;" ><a href="{% url 'user_dashboard' user.profile.slug %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
+            <span style="margin: auto 0;" ><a href="{% url 'project:projects_list' usernameslug=profile.slug  %}" style="font-size: 1.2rem;">{{ user.username }}</a></span>
             <span style="margin: auto 0; padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
             <span style="margin: auto 0; font-size: 1.2rem;">{{ project.name }}</span>
             <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color:dimgray;">
