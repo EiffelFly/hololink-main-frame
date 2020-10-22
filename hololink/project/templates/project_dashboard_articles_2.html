@@ -282,23 +282,33 @@
         function tickActions(){
             linkElements
                 .attr("x1", function(d) {
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                        return d.source.x 
+                    } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.source.x 
                     }})
+
                 //})
                 .attr("y1", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
-                        return d.source.y
+                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                        return d.source.y 
+                    } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
+                        return d.source.y 
                     }})
+
                 //})
                 .attr("x2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                        return d.target.x
+                    } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.target.x 
                     }})
                 //})
                 .attr("y2", function(d) { 
-                    if (d.target.connection > parseInt(amount_of_articles/3)){
+                    if (d.target.level == 'basestone' & d.target.connection >= 2){
                         return d.target.y
+                    } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
+                        return d.target.y 
                     }})
                 //})
 
