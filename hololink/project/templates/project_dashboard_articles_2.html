@@ -221,7 +221,12 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    return d.connection > parseInt(amount_of_articles/3) || d.level == 'article'
+                    if (d.level == 'basestone'){
+                        return d
+                    }
+                    else if (d.level == 'stellar'){
+                        return d.connection >= (amount_of_articles - 1)
+                    }
                 })
                     .append('foreignObject')
                     .style('width', getTextWrapperSpace)
@@ -265,7 +270,7 @@
             
         function tickActions(){
             linkElements
-                .attr("x1", function(d) { 
+                .attr("x1", function(d) {
                     if (d.target.connection > parseInt(amount_of_articles/3)){
                         return d.source.x 
                     }})
