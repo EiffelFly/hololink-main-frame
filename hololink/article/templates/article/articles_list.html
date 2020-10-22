@@ -47,10 +47,10 @@
 
 <div class="container-fluid" style="padding:0px;">
     {% include 'dashboard_navbar.html' %}
-    <div class="content_container d-flex">
+    <div class="content_container d-flex" >
         <div class="row m-auto content-sub-container">
             {% include 'dashboard_sidebar.html' %}
-            <div class="col-12 col-md-8" style="padding: 0 25px;">
+            <div class="col-12 col-md-8"  style="padding: 0 25px;">
                 <div class="row" style="margin-top: 20px">
                     <div class="col">
                         <form method="GET" action=".">
@@ -60,7 +60,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 1rem;">
+                <div class="row flex-column" style="margin-top: 1rem;">
                     {% if not articles %}
                         <div class="col">
                             <p>{% trans "You don't have any article to show. " %}<!--<a class="text-primary"
@@ -68,17 +68,12 @@
                         </div>
                     {% else %}
                         {% for article in articles %}
-                        <div class="col-12">
+                        <div class="col">
                             <hr style="border-color: #BFB9B8;">
                             <div class="row">
                                 <div class="col-8">
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="article-title" style="font-weight: bold;font-size: 18px; margin-bottom: 0;"><a href="{% url 'article:article_detail' article.slug %}" style="color: #222626;"> {{ article.name }} </a></p>
-                                        </div>
-                                    </div>
+                                    <p class="article-title" style="font-weight: bold;font-size: 18px; margin-bottom: 0;"><a href="{% url 'article:article_detail' article.slug %}" style="color: #222626;"> {{ article.name }} </a></p>
                                 </div>
-                                <div class="col-4"></div>
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -107,7 +102,6 @@
                                     </p>
                                 </div>
                             </div>
-
                         </div>
                                            
                         {% endfor %}
@@ -121,6 +115,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}
