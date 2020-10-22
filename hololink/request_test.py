@@ -1,5 +1,5 @@
 import requests
-
+'''
 a = ['sks']
 
 list = [{"a":'sks', "b":20},{"a":2, "b":34}]
@@ -7,9 +7,9 @@ list = [{"a":'sks', "b":20},{"a":2, "b":34}]
 list_a = [ (dict if dict['b'] > 30 ) if dict['a'] in a for dict in list]
 
 print(list_a)
-
 '''
-url = "http://35.221.178.255:8080/predict"
+
+url = "http://35.201.255.213:8080/predict"
 
 data = [
     {
@@ -25,7 +25,7 @@ r = requests.post(url, json=data)
 
 print(r.status_code)
 print(r.text)
-
+'''
 request_session = requests.Session()
 get_target_session = request_session.get('https://127.0.0.1:8000') #will change to https://hololink.co after deploying on GCP
 get_csrf_token = get_target_session.cookies['csrftoken']
