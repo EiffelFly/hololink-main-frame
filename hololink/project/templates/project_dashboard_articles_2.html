@@ -207,7 +207,7 @@
                         return d
                     } else {
                         if (d.level == 'basestone'){
-                            return d.connection >= 2
+                            return d
                         } else if (d.level == 'stellar'){
                             return d.connection >= (amount_of_articles - 1)
                         }
@@ -233,7 +233,7 @@
                         return d
                     } else {
                         if (d.level == 'basestone'){
-                            return d.connection >= 2
+                            return d
                         } else if (d.level == 'stellar'){
                             return d.connection >= (amount_of_articles - 1)
                         }
@@ -282,7 +282,7 @@
         function tickActions(){
             linkElements
                 .attr("x1", function(d) {
-                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                    if (d.target.level == 'basestone'){
                         return d.source.x 
                     } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.source.x 
@@ -290,7 +290,7 @@
 
                 //})
                 .attr("y1", function(d) { 
-                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                    if (d.target.level == 'basestone'){
                         return d.source.y 
                     } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.source.y 
@@ -298,14 +298,14 @@
 
                 //})
                 .attr("x2", function(d) { 
-                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                    if (d.target.level == 'basestone'){
                         return d.target.x
                     } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.target.x 
                     }})
                 //})
                 .attr("y2", function(d) { 
-                    if (d.target.level == 'basestone' & d.target.connection >= 2){
+                    if (d.target.level == 'basestone'){
                         return d.target.y
                     } else if (d.target.level == 'stellar' & d.target.connection >= (amount_of_articles - 1)){
                         return d.target.y 
