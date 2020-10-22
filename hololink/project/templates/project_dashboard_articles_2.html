@@ -511,7 +511,7 @@
             .range([10, 50])
             .domain([0, biggestNode_keyword])
         var interpolatorForArticles = d3.interpolateNumber(20,70);
-        var interpolatorForTags = d3.interpolateNumber(2 ,50);
+        var interpolatorForTags = d3.interpolateNumber(2 ,30);
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
