@@ -191,7 +191,15 @@
             .selectAll("line") //select svg-line element and use D3.data method
                 .data(graph.links)
                 .enter()
-                
+                .filter(function(d){
+                    //onsole.log(d)
+                    if (d.source.level == 'article'){
+                        
+                        return d
+                    } else if(d.target.level == 'basestone'){
+                        return d
+                    }
+                })
                 .append("line")
                     .attr("stroke-width", 1)
                     .style("stroke", getLinkColor)
@@ -204,6 +212,7 @@
                 .enter()
                 .filter(function(d){
                     if (d.level == 'article'){
+                        console.log(d)
                         return d
                     } else {
                         if (d.level == 'basestone'){
@@ -574,7 +583,6 @@
     }
 
     function getLinkColor(node){
-        console.log(node)
         return "grey"
     }
 
@@ -610,3 +618,5 @@
 </script>
 
 {% endblock %}
+
+
