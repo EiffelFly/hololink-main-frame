@@ -181,8 +181,7 @@
 
         var graph = data.graph
         amount_of_keywords = data.amount_of_keywords
-        amount_of_articles = data.amount_of_articles
-        
+        amount_of_articles = 6
         console.log(parseInt(amount_of_articles/3))
 
         calculateBiggestNum()
@@ -192,6 +191,7 @@
             .selectAll("line") //select svg-line element and use D3.data method
                 .data(graph.links)
                 .enter()
+                
                 .append("line")
                     .attr("stroke-width", 1)
                     .style("stroke", getLinkColor)
@@ -256,20 +256,6 @@
             .style('font-weight', getTextFontWeight)
             .style('font-size', getTextFontSize)
             .style('fill', 'black')
-            
-            
-        //Fourth step: activate simulation and tick function
-        simulation
-            .nodes(graph.nodes)
-            //.alphaMin(0.01)
-            .alphaDecay(0.05)
-            .on("tick", tickActions)
-
-        simulation.force("link")
-            .links(graph.links)         
-
-        nodeElements.append("title")
-            .text(function(d) { return d.id; });
 
         
 
@@ -315,19 +301,62 @@
                 //})
 
             nodeElements
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
+                .attr("cx", function(d) { 
+                    if (d.level == 'article'){
+                        return d.x
+                    } else {
+                        if (d.level == 'basestone'){
+                            return d.x
+                        } else if (d.level == 'stellar' & d.connection >= (amount_of_articles - 1)){
+                            return d.x
+                        }
+                    }})
+                .attr("cy", function(d) { 
+                    if (d.level == 'article'){
+                        return d.y
+                    } else {
+                        if (d.level == 'basestone'){
+                            return d.y
+                        } else if (d.level == 'stellar' & d.connection >= (amount_of_articles - 1)){
+                            return d.y
+                        }
+                    }});
 
             textContainer
                 .attr("x", function(d) { 
-                    nodeR = getNodeSize(d);
-                    x = d.x - nodeR/Math.sqrt(2)
-                    return x 
+                    if (d.level == 'article'){
+                        nodeR = getNodeSize(d);
+                        x = d.x - nodeR/Math.sqrt(2)
+                        return x 
+                    } else {
+                        if (d.level == 'basestone' & d.connection >= 2){
+                            nodeR = getNodeSize(d);
+                            x = d.x - nodeR/Math.sqrt(2)
+                            return x 
+                        } else if (d.level == 'stellar' & d.connection >= (amount_of_articles - 1)){
+                            nodeR = getNodeSize(d);
+                            x = d.x - nodeR/Math.sqrt(2)
+                            return x 
+                        }
+                    }
+                    
                 })
                 .attr("y", function(d) { 
-                    nodeR = getNodeSize(d);
-                    y = d.y - nodeR/Math.sqrt(2)
-                    return y 
+                    if (d.level == 'article'){
+                        nodeR = getNodeSize(d);
+                        y = d.y - nodeR/Math.sqrt(2)
+                        return y 
+                    } else {
+                        if (d.level == 'basestone' & d.connection >= 2){
+                            nodeR = getNodeSize(d);
+                            y = d.y - nodeR/Math.sqrt(2)
+                            return y 
+                        } else if (d.level == 'stellar' & d.connection >= (amount_of_articles - 1)){
+                            nodeR = getNodeSize(d);
+                            y = d.y - nodeR/Math.sqrt(2)
+                            return y 
+                        }
+                    }
                 });                
         };
 
@@ -394,6 +423,19 @@
         var XForce = simulation.force("x");
         var YForce = simulation.force("y");
 
+        //Fourth step: activate simulation and tick function
+        simulation
+            .nodes(graph.nodes)
+            //.alphaMin(0.01)
+            .alphaDecay(0.05)
+            .on("tick", tickActions)
+
+        simulation.force("link")
+            .links(graph.links)         
+
+        nodeElements.append("title")
+            .text(function(d) { return d.id; });
+        
         XForce.strength(function(d){
             if (d.level != 'article'){
                 if (d.connection >= 2){
@@ -532,6 +574,7 @@
     }
 
     function getLinkColor(node){
+        console.log(node)
         return "grey"
     }
 
