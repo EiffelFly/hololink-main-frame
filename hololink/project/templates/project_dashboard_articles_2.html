@@ -203,7 +203,15 @@
                 .data(graph.nodes)
                 .enter()
                 .filter(function(d){
-                    return d.connection > parseInt(amount_of_articles/3) || d.level == "article"
+                    if (d.level == 'article'){
+                        return d
+                    } else {
+                        if (d.level == 'basestone'){
+                            return d.connection >= 2
+                        } else if (d.level == 'stellar'){
+                            return d.connection >= (amount_of_articles - 1)
+                        }
+                    }
                 })
                 .append("circle")
                 .attr("r", getNodeSize)
@@ -221,11 +229,14 @@
                 .data(graph.nodes)                   
                 .enter()
                 .filter(function(d){
-                    if (d.level == 'basestone'){
+                    if (d.level == 'article'){
                         return d
-                    }
-                    else if (d.level == 'stellar'){
-                        return d.connection >= (amount_of_articles - 1)
+                    } else {
+                        if (d.level == 'basestone'){
+                            return d.connection >= 2
+                        } else if (d.level == 'stellar'){
+                            return d.connection >= (amount_of_articles - 1)
+                        }
                     }
                 })
                     .append('foreignObject')
