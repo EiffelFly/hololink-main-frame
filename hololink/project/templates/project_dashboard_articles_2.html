@@ -185,19 +185,28 @@
         console.log(parseInt(amount_of_articles/3))
 
         calculateBiggestNum()
+
+        // because we want to access the D3 calculated data
+        //Fourth step: activate simulation and tick function
+        simulation
+            .nodes(graph.nodes)
+            //.alphaMin(0.01)
+            .alphaDecay(0.05)
+            .on("tick", tickActions)
+
+        simulation.force("link")
+            .links(graph.links)    
         
         var linkElements = g.append("g")
                 .attr("class", "links")
             .selectAll("line") //select svg-line element and use D3.data method
                 .data(graph.links)
                 .enter()
-                .filter(function(d){
-                    //onsole.log(d)
-                    if (d.source.level == 'article'){
-                        
+                .filter( function(d){
+                    if (d.target.level == 'basestone'){
                         return d
-                    } else if(d.target.level == 'basestone'){
-                        return d
+                    } else if (d.target.level == 'stellar'){
+                        return d.target.connection >= (amount_of_articles - 1)
                     }
                 })
                 .append("line")
@@ -212,7 +221,7 @@
                 .enter()
                 .filter(function(d){
                     if (d.level == 'article'){
-                        console.log(d)
+                        //console.log(d)
                         return d
                     } else {
                         if (d.level == 'basestone'){
@@ -278,6 +287,29 @@
             
         function tickActions(){
             linkElements
+                .attr("x1", function(d) { return d.source.x })
+                .attr("y1", function(d) { return d.source.y })
+                .attr("x2", function(d) { return d.target.x })
+                .attr("y2", function(d) { return d.target.y })
+
+            nodeElements
+                .attr('cx', function(d){ return d.x })
+                .attr('cy', function(d){ return d.y })
+
+            textContainer
+                .attr('x', function(d){ 
+                    nodeR = getNodeSize(d);
+                    x = d.x - nodeR/Math.sqrt(2)
+                    return x 
+                })
+                .attr('y', function(d){ 
+                    nodeR = getNodeSize(d);
+                    y = d.y - nodeR/Math.sqrt(2)
+                    return y 
+                })
+
+            /*
+            linkElements
                 .attr("x1", function(d) {
                     if (d.target.level == 'basestone'){
                         return d.source.x 
@@ -308,6 +340,7 @@
                         return d.target.y 
                     }})
                 //})
+            
 
             nodeElements
                 .attr("cx", function(d) { 
@@ -366,7 +399,8 @@
                             return y 
                         }
                     }
-                });                
+                });
+                */                
         };
 
         //Implement FADE IN and OUT EFFECT ------------
@@ -387,17 +421,7 @@
             };
         }
 
-        //create a index to allow constant-time lookup with good performance
-        const linkedByIndex = {};
-        graph.links.forEach(d => {
-            console.log(d)
-            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
-            console.log(linkedByIndex)
-        });
-
-        function isConnected(a, b) {
-            return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
-        }
+        
 
         //calculate biggest Num
     
@@ -434,15 +458,7 @@
         var XForce = simulation.force("x");
         var YForce = simulation.force("y");
 
-        //Fourth step: activate simulation and tick function
-        simulation
-            .nodes(graph.nodes)
-            //.alphaMin(0.01)
-            .alphaDecay(0.05)
-            .on("tick", tickActions)
-
-        simulation.force("link")
-            .links(graph.links)         
+                
 
         nodeElements.append("title")
             .text(function(d) { return d.id; });
@@ -474,6 +490,21 @@
                 return 0
             }
         });
+        
+
+        // create a index to allow constant-time lookup with good performance
+        // This must put after simulation, after that we can access the d3 calculated info
+        const linkedByIndex = {};
+        graph.links.forEach(d => {
+            //console.log(d)
+            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+        });
+
+        console.log(linkedByIndex)
+
+        function isConnected(a, b) {
+            return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+        }
     });
 
     //Sixth step: add zoom capability
