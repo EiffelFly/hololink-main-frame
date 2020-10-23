@@ -169,13 +169,18 @@ def explore(request):
 
 def user_source(request, usernameslug):
     
-    
+    count_article_list = []
+
     profile = get_object_or_404(Profile, user=request.user)
     domains = Domain.objects.filter(owned_by_user=profile)
+    for domain in domains:
+        count_article = Article.objects.filter(owned_by=request.user, domain=domain).count()
+        count_article_list.append(count_article)
 
     context = {
         'domains':domains,
         'profile':profile,
+        'count_article_list':count_article_list,
 
     }
 
