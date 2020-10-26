@@ -512,7 +512,6 @@ def request_ml_thread(**kwargs):
         setattr(article, 'D3_data_format', d3_data)
         article.save()
         article_save_end = timer()
-        merge.save()
         merge_save_end = timer()
     
     print(start-ml_end, start-merge_end, start-article_save_end, start-merge_save_end)
