@@ -158,6 +158,11 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
 
         return article    
 
+
+class NerResultSerializer(serializers.ModelSerializer):
+
+
+
 class ArticleSerializerForPost(serializers.ModelSerializer):
     
     '''
@@ -196,13 +201,13 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
     def create(self, validated_data):
         username = self.context['request'].user
-        user = get_object_or_404(User, username=username)
-
         name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
         recommended = validated_data.get('recommended', None)
         projects = validated_data.get('projects', None)
+
+        user = get_object_or_404(User, username=username)
         
         try:
             article = Article.objects.get(name=name, from_url=from_url)            
@@ -280,6 +285,9 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         t.start()
 
         return article
+
+
+
 
 def get_or_create_recommendation(user, article):
     try:
