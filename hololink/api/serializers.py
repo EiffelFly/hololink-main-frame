@@ -215,22 +215,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 article.ml_is_processing = True
                 article.owned_by.add(user)
         except Article.DoesNotExist:
-            parse_url = tldextract.extract(from_url)
-            scheme = urlparse(from_url).scheme
-            site_main_url = scheme + '://' + parse_url.registered_domain + '/'
-        
-            try:
-                domain = Domain.objects.get(main_site=site_main_url, scheme_type=scheme)
-            except Domain.DoesNotExist:
-                domain = Domain.objects.create(
-                    name=parse_url.registered_domain,
-                    main_site=site_main_url,
-                    created_by=user,
-                    scheme_type=scheme,
-                )
-                domain.save()
-                print(domain)
-
+            get_or_create_domain(from_url)
             data = {
                 'hash':sha256_hash(content),
                 'name':name,
@@ -287,7 +272,22 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         return article
 
 
+def get_or_create_domain(from_url):
+    parse_url = tldextract.extract(from_url)
+    scheme = urlparse(from_url).scheme
+    site_main_url = scheme + '://' + parse_url.registered_domain + '/'
 
+    try:
+        domain = Domain.objects.get(main_site=site_main_url, scheme_type=scheme)
+    except Domain.DoesNotExist:
+        domain = Domain.objects.create(
+            name=parse_url.registered_domain,
+            main_site=site_main_url,
+            created_by=user,
+            scheme_type=scheme,
+        )
+        domain.save()
+        
 
 def get_or_create_recommendation(user, article):
     try:
