@@ -205,17 +205,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         projects = validated_data.get('projects', None)
         
         try:
-            article = Article.objects.get(name=name, from_url=from_url)
-            if recommended == True:
-                try:
-                    recommendation = Recommendation.objects.get(user=user, article=article)
-                except Recommendation.DoesNotExist:
-                    recommendation = Recommendation.objects.create(
-                        user=user,
-                        article=article
-                    )
-                    recommendation.save()
-            
+            article = Article.objects.get(name=name, from_url=from_url)            
             if user not in article.owned_by.all():
                 article.ml_is_processing = True
                 article.owned_by.add(user)
@@ -276,15 +266,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         article.owned_by.add(user)
 
         if recommended == True:
-            try:
-                recommendation = Recommendation.objects.get(user=user, article=article)
-            except Recommendation.DoesNotExist:
-                recommendation = Recommendation.objects.create(
-                    user=user,
-                    article=article
-                )
-                recommendation.save()
-
+            get_or_create_recommendation(user, article)
 
         prepare_data_for_ml = {
             "username":user.username,
@@ -299,7 +281,15 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
         return article
 
-
+def get_or_create_recommendation(user, article):
+    try:
+        recommendation = Recommendation.objects.get(user=user, article=article)
+    except Recommendation.DoesNotExist:
+        recommendation = Recommendation.objects.create(
+            user=user,
+            article=article
+        )
+        recommendation.save()
     
 def sha256_hash(content):
     sha = hashlib.sha256()
@@ -482,6 +472,11 @@ def merge_article_into_galaxy(data_for_merging):
         project.save()
         return project
 
+
+
+
+
+'''
 def request_ml_thread(**kwargs):
 
     # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
@@ -515,6 +510,6 @@ def request_ml_thread(**kwargs):
         merge_save_end = timer()
     
     print(start-ml_end, start-merge_end, start-article_save_end, start-merge_save_end)
-
+'''
 
         
