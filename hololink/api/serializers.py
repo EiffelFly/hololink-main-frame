@@ -227,20 +227,18 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'ml_is_processing':True,
                 'domain':domain,
             }
-
-            try: 
-                Domain.objects.get(main_site=site_main_url, scheme_type=scheme, owned_by_user=user.profile)
-            except Domain.DoesNotExist:
-                user.profile.source.add(domain)
-
             article = super().create(data)
             article.owned_by.add(user)
+
+        try: 
+            Domain.objects.get(main_site=site_main_url, scheme_type=scheme, owned_by_user=user.profile)
+        except Domain.DoesNotExist:
+            user.profile.source.add(domain)
 
         project_name_list = []
             
         for project in projects:
             try:
-                print(project, user)
                 target_project = Project.objects.get(name=project, created_by=user)
                 setattr(target_project, 'ml_is_processing', True)
                 target_project.save()
@@ -253,7 +251,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
             except Project.DoesNotExist:
                 print('204','There is no such project')
-        article.owned_by.add(user)
 
         if recommended == True:
             get_or_create_recommendation(user, article)
@@ -263,7 +260,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             "content":content,
             "projects":project_name_list,
             "article_name":name,
-            "from_url":from_url
+            "from_url":from_url,
         }
 
         t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
