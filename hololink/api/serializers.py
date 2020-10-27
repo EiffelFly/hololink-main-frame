@@ -166,6 +166,11 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
             'D3_data_format'
         ]
 
+    '''
+        we use D3_data_format as endpoint field and override save method as a workaround
+        for ner result endpoint
+    '''   
+
     def save(self, validated_data):
         ner_result = validated_data.get('D3_data_format', None)
     
@@ -354,7 +359,7 @@ def json_to_d3_nodes(data):
 def merge_article_into_galaxy(ner_result):
 
     username = ner_result['username']
-    article_data = ner_result['d3_nodes_data']
+    article_d3_json = ner_result['d3_nodes_data']
     projects = ner_result['projects']
     article_name = ner_result['article_name']
     from_url = ner_result['from_url']
@@ -392,8 +397,8 @@ def merge_article_into_galaxy(ner_result):
                 if node['id'] == article_name:
                     node.update(
                         {
-                            "basestoneNum":article_data['basestoneNum'],
-                            "stellarNum":article_data['stellarNum']
+                            "basestoneNum":article_d3_json['basestoneNum'],
+                            "stellarNum":article_d3_json['stellarNum']
                         }
                     )
                     flag_for_creating_article_node = False
@@ -406,12 +411,12 @@ def merge_article_into_galaxy(ner_result):
                     "id":article_name,
                     "url":from_url,
                     "level":"article",
-                    "basestoneNum":article_data['basestoneNum'],
-                    "stellarNum":article_data['stellarNum'],
+                    "basestoneNum":article_d3_json['basestoneNum'],
+                    "stellarNum":article_d3_json['stellarNum'],
                 }
             )        
 
-        for article_node in article_data['nodes']:    
+        for article_node in article_d3_json['nodes']:    
             # Append new keyword
             try:
                 keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level']).prefetch_related('owned_by_user','owned_by_article')
