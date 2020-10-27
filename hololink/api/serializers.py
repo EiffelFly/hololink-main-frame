@@ -160,6 +160,30 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
 
 
 class NerResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = [
+            'name', 'from_url', 'projects', 'username', 'ner_result'
+        ]
+
+    def save(self, validated_data):
+        name = validated_data.get('name', None)
+        username = validated_data.get('username', None)
+        from_url = validated_data.get('from_url', None)
+        ner_result = validated_data.get('ner_result', None)
+        projects = validated_data.get('projects', None)
+        
+        d3_nodes_data = json_to_d3_nodes(ner_output)
+
+        prepare_for_merging = {
+            "username":username,
+            "name":name,
+            "from_url":from_url,
+            "projects":projects,
+            "d3_nodes_data":d3_nodes_data,  
+        }
+
+        merge_article_into_galaxy(prepare_for_merging)
 
 
 
@@ -212,7 +236,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         try:
             article = Article.objects.get(name=name, from_url=from_url)            
             if user not in article.owned_by.all():
-                article.ml_is_processing = True
+                setattr(article, 'ml_is_processing', True)
                 article.owned_by.add(user)
         except Article.DoesNotExist:
             get_or_create_domain(from_url)
@@ -268,7 +292,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
         return article
 
-
 def get_or_create_domain(from_url):
     parse_url = tldextract.extract(from_url)
     scheme = urlparse(from_url).scheme
@@ -283,8 +306,7 @@ def get_or_create_domain(from_url):
             created_by=user,
             scheme_type=scheme,
         )
-        domain.save()
-        
+        domain.save() 
 
 def get_or_create_recommendation(user, article):
     try:
@@ -301,7 +323,7 @@ def sha256_hash(content):
     sha.update(content.encode())
     return sha.hexdigest()
 
-def json_to_d3(data):
+def json_to_d3_nodes(data):
 
     nodejson = []
     basestoneNum = 0
@@ -338,9 +360,9 @@ def json_to_d3(data):
 def merge_article_into_galaxy(data_for_merging):
 
     username = data_for_merging['username']
-    article_data = data_for_merging['d3']
+    article_data = data_for_merging['d3_nodes_data']
     projects = data_for_merging['projects']
-    article_name = data_for_merging['article_name']
+    article_name = data_for_merging['name']
     from_url = data_for_merging['from_url']
 
     article = get_object_or_404(Article, name=article_name, from_url=from_url)
@@ -366,6 +388,10 @@ def merge_article_into_galaxy(data_for_merging):
         project = Project.objects.get(name=target_project, created_by=user)
 
         flag_for_creating_article_node = True
+
+        '''
+            update_or_create article_node in project_d3_json
+        '''
 
         for node in project.project_d3_json['nodes']:
             if node['level'] == 'article':
@@ -393,9 +419,8 @@ def merge_article_into_galaxy(data_for_merging):
 
         for article_node in article_data['nodes']:    
             # Append new keyword
-            print(project.keyword_list['total'])
             try:
-                keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level'])
+                keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level']).prefetch_related('owned_by_user','owned_by_article')
                 if user.profile not in keyword.owned_by_user.all():
                     keyword.owned_by_user.add(user.profile)
                 if keyword not in keyword.owned_by_article.all():
@@ -478,10 +503,6 @@ def merge_article_into_galaxy(data_for_merging):
         return project
 
 
-
-
-
-'''
 def request_ml_thread(**kwargs):
 
     # prepare request session and using urllib3.Retry to cope with requests.exceptions.ConnectionError
@@ -495,26 +516,21 @@ def request_ml_thread(**kwargs):
     start = timer()  
     ml_result = session.post(url, json=[kwargs])
     ml_end = timer()
-    print(ml_result.status_code)
-    if ml_result.status_code == 200:
-        article = Article.objects.get(name=kwargs['article_name'], from_url=kwargs['from_url'])
-        print(article)
-        setattr(article, 'ml_is_processing', False)
-        ner_output = ml_result.json()
-        print(ner_output)
-        d3_data = json_to_d3(ner_output[0])
-        kwargs['d3'] = d3_data
-        merge = merge_article_into_galaxy(kwargs)
-        merge_end = timer()
-        print(merge)
-        setattr(article, 'ner_output', json.dumps(ner_output[0]))
-        setattr(article, 'D3_data_format', d3_data)
-        setattr(article, 'D3_data_format', d3_data)
-        article.save()
-        article_save_end = timer()
-        merge_save_end = timer()
+        
+    '''
+    d3_data = json_to_d3(ner_output[0])
+    kwargs['d3'] = d3_data
+    merge = merge_article_into_galaxy(kwargs)
+    merge_end = timer()
+    setattr(article, 'ner_output', json.dumps(ner_output[0]))
+    setattr(article, 'D3_data_format', d3_data)
+    setattr(article, 'D3_data_format', d3_data)
+    article.save()
+    article_save_end = timer()
+    merge_save_end = timer()
+    '''
     
     print(start-ml_end, start-merge_end, start-article_save_end, start-merge_save_end)
-'''
+
 
         
