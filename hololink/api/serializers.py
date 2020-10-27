@@ -159,32 +159,26 @@ class ArticleSerializerForNEREngine(serializers.ModelSerializer):
         return article    
 
 
-class NerResultSerializer(serializers.ModelSerializer):
+class ArticleSerializerForNerResult(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'name', 'from_url', 'projects', 'username', 'ner_result'
+            'D3_data_format'
         ]
 
     def save(self, validated_data):
-        name = validated_data.get('name', None)
-        username = validated_data.get('username', None)
-        from_url = validated_data.get('from_url', None)
-        ner_result = validated_data.get('ner_result', None)
-        projects = validated_data.get('projects', None)
+        ner_result = validated_data.get('D3_data_format', None)
+    
+        username = ner_result['username']
+        article_name = ner_result['article_name']
+        projects = ner_result['projects']
+        from_url = ner_result['from_url']
         
         d3_nodes_data = json_to_d3_nodes(ner_output)
 
-        prepare_for_merging = {
-            "username":username,
-            "name":name,
-            "from_url":from_url,
-            "projects":projects,
-            "d3_nodes_data":d3_nodes_data,  
-        }
+        ner_result['d3_nodes_data']=d3_nodes_data
 
-        merge_article_into_galaxy(prepare_for_merging)
-
+        merge = merge_article_into_galaxy(ner_result)
 
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
@@ -357,13 +351,13 @@ def json_to_d3_nodes(data):
 
     return processed_data
 
-def merge_article_into_galaxy(data_for_merging):
+def merge_article_into_galaxy(ner_result):
 
-    username = data_for_merging['username']
-    article_data = data_for_merging['d3_nodes_data']
-    projects = data_for_merging['projects']
-    article_name = data_for_merging['name']
-    from_url = data_for_merging['from_url']
+    username = ner_result['username']
+    article_data = ner_result['d3_nodes_data']
+    projects = ner_result['projects']
+    article_name = ner_result['article_name']
+    from_url = ner_result['from_url']
 
     article = get_object_or_404(Article, name=article_name, from_url=from_url)
     user = get_object_or_404(User, username=username)
