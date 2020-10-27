@@ -19,6 +19,9 @@
         .sources-container {
             min-width: 100% !important;
         }
+        .container-with-border{
+            width: clamp( 300px, 50vw, 700px);
+        }
     }
     @media (min-width: 840px) {
         .content-sub-container {
@@ -67,7 +70,7 @@
     <div class="content_container d-flex" >
         <div class="row m-auto content-sub-container">
             {% include 'dashboard_sidebar.html' %}
-            <div class="col-12 col-md-8"  style="padding: 0 25px; width: clamp( 300px, 50vw, 900px);">
+            <div class="col-12 col-md-8 container-with-border"  style="padding: 0 25px;">
                 <div class="row" style="margin-top: 20px;">
                     <div class="col-8">
                         <h3>Sources</h3>
