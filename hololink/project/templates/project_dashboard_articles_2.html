@@ -241,7 +241,7 @@
                 .attr('connection', function(d){
                     return d.connection
                 })
-                .style("stroke", getLinkColor)
+                .style("stroke", getBorderColor)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
@@ -619,8 +619,17 @@
         }
     }
 
-    function getLinkColor(node){
-        return "grey"
+    function getBorderColor(node){
+        if (node.level == "article"){
+            if (node.recommended == "True"){
+                return '#222626'
+            } else {
+                return "grey"
+            }
+            
+        } else {
+            return "grey"
+        }
     }
 
     function getNodeColor(node){
