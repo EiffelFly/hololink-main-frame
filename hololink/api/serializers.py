@@ -173,7 +173,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 pass
 
         if duplication_list:
-            raise serializers.ValidationError({"Duplication Error": duplication_list})
+            raise serializers.ValidationError({"duplication_error": duplication_list})
         
         return data
 
