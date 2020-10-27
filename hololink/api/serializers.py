@@ -93,15 +93,15 @@ class ArticleSerializer(serializers.ModelSerializer):
         ordering = ['-created_at']
         model = Article
         fields = [
-            'hash', 'name', 'content', 'from_url',
+            'hash', 'name', 'from_url',
             'recommended', 'projects', 'created_by', 'created_at',
-            'article_basestone_keyword_sum','article_stellar_keyword_sum','tokenize_output','ner_output',
-            'final_output', 'D3_data_format', 'owned_by'
+            'article_basestone_keyword_sum','article_stellar_keyword_sum', 'owned_by'
         ]
         read_only_fields = [
-            'hash', 'created_at', 'created_by', 'D3_data_format'
+            'hash', 'created_at', 'created_by'
         ]
         extra_kwargs = {'authors': {'required': False}}
+
 
 
 class ArticleSerializerForNEREngine(serializers.ModelSerializer):

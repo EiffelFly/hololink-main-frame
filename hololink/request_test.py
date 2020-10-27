@@ -1295,10 +1295,13 @@ headers = {
 
 ner_endpoint = 'http://127.0.0.1:8000/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
 
+start = timer()  
 post_target = request_session.post(url=ner_endpoint, json = data, headers=headers)
+ml_end = timer()
 
 print(post_target.status_code)
 print(post_target.text)
+print(start-ml_end)
 '''
 data = {
     "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", #put in the name Hololink_mainframe post to you
