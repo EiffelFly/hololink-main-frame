@@ -67,8 +67,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
             perform_create will init serializer with this additional data.
         '''
 
-        print(serializer)
-        
         serializer.save(
             hash = sha256_hash(self.request.data['content']),
             created_by = self.request.user,
@@ -78,10 +76,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
 class ArticleViewSetForNerResult(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, BasicAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = ArticleSerializerForNerResult
+
+    def get_serializer_class(self):
+        return ArticleSerializerForNerResult
 
     def get_queryset(self):
-        return Article.objects.all()
+        return Article.objects.filter(created_by=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save()
