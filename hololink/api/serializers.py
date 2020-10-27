@@ -234,6 +234,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             "projects":project_name_list,
             "article_name":name,
             "from_url":from_url,
+            "recommened":recommended,
         }
 
         t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
@@ -320,6 +321,7 @@ def merge_article_into_galaxy(ner_result):
     projects = ner_result['projects']
     article_name = ner_result['article_name']
     from_url = ner_result['from_url']
+    recommended = ner_result['recommended']
 
     article = get_object_or_404(Article, name=article_name, from_url=from_url)
     user = get_object_or_404(User, username=username)
@@ -370,6 +372,7 @@ def merge_article_into_galaxy(ner_result):
                     "level":"article",
                     "basestoneNum":article_d3_json['basestoneNum'],
                     "stellarNum":article_d3_json['stellarNum'],
+                    "recommended":recommended,
                 }
             )        
 
