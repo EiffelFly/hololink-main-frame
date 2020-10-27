@@ -3,7 +3,7 @@ from article.models import Article
 from project.models import Project
 from accounts.models import Recommendation
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNEREngine, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -75,10 +75,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
             created_at = timezone.localtime(timezone.now())
         )
 
-class ArticleViewSetForNEREngine(viewsets.ModelViewSet):
+class ArticleViewSetForNerResult(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, BasicAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = ArticleSerializerForNEREngine
+    serializer_class = ArticleSerializerForNerResult
 
     def get_queryset(self):
         return Article.objects.all()

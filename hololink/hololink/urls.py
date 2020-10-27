@@ -34,7 +34,7 @@ router.register('users', views.UserViewSet)
 router.register('groups', views.GroupViewSet)
 router.register('articles', views.ArticleViewSet, basename='articles')
 router.register('projects', views.ProjectViewSet, basename='projects')
-router.register('ner-result', views.ArticleViewSetForNEREngine, basename='nerResult')
+router.register('ner-result', views.ArticleViewSetForNerResult, basename='nerResult')
 router.register('broswer-extension-data', views.DataViewforBrowser, basename='broswer_extension_data')
 
 # Wire up our API using automatic URL routing.
