@@ -171,7 +171,10 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
         for ner result endpoint
     '''   
 
-    def save(self, validated_data):
+    def validate(self, data):
+        return data
+
+    def create(self, validated_data):
         ner_result = validated_data.get('D3_data_format', None)
     
         username = ner_result['username']
@@ -179,7 +182,7 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
         projects = ner_result['projects']
         from_url = ner_result['from_url']
         
-        d3_nodes_data = json_to_d3_nodes(ner_output)
+        d3_nodes_data = json_to_d3_nodes(ner_result)
 
         ner_result['d3_nodes_data']=d3_nodes_data
 
@@ -238,7 +241,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 setattr(article, 'ml_is_processing', True)
                 article.owned_by.add(user)
         except Article.DoesNotExist:
-            get_or_create_domain(from_url)
+            domain = get_or_create_domain(user, from_url)
             data = {
                 'hash':sha256_hash(content),
                 'name':name,
@@ -252,11 +255,6 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             }
             article = super().create(data)
             article.owned_by.add(user)
-
-        try: 
-            Domain.objects.get(main_site=site_main_url, scheme_type=scheme, owned_by_user=user.profile)
-        except Domain.DoesNotExist:
-            user.profile.source.add(domain)
 
         project_name_list = []
             
@@ -291,7 +289,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
         return article
 
-def get_or_create_domain(from_url):
+def get_or_create_domain(user, from_url):
     parse_url = tldextract.extract(from_url)
     scheme = urlparse(from_url).scheme
     site_main_url = scheme + '://' + parse_url.registered_domain + '/'
@@ -306,6 +304,13 @@ def get_or_create_domain(from_url):
             scheme_type=scheme,
         )
         domain.save() 
+
+    try: 
+        Domain.objects.get(main_site=site_main_url, scheme_type=scheme, owned_by_user=user.profile)
+    except Domain.DoesNotExist:
+        user.profile.source.add(domain)
+    
+    return domain
 
 def get_or_create_recommendation(user, article):
     try:
@@ -384,7 +389,7 @@ def merge_article_into_galaxy(ner_result):
 
     for target_project in projects:
         # Create or Update article info in project_d3_json['nodes']
-        project = Project.objects.get(name=target_project, created_by=user)
+        project = Project.objects.get(name=target_project, created_by=user).prefetch_related('keyword')
 
         flag_for_creating_article_node = True
 
