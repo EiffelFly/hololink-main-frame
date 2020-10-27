@@ -1230,9 +1230,8 @@ data = {
 
 
 request_session = requests.Session()
-get_target_session = request_session.get('http://127.0.0.1:8000') #will change to https://hololink.co after deploying on GCP
-get_csrf_token = get_target_session.cookies['csrftoken']
-
+# get_target_session = request_session.get('https://') #will change to https://hololink.co after deploying on GCP
+# get_csrf_token = get_target_session.cookies['csrftoken']
 
 headers = {
     # "X-CSRFToken": get_csrf_token,
@@ -1241,7 +1240,7 @@ headers = {
     "Authorization":"Token 78602c22bc09d0669bd14895264f083bcebc6e93" #this token is for demo
 }
 
-ner_endpoint = 'http://127.0.0.1:8000/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
+ner_endpoint = 'https://hololink.co/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
 
 start = timer()  
 post_target = request_session.post(url=ner_endpoint, json = data, headers=headers)
