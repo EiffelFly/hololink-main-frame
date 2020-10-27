@@ -188,6 +188,10 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
 
         article, project = merge_article_into_galaxy(ner_result)
 
+        setattr(article, 'D3_data_format', d3_nodes_data)
+
+        article.save()
+
         return article
 
 
