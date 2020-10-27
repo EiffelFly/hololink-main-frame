@@ -186,7 +186,11 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
 
         ner_result['d3_nodes_data']=d3_nodes_data
 
-        merge = merge_article_into_galaxy(ner_result)
+        article, project = merge_article_into_galaxy(ner_result)
+
+        return article
+
+
 
 
 class ArticleSerializerForPost(serializers.ModelSerializer):
@@ -389,8 +393,8 @@ def merge_article_into_galaxy(ner_result):
 
     for target_project in projects:
         # Create or Update article info in project_d3_json['nodes']
-        project = Project.objects.get(name=target_project, created_by=user).prefetch_related('keyword')
-
+        project = Project.objects.filter(name=target_project, created_by=user).prefetch_related('keyword')[0]
+        print(project)
         flag_for_creating_article_node = True
 
         '''
@@ -424,12 +428,12 @@ def merge_article_into_galaxy(ner_result):
         for article_node in article_d3_json['nodes']:    
             # Append new keyword
             try:
-                keyword = Keyword.objects.get(name=article_node['title'], keyword_type=article_node['level']).prefetch_related('owned_by_user','owned_by_article')
+                keyword = Keyword.objects.filter(name=article_node['title'], keyword_type=article_node['level']).prefetch_related('owned_by_user','owned_by_article')[0]
                 if user.profile not in keyword.owned_by_user.all():
                     keyword.owned_by_user.add(user.profile)
-                if keyword not in keyword.owned_by_article.all():
+                if article not in keyword.owned_by_article.all():
                     keyword.owned_by_article.add(article)
-            except Keyword.DoesNotExist:
+            except (Keyword.DoesNotExist, IndexError):
                 keyword = Keyword.objects.create(
                     name = article_node['title'],
                     keyword_type = article_node['level'],
@@ -504,7 +508,7 @@ def merge_article_into_galaxy(ner_result):
 
         setattr(project, 'ml_is_processing', False)
         project.save()
-        return project
+        return article, project
 
 
 def request_ml_thread(**kwargs):
