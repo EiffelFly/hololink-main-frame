@@ -181,6 +181,7 @@ def user_source(request, usernameslug):
         'domains':domains,
         'profile':profile,
         'count_article_list':count_article_list,
+        'active_nav':'sources',
 
     }
 
