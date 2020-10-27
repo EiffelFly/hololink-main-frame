@@ -7,6 +7,7 @@ data = {
 	"D3_data_format": {
 		"article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
 		"from_url": "https://udn.com/news/story/7240/4604445",
+		"recommended":"True",
 		"projects": ["科技島讀"],
 		"Final": {
 			"美國": {
@@ -1224,7 +1225,7 @@ data = {
 				"Frequency": 1
 			}
 		},
-		"username": "summerbud"
+		"username": "hololink"
 	}
 }
 
@@ -1237,7 +1238,7 @@ headers = {
     # "X-CSRFToken": get_csrf_token,
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "Authorization":"Token 78602c22bc09d0669bd14895264f083bcebc6e93" #this token is for demo
+    "Authorization":"Token b2a824d00e907c4902f47f399ddcf375a6a9b62d" #this token is for demo
 }
 
 ner_endpoint = 'https://hololink.co/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
