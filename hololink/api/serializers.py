@@ -102,63 +102,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {'authors': {'required': False}}
 
-
-
-class ArticleSerializerForNEREngine(serializers.ModelSerializer):
-
-    ner_output = serializers.JSONField()
-
-    class Meta:
-        model = Article
-        fields = [
-            'name', 'from_url', 'D3_data_format', 'ner_output', 'projects', 'owned_by'
-        ]
-        read_only_fields = [
-            'D3_data_format'
-        ]
-
-    def create(self, validated_data):
-        users = validated_data.get('owned_by', None)
-        
-        for user in users:
-            user = get_object_or_404(User, username=user)
-
-        name = validated_data.get('name', None)
-        from_url = validated_data.get('from_url', None)
-        ner_output = validated_data.get('ner_output', None)
-        projects = validated_data.get('projects', None)
-
-        try:
-            article = Article.objects.get(name=name, from_url=from_url)
-        except Article.DoesNotExist:
-            raise serializers.ValidationError({"ValidationError": "Article doesn't exist, you must post exact the same name and url"})
-
-        d3_data = json_to_d3(ner_output)   
-
-        ner_output.pop('url', None)
-        ner_output.pop('title', None)
-        ner_output.pop('content', None)
-        ner_output.pop('galaxy', None)
-
-        setattr(article, 'ner_output', ner_output)
-        setattr(article, 'D3_data_format', d3_data)
-        setattr(article, 'ml_is_processing', False)
-        article.save()
-
-        data_for_merging = {
-            "username":user,
-            "name":name,
-            "from_url":from_url,
-            "projects":projects,
-            "d3":d3_data,  
-        }
-
-        merge = merge_article_into_galaxy(data_for_merging)
-        merge.save()
-
-        return article    
-
-
 class ArticleSerializerForNerResult(serializers.ModelSerializer):
     class Meta:
         model = Article
