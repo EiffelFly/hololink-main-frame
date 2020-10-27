@@ -5,6 +5,7 @@ from rest_framework import routers
 from api import views
 from django.conf import settings
 from django.conf.urls.static import static
+import debug_toolbar
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -23,6 +24,7 @@ urlpatterns = [
     path('explore/', explore, name='explore'),
     path('explore/users', explore_users, name='explore_users'),
     #path('<username>/', user_dashboard, name='user_dashboard')
+    path('__debug__/', include(debug_toolbar.urls)),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

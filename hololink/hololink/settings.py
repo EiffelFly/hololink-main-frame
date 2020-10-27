@@ -27,6 +27,9 @@ from secret.hololink.settings import DEBUG
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'widget_tweaks',
     'rest_framework.authtoken',
+    'debug_toolbar',
 
 ]
 
@@ -56,6 +60,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # For dynamic languages
