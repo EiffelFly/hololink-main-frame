@@ -187,6 +187,7 @@
         amount_of_keywords = data.amount_of_keywords
         amount_of_articles = data.amount_of_articles
         console.log(parseInt(amount_of_articles/3))
+        console.log(data)
 
         calculateBiggestNum()
 
@@ -241,7 +242,7 @@
                 .attr('connection', function(d){
                     return d.connection
                 })
-                .style("border-color", getBorderColor)
+                //.style("border-color", getBorderColor)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
