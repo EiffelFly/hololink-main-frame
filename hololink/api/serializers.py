@@ -237,8 +237,8 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             "from_url":from_url,
         }
 
-        # t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
-        # t.start()
+        t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
+        t.start()
 
         return article
 
