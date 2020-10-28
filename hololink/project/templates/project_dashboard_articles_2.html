@@ -211,7 +211,7 @@
                     if (d.target.level == 'basestone'){
                         return d.target.connection > parseInt(amount_of_articles/5)
                     } else if (d.target.level == 'stellar'){
-                        return d.target.connection > (amount_of_articles)
+                        return d.target.connection > (amount_of_articles/2)
                     }
                 })
                 .append("line")
@@ -232,7 +232,7 @@
                         if (d.level == 'basestone'){
                             return d.connection >= parseInt(amount_of_articles/5)
                         } else if (d.level == 'stellar'){
-                            return d.connection > (amount_of_articles)
+                            return d.connection > (amount_of_articles/2)
                         }
                     }
                 })
@@ -258,7 +258,7 @@
                         if (d.level == 'basestone'){
                             return d.connection >= parseInt(amount_of_articles/5)
                         } else if (d.level == 'stellar'){
-                            return d.connection > (amount_of_articles)
+                            return d.connection > (amount_of_articles/2)
                         }
                     }
                 })
