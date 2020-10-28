@@ -179,7 +179,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
 
     def create(self, validated_data):
         username = self.context['request'].user
-        name = validated_data.get('name', None)
+        article_name = validated_data.get('name', None)
         from_url = validated_data.get('from_url', None)
         content = validated_data.get('content', None)
         recommended = validated_data.get('recommended', None)
@@ -188,15 +188,16 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         user = get_object_or_404(User, username=username)
         
         try:
-            article = Article.objects.get(name=name, from_url=from_url)            
+            article = Article.objects.filter(name=article_name, from_url=from_url).prefetch_related('owned_by')[0]
             if user not in article.owned_by.all():
+                print('hohohohohohhh')
                 setattr(article, 'ml_is_processing', True)
                 article.owned_by.add(user)
-        except Article.DoesNotExist:
+        except (Article.DoesNotExist, IndexError):
             domain = get_or_create_domain(user, from_url)
             data = {
                 'hash':sha256_hash(content),
-                'name':name,
+                'name':article_name,
                 'from_url':from_url,
                 'content':content,
                 'recommended':recommended,
@@ -218,7 +219,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 project_name_list.append(target_project.name)
 
                 try:
-                    article = Article.objects.get(projects=target_project, name=name)
+                    article = Article.objects.get(projects=target_project, name=article_name)
                 except Article.DoesNotExist:
                     article.projects.add(target_project)
 
@@ -232,15 +233,15 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             "username":user.username,
             "content":content,
             "projects":project_name_list,
-            "article_name":name,
+            "article_name":article_name,
             "from_url":from_url,
-            "recommened":recommended,
         }
 
-        t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
-        t.start()
+        # t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
+        # t.start()
 
         return article
+
 
 def get_or_create_domain(user, from_url):
     parse_url = tldextract.extract(from_url)
