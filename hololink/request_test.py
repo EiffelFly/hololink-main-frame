@@ -1229,10 +1229,10 @@ data = {
 		"username": "hololink"
 	}
 }
-'''
-with open('ner_format_json.json', 'r', encoding='utf-8') as file:
+
+with open('1028.json', 'r', encoding='utf-8') as file:
 	target_file = json.load(file)
-'''
+
 request_session = requests.Session()
 # get_target_session = request_session.get('https://') #will change to https://hololink.co after deploying on GCP
 # get_csrf_token = get_target_session.cookies['csrftoken']
@@ -1241,14 +1241,16 @@ headers = {
     # "X-CSRFToken": get_csrf_token,
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "Authorization":"Token b2a824d00e907c4902f47f399ddcf375a6a9b62d" #this token is for demo
+    "Authorization":"Token 78602c22bc09d0669bd14895264f083bcebc6e93" #this token is for demo
 }
 
-ner_endpoint = 'https://hololink.co/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
+ner_endpoint = 'http://127.0.0.1:8000/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
 
 start = timer()  
-post_target = request_session.post(url=ner_endpoint, json = data, headers=headers)
+post_target = request_session.post(url=ner_endpoint, json = target_file, headers=headers)
 ml_end = timer()
+
+
 
 print(post_target.status_code)
 print(post_target.text)

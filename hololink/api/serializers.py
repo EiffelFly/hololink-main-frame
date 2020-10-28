@@ -185,6 +185,8 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         recommended = validated_data.get('recommended', None)
         projects = validated_data.get('projects', None)
 
+        print(type(recommended))
+
         user = get_object_or_404(User, username=username)
         
         try:
@@ -235,6 +237,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             "projects":project_name_list,
             "article_name":article_name,
             "from_url":from_url,
+            "recommended":recommended,
         }
 
         t = threading.Thread(target=request_ml_thread, kwargs=prepare_data_for_ml, daemon=True)
@@ -475,9 +478,7 @@ def request_ml_thread(**kwargs):
     print(kwargs)
 
     url = "http://35.201.255.213:8080/predict"
-    start = timer()  
     ml_result = session.post(url, json=kwargs)
-    ml_end = timer()
         
     '''
     d3_data = json_to_d3(ner_output[0])
@@ -492,7 +493,6 @@ def request_ml_thread(**kwargs):
     merge_save_end = timer()
     '''
     
-    print(start-ml_end, start-merge_end, start-article_save_end, start-merge_save_end)
 
 
         
