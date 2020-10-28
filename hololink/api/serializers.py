@@ -474,7 +474,7 @@ def request_ml_thread(**kwargs):
 
     print(kwargs)
 
-    #url = "http://35.201.255.213:8080/predict"
+    url = "http://35.201.255.213:8080/predict"
     start = timer()  
     ml_result = session.post(url, json=kwargs)
     ml_end = timer()
