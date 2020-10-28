@@ -1,8 +1,34 @@
+
+
+# 這是我給你的資料
+
+{
+	"username": "hololink",
+	"content": "顛覆火箭產業不夠，SpaceX 要殖民火星",
+	"projects": ["科技島讀"],
+	"article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
+	"from_url": "https://udn.com/news/story/7240/4604445"
+}
+
+# 還是你希望我寫成這樣
+
+{
+	"D3_data_format": {
+		"username": "hololink",
+	    "content": "顛覆火箭產業不夠，SpaceX 要殖民火星",
+	    "projects": ["科技島讀"],
+	    "article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
+	    "from_url": "https://udn.com/news/story/7240/4604445"
+	}
+}
+
+
+# 這是我希望接收到的資料格式：去掉 content 加上 Final
+
 {
 	"D3_data_format": {
 		"article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
 		"from_url": "https://udn.com/news/story/7240/4604445",
-		"recommended": "True",
 		"projects": ["科技島讀"],
 		"username": "hololink",
 		"Final": {
@@ -1223,3 +1249,4 @@
 		}
 	}
 }
+

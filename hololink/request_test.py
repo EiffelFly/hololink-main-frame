@@ -1229,10 +1229,10 @@ data = {
 		"username": "hololink"
 	}
 }
-
+'''
 with open('ner_format_json.json', 'r', encoding='utf-8') as file:
 	target_file = json.load(file)
-
+'''
 request_session = requests.Session()
 # get_target_session = request_session.get('https://') #will change to https://hololink.co after deploying on GCP
 # get_csrf_token = get_target_session.cookies['csrftoken']
@@ -1247,7 +1247,7 @@ headers = {
 ner_endpoint = 'https://hololink.co/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
 
 start = timer()  
-post_target = request_session.post(url=ner_endpoint, json = target_file, headers=headers)
+post_target = request_session.post(url=ner_endpoint, json = data, headers=headers)
 ml_end = timer()
 
 print(post_target.status_code)

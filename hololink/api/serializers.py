@@ -472,7 +472,9 @@ def request_ml_thread(**kwargs):
     session.mount('http://', adapter)
     session.mount('https://', adapter)
 
-    url = "http://35.201.255.213:8080/predict"
+    print(kwargs)
+
+    #url = "http://35.201.255.213:8080/predict"
     start = timer()  
     ml_result = session.post(url, json=kwargs)
     ml_end = timer()
