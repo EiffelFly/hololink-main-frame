@@ -1,15 +1,10 @@
-import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-from timeit import default_timer as timer
-import json
-
-data = {
+{
 	"D3_data_format": {
 		"article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
 		"from_url": "https://udn.com/news/story/7240/4604445",
-		"recommended":"True",
+		"recommended": "True",
 		"projects": ["科技島讀"],
+		"username": "hololink",
 		"Final": {
 			"美國": {
 				"Title": "美國",
@@ -1225,97 +1220,6 @@ data = {
 				],
 				"Frequency": 1
 			}
-		},
-		"username": "hololink"
+		}
 	}
 }
-
-with open('ner_format_json.json', 'r', encoding='utf-8') as file:
-	target_file = json.load(file)
-
-request_session = requests.Session()
-# get_target_session = request_session.get('https://') #will change to https://hololink.co after deploying on GCP
-# get_csrf_token = get_target_session.cookies['csrftoken']
-
-headers = {
-    # "X-CSRFToken": get_csrf_token,
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Authorization":"Token b2a824d00e907c4902f47f399ddcf375a6a9b62d" #this token is for demo
-}
-
-ner_endpoint = 'https://hololink.co/api/ner-result/' #will change to https://hololink.co/api/ner-result after deploying on GCP
-
-start = timer()  
-post_target = request_session.post(url=ner_endpoint, json = target_file, headers=headers)
-ml_end = timer()
-
-print(post_target.status_code)
-print(post_target.text)
-print(start-ml_end)
-
-
-'''
-data = {
-    "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", #put in the name Hololink_mainframe post to you
-    "from_url": "https://daodu.tech/08-20-2020-apple-epic-games-and-the-fight-for-metaverse-entrance", #put in the from_url Hololink_mainframe post to you
-    "ner_output":{
-        "data":"put NER output here"
-    }
-    "owned_by":[1],
-    "projects":[19,]
-}
-'''
-'''
-data = [
-    {
-        "name": "螞蟻集團上市 — 無法複製的中國超級平台",
-        "content": "今年新創上市熱絡，島讀最近就分析了 5 家。不過它們的估值全部加起來，都還比不上預計將於 9 月上市的中國螞蟻集團。螞蟻集團申請在香港與上海同步上市。一般推測其將募資 300 億美金，估值達 2,000 億美金（約 6 兆台幣）。",
-        "from_url": "https://daodu.tech/09-03-2020-ant-group-file-ipo-the-uncopyable-super-app",
-        "projects":[19],
-        "owned_by":[1]
-    }
-]
-
-session = requests.Session()
-retry = Retry(connect=3, backoff_factor=0.5)
-adapter = HTTPAdapter(max_retries=retry)
-session.mount('http://', adapter)
-session.mount('https://', adapter)
-
-url = "http://127.0.0.1:8000/api/ner-result/"
-start = timer()  
-ml_result = session.post(url, json=data)
-ml_end = timer()
-print(ml_result.status_code)
-print(ml_result.text)
-
-'''
-
-
-'''
-a = ['sks']
-
-list = [{"a":'sks', "b":20},{"a":2, "b":34}]
-
-list_a = [ (dict if dict['b'] > 30 ) if dict['a'] in a for dict in list]
-
-print(list_a)
-
-url = "http://35.201.255.213:8080/predict"
-
-data = [
-    {
-        "name": "螞蟻集團上市 — 無法複製的中國超級平台",
-        "content": "今年新創上市熱絡，島讀最近就分析了 5 家。不過它們的估值全部加起來，都還比不上預計將於 9 月上市的中國螞蟻集團。螞蟻集團申請在香港與上海同步上市。一般推測其將募資 300 億美金，估值達 2,000 億美金（約 6 兆台幣）。",
-        "from_url": "https://daodu.tech/09-03-2020-ant-group-file-ipo-the-uncopyable-super-app",
-        "projects":[19],
-        "owned_by":[1]
-    }
-]
-
-r = requests.post(url, json=data)
-
-print(r.status_code)
-print(r.text)
-'''
