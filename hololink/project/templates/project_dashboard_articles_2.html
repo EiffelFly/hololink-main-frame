@@ -606,12 +606,12 @@
         }
         else if (d.level == 'stellar'){
             return NodeSizeScaleforTag(d.connection)
-        } else {
-            if (d.connection = parseInt(amount_of_articles/5)){
+        } else if (d.level == 'basestone'){
+            if (d.connection > parseInt(amount_of_articles/5)){
                 console.log(parseInt(amount_of_articles/5))
-                return 10
-            } else{
                 return NodeSizeScaleforTag(d.connection)
+            } else{
+                return 15
             }
         }
     }
