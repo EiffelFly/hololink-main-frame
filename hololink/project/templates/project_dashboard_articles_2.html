@@ -454,8 +454,9 @@
         var strengthScale = d3.scalePow()
             .exponent(2)
             .range([0, 0.5])
-            .domain([0, d3.max(graph.nodes, function(d) {
-                return d.connection;
+            .domain([0, biggestNode_keyword])
+            //.domain([0, d3.max(graph.nodes, function(d) {
+            //    return d.connection;
             })]);
 
         // Re-define x,y force strength to make bigger node at center
@@ -463,18 +464,16 @@
         var XForce = simulation.force("x");
         var YForce = simulation.force("y");
 
-                
-
         nodeElements.append("title")
             .text(function(d) { return d.id; });
         
         XForce.strength(function(d){
             if (d.level != 'article'){
-                if (d.connection >= 2){
+                if (d.level == 'basestone'){
                     return strengthScale(d.connection) + 0.4
                 }
                 else{
-                    return 0
+                    return strengthScale(d.connection)
                 }
             }
             else {
@@ -484,11 +483,11 @@
 
         YForce.strength(function(d){
             if (d.level != 'article'){
-                if (d.connection >= 2){
+                if (d.level == 'basestone'){
                     return strengthScale(d.connection) + 0.4
                 }
                 else{
-                    return 0
+                    return strengthScale(d.connection)
                 }
             }
             else{
