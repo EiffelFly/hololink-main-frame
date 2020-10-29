@@ -186,8 +186,8 @@
         var graph = data.graph
         amount_of_keywords = data.amount_of_keywords
         amount_of_articles = data.amount_of_articles
-        console.log(parseInt(amount_of_articles/5))
-        console.log(data)
+        //console.log(parseInt(amount_of_articles/5))
+        //console.log(data)
 
         calculateBiggestNum()
 
@@ -226,7 +226,7 @@
                 .enter()
                 .filter(function(d){
                     if (d.level == 'article'){
-                        console.log(d)
+                        //console.log(d)
                         return d
                     } else {
                         if (d.level == 'basestone'){
@@ -245,6 +245,7 @@
                 .style("border-color", getNodeBorderColor)
                 .style("border-width", getNodeBorderWidth)
                 .style("border-style", 'solid')
+                .style("stroke", getNodeBorderColor)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
@@ -506,7 +507,7 @@
             linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
         });
 
-        console.log(linkedByIndex)
+        //console.log(linkedByIndex)
 
         function isConnected(a, b) {
             return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
@@ -610,7 +611,7 @@
             return NodeSizeScaleforTag(d.connection)
         } else if (d.level == 'basestone'){
             if (d.connection > parseInt(amount_of_articles/5)){
-                console.log(parseInt(amount_of_articles/5))
+                //console.log(parseInt(amount_of_articles/5))
                 return NodeSizeScaleforTag(d.connection)
             } else{
                 return 8
