@@ -125,7 +125,8 @@ def project_articles(request, projectnameslug, **kwargs):
 
             return HttpResponseRedirect(reverse('project:project_articles', args=(project.slug,)))
         '''
-            
+    
+    print(project.ml_is_processing)
 
     context = {
         'profile':user.profile,
@@ -201,7 +202,7 @@ def galaxy_setting(request, projectnameslug, **kwargs):
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
 
-    context = {\
+    context = {
         'profile':profile,
         'form': None,
         'tips': [],

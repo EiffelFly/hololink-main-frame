@@ -133,6 +133,7 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
 
         setattr(article, 'D3_data_format', d3_nodes_data)
         setattr(article, 'ml_is_processing', False)
+        setattr(project, 'ml_is_processing', False)
 
         article.save()
 
