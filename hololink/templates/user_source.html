@@ -20,7 +20,7 @@
             min-width: 100% !important;
         }
         .container-with-border{
-            width: clamp( 300px, 50vw, 700px);
+            width: clamp( 300px, 50vw, 640px);
         }
     }
     @media (min-width: 840px) {
@@ -77,10 +77,10 @@
                     </div>
                     <div class="col-4"></div>
                 </div>
-                <div class="row" >
+                <div class="row" style="overflow: auto;">
                     {% for domain in domains %}
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
-                        <div class="sources-container" style="min-width: 90vw;">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="margin-bottom: 20px;">
+                        <div class="sources-container">
                             <div class="row" style="padding: 0px 0px 0px 20px">
                                 <div class="col">
                                     <div style="font-size: 18px; font-weight: 700;">{{domain.name}}</div>
