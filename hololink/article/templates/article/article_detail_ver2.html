@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+
+    @media (min-width: 440px) {
+        .articles-sub-container{
+            height: 140px !important;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .articles-sub-container{
+            height: 110px !important;
+        }
+    }
+    @media (min-width: 768px) {
+
+        a.mainnavbar-link-vision{
+            padding: 0.6rem 0.5rem 0.6rem 1.5rem !important;
+        }
+        a.mainnavbar-link-explore{
+            padding: 0.6rem 0.5rem 0.6rem 0.5rem !important;
+        }
+        .sub-container{
+            height: 60vw !important;
+        }
+    }
+    @media (min-width: 992px) {
+        .sub-container{
+            width: 45vw;
+            height: 600px !important;
+        }
+        .articles-sub-container{
+            height: 125px !important;
+        }
+        .articles-container{
+            margin: 0 !important;
+        }
+    }
+    @media (min-width: 1200px) {}
+
+    .dashboard-articles-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+
+    .table{
+        border:1px solid #BFB9B8;
+        border-radius: 5px;
+        border-spacing: 0px;
+        border-collapse: separate;
+    }
+    
+</style>
+<div class="container-fluid d-flex flex-column" style="padding:0">
+    {% include "article/article_navbar.html" %}
+    <div class="row flex-grow-1" style="margin: 20px auto;">
+        <div class="col-12 col-lg-6" >
+            <div class="row h-100 sub-container" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
+                <div class="col" style="padding: 0;">
+                    <svg width="100%" height="100%"></svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 articles-container" style="margin: 20px 0 0 0;">
+            <div class="row sub-container d-flex" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; padding: 0px 0px 0px 0px; overflow:auto; height: 100%;">
+                <p style="margin: auto;">under construction</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script>
+
+    
+
+    //First step: prepare svg and add encompassing group-g for the zoom 
+    var svg = d3.select("svg"),
+        width = $("svg").width()
+        height = $("svg").height();
+
+    console.log(width)
+    
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var biggestNode = 0
+
+    //Second step: set up simulation and force
+    // In this diagram we want to center the big node 
+    // forceX and forceY will do the job but they will force the node like backslash so we need to put another center force
+    var simulation = d3.forceSimulation()
+        .force("x", d3.forceX(width / 2))
+        .force("y", d3.forceY(height / 2))
+        .force('charge', d3.forceManyBody().strength(20))
+        .force("center_force", d3.forceCenter(width / 2, height / 2))
+        .force(
+            "collision",
+            d3
+                .forceCollide()
+                .radius(function(d){
+                    radius = getNodeSize(d)
+                    return radius + 2
+                })
+                .strength(1)
+        );
+    
+    //Third step: LOAD DATA and create node elements
+    d3.json('{% url "article:deliver_D3" article.slug%}', function(error,graph){
+        if (error) throw error;
+
+        calculateBiggestNum()
+        console.log(graph.nodes)
+
+        //Set up scale for forceX an Y
+        var strengthScale = d3.scalePow()
+            .exponent(2)
+            .range([0, 0.5])
+            .domain([0, d3.max(graph.nodes, function(d) {
+                return d.frequency;
+            })]);
+
+        var nodeElements = g.append("g")
+            .attr("class", "nodes")         
+                .selectAll("circle")
+                    .data(graph.nodes)
+                    .enter()
+                    .append("circle")
+                    .attr("r", getNodeSize)
+                    .attr("fill", getNodeColor)
+                    .style("stroke", "grey")
+
+        var testElements = g.append("g")
+            .attr("class", "text")
+                .selectAll("text")
+                    .data(graph.nodes)
+                        .enter()
+                        .append('text')
+                        .text(node => node.title)
+                        .attr('text-anchor', 'middle')
+                        //.attr('font-family', "'Noto Sans TC', sans-serif")
+                        .attr('font-weight', getTextFontWeight)
+                        .attr('dx', 0)
+                        .attr('dy', getTextDy)
+                        .attr('font-size', getTextFontSize)
+                        .style('fill', 'black')
+
+        var NERtestElements = g.append("g")
+            .attr("class", "text")
+                .selectAll("text")
+                    .data(graph.nodes)
+                        .enter()
+                        .append('text')
+                        .text(node => {
+                            if (node.level == 'basestone'){
+                                return node.type
+                            }
+                        })
+                        .attr('text-anchor', 'middle')
+                        .attr('font-weight', getTextFontWeight)
+                        .attr('dx', 0)
+                        .attr('dy', getNERTextDy)
+                        .attr('font-size', getNERTextFontSize)
+                        .style('fill', 'black')
+
+        nodeElements.append("title")
+            .text(function(d) { return d.title; });
+
+        // Re-define x,y force strength to make bigger node at center
+        // And besides that, we make basestone at center and basestone at outer ring
+        var XForce = simulation.force("x");
+        var YForce = simulation.force("y");
+
+        XForce.strength(function(d){
+            if (d.level == "basestone"){
+                return strengthScale(d.frequency) + 0.4
+            }
+            else { 
+                return strengthScale(d.frequency) 
+            }   
+        });
+
+        YForce.strength(function(d){
+            if (d.level == "basestone"){
+                return strengthScale(d.frequency) + 0.4
+            }
+            else { 
+                return strengthScale(d.frequency) 
+            }
+        });
+
+        //Fourth step: activate simulation and tick function
+        simulation
+            .nodes(graph.nodes)
+            .on("tick", tickActions);
+
+        function tickActions(){
+            nodeElements
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; });
+
+            testElements
+                .attr("x", node => node.x)
+                .attr("y", node => node.y);
+
+            NERtestElements
+                .attr("x", node => node.x)
+                .attr("y", node => node.y);
+        }
+
+        //Fifth step: add drag capability
+        var drag_handler = d3.drag()
+            .on("start", drag_start)
+            .on("drag", drag_drag)
+            .on("end", drag_end);	
+
+        drag_handler(nodeElements);
+            
+        //Sixth step: add fade function
+        function fade(opacity){
+            return d => {
+                nodeElements.style('opacity', function (o) { 
+                    if (d==o){ return 1}
+                    else {return opacity}
+                });
+            };
+        };
+
+        function calculateBiggestNum(){
+            graph.nodes.forEach(function(obj){    
+                if (obj.frequency > biggestNode){
+                    biggestNode = obj.frequency
+                }   
+            });    
+        };
+
+        console.log(biggestNode)
+
+    });
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions);
+
+    zoom_handler(svg);
+
+    //FUNCTION
+    function getNodeSize(node){
+        var interpolator = d3.interpolateNumber(20,150);
+        return interpolator(node.frequency/biggestNode)
+    }
+
+    function getNodeColor(node){
+        if (node.level == "basestone") {return'#FCA311'}
+        else if (node.level == "stellar") {return '#FFFFFF'}
+    }
+
+    //Set up scale for Text and NERText Dy
+    var textDyScale = d3.scalePow()
+            .exponent(2)
+            .range([0.5, 2])
+            
+
+    function getTextDy(node){
+        if (node.level == 'basestone'){
+            
+            textDyScale.domain([0, biggestNode])
+            textdy = textDyScale(node.frequency);
+            textdy = textdy;
+            return `-${textdy}rem`;
+        }
+           
+        else if (node.level == 'stellar'){
+            return '0.35rem';
+        }
+    }
+
+    function getNERTextDy(node){
+        if (node.level == 'basestone'){
+            textDyScale.domain([0, biggestNode])
+            textdy = textDyScale(node.frequency);
+            return `${textdy}rem`;          
+        } 
+    }
+
+    function getTextFontSize(node){
+        var interpolator = d3.interpolateNumber(7,50);
+        return interpolator(node.frequency/biggestNode)
+    }
+
+    function getNERTextFontSize(node){
+        var interpolator = d3.interpolateNumber(7,30);
+        return interpolator(node.frequency/biggestNode)
+    }
+
+    function getTextFontWeight(node){
+        if (node.frequency/biggestNode > 0.8){
+            return 900
+        }
+        else if ( 0.8 > node.frequency/biggestNode > 0.5){
+            return 700
+        }
+        else if (node.frequency/biggestNode < 0.5){
+            return 3000
+        }
+    }
+
+    //DRAG FUNCTION
+    function drag_start(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    //make sure you can't drag the circle outside the box
+    function drag_drag(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function drag_end(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = d.x; //sticky node
+        d.fy = d.y; //sticky node
+    }
+
+    //ZOOM FUNCTION
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }
+
+</script>
+
+{% endblock %}

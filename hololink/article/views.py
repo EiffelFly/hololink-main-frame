@@ -113,13 +113,17 @@ def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug, created_by=request.user)
 
     user_selected_project = request.session.get('user_selected_project')
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count()
 
     context = {
-        'article' : article,
-        'user' : user,
-        'user_selected_project' : user_selected_project
+        'article':article,
+        'user':user,
+        'user_selected_project':user_selected_project,
+        'count_basestone':count_basestone,
+        'count_stellar':count_stellar,
     }
-    return render(request, 'article/article_detail.html', context)
+    return render(request, 'article/article_detail_ver2.html', context)
 
 def is_valid_queryparam(param):
     return param != '' and param is not None

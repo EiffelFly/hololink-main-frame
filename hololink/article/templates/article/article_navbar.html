@@ -1,0 +1,84 @@
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<style>
+
+    @media (min-width: 576px) {
+        
+    }
+    @media (min-width: 768px) {
+        .project-badges-container{
+            margin-top: 0 !important;
+        }
+        .project-badges-sub-container{
+            margin-left: auto !important;
+        }
+    }
+    @media (min-width: 992px) {
+       
+    }
+    @media (min-width: 1200px) {
+        
+    }
+    .dashboard-recentProject-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: clamp(12px, 1vw, 16px);
+    }
+
+    .dashboard-nav-item{
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: clamp(12px, 1vw, 16px);
+        color: black !important;
+        font-weight: 700;
+        
+    }
+
+</style>
+
+<div class="project-nav" style="margin: clamp(20px, 2vw, 30px) 0 0 0;">
+    <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 4vw, 60px)">
+        <div class="col-12 col-md-6 d-flex">
+            <span style="margin: auto 0;" ><a href="{% url 'article:articles_list'%}" style="font-size: 1.2rem;">Articles</a></span>
+            <span style="margin: auto 0; padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
+            <span style="margin: auto 0; font-size: 1.2rem;">{{ article.name }}</span>
+            <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color: dimgray;">
+                {% if project.ml_is_processing == True %}
+                model is processing 
+                {% else %}
+                clear
+                {% endif %}
+            </span>
+        </div>
+        <div class="col-12 col-md-6 project-badges-container d-flex" style="margin-top: 20px;">
+            <div class="project-badges-sub-container">
+                <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                    <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                    <span>basestone -</span>
+                    <span style="color: #2e1760;">{{count_basestone}}</span>
+                </span>
+                <span class="d-inline-block mr-2 dashboard-recentProject-container-badges">
+                    <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                    <span>stellar -</span>
+                    <span style="color: #2e1760;">{{count_stellar}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row w-100 border-bottom flex-column" style="margin: 0 0 0 0; padding: 0 clamp(20px, 4vw, 60px)">
+        <div class="col">
+            <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" style="font-size: 10px; color: gray;">{{ article.from_url|truncatechars:60 }}</a>
+        </div>
+        <div class="col" style="margin: 20px 0;">
+            <div class="article_created_at" style="font-size: 10px; color: gray; margin: auto 0">
+                {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
