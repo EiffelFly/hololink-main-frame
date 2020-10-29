@@ -242,7 +242,8 @@
                 .attr('connection', function(d){
                     return d.connection
                 })
-                //.style("border-color", getBorderColor)
+                .style("border-color", getNodeBorderColor)
+                .style("border-width", getNodeBorderWidth)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
@@ -630,7 +631,21 @@
         return 'grey'
     }
 
-    function getBorderColor(node){
+    function getNodeBorderWidth(node){
+        if (node.level == "article"){
+            if (node.recommended == true){
+                return 3
+            } else {
+                return 1
+            }
+            
+        } else {
+            return 1
+        }
+    
+    }
+
+    function getNodeBorderColor(node){
         if (node.level == "article"){
             if (node.recommended == true){
                 return '#222626'
