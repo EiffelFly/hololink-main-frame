@@ -599,13 +599,15 @@
             .range([10, 50])
             .domain([0, biggestNode_keyword])
         var interpolatorForArticles = d3.interpolateNumber(60,100);
-        var interpolatorForTags = d3.interpolateNumber(2 ,30);
+
         if (d.level == 'article'){
             totalkeywordNum = parseInt(d.basestoneNum) + parseInt(d.stellarNum)
             return interpolatorForArticles(totalkeywordNum/biggestNode_article)
         }
-        else if (d.level == 'stellar'|| d.level == 'basestone'){
+        else if (d.level == 'stellar'){
             return NodeSizeScaleforTag(d.connection)
+        } else {
+            return NodeSizeScaleforTag(d.connection*2)
         }
     }
 
