@@ -242,10 +242,8 @@
                 .attr('connection', function(d){
                     return d.connection
                 })
-                .style("border-color", getNodeBorderColor)
-                .style("border-width", getNodeBorderWidth)
-                .style("border-style", 'solid')
                 .style("stroke", getNodeBorderColor)
+                .style("stroke-width", getNodeBorderWidth)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
