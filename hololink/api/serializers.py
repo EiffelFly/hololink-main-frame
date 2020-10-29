@@ -381,9 +381,13 @@ def merge_article_into_galaxy(ner_result):
             )        
 
         for article_node in article_d3_json['nodes']:    
+            keyword_has_case_insensitive_issue = False
             # Append new keyword
             try:
                 keyword = Keyword.objects.filter(name=article_node['title'], keyword_type=article_node['level']).prefetch_related('owned_by_user','owned_by_article')[0]
+                if keyword.name != article_node['title']: # compensate mysql is default case-insensitive
+                    keyword_has_case_insensitive_issue = True
+                    raise Keyword.DoesNotExist
                 if user.profile not in keyword.owned_by_user.all():
                     keyword.owned_by_user.add(user.profile)
                 if article not in keyword.owned_by_article.all():
@@ -399,11 +403,26 @@ def merge_article_into_galaxy(ner_result):
                 keyword.save()
 
             # if article_node['title'] not in project.keyword_list['total']:
-            if keyword not in project.keyword.all():
+            if keyword not in project.keyword.all() and keyword_has_case_insensitive_issue==False:
                 print("new keywords", article_node['title'])
                 project.keyword.add(keyword)
                 project.keyword_list['total'].append(article_node['title'])
-                if article_node['level'] is 'basestone':
+                if article_node['level'] == 'basestone':
+                    project.keyword_list['basestone'].append(article_node['title'])
+                else:
+                    project.keyword_list['stellar'].append(article_node['title'])
+                project.project_d3_json['nodes'].append(
+                    {
+                        "id":article_node['title'],
+                        "level":article_node['level'],
+                        "connection":1,
+                    }
+                )
+            elif keyword not in project.keyword.all() and keyword_has_case_insensitive_issue==True:
+                print("case sensitive new keyword", article_node['title'])
+                project.keyword.add(keyword)
+                project.keyword_list['total'].append(article_node['title'])
+                if article_node['level'] == 'basestone':
                     project.keyword_list['basestone'].append(article_node['title'])
                 else:
                     project.keyword_list['stellar'].append(article_node['title'])
