@@ -230,7 +230,7 @@
                         return d
                     } else {
                         if (d.level == 'basestone'){
-                            return d.connection >= parseInt(amount_of_articles/5)
+                            return d.connection > parseInt(amount_of_articles/5)
                         } else if (d.level == 'stellar'){
                             return d.connection > (amount_of_articles/2)
                         }
