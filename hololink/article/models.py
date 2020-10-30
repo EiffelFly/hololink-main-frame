@@ -126,6 +126,7 @@ class Article(models.Model):
     domain = models.ForeignKey(
         verbose_name=_('Domain'),
         to=Domain,
+        related_name="owned_by_articles",
         on_delete=models.CASCADE,
         null=True
     )

@@ -17,6 +17,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 import os
 from .settings import BASE_DIR
+from django.db.models import Count
 
 
 def now():
@@ -175,7 +176,7 @@ def user_source(request, usernameslug):
     count_article_list = []
 
     profile = get_object_or_404(Profile, user=request.user)
-    domains = Domain.objects.filter(owned_by_user=profile)
+    domains = Domain.objects.filter(owned_by_user=profile).annotate(num_source=Count('owned_by_articles')).order_by('-num_source')
     for domain in domains:
         count_article = Article.objects.filter(owned_by=request.user, domain=domain).count()
         count_article_list.append(count_article)
