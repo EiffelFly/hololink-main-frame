@@ -243,7 +243,7 @@ def galaxy_setting(request, projectnameslug, **kwargs):
                     project_name = project.name
                     project.delete()
                     messages.add_message(request, messages.SUCCESS, _(f'Successfully delete galaxy {project_name}'))
-                    return HttpResponseRedirect(reverse('project:projects_list'))
+                    return HttpResponseRedirect(reverse('project:projects_list', kwargs={'usernameslug':profile.slug}))
                 else:
                     messages.add_message(request, messages.ERROR, _('Confirmation input is not correct'))
                     return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
