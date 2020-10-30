@@ -18,13 +18,6 @@
         }
     }
     @media (min-width: 768px) {
-
-        a.mainnavbar-link-vision{
-            padding: 0.6rem 0.5rem 0.6rem 1.5rem !important;
-        }
-        a.mainnavbar-link-explore{
-            padding: 0.6rem 0.5rem 0.6rem 0.5rem !important;
-        }
         .sub-container{
             height: 60vw !important;
         }
@@ -117,7 +110,7 @@
         );
     
     //Third step: LOAD DATA and create node elements
-    d3.json('{% url "article:deliver_D3" article.slug%}', function(error,graph){
+    d3.json('{% url "article:deliver_D3" articlenameslug=article.slug usernameslug=user.profile.slug%}', function(error,graph){
         if (error) throw error;
 
         calculateBiggestNum()

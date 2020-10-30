@@ -39,14 +39,10 @@
     {% endcomment %}
 
     @media (min-width: 576px) {
-        
     }
     @media (min-width: 768px) {
-        a.mainnavbar-link-vision{
-            padding: 0.6rem 0.5rem 0.6rem 1.5rem !important;
-        }
-        a.mainnavbar-link-explore{
-            padding: 0.6rem 0.5rem 0.6rem 0.5rem !important;
+        .mainnavbar-link-vision{
+            margin: 0 20px !important; 
         }
     }
     @media (min-width: 992px) {}
@@ -80,9 +76,14 @@
         </button>
         <div class="collapse navbar-collapse w-100" id="togglerTarget">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="btn mainnavbar-link-vision" target="_blank" rel="noopener noreferrer" href="https://www.notion.so/summerbud/Pre-Alpha-Test-Released-Note-71bc03df3def43cfad04d83204db32eb" style="font-size: 16px; color: rgba(0,0,0,0.5); font-weight: 500; padding: 0.5rem 0;">
+                <li class="nav-item mainnavbar-link-vision">
+                    <a class="btn " target="_blank" rel="noopener noreferrer" href="https://www.notion.so/summerbud/Pre-Alpha-Test-Released-Note-71bc03df3def43cfad04d83204db32eb" style="font-size: 16px; color: rgba(0,0,0,0.5); font-weight: 500; padding: 0.5rem 0;">
                         Vision
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.notion.so/summerbud/Hololink-4173ef0298a747ec9a31512c68aab936" style="font-size: 16px; color: rgba(0,0,0,0.5); font-weight: 500; padding: 0.5rem 0;">
+                        Instruction
                     </a>
                 </li>
                 <!--
@@ -111,7 +112,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a>
                         <a class="dropdown-item" href="{% url 'project:projects_list' usernameslug=user.profile.slug %}">Galaxies</a>
-                        <a class="dropdown-item" href="{% url 'article:articles_list' %}">Articles</a>
+                        <a class="dropdown-item" href="{% url 'article:articles_list' usernameslug=user.profile.slug %}">Articles</a>
                         <a class="dropdown-item" href="{% url 'user_settings' user.profile.slug %}">Settings</a>
                         <!--<a class="dropdown-item" href="{% url 'password_change' %}">{% trans 'Password change' %}</a>!-->
                         <div class="dropdown-divider"></div>

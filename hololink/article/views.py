@@ -106,11 +106,11 @@ def delete(request, id):
         return redirect(reverse('article:change_list'))
     return render(request, 'article/delete.html')
 
-def article_detail(request, slug):
+def article_detail(request, usernameslug, articlenameslug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     user = User.objects.get(username=request.user.username)
-    article = get_object_or_404(Article, slug=slug, created_by=request.user)
+    article = get_object_or_404(Article, slug=articlenameslug, created_by=request.user)
 
     user_selected_project = request.session.get('user_selected_project')
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count()
@@ -142,7 +142,7 @@ def filter(request):
     return qs
 
 
-def articles_list(request):
+def articles_list(request, usernameslug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
 
@@ -168,10 +168,10 @@ def articles_list(request):
 
     return render(request, 'article/articles_list.html', context)   
 
-def deliver_D3(request, slug):
+def deliver_D3(request, articlenameslug, usernameslug):
     if not request.user.is_authenticated:
         return redirect(reverse('login'))
     
-    article = get_object_or_404(Article, slug=slug, created_by=request.user)
+    article = get_object_or_404(Article, slug=articlenameslug, created_by=request.user)
 
     return JsonResponse(article.D3_data_format, safe=False)

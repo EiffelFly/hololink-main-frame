@@ -44,7 +44,7 @@
 <div class="project-nav" style="margin: clamp(20px, 2vw, 30px) 0 0 0;">
     <div class="row w-100" style="margin: 0; padding: 0 clamp(20px, 4vw, 60px)">
         <div class="col-12 col-md-6 d-flex">
-            <span style="margin: auto 0;" ><a href="{% url 'article:articles_list'%}" style="font-size: 1.2rem;">Articles</a></span>
+            <span style="margin: auto 0;" ><a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" style="font-size: 1.2rem;">Articles</a></span>
             <span style="margin: auto 0; padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
             <span style="margin: auto 0; font-size: 1.2rem;">{{ article.name }}</span>
             <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color: dimgray;">

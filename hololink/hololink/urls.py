@@ -12,7 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('articles/', include('article.urls')),
+    path('@<slug:usernameslug>/articles/', include('article.urls')),
     path('@<slug:usernameslug>/projects/', include('project.urls')),
     path('', index, name='index'),
     path('d3demo/', d3demo, name='d3demo'),
