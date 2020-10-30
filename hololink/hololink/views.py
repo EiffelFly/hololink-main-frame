@@ -78,8 +78,11 @@ def index(request):
     context = {
         'form': form,
     }
+    if request.user.is_authenticated:
+        return redirect(reverse('user_dashboard', kwargs={'slug':request.user}))
+    else:
+        return render(request, 'landing_page_ver3.html', context)
     
-    return render(request, 'landing_page_ver3.html', context)
     
 
 def user_dashboard(request, slug):
