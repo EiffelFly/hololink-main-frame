@@ -220,13 +220,13 @@ def galaxy_setting(request, projectnameslug, **kwargs):
                 project.name = form.cleaned_data.get('name')
                 project.save()
                 messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
-                return render(request, 'project_dashboard_settings.html', context)
+                return HttpResponseRedirect(reverse('project:galaxy_setting',kwargs={'usernameslug':profile.slug, 'projectnameslug':project.slug} ))
 
             elif request.POST['action'] == "edit_description":
                 project.description = form.cleaned_data.get('galaxy_description')
                 project.save()
                 messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
-                return render(request, 'project_dashboard_settings.html', context)
+                return HttpResponseRedirect(reverse('project:galaxy_setting',kwargs={'usernameslug':profile.slug, 'projectnameslug':project.slug}))
 
             elif request.POST['action'] == "change_galaxy_visibility":
                 if form.cleaned_data.get('change_galaxy_visibility_confirmation') == confirmation_code:
@@ -234,19 +234,19 @@ def galaxy_setting(request, projectnameslug, **kwargs):
                     project.save()
                     messages.add_message(request, messages.SUCCESS, _('Edited successfully.'))
                     context['form'] = GalaxySettingsForm()
-                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
+                    return HttpResponseRedirect(reverse('project:galaxy_setting',kwargs={'usernameslug':profile.slug, 'projectnameslug':project.slug}))
                 else:
                     messages.error(request, messages.ERROR, _('Confirmation input is not correct'))
-                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
+                    return HttpResponseRedirect(reverse('project:galaxy_setting',kwargs={'usernameslug':profile.slug, 'projectnameslug':project.slug}))
             elif request.POST['action'] == 'delete_galaxy':
                 if form.cleaned_data.get('delete_galaxy_confirmation') == confirmation_code:
                     project_name = project.name
                     project.delete()
                     messages.add_message(request, messages.SUCCESS, _(f'Successfully delete galaxy {project_name}'))
-                    return HttpResponseRedirect(reverse('project:projects_list', kwargs={'usernameslug':profile.slug}))
+                    return HttpResponseRedirect(reverse('project:projects_list',kwargs={'usernameslug':profile.slug}))
                 else:
                     messages.add_message(request, messages.ERROR, _('Confirmation input is not correct'))
-                    return HttpResponseRedirect(reverse('project:galaxy_setting', args=(project.slug,)))
+                    return HttpResponseRedirect(reverse('project:galaxy_setting',kwargs={'usernameslug':profile.slug, 'projectnameslug':project.slug}))
         
     else:
         form = GalaxySettingsForm()
