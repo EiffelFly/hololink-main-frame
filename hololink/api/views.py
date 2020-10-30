@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
 import hashlib
+from rest_framework_api_key.permissions import HasAPIKey
 
 
 
@@ -74,7 +75,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 class ArticleViewSetForNerResult(viewsets.ModelViewSet):
-    authentication_classes = [TokenAuthentication, BasicAuthentication, SessionAuthentication]
+    authentication_classes = [HasAPIKey] #Django REST Framework API Key
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     # 3rd parties
     'rest_framework',
+    'rest_framework_api_key',
     'widget_tweaks',
     'rest_framework.authtoken',
     'debug_toolbar',
@@ -175,7 +176,7 @@ LOGOUT_REDIRECT_URL = '/'
 # SMTP things
 SIGNUP_VERIFICATION_EMAIL_TEXT = 'singup_verification_email.txt'
 SIGNUP_VERIFICATION_EMAIL_HTML = 'singup_verification_email.html'
-EMAIL_VERIFICATION_PAGE_DOMAIN = 'http://127.0.0.1:8000/'
+EMAIL_VERIFICATION_PAGE_DOMAIN = 'https://hololink.co/'
 from secret.hololink.settings import (
     EMAIL_BACKEND,
     EMAIL_HOST,
