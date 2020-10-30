@@ -67,8 +67,7 @@
             <div class="row sub-container" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; padding: 0px 0px 0px 0px; overflow:auto; height: 100%;">
                 {% if not articles %}
                         <div class="col">
-                            <p>{% trans "You don't have any article to show. " %}<!--<a class="text-primary"
-                                    href="{% url 'article:add' %}">{% trans 'Add one now.'%}</a>!--></p>
+                            <p>{% trans "You don't have any article to show. " %}</p>
                         </div>
                     {% else %}
                         {% for article in articles %}
