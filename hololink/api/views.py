@@ -75,8 +75,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 class ArticleViewSetForNerResult(viewsets.ModelViewSet):
-    authentication_classes = [HasAPIKey] #Django REST Framework API Key
-    permission_classes = [IsAuthenticated]
+    permission_classes = [HasAPIKey | IsAuthenticated] #Django REST Framework API Key
 
     def get_serializer_class(self):
         return ArticleSerializerForNerResult
