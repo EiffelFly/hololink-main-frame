@@ -17,7 +17,11 @@
     @media (min-width: 992px) {
         
     }
-    @media (min-width: 1200px) {}
+    @media (min-width: 1200px) {
+        .content-sub-container{
+            width: 1160px !important;
+        }
+    }
 
     .dashboard-overview-headline{
         font-size: 1.5rem;
@@ -80,7 +84,7 @@
 <div class="container-fluid" style="padding: 0">
     {% include 'dashboard_navbar.html' %}
     <div class="content_container d-flex">
-        <div class="row m-auto">
+        <div class="row m-auto content-sub-container">
             {% include 'dashboard_sidebar.html' %}
             <div class="col-12 col-md-8">
                 <div class="row recent-project-container" style="margin-top: 20px; padding: 0 15px;">
