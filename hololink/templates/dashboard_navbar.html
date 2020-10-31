@@ -27,8 +27,8 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto text-center">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent" style="width: 100%;">
+                    <ul class="navbar-nav mr-auto text-center" style="width: 100%;">
                         <li class="nav-item text-center mr-4">
                             <a class="nav-link dashboard-nav-item {% if active_nav == 'overview' %} active {% endif %}" href="{% url 'user_dashboard' user.profile.slug %}"><img src="{% static 'img/overview.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px ;">Overview</a>
                         </li>

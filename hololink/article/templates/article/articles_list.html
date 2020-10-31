@@ -33,6 +33,9 @@
         .content-sub-container {
             min-width: 1160px !important;
         }
+        .articles-container{
+            max-width: 800px !important;
+        }
     }
 
     .dashboard-articles-container-badges{
@@ -50,7 +53,7 @@
     <div class="content_container d-flex" >
         <div class="row m-auto content-sub-container">
             {% include 'dashboard_sidebar.html' %}
-            <div class="col-12 col-md-8"  style="padding: 0 25px;">
+            <div class="col-12 col-md-8 articles-container"  style="padding: 0 25px; width: 100%;">
                 <div class="row" style="margin-top: 20px">
                     <div class="col">
                         <form method="GET" action=".">
