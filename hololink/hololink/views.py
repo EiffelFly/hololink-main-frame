@@ -117,7 +117,7 @@ def user_dashboard(request, slug):
         {'title':'Basestones', 'count':count_basestone},
         {'title':'Stellars', 'count':count_stellar},
         {'title':'Sources', 'count':count_source},
-        {'title':'Recommended Articles', 'count':count_recommendation}
+        {'title':'Recommendation', 'count':count_recommendation}
     ]
 
     print(count_basestone)
