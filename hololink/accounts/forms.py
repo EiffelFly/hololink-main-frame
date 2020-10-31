@@ -32,7 +32,7 @@ class SignUpWithEmailForm(forms.ModelForm):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': _('Invitation Token'),
+                'placeholder': _('Access Token'),
             },
         ),
 
