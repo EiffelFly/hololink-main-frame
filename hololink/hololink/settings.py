@@ -95,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'hololink.custom_context_processors.analytics'
             ],
         },
     },
@@ -110,7 +111,7 @@ AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 from secret.hololink.settings import (
-    DATABASES,
+    DATABASES,GOOGLE_ANALYTICS_KEY
 )
 
 # Password validation
