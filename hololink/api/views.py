@@ -125,7 +125,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class DataViewforBrowser(viewsets.ViewSet):
     '''
-        This endpoint is especially for chrome extension 
+        This endpoint is especially for chrome extension: with multiple model.
     '''
 
     authentication_classes = [SessionAuthentication, BasicAuthentication]

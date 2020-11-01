@@ -48,7 +48,7 @@
             <span style="margin: auto 0; padding: 0 0.5vw; font-size: 1.2rem;"> / </span>
             <span style="margin: auto 0; font-size: 1.2rem;">{{ article.name }}</span>
             <span style="margin: auto 0 auto 10px; border-radius: 50px; border: solid 1px dimgray; padding: 1px 12px; font-size: 14px; color: dimgray;">
-                {% if project.ml_is_processing == True %}
+                {% if article.ml_is_processing == True %}
                 model is processing 
                 {% else %}
                 clear
