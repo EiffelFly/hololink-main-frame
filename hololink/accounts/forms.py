@@ -141,7 +141,7 @@ class SignUpWithEmailForm(forms.ModelForm):
                     ("")
                 )
             )
-        if password.length < 8:
+        if len(password) < 8:
             self.add_error(
                 'password',
                 ValidationError(
