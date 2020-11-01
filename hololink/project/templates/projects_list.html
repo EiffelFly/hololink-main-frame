@@ -71,7 +71,7 @@
                 </div>
                 {% if not projects %}
                     <div class="col">
-                        <p>{% trans "You don't have any galaxy to show." %}<a href="{% url 'project:create_newproject' usernameslug=profile.slug %}"></a></p>
+                        <p>{% trans "You don't have any galaxy to show." %}<a href="{% url 'project:create_newproject' usernameslug=profile.slug %}">Please add one.</a></p>
                     </div>
                 {% else %}
                 {% for project in projects %}
