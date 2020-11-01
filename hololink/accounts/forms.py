@@ -104,7 +104,7 @@ class SignUpWithEmailForm(forms.ModelForm):
                     self.add_error(
                     'token',
                     ValidationError(
-                        _('The token is used.'),
+                        _('The token had been used.'),
                         code='invalid'
                     )
                 )
