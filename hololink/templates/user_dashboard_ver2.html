@@ -132,8 +132,8 @@
                 </div>
                 <div class="row d-flex flex-row" style="padding: 10px 10px 10px 30px;">
                 {% if not projects %}
-                <div class="col">
-                    <p>{% trans "You don't have any galaxy to show." %}<a href="{% url 'project:create_newproject' usernameslug=profile.slug %}">Please add one.</a></p>
+                <div class="col-12 w-100" style="padding: 0; ">
+                    <p>{% trans "You don't have any galaxy to show. " %}<a href="{% url 'project:create_newproject' usernameslug=profile.slug %}">Please add one.</a></p>
                 </div>
                 {% else %}
                 {% for project in projects %} 
