@@ -98,8 +98,17 @@ class SignUpWithEmailForm(forms.ModelForm):
                 )
             )
         else:
-            target_token = PreAlphaTestToken.objects.filter(token=token)[0]
-            if not target_token.exists():
+            try:
+                target_token = PreAlphaTestToken.objects.get(token=token)
+                if target_token.used == True:
+                    self.add_error(
+                    'token',
+                    ValidationError(
+                        _('The token is used.'),
+                        code='invalid'
+                    )
+                )
+            except target_token.DoesNotExist:
                 self.add_error(
                     'token',
                     ValidationError(
@@ -107,16 +116,7 @@ class SignUpWithEmailForm(forms.ModelForm):
                         code='invalid'
                     )
                 )
-
-            if target_token.used == True:
-                self.add_error(
-                'token',
-                ValidationError(
-                    _('The token is used.'),
-                    code='invalid'
-                )
-            )
-            
+                
         return token
         
 
