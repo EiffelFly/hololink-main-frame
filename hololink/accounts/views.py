@@ -150,8 +150,8 @@ def sign_up_with_email_verification(request):
             #寄送認證信件
             
             sendVerification(user)
-
-            return render(request, 'registration/signup_success.html')
+            
+            return redirect(reverse('sign_up_success'))
 
         else:
             context = {
