@@ -125,7 +125,7 @@ class SignUpWithEmailForm(forms.ModelForm):
             If we want to valid field depend on other field
             ref:https://docs.djangoproject.com/en/3.0/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
         '''
-        cleaned_data = super().clean()
+
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
         if password != confirm_password:
@@ -148,6 +148,8 @@ class SignUpWithEmailForm(forms.ModelForm):
                     ("Use 8 characters or more for your password")
                 )
             )
+        
+        cleaned_data = super().clean()
 
 class EmailValidationOnForgotPassword(PasswordResetForm):
 
