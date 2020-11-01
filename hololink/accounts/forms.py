@@ -108,7 +108,7 @@ class SignUpWithEmailForm(forms.ModelForm):
                         code='invalid'
                     )
                 )
-            except target_token.DoesNotExist:
+            except PreAlphaTestToken.DoesNotExist:
                 self.add_error(
                     'token',
                     ValidationError(
