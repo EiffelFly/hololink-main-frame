@@ -99,7 +99,7 @@ class SignUpWithEmailForm(forms.ModelForm):
             )
         else:
             target_token = PreAlphaTestToken.objects.filter(token=token)
-            if not target_token.exist():
+            if not target_token.exists():
                 self.add_error(
                     'token',
                     ValidationError(
