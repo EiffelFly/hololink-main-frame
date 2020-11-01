@@ -117,6 +117,7 @@
                         <a class="dropdown-item" href="{% url 'user_dashboard' user.profile.slug %}">Dashboard</a>
                         <a class="dropdown-item" href="{% url 'project:projects_list' usernameslug=user.profile.slug %}">Galaxies</a>
                         <a class="dropdown-item" href="{% url 'article:articles_list' usernameslug=user.profile.slug %}">Articles</a>
+                        <a class="dropdown-item" href="{% url 'user_source' usernameslug=user.profile.slug %}">Sources</a>
                         <a class="dropdown-item" href="{% url 'user_settings' user.profile.slug %}">Settings</a>
                         <!--<a class="dropdown-item" href="{% url 'password_change' %}">{% trans 'Password change' %}</a>!-->
                         <div class="dropdown-divider"></div>
