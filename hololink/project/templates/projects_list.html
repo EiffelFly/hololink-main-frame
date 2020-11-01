@@ -69,6 +69,11 @@
                         <a href="{% url 'project:create_newproject' usernameslug=user.profile.slug %}" class="btn btn-primary active ml-auto" role="button" aria-pressed="true" style="font-size: clamp(14px, 2vw, 16px);">Create new Galaxy</a>
                     </div>
                 </div>
+                {% if not projects %}
+                    <div class="col">
+                        <p>{% trans "You don't have any galaxy to show." %}<a href="{% url 'project:create_newproject' usernameslug=profile.slug %}"></a></p>
+                    </div>
+                {% else %}
                 {% for project in projects %}
                 <div class="row">
                     <div class="col-12">
@@ -105,6 +110,7 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% endif %}
                 <hr style="border-color: #BFB9B8;">
             </div>
         </div>
