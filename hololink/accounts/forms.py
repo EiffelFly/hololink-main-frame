@@ -122,7 +122,7 @@ class SignUpWithEmailForm(forms.ModelForm):
 
     def clean(self):
         '''
-            If we want to 
+            If we want to valid field depend on other field
             ref:https://docs.djangoproject.com/en/3.0/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
         '''
         cleaned_data = super().clean()
@@ -139,6 +139,13 @@ class SignUpWithEmailForm(forms.ModelForm):
                 'password',
                 ValidationError(
                     ("")
+                )
+            )
+        if password.length < 8:
+            self.add_error(
+                'password',
+                ValidationError(
+                    ("Use 8 characters or more for your password")
                 )
             )
 
