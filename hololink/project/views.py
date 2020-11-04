@@ -301,7 +301,7 @@ def deliver_D3(request, projectnameslug, **kwargs):
     return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
 
 def galaxy_playground(request, projectnameslug, usernameslug):
-    user = get_object_or_404(User, slug=usernameslug)
+    user = get_object_or_404(User, username=usernameslug)
     project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
 
     context = {
