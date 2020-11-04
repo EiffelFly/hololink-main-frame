@@ -299,3 +299,14 @@ def deliver_D3(request, projectnameslug, **kwargs):
     amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
 
     return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
+
+def galaxy_playground(request, projectnameslug, usernameslug):
+    user = get_object_or_404(User, slug=usernameslug)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
+
+    context = {
+        'user':user,
+        'project':project,
+    }
+
+    return render(request, 'galaxy_playground.html', context)
