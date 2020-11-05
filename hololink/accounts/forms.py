@@ -149,14 +149,16 @@ class SignUpWithEmailForm(forms.ModelForm):
                     ("")
                 )
             )
-        
-        if len(password) < 8:
-            self.add_error(
-                'password',
-                ValidationError(
-                    ("Use 8 characters or more for your password")
+        try:
+            if len(password) < 8:
+                self.add_error(
+                    'password',
+                    ValidationError(
+                        ("Use 8 characters or more for your password")
+                    )
                 )
-            )
+        except:
+            pass
         
         
 class EmailValidationOnForgotPassword(PasswordResetForm):
