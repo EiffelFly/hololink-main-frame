@@ -76,7 +76,7 @@ class SignUpWithEmailForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if username.isalpha() == False:
+        if username.isalnum() == False:
             self.add_error(
                 'username',
                 ValidationError(
