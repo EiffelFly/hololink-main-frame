@@ -15,8 +15,7 @@
             </div>
             <div class="row force">
                 <div class="col-12">
-                    <p><label><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
-                    <label title="Negative strength repels nodes. Positive strength attracts nodes.">
+                    <p><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
                 </div>
                 <div class="col-12">
                     <div class="d-flex">
@@ -43,6 +42,29 @@
                     </div>
                     <div>
                         <input type="range" min="0" max="2000" value="2000" step=".1" oninput="d3.select('#charge_distanceMaxSliderOutput').text(value); forceProperties.charge.distanceMax=value; updateAll();">
+                    </div>
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
+                    <p><input type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();"> collide</label> Prevents nodes from overlapping</p>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>strength</p>
+                        <output id="collide_StrengthSliderOutput">.7</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="2" value=".7" step=".1" oninput="d3.select('#collide_StrengthSliderOutput').text(value); forceProperties.collide.strength=value; updateAll();">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>radius</p>
+                        <output id="collide_radiusSliderOutput">5</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="100" value="5" step="1" oninput="d3.select('#collide_radiusSliderOutput').text(value); forceProperties.collide.radius=value; updateAll();">
                     </div>
                 </div>
             </div>
