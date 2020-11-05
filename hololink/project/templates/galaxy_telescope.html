@@ -67,6 +67,66 @@
                         <input type="range" min="0" max="100" value="5" step="1" oninput="d3.select('#collide_radiusSliderOutput').text(value); forceProperties.collide.radius=value; updateAll();">
                     </div>
                 </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>iterations</p>
+                        <output id="collide_iterationsSliderOutput">1</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="1" max="10" value="1" step="1" oninput="d3.select('#collide_iterationsSliderOutput').text(value); forceProperties.collide.iterations=value; updateAll();">
+                    </div>
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
+
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
+                    <p><label><input type="checkbox" onchange="forceProperties.forceX.enabled = this.checked; updateAll();"> forceX</label> Acts like gravity. Pulls all points towards an X location.</p>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>strength</p>
+                        <output id="forceX_StrengthSliderOutput">.1</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceX_StrengthSliderOutput').text(value); forceProperties.forceX.strength=value; updateAll();">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>x</p>
+                        <output id="forceX_XSliderOutput">.5</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#forceX_XSliderOutput').text(value); forceProperties.forceX.x=value; updateAll();">
+                    </div>
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
+                    <p><input type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();"> forceY</label> Acts like gravity. Pulls all points towards a Y location.</p>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>strength</p>
+                        <output id="forceY_StrengthSliderOutput">.1</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceY_StrengthSliderOutput').text(value); forceProperties.forceY.strength=value; updateAll();">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>y</p>
+                        <output id="forceY_YSliderOutput">.5</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#forceY_YSliderOutput').text(value); forceProperties.forceY.y=value; updateAll();">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-12 col-sm-10">
