@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid d-flex" style="width: 90%;">
     <div class="row flex-grow-1" style="margin: auto;">
-        <div class="col-12 col-sm-2">
+        <div class="col-12 col-sm-2" style="overflow:scroll; max-height: 600px;">
             <div class="row force_alpha">
                 <div class="col-12">
                     <p><label>alpha</label> Simulation activity</p>
@@ -15,7 +15,7 @@
             </div>
             <div class="row force">
                 <div class="col-12">
-                    <p><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
+                    <p><label><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
                 </div>
                 <div class="col-12">
                     <div class="d-flex">
@@ -47,7 +47,7 @@
             </div>
             <div class="row force">
                 <div class="col-12">
-                    <p><input type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();"> collide</label> Prevents nodes from overlapping</p>
+                    <p><label><input type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();"> collide</label> Prevents nodes from overlapping</p>
                 </div>
                 <div class="col-12">
                     <div class="d-flex">
@@ -107,7 +107,7 @@
             </div>
             <div class="row force">
                 <div class="col-12">
-                    <p><input type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();"> forceY</label> Acts like gravity. Pulls all points towards a Y location.</p>
+                    <p><label><input type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();"> forceY</label> Acts like gravity. Pulls all points towards a Y location.</p>
                 </div>
                 <div class="col-12">
                     <div class="d-flex">
@@ -125,6 +125,20 @@
                     </div>
                     <div class="d-flex">
                         <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#forceY_YSliderOutput').text(value); forceProperties.forceY.y=value; updateAll();">
+                    </div>
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
+                    <p><label><input type="checkbox" checked onchange="forceProperties.link.enabled = this.checked; updateAll();"> link</label> Sets link length</p>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>distance</p>
+                        <output id="link_DistanceSliderOutput">30</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="100" value="30" step="1" oninput="d3.select('#link_DistanceSliderOutput').text(value); forceProperties.link.distance=value; updateAll();">
                     </div>
                 </div>
             </div>
