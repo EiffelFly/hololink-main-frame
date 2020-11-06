@@ -171,9 +171,10 @@
     var graph;
 
     // load the data
-    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, _graph) {
+    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
         if (error) throw error;
-        graph = _graph;
+        graph = data.graph;
+        console.log(graph)
         initializeDisplay();
         initializeSimulation();
     });
@@ -277,23 +278,23 @@
 
     // generate the svg objects and force simulation
     function initializeDisplay() {
+        console.log(graph)
+        console.log(width)
         // set the data and properties of link lines
         link = g.append("g")
                 .attr("class", "links")
             .selectAll("line")
-            .data(graph.links)
-            .enter().append("line");
+                .data(graph.links)
+                .enter()
+                .append("line");
 
         // set the data and properties of node circles
         node = g.append("g")
                 .attr("class", "nodes")
             .selectAll("circle")
-            .data(graph.nodes)
-            .enter().append("circle")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
+                .data(graph.nodes)
+                .enter()
+                .append("circle")
 
         // node tooltip
         node.append("title")
@@ -365,6 +366,19 @@
     //ZOOM FUNCTION
     function zoom_actions(){
         g.attr("transform", d3.event.transform)
+    }
+
+    // update size-related forces
+    d3.select(window).on("resize", function(){
+        width = +svg.node().getBoundingClientRect().width;
+        height = +svg.node().getBoundingClientRect().height;
+        updateForces();
+    });
+
+    // convenience function to update everything (run after UI input)
+    function updateAll() {
+        updateForces();
+        updateDisplay();
     }
 
 </script>
