@@ -15,6 +15,29 @@
             </div>
             <div class="row force">
                 <div class="col-12">
+                    <p><label>center</label> Shifts the view, so the graph is centered at this location.</p>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>x</p>
+                        <output id="center_XSliderOutput">.5</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#center_XSliderOutput').text(value); forceProperties.center.x=value; updateAll();">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="d-flex">
+                        <p>y</p>
+                        <output id="center_YSliderOutput">.5</output>
+                    </div>
+                    <div class="d-flex">
+                        <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#center_YSliderOutput').text(value); forceProperties.center.y=value; updateAll();">
+                    </div>
+                </div>
+            </div>
+            <div class="row force">
+                <div class="col-12">
                     <p><label><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
                 </div>
                 <div class="col-12">
@@ -206,7 +229,7 @@
     forceProperties = {
         center: {
             x: 0.5,
-            y: 0.5
+            y: 0.5,
         },
         charge: {
             enabled: true,
@@ -337,7 +360,8 @@
 
         link
             .attr("stroke-width", forceProperties.link.enabled ? 1 : .5)
-            .attr("opacity", forceProperties.link.enabled ? 1 : 0);
+            .attr("opacity", forceProperties.link.enabled ? 1 : 0)
+            .style("stroke", 'grey');
     }
 
     // update the display positions after each simulation tick
