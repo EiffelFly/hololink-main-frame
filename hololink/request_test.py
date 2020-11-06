@@ -4,6 +4,12 @@ from requests.packages.urllib3.util.retry import Retry
 from timeit import default_timer as timer
 import json
 
+
+a = "dddd dssss"
+print(a.isalpha())
+
+
+'''
 data = {
 	"D3_data_format": {
 		"article_name": "台積電5奈米擴建及3奈米試產 延後2季 | 科技產業 | 產經 | 聯合新聞網",
@@ -1256,7 +1262,7 @@ print(post_target.status_code)
 print(post_target.text)
 print(start-ml_end)
 
-
+'''
 '''
 data = {
     "name":"蘋果、Epic Games 與爭奪虛構宇宙入口", #put in the name Hololink_mainframe post to you
