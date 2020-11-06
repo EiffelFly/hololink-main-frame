@@ -21,6 +21,19 @@
     }
     @media (min-width: 1200px) {}
 
+    .collapse-force-title:hover {
+        text-decoration: none;
+        color: black;
+        opacity: 1;
+        background-color: rgba(61, 61, 61, 0.1);
+    }
+
+    .collapse-force-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: black;
+    }
+
 </style>
 
 
@@ -33,7 +46,7 @@
                     <div class="alpha_bar" onclick="updateAll();"><div id="alpha_value"></div></div>
                 </div>     
             </div>
-            <a data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force">Center force</a>
+            <a class="collapse-force-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force">Center force</a>
             <div class="row collapse multi-collapse" id="center_force">
                 <div class="col-12">
                     <p><label>center</label> Shifts the view, so the graph is centered at this location.</p>
@@ -57,7 +70,8 @@
                     </div>
                 </div>
             </div>
-            <a data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
+            <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+            <a class="collapse-force-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
             <div class="row collapse multi-collapse" id="charge_force">
                 <div class="col-12">
                     <p><label><input type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();"> charge</label> Attracts (+) or repels (-) nodes to/from each other.</p>
@@ -90,7 +104,8 @@
                     </div>
                 </div>
             </div>
-            <a data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
+            <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+            <a class="collapse-force-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
             <div class="row collapse multi-collapse" id="collide_force">
                 <div class="col-12">
                     <p><label><input type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();"> collide</label> Prevents nodes from overlapping</p>
@@ -123,7 +138,8 @@
                     </div>
                 </div>
             </div>
-            <a data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
+            <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+            <a class="collapse-force-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
             <div class="row collapse multi-collapse" id="x_force">
                 <div class="col-12">
                     <p><label><input type="checkbox" onchange="forceProperties.forceX.enabled = this.checked; updateAll();"> forceX</label> Acts like gravity. Pulls all points towards an X location.</p>
@@ -147,8 +163,9 @@
                     </div>
                 </div>
             </div>
-            <a data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
-            <div class="row collapse multi-collapse" id="x_force">
+            <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+            <a class="collapse-force-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
+            <div class="row collapse multi-collapse" id="y_force">
                 <div class="col-12">
                     <p><label><input type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();"> forceY</label> Acts like gravity. Pulls all points towards a Y location.</p>
                 </div>
@@ -171,7 +188,8 @@
                     </div>
                 </div>
             </div>
-            <a data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
+            <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+            <a class="collapse-force-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
             <div class="row collapse multi-collapse" id="link_force">
                 <div class="col-12">
                     <p><label><input type="checkbox" checked onchange="forceProperties.link.enabled = this.checked; updateAll();"> link</label> Sets link length</p>
