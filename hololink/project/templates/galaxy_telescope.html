@@ -212,10 +212,10 @@
                         <div class="col-12">
                             <div class="d-flex">
                                 <p>distance</p>
-                                <output id="link_DistanceSliderOutput">30</output>
+                                <output id="link_DistanceSliderOutput">50</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="100" value="30" step="1" oninput="d3.select('#link_DistanceSliderOutput').text(value); forceProperties.link.distance=value; updateAll();">
+                                <input type="range" min="0" max="100" value="50" step="1" oninput="d3.select('#link_DistanceSliderOutput').text(value); forceProperties.link.distance=value; updateAll();">
                             </div>
                         </div>
                         <div class="col-12">
@@ -318,7 +318,7 @@
         },
         link: {
             enabled: true,
-            distance: 30,
+            distance: 50,
             iterations: 1,
             strength: 0.3,
         }
