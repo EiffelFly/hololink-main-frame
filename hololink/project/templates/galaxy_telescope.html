@@ -261,6 +261,10 @@
     // the data - an object with nodes and links
     var graph;
 
+    //limit font-size when scaling
+    var max_text_size = 24
+        nominal_text_size = 10;
+
     // load the data
     d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
         if (error) throw error;
@@ -369,7 +373,9 @@
 
         // updates ignored until this is run
         // restarts the simulation (important if simulation has already slowed down)
-        simulation.alpha(1).restart();
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8).restart();
     }
 
     //////////// DISPLAY ////////////
@@ -396,7 +402,17 @@
                 .attr('connection', function(d){
                     return d.connection
                 })
-
+        
+        node.append("text")
+            .text(node => node.id)
+            .attr('dx', '12')
+            .attr('dy', '.35rem')
+            .style('font-weight', '500')
+            .style('font-size', nominal_text_size + "px")
+            .style('fill', 'black')
+                
+                
+        /*
         textContainer = g.append("g")
             .attr("class", "textContainer")
                 .selectAll("foreignObject")
@@ -415,8 +431,10 @@
             .style('align-items','center')
             .style('font-family', "'Noto Sans TC', sans-serif")
             .style('font-weight', '500')
-            .style('font-size', '6px')
+            .style('font-size', nominal_text_size + "px")
             .style('fill', 'black')
+
+        */
 
         // node tooltip
         node.append("title")
@@ -447,16 +465,18 @@
             .attr("stroke-width", forceProperties.link.enabled ? 1 : .5)
             .attr("opacity", forceProperties.link.enabled ? 1 : 0)
             .style("stroke", 'grey');
-
+        /*
         textContainer
             .style('width', getTextWrapperXSpace)
             .style('height', getTextWrapperYSpace)
-
+        
+        
         text
             .style('opacity', function(node){
                 if (node.connection > 2) { return 1 }
                 else { return 0 }
             })
+        */
     }
 
     // update the display positions after each simulation tick
@@ -468,15 +488,20 @@
             .attr("y2", function(d) { return d.target.y; });
 
         node
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+            .attr("r", getNodeSize)
+
+        /*
+        node
             .attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; })
-            .attr("r", getNodeSize);
+            .attr("r", getNodeSize)
+            //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        */
 
-        textContainer
-            .attr("x", function(d) { return d.x; })
-            .attr("y", function(d) { return d.y - 5; })
+        //text
+            //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
         
-        d3.select('#alpha_value').style('flex-basis', (simulation.alpha()*100) + '%');
     }
 
 
@@ -503,6 +528,7 @@
     function zoom_actions(){
         g.attr("transform", d3.event.transform)
         transform = d3.event.transform
+
         if (transform.k < otherProperties.zoom_threshhold_of_displaying_label){
             svg.selectAll('foreignObject').style("opacity",0)
         } else if ( otherProperties.zoom_threshhold_of_displaying_label += 0.5 > transform.k >= otherProperties.zoom_threshhold_of_displaying_label) {
@@ -510,6 +536,13 @@
         } else {
             svg.selectAll('foreignObject').style("opacity",1)
         }
+
+        var text_size = nominal_text_size
+        if (nominal_text_size*transform.k > max_text_size){
+            text_size = max_text_size/transform.k
+        }
+        text.style("font-size",text_size + "px");
+
     }
 
     function getNodeSize(node){
