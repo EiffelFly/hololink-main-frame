@@ -262,7 +262,7 @@
     var graph;
 
     //limit font-size when scaling
-    var max_text_size = 24
+    var max_text_size = 18
         nominal_text_size = 10;
 
     // load the data
@@ -410,10 +410,11 @@
         node
             .append("text")
             .text(node => node.id)
-            .attr('dy', '.35rem')
+            .attr('dy', '.75rem')
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
             .style('opacity', 0)
+            .attr('text-anchor', 'middle')
             //.style('fill', 'black')
                 
                 
