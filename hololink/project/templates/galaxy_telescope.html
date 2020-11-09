@@ -394,22 +394,26 @@
 
         // set the data and properties of node circles
         node = g.append("g")
-                .attr("class", "nodes")
-            .selectAll("circle")
-                .data(graph.nodes)
-                .enter()
-                .append("circle")
-                .attr('connection', function(d){
-                    return d.connection
-                })
+            .attr("class", "nodes")
+            .selectAll("g")
+            .data(graph.nodes)
+            .enter().append("g")
+            
+
+        node
+            .append("circle")
+            .attr('connection', function(d){
+                return d.connection
+            })
+            .attr('r', getNodeSize)
         
-        node.append("text")
+        node
+            .append("text")
             .text(node => node.id)
-            .attr('dx', '12')
             .attr('dy', '.35rem')
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
-            .style('fill', 'black')
+            //.style('fill', 'black')
                 
                 
         /*
@@ -541,7 +545,7 @@
         if (nominal_text_size*transform.k > max_text_size){
             text_size = max_text_size/transform.k
         }
-        text.style("font-size",text_size + "px");
+        svg.selectAll('text').style('font-size', text_size)
 
     }
 

@@ -307,6 +307,7 @@ def galaxy_telescope(request, projectnameslug, usernameslug):
     context = {
         'user':user,
         'project':project,
+        'profile':user.profile,
     }
 
     return render(request, 'galaxy_telescope.html', context)
