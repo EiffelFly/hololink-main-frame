@@ -413,6 +413,7 @@
             .attr('dy', '.35rem')
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
+            .style('opacity', 0)
             //.style('fill', 'black')
                 
                 
@@ -534,11 +535,11 @@
         transform = d3.event.transform
 
         if (transform.k < otherProperties.zoom_threshhold_of_displaying_label){
-            svg.selectAll('foreignObject').style("opacity",0)
+            svg.selectAll('text').style("opacity",0)
         } else if ( otherProperties.zoom_threshhold_of_displaying_label += 0.5 > transform.k >= otherProperties.zoom_threshhold_of_displaying_label) {
-            svg.selectAll('foreignObject').style("opacity",transform.k - otherProperties.zoom_threshhold_of_displaying_label)
+            svg.selectAll('text').style("opacity",transform.k - otherProperties.zoom_threshhold_of_displaying_label)
         } else {
-            svg.selectAll('foreignObject').style("opacity",1)
+            svg.selectAll('text').style("opacity",1)
         }
 
         var text_size = nominal_text_size
