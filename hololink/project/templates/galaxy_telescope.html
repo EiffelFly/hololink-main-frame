@@ -208,19 +208,17 @@
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
-                                <output id="forceY_StrengthSliderOutput">.1</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceY_StrengthSliderOutput').text(value); forceProperties.forceY.strength=value; updateAll();">
+                                <input id="forceY_StrengthSliderOutput">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">y</div>
-                                <output id="forceY_YSliderOutput">.5</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#forceY_YSliderOutput').text(value); forceProperties.forceY.y=value; updateAll();">
+                                <input id="forceY_YSliderOutput">
                             </div>
                         </div>
                     </div>
@@ -234,19 +232,17 @@
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">distance</div>
-                                <output id="link_DistanceSliderOutput">50</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="100" value="50" step="1" oninput="d3.select('#link_DistanceSliderOutput').text(value); forceProperties.link.distance=value; updateAll();">
+                                <input id="link_DistanceSliderOutput">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
-                                <output id="link_StrengthSliderOutput">30</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="1" value="0.5" step="0.01" oninput="d3.select('#link_StrengthSliderOutput').text(value); forceProperties.link.strength=value; updateAll();">
+                                <input id="link_StrengthSliderOutput">
                             </div>
                         </div>
                     </div>
@@ -405,6 +401,54 @@
 
     $('#forceX_XSliderOutput').on("change", function(event){
         forceProperties.forceX.x=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#forceY_StrengthSliderOutput').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#forceY_StrengthSliderOutput').on("change", function(event){
+        forceProperties.forceY.strength=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#forceY_YSliderOutput').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#forceY_YSliderOutput').on("change", function(event){
+        forceProperties.forceY.y=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#link_DistanceSliderOutput').slider({
+        min:0,
+        max:100,
+        value:50,
+        step:1,
+    });
+
+    $('#link_DistanceSliderOutput').on("change", function(event){
+        forceProperties.link.distance=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#link_StrengthSliderOutput').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#link_StrengthSliderOutput').on("change", function(event){
+        forceProperties.link.strength=event.value.newValue; 
         updateAll();
     });
 
