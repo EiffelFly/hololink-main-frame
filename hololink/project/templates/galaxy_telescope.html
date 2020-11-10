@@ -40,7 +40,7 @@
     }
 
     .collapse-controller-container {
-        padding-left: 15px;
+        padding: 0 15px;
     }
 
     .force-instruction {
@@ -96,13 +96,13 @@
                             <div class="d-flex">
                                 <div class="silder-instruction">x</div>
                             </div>
-                            <div class="d-flex" style="padding-right: 15px;">
+                            <div class="d-flex">
                                 <input id="center_XSliderOutput" oninput="forceProperties.center.x=value; updateAll();">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>y</p>
+                                <div class="silder-instruction">y</div>
                                 <output id="center_YSliderOutput">.5</output>
                             </div>
                             <div class="d-flex">
@@ -119,7 +119,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>strength</p>
+                                <div class="silder-instruction">strength</div>
                                 <output id="charge_StrengthSliderOutput">-30</output>
                             </div>
                             <div>
@@ -128,7 +128,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>distanceMin</p>
+                                <div class="silder-instruction">distanceMin</div>
                                 <output id="charge_distanceMinSliderOutput">1</output>
                             </div>
                             <div>
@@ -137,7 +137,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>distanceMax</p>
+                                <div class="silder-instruction">distanceMax</div>
                                 <output id="charge_distanceMaxSliderOutput">2000</output>
                             </div>
                             <div>
@@ -154,7 +154,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>strength</p>
+                                <div class="silder-instruction">strength</div>
                                 <output id="collide_StrengthSliderOutput">.7</output>
                             </div>
                             <div class="d-flex">
@@ -163,7 +163,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>radius</p>
+                                <div class="silder-instruction">radius</div>
                                 <output id="collide_radiusSliderOutput">5</output>
                             </div>
                             <div class="d-flex">
@@ -172,7 +172,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>iterations</p>
+                                <div class="silder-instruction">iterations</div>
                                 <output id="collide_iterationsSliderOutput">1</output>
                             </div>
                             <div class="d-flex">
@@ -189,7 +189,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>strength</p>
+                                <div class="silder-instruction">strength</div>
                                 <output id="forceX_StrengthSliderOutput">.1</output>
                             </div>
                             <div class="d-flex">
@@ -198,7 +198,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>x</p>
+                                <div class="silder-instruction">x</div>
                                 <output id="forceX_XSliderOutput">.5</output>
                             </div>
                             <div class="d-flex">
@@ -208,14 +208,14 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
-                    <div class="row collapse multi-collapse" id="y_force">
+                    <div class="row collapse multi-collapse collapse-controller-container" id="y_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>strength</p>
+                                <div class="silder-instruction">strength</div>
                                 <output id="forceY_StrengthSliderOutput">.1</output>
                             </div>
                             <div class="d-flex">
@@ -224,7 +224,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>y</p>
+                                <div class="silder-instruction">y</div>
                                 <output id="forceY_YSliderOutput">.5</output>
                             </div>
                             <div class="d-flex">
@@ -241,7 +241,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>distance</p>
+                                <div class="silder-instruction">distance</div>
                                 <output id="link_DistanceSliderOutput">50</output>
                             </div>
                             <div class="d-flex">
@@ -250,7 +250,7 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>strength</p>
+                                <div class="silder-instruction">strength</div>
                                 <output id="link_StrengthSliderOutput">30</output>
                             </div>
                             <div class="d-flex">
