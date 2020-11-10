@@ -184,19 +184,17 @@
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
-                                <output id="forceX_StrengthSliderOutput">.1</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceX_StrengthSliderOutput').text(value); forceProperties.forceX.strength=value; updateAll();">
+                                <input id="forceX_StrengthSliderOutput">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">x</div>
-                                <output id="forceX_XSliderOutput">.5</output>
                             </div>
                             <div class="d-flex">
-                                <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#forceX_XSliderOutput').text(value); forceProperties.forceX.x=value; updateAll();">
+                                <input id="forceX_XSliderOutput">
                             </div>
                         </div>
                     </div>
@@ -386,6 +384,29 @@
         updateAll();
     });
 
+    $('#forceX_StrengthSliderOutput').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#forceX_StrengthSliderOutput').on("change", function(event){
+        forceProperties.forceX.strength=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#forceX_XSliderOutput').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#forceX_XSliderOutput').on("change", function(event){
+        forceProperties.forceX.x=event.value.newValue; 
+        updateAll();
+    });
 
 </script>
 
@@ -409,7 +430,7 @@
 
     const linkedByIndex = {};
 
-    const simulationDurationInMs = 5000; // 2 seconds
+    const simulationDurationInMs = 10000; // 2 seconds
 
     var startTime = Date.now();
     var endTime = startTime + simulationDurationInMs;
