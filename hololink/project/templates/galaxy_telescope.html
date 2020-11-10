@@ -274,6 +274,12 @@
 
     const linkedByIndex = {};
 
+    const simulationDurationInMs = 5000; // 2 seconds
+
+    var startTime = Date.now();
+    var endTime = startTime + simulationDurationInMs;
+
+
     // load the data
     d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
         if (error) throw error;
@@ -302,8 +308,6 @@
         simulation.nodes(graph.nodes);
         initializeForces();
         simulation.on("tick", ticked);
-
-        
     }
 
     // values for all forces
@@ -507,26 +511,31 @@
 
     // update the display positions after each simulation tick
     function ticked() {
-        link
+        if (Date.now() < endTime) {
+            link
             .attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; });
 
-        node
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .attr("r", getNodeSize)
+            node
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                .attr("r", getNodeSize)
 
-        /*
-        node
-            .attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; })
-            .attr("r", getNodeSize)
-            //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-        */
+            /*
+            node
+                .attr("cx", function(d) { return d.x; })
+                .attr("cy", function(d) { return d.y; })
+                .attr("r", getNodeSize)
+                //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            */
 
-        //text
-            //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            //text
+                //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        } else {
+            simulation.stop();
+        }
+        
         
     }
 
@@ -548,6 +557,8 @@
         if (!d3.event.active) simulation.alphaTarget(0);
         d.fx = d.x; //sticky node
         d.fy = d.y; //sticky node
+        startTime = Date.now();
+        endTime = startTime + simulationDurationInMs;
     }
 
     //ZOOM FUNCTION
@@ -612,12 +623,11 @@
 
     // convenience function to update everything (run after UI input)
     function updateAll() {
+        startTime = Date.now();
+        endTime = startTime + simulationDurationInMs;
         updateForces();
         updateDisplay();
     }
-
-
-
 </script>
 
 {% endblock %}
