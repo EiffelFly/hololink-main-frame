@@ -21,21 +21,21 @@
     }
     @media (min-width: 1200px) {}
 
-    .collapse-force-title:hover {
+    .collapse-controller-title:hover {
         text-decoration: none;
         color: black;
         opacity: 1;
         background-color: rgba(61, 61, 61, 0.1);
     }
 
-    .collapse-force-title {
+    .collapse-controller-title {
         font-size: 18px;
         font-weight: 700;
         color: black;
         padding-left: 15px;
     }
 
-    .collapse-force-container {
+    .collapse-controller-container {
         padding-left: 15px;
     }
 
@@ -56,8 +56,8 @@
         <div class="row flex-grow-1" style="margin: auto; overflow: auto;">
             <div class="slider-container col-12 col-sm-2">
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
-                    <a class="collapse-force-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
-                    <div class="row collapse multi-collapse collapse-force-container" id="center_force">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="center_force">
                         <div class="col-12">
                             <div class="force-instruction">{% trans 'Shifts the view, so the graph is centered at this location.' %}</div>
                         </div>
@@ -81,8 +81,8 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-force-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
-                    <div class="row collapse multi-collapse collapse-force-container" id="charge_force">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
@@ -116,8 +116,8 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-force-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
-                    <div class="row collapse multi-collapse collapse-force-container" id="collide_force">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="collide_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Prevents nodes from overlapping</div>
@@ -151,8 +151,8 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-force-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
-                    <div class="row collapse multi-collapse collapse-force-container" id="x_force">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="x_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" onchange="forceProperties.forceX.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
@@ -177,7 +177,7 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-force-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
                     <div class="row collapse multi-collapse" id="y_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();">
@@ -203,8 +203,8 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-force-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
-                    <div class="row collapse multi-collapse collapse-force-container" id="link_force">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="link_force">
                         <div class="col-12 d-flex">
                             <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.link.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Sets link length and strength</div>
@@ -239,7 +239,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-2"></div>
+            <div class="col-12 col-sm-2">
+                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="filter">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -263,15 +270,24 @@
 
     //limit font-size when scaling
     var max_text_size = 18
-        nominal_text_size = 10;
+        nominal_text_size = 8;
+
+    const linkedByIndex = {};
 
     // load the data
     d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
         if (error) throw error;
         graph = data.graph;
-        console.log(graph)
-        initializeDisplay();
         initializeSimulation();
+        initializeDisplay();
+
+         // create a index to allow constant-time lookup with good performance
+        // This must put after simulation, after that we can access the d3 calculated info
+        
+        graph.links.forEach(d => {
+            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+        });
+
     });
 
 
@@ -286,6 +302,8 @@
         simulation.nodes(graph.nodes);
         initializeForces();
         simulation.on("tick", ticked);
+
+        
     }
 
     // values for all forces
@@ -382,15 +400,13 @@
 
     // generate the svg objects and force simulation
     function initializeDisplay() {
-        console.log(graph)
-        console.log(width)
         // set the data and properties of link lines
         link = g.append("g")
                 .attr("class", "links")
             .selectAll("line")
                 .data(graph.links)
                 .enter()
-                .append("line");
+                .append("line")
 
         // set the data and properties of node circles
         node = g.append("g")
@@ -406,15 +422,19 @@
                 return d.connection
             })
             .attr('r', getNodeSize)
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
         
         node
             .append("text")
             .text(node => node.id)
-            .attr('dy', '.75rem')
+            .attr('dy', '.5rem')
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
             .style('opacity', 0)
             .attr('text-anchor', 'middle')
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
             //.style('fill', 'black')
                 
                 
@@ -468,7 +488,7 @@
     function updateDisplay() {
 
         link
-            .attr("stroke-width", forceProperties.link.enabled ? 1 : .5)
+            .attr("stroke-width", forceProperties.link.enabled ? 0.5 : .2)
             .attr("opacity", forceProperties.link.enabled ? 1 : 0)
             .style("stroke", 'grey');
         /*
@@ -552,7 +572,7 @@
     }
 
     function getNodeSize(node){
-        return 4
+        return 2
     }
 
     function getTextWrapperXSpace(node){
@@ -570,11 +590,33 @@
         updateForces();
     });
 
+    //Implement FADE IN and OUT EFFECT ------------
+
+    function fade(opacity){
+            return d => {
+                //判斷 node 是否相連，若沒有則套用 opacity
+                node.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+                //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
+                link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+                //When mouseout reset opacity
+                if(opacity === 1){
+                    node.style('opacity', 1)
+                    link.style('stroke-opacity', 0.5)
+                }
+            };
+        }
+
+    function isConnected(a, b) {
+        return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+    }
+
     // convenience function to update everything (run after UI input)
     function updateAll() {
         updateForces();
         updateDisplay();
     }
+
+
 
 </script>
 
