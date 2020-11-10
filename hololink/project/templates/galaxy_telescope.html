@@ -708,13 +708,29 @@
     function fade(opacity){
             return d => {
                 //判斷 node 是否相連，若沒有則套用 opacity
-                node.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+                node
+                    .transition()
+                    .duration(300)
+                    .ease(d3.easeLinear)
+                    .style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
                 //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
-                link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+                link
+                    .transition()
+                    .duration(300)
+                    .ease(d3.easeLinear)
+                    .style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
                 //When mouseout reset opacity
                 if(opacity === 1){
-                    node.style('opacity', 1)
-                    link.style('stroke-opacity', 0.5)
+                    node
+                        .transition()
+                        .duration(300)
+                        .ease(d3.easeLinear)
+                        .style('opacity', 1)
+                    link
+                        .transition()
+                        .duration(300)
+                        .ease(d3.easeLinear)
+                        .style('stroke-opacity', 0.5)
                 }
             };
         }
