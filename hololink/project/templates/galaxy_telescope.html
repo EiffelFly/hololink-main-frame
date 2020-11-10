@@ -41,6 +41,7 @@
 
     .collapse-controller-container {
         padding: 0 15px;
+        width: 100%;
     }
 
     .force-instruction {
@@ -119,28 +120,25 @@
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
-                                <output id="charge_StrengthSliderOutput">-30</output>
                             </div>
                             <div>
-                                <input type="range" min="-200" max="50" value="-30" step=".1" oninput="d3.select('#charge_StrengthSliderOutput').text(value); forceProperties.charge.strength=value; updateAll();">
+                                <input id="charge_StrengthSliderOutput">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">distanceMin</div>
-                                <output id="charge_distanceMinSliderOutput">1</output>
                             </div>
                             <div>
-                                <input type="range" min="0" max="50" value="1" step=".1" oninput="d3.select('#charge_distanceMinSliderOutput').text(value); forceProperties.charge.distanceMin=value; updateAll();">
+                                <input id="charge_distanceMinSliderOutput">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
                                 <div class="silder-instruction">distanceMax</div>
-                                <output id="charge_distanceMaxSliderOutput">2000</output>
                             </div>
                             <div>
-                                <input type="range" min="0" max="2000" value="2000" step=".1" oninput="d3.select('#charge_distanceMaxSliderOutput').text(value); forceProperties.charge.distanceMax=value; updateAll();">
+                                <input id="charge_distanceMaxSliderOutput">
                             </div>
                         </div>
                     </div>
@@ -318,6 +316,43 @@
         forceProperties.center.y=event.value.newValue; 
         updateAll();
     });
+
+    $('#charge_StrengthSliderOutput').slider({
+        min:-200,
+        max:50,
+        value:-30,
+        step:1,
+    });
+
+    $('#charge_StrengthSliderOutput').on("change", function(event){
+        forceProperties.charge.strength=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#charge_distanceMinSliderOutput').slider({
+        min:0,
+        max:50,
+        value:1,
+        step:1,
+    });
+
+    $('#charge_distanceMinSliderOutput').on("change", function(event){
+        forceProperties.charge.distanceMin=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#charge_distanceMaxSliderOutput').slider({
+        min:0,
+        max:2000,
+        value:2000,
+        step:1,
+    });
+
+    $('#charge_distanceMaxSliderOutput').on("change", function(event){
+        forceProperties.charge.distanceMax=event.value.newValue; 
+        updateAll();
+    });
+
 
 </script>
 
