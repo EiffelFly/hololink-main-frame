@@ -3,9 +3,13 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block content %}
 
+{% block extracss %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" 
+        integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ==" crossorigin="anonymous" />
 <style>
+
+
     @media (min-width: 440px) {
 
     }
@@ -47,8 +51,35 @@
     .force-checkbox {
         margin: 2.5px 5px 0 0;
     }
+ 
+    .slider-selection {
+        background: grey;
+    }
+
+    .slider-handle {
+        background-color: black;
+        background-image: none;
+        height: 15px;
+        width: 15px;
+        top: 2px;
+    }
+
+    .silder-instruction{
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .slider-track {
+        height: 8px !important;
+    }
 
 </style>
+
+
+{% endblock %}
+
+{% block content %}
+
 
 <div class="container-fluid d-flex flex-column" style="padding:0">
     {% include 'project_dashboard_navbar_2.html' %}
@@ -63,11 +94,10 @@
                         </div>
                         <div class="col-12">
                             <div class="d-flex">
-                                <p>x</p>
-                                <output id="center_XSliderOutput">.5</output>
+                                <div class="silder-instruction">x</div>
                             </div>
-                            <div class="d-flex">
-                                <input type="range" min="0" max="1" value=".5" step="0.01" oninput="d3.select('#center_XSliderOutput').text(value); forceProperties.center.x=value; updateAll();">
+                            <div class="d-flex" style="padding-right: 15px;">
+                                <input id="center_XSliderOutput" oninput="forceProperties.center.x=value; updateAll();">
                             </div>
                         </div>
                         <div class="col-12">
@@ -245,6 +275,12 @@
                     <div class="row collapse multi-collapse collapse-controller-container" id="filter">
 
                     </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="display">
+
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                 </div>
             </div>
         </div>
@@ -252,8 +288,30 @@
 </div>
 {% endblock %}
 
+{% block sliderjs %}
+
+
+    
+
+{% endblock %}
 
 {% block extrajs %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" 
+    integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous">
+</script>
+
+<script>
+
+    $('#center_XSliderOutput').slider({
+        min:0,
+        max:1,
+        step:0.01,
+        value:0.5,
+    });
+
+</script>
+
 <script>
     var svg = d3.select("svg"),
         width = +svg.node().getBoundingClientRect().width,
