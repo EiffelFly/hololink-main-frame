@@ -122,7 +122,9 @@
                                 <div class="silder-instruction">strength</div>
                             </div>
                             <div>
-                                <input id="charge_StrengthSliderOutput">
+                                <div class="d-flex">
+                                    <input id="charge_StrengthSliderOutput">
+                                </div>
                             </div>
                         </div>
                         <div class="col-12">
@@ -130,7 +132,9 @@
                                 <div class="silder-instruction">distanceMin</div>
                             </div>
                             <div>
-                                <input id="charge_distanceMinSliderOutput">
+                                <div class="d-flex">
+                                    <input id="charge_distanceMinSliderOutput">
+                                </div>
                             </div>
                         </div>
                         <div class="col-12">
@@ -138,7 +142,9 @@
                                 <div class="silder-instruction">distanceMax</div>
                             </div>
                             <div>
-                                <input id="charge_distanceMaxSliderOutput">
+                                <div class="d-flex">
+                                    <input id="charge_distanceMaxSliderOutput">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -487,11 +493,19 @@
         initializeSimulation();
         initializeDisplay();
 
-         // create a index to allow constant-time lookup with good performance
+        // create a index to allow constant-time lookup with good performance
         // This must put after simulation, after that we can access the d3 calculated info
         
         graph.links.forEach(d => {
             linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+        });
+
+        // create a index to allow constant-time lookup with good performance
+
+        var nodeByID = {};
+
+        graph.nodes.forEach(function(n) {
+            nodeByID[n.id] = n;
         });
 
     });
@@ -810,7 +824,10 @@
                     .transition()
                     .duration(300)
                     .ease(d3.easeLinear)
-                    .style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+                    .style('opacity', function (o) { 
+                        //console.log(d,o)
+                        return isConnected(d, o) ? 1 : opacity 
+                    });
                 //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
                 link
                     .transition()
