@@ -500,6 +500,19 @@
             linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
         });
 
+        //alternative way to cope with adding new parameter in d3 graph data
+
+        graph.links1.forEach(function(l) {
+            if (!l.sourceLevel){
+                l.sourceGroup = nodeByID[l.source].group.toString();
+            }
+
+            if (!l.targetLevel){
+                l.targetGroup = nodeByID[l.target].group.toString();
+            } 
+        });
+
+
         // create a index to allow constant-time lookup with good performance
 
         var nodeByID = {};
