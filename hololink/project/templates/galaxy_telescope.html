@@ -52,6 +52,15 @@
     .force-checkbox {
         margin: 2.5px 5px 0 0;
     }
+
+    .filter-instruction {
+        font-size: 14px;
+        margin-bottom: 5px;    
+    }
+
+    .filter-checkbox {
+        margin: 2.5px 5px 0 0;
+    }
  
     .slider-selection {
         background: lightgray;
@@ -72,6 +81,10 @@
 
     .slider-track {
         height: 8px !important;
+    }
+
+    .collapse-controller-element{
+        padding-right: 0;
     }
 
 </style>
@@ -267,7 +280,24 @@
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="filter">
-
+                        <div class="col-12 d-flex collapse-controller-element">
+                            <input class="filter-checkbox" type="checkbox" value="article">
+                            <div class="filter-instruction">
+                                Filter out articles
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex collapse-controller-element">
+                            <input class="filter-checkbox" type="checkbox" value="basestone">
+                            <div class="filter-instruction">
+                                Filter out basestone keywords
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex">
+                            <input class="filter-checkbox" type="checkbox" value="stellar">
+                            <div class="filter-instruction">
+                                Filter out stellar keywords
+                            </div>
+                        </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
@@ -470,28 +500,49 @@
         .attr("class", "everything");
 
     // svg objects
-    var link, node;
+    var link = g.append("g")
+                .attr("class", "links") 
+                .selectAll('.line')
+    var node = g.append("g")
+                .attr("class", "nodes")
+                .selectAll('g')
+
+
     // the data - an object with nodes and links
-    var graph;
+    var graph, store;
 
     //limit font-size when scaling
     var max_text_size = 18
         nominal_text_size = 8;
 
-    const linkedByIndex = {};
+    var linkedByIndex = {};
 
     const simulationDurationInMs = 10000; // 2 seconds
 
     var startTime = Date.now();
     var endTime = startTime + simulationDurationInMs;
 
+    // filter keyword type
+    var filterKeywordLevel = []
+
+    /*
+        load data -> initializeSimulation()
+                                            simulation.nodes()
+                                            simulation.on('tick')
+                                            -> initializeForces() -> updateForces() -> simulation.restart()
+                  -> initialDisplay() -> updateDisplay()                                       
+    */
+
+
 
     // load the data
     d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
         if (error) throw error;
         graph = data.graph;
+        console.log('initial', graph)
         initializeSimulation();
-        initializeDisplay();
+        updateFilteredDisplay()
+        //initializeDisplay();
 
         // create a index to allow constant-time lookup with good performance
         // This must put after simulation, after that we can access the d3 calculated info
@@ -499,19 +550,6 @@
         graph.links.forEach(d => {
             linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
         });
-
-        //alternative way to cope with adding new parameter in d3 graph data
-
-        graph.links1.forEach(function(l) {
-            if (!l.sourceLevel){
-                l.sourceGroup = nodeByID[l.source].group.toString();
-            }
-
-            if (!l.targetLevel){
-                l.targetGroup = nodeByID[l.target].group.toString();
-            } 
-        });
-
 
         // create a index to allow constant-time lookup with good performance
 
@@ -521,8 +559,36 @@
             nodeByID[n.id] = n;
         });
 
+        //alternative way to cope with adding new parameter in d3 graph data
+
+        graph.links.forEach(function(l) {
+            if (!l.sourceLevel){
+                l['sourceLevel'] = nodeByID[l.source.id].level.toString();
+            }
+
+            if (!l.targetLevel){
+                l['targetLevel'] = nodeByID[l.target.id].level.toString();
+            } 
+        });
+
+        // copy graph data for further usage
+        store = $.extend(true, {}, graph);
+
     });
 
+    ////////////  UI INTERACTION ////////////
+    $('.filter-checkbox').on("click", function(){
+        var type = $(this).attr("value");
+        if (filterKeywordLevel.includes(type)) {
+            filterKeywordLevel.splice(filterKeywordLevel.indexOf(type), 1)
+        } else {
+            filterKeywordLevel.push(type);
+        }
+        console.log(filterKeywordLevel)
+        
+        filter()
+        updateFilteredDisplay()
+    });
 
 
     //////////// FORCE SIMULATION //////////// 
@@ -632,17 +698,13 @@
     // generate the svg objects and force simulation
     function initializeDisplay() {
         // set the data and properties of link lines
-        link = g.append("g")
-                .attr("class", "links")
-            .selectAll("line")
-                .data(graph.links)
-                .enter()
-                .append("line")
+        link 
+            .data(graph.links)
+            .enter()
+            .append("line")
 
         // set the data and properties of node circles
-        node = g.append("g")
-            .attr("class", "nodes")
-            .selectAll("g")
+        node
             .data(graph.nodes)
             .enter().append("g")
             
@@ -667,31 +729,6 @@
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
             //.style('fill', 'black')
-                
-                
-        /*
-        textContainer = g.append("g")
-            .attr("class", "textContainer")
-                .selectAll("foreignObject")
-                .data(graph.nodes)                   
-                .enter()
-                    .append('foreignObject')
-                    
-
-        
-        text = textContainer.append('xhtml:text')
-            .text(node => node.id)
-            .style('display', 'flex')
-            .style('width', '100%')
-            .style('height', '100%')
-            .style('justify-content', 'center')
-            .style('align-items','center')
-            .style('font-family', "'Noto Sans TC', sans-serif")
-            .style('font-weight', '500')
-            .style('font-size', nominal_text_size + "px")
-            .style('fill', 'black')
-
-        */
 
         // node tooltip
         node.append("title")
@@ -717,23 +754,113 @@
 
     // update the display based on the forces (but not positions)
     function updateDisplay() {
-
         link
             .attr("stroke-width", forceProperties.link.enabled ? 0.5 : .2)
             .attr("opacity", forceProperties.link.enabled ? 1 : 0)
             .style("stroke", 'grey');
-        /*
-        textContainer
-            .style('width', getTextWrapperXSpace)
-            .style('height', getTextWrapperYSpace)
+    }
+
+    // Filter function
+    function filter(){
+        store.nodes.forEach(function(n){
+            if (!filterKeywordLevel.includes(n.level) && n.filtered){
+                n.filtered = false
+                graph.nodes.push($.extend(true, {}, n));
+            } else if (filterKeywordLevel.includes(n.level) && !n.filtered ){
+                n.filtered = true;
+                graph.nodes.forEach(function(d, i) {
+                    if (n.id === d.id) {
+                        graph.nodes.splice(i, 1);
+                    }
+                });
+            }
+        });
+
+        //	add and remove links from data based on availability of nodes
+	    store.links.forEach(function(l) {
+		    if (!(filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && l.filtered) {
+                console.log('f')
+			    l.filtered = false;
+			    graph.links.push($.extend(true, {}, l));
+		    } else if ((filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && !l.filtered) {
+                console.log(l)
+			    l.filtered = true;
+			    graph.links.forEach(function(d, i) {
+				    if (l.index === d.index) {
+					    graph.links.splice(i, 1);
+				    }
+			    });
+		    }
+	    });
+
+        console.log('after_filter',graph)
+    }
+
+    // update filter condition to node and link
+    function updateFilteredDisplay(){
+        //	UPDATE
+        node = node.data(graph.nodes, function(d) { return d.id;})
+        //	EXIT
+	    node.exit().remove();
+        //	ENTER
+	    var newNode = node
+            .enter()
+            .append("g")
         
-        
-        text
-            .style('opacity', function(node){
-                if (node.connection > 2) { return 1 }
-                else { return 0 }
+        newNode
+            .append("circle")
+            .attr('connection', function(d){
+                return d.connection
             })
-        */
+            .attr('r', getNodeSize)
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+        
+        newNode
+            .append("text")
+            .text(node => node.id)
+            .attr('dy', '.5rem')
+            .style('font-weight', '500')
+            .style('font-size', nominal_text_size + "px")
+            .style('opacity', 0)
+            .attr('text-anchor', 'middle')
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+        
+        newNode
+            .append("title")
+            .text(function(d) { return d.id; });
+
+        //	ENTER + UPDATE
+	    node = node.merge(newNode);
+
+        //	UPDATE second function is essential
+        link = link.data(graph.links, function(d) { return d.id;})
+
+        //	EXIT
+	    link.exit().remove();
+
+        var newLink = link
+            .enter()
+            .append('line')
+        
+        link = link.merge(newLink);
+
+        var zoom_handler = d3.zoom()
+            .on("zoom", zoom_actions)
+            .scaleExtent([0.1, 10]); //set zoom in and out limit
+
+        zoom_handler(svg);
+
+        var drag_handler = d3.drag()
+            .on("start", drag_start)
+            .on("drag", drag_drag)
+            .on("end", drag_end);	
+
+        drag_handler(node);
+
+        updateDisplay();
+
     }
 
     // update the display positions after each simulation tick
