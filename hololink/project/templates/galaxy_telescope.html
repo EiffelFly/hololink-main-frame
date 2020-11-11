@@ -540,9 +540,7 @@
         if (error) throw error;
         graph = data.graph;
         console.log('initial', graph)
-        initializeSimulation();
-        updateFilteredDisplay()
-        //initializeDisplay();
+        initializeOrUpdateDisplay()
 
         // create a index to allow constant-time lookup with good performance
         // This must put after simulation, after that we can access the d3 calculated info
@@ -587,7 +585,8 @@
         console.log(filterKeywordLevel)
         
         filter()
-        updateFilteredDisplay()
+        initializeOrUpdateDisplay()
+
     });
 
 
@@ -595,13 +594,6 @@
 
     // force simulator
     var simulation = d3.forceSimulation();
-
-    // set up the simulation and event to update locations after each tick
-    function initializeSimulation() {
-        simulation.nodes(graph.nodes);
-        initializeForces();
-        simulation.on("tick", ticked);
-    }
 
     // values for all forces
     forceProperties = {
@@ -797,45 +789,46 @@
     }
 
     // update filter condition to node and link
-    function updateFilteredDisplay(){
+    function initializeOrUpdateDisplay(){
+        console.log(graph)
         //	UPDATE
-        node = node.data(graph.nodes, function(d) { return d.id;})
+        node = node.data(graph.nodes)
         //	EXIT
-	    node.exit().remove();
+	    //node.exit().remove();
         //	ENTER
 	    var newNode = node
             .enter()
             .append("g")
         
-        newNode
-            .append("circle")
-            .attr('connection', function(d){
-                return d.connection
-            })
-            .attr('r', getNodeSize)
-            .on('mouseover.fade', fade(0.2))
-            .on('mouseout.fade', fade(1));
+            newNode
+                .append("circle")
+                .attr('connection', function(d){
+                    return d.connection
+                })
+                .attr('r', getNodeSize)
+                .on('mouseover.fade', fade(0.2))
+                .on('mouseout.fade', fade(1));
+            
+            newNode
+                .append("text")
+                .text(node => node.id)
+                .attr('dy', '.5rem')
+                .style('font-weight', '500')
+                .style('font-size', nominal_text_size + "px")
+                .style('opacity', 0)
+                .attr('text-anchor', 'middle')
+                .on('mouseover.fade', fade(0.2))
+                .on('mouseout.fade', fade(1));
         
-        newNode
-            .append("text")
-            .text(node => node.id)
-            .attr('dy', '.5rem')
-            .style('font-weight', '500')
-            .style('font-size', nominal_text_size + "px")
-            .style('opacity', 0)
-            .attr('text-anchor', 'middle')
-            .on('mouseover.fade', fade(0.2))
-            .on('mouseout.fade', fade(1));
-        
-        newNode
-            .append("title")
-            .text(function(d) { return d.id; });
+            newNode
+                .append("title")
+                .text(function(d) { return d.id; });
 
         //	ENTER + UPDATE
 	    node = node.merge(newNode);
 
         //	UPDATE second function is essential
-        link = link.data(graph.links, function(d) { return d.id;})
+        link = link.data(graph.links)
 
         //	EXIT
 	    link.exit().remove();
@@ -860,6 +853,16 @@
         drag_handler(node);
 
         updateDisplay();
+        
+        startTime = Date.now();
+        endTime = startTime + simulationDurationInMs;
+
+        // set up the simulation and event to update locations after each tick
+        simulation
+            .nodes(graph.nodes)
+            .on("tick", ticked);
+
+        initializeForces();
 
     }
 
@@ -867,10 +870,10 @@
     function ticked() {
         if (Date.now() < endTime) {
             link
-            .attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
 
             node
                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
