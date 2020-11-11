@@ -280,18 +280,6 @@
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="filter">
-                        <div class="col-12 d-flex collapse-controller-element">
-                            <input class="filter-checkbox" type="checkbox" value="article">
-                            <div class="filter-instruction">
-                                Filter out articles
-                            </div>
-                        </div>
-                        <div class="col-12 d-flex collapse-controller-element">
-                            <input class="filter-checkbox" type="checkbox" value="basestone">
-                            <div class="filter-instruction">
-                                Filter out basestone keywords
-                            </div>
-                        </div>
                         <div class="col-12 d-flex">
                             <input class="filter-checkbox" type="checkbox" value="stellar">
                             <div class="filter-instruction">
@@ -525,6 +513,7 @@
     // filter keyword type
     var filterKeywordLevel = []
 
+    var nodeByID = {};
     /*
         load data -> initializeSimulation()
                                             simulation.nodes()
@@ -551,7 +540,6 @@
 
         // create a index to allow constant-time lookup with good performance
 
-        var nodeByID = {};
 
         graph.nodes.forEach(function(n) {
             nodeByID[n.id] = n;
@@ -576,17 +564,26 @@
 
     ////////////  UI INTERACTION ////////////
     $('.filter-checkbox').on("click", function(){
-        var type = $(this).attr("value");
-        if (filterKeywordLevel.includes(type)) {
-            filterKeywordLevel.splice(filterKeywordLevel.indexOf(type), 1)
+        if (this.checked){
+            var type = $(this).attr("value");
+            if (filterKeywordLevel.includes(type)) {
+                filterKeywordLevel.splice(filterKeywordLevel.indexOf(type), 1)
+            } else {
+                filterKeywordLevel.push(type);
+            }
+            filter()
+            initializeOrUpdateDisplay()
         } else {
-            filterKeywordLevel.push(type);
-        }
-        console.log(filterKeywordLevel)
-        
-        filter()
-        initializeOrUpdateDisplay()
+            graph = store
+            console.log('s')
+            
+            reInitializeForce()
 
+        }
+        console.log(graph)
+        
+        
+        
     });
 
 
@@ -594,6 +591,13 @@
 
     // force simulator
     var simulation = d3.forceSimulation();
+
+    function startSimulation(){
+        // set up the simulation and event to update locations after each tick
+        simulation
+            .nodes(graph.nodes)
+            .on("tick", ticked);
+    }
 
     // values for all forces
     forceProperties = {
@@ -648,8 +652,19 @@
             .force("forceY", d3.forceY());
         // apply properties to each of the forces
         updateForces();
-
     }
+
+    function reInitializeForce(){
+        simulation.force("collide").initialize(graph.nodes);
+        simulation.force("charge").initialize(graph.nodes);
+        simulation.force("center").initialize(graph.nodes);
+        simulation.force("forceX").initialize(graph.nodes);
+        simulation.force("forceY").initialize(graph.nodes);
+        simulation.force("link").initialize(graph.links);
+        updateForces();
+    }
+
+
     
     // apply new force properties
     function updateForces() {
@@ -771,11 +786,9 @@
         //	add and remove links from data based on availability of nodes
 	    store.links.forEach(function(l) {
 		    if (!(filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && l.filtered) {
-                console.log('f')
 			    l.filtered = false;
 			    graph.links.push($.extend(true, {}, l));
 		    } else if ((filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && !l.filtered) {
-                console.log(l)
 			    l.filtered = true;
 			    graph.links.forEach(function(d, i) {
 				    if (l.index === d.index) {
@@ -792,9 +805,9 @@
     function initializeOrUpdateDisplay(){
         console.log(graph)
         //	UPDATE
-        node = node.data(graph.nodes)
+        node = node.data(graph.nodes, function(d) { return d.id;})
         //	EXIT
-	    //node.exit().remove();
+	    node.exit().remove();
         //	ENTER
 	    var newNode = node
             .enter()
@@ -828,7 +841,7 @@
 	    node = node.merge(newNode);
 
         //	UPDATE second function is essential
-        link = link.data(graph.links)
+        link = link.data(graph.links, function(d) { return d.id;})
 
         //	EXIT
 	    link.exit().remove();
@@ -857,11 +870,7 @@
         startTime = Date.now();
         endTime = startTime + simulationDurationInMs;
 
-        // set up the simulation and event to update locations after each tick
-        simulation
-            .nodes(graph.nodes)
-            .on("tick", ticked);
-
+        startSimulation()
         initializeForces();
 
     }
@@ -876,7 +885,8 @@
                 .attr("y2", function(d) { return d.target.y; });
 
             node
-                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                // we use transform is because we group circle and text together in g, and transform is g's position 
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; }) 
                 .attr("r", getNodeSize)
 
             /*
