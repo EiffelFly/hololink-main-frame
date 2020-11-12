@@ -487,6 +487,8 @@
     var g = svg.append("g")
         .attr("class", "everything");
 
+    var simulation;
+
     // svg objects
     var link = g.append("g")
                 .attr("class", "links") 
@@ -529,7 +531,10 @@
         if (error) throw error;
         graph = data.graph;
         console.log('initial', graph)
-        initializeOrUpdateDisplay()
+        initialSimulation();
+        startSimulation();
+        initializeForces();
+        initializeOrUpdateDisplay();
 
         // create a index to allow constant-time lookup with good performance
         // This must put after simulation, after that we can access the d3 calculated info
@@ -590,13 +595,26 @@
     //////////// FORCE SIMULATION //////////// 
 
     // force simulator
-    var simulation = d3.forceSimulation();
-
+    function initialSimulation(){
+        var firstSimulation = d3.forceSimulation();
+        resetSimulation(firstSimulation);
+    }
+   
     function startSimulation(){
         // set up the simulation and event to update locations after each tick
         simulation
             .nodes(graph.nodes)
             .on("tick", ticked);
+    }
+
+    function resetSimulation(newSim){
+        if (simulation){
+            simulation.stop();
+        }
+
+        if (newSim != undefined) {
+            simulation = newSim;
+        }
     }
 
     // values for all forces
@@ -663,8 +681,6 @@
         simulation.force("link").initialize(graph.links);
         updateForces();
     }
-
-
     
     // apply new force properties
     function updateForces() {
@@ -803,7 +819,6 @@
 
     // update filter condition to node and link
     function initializeOrUpdateDisplay(){
-        console.log(graph)
         //	UPDATE
         node = node.data(graph.nodes, function(d) { return d.id;})
         //	EXIT
