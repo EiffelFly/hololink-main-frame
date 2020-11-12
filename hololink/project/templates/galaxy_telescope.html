@@ -532,8 +532,9 @@
         graph = data.graph;
         console.log('initial', graph)
         initialSimulation();
-        startSimulation();
         initializeForces();
+        startSimulation();
+        updateForces();
         initializeOrUpdateDisplay();
 
         // create a index to allow constant-time lookup with good performance
@@ -577,13 +578,13 @@
                 filterKeywordLevel.push(type);
             }
             filter()
-            initializeOrUpdateDisplay()
-        } else {
-            graph = store
-            console.log('s')
-            
-            reInitializeForce()
+            initializeOrUpdateDisplay();
 
+            
+        } else {
+
+            graph = store
+            initializeOrUpdateDisplay();
         }
         console.log(graph)
         
@@ -596,15 +597,23 @@
 
     // force simulator
     function initialSimulation(){
-        var firstSimulation = d3.forceSimulation();
+        var firstSimulation = d3.forceSimulation()
+            .on("tick", ticked);
         resetSimulation(firstSimulation);
+    }
+
+    function initialFilteredSimulation(){
+        var filteredSimulation = d3.forceSimulation()
+            .on("tick", ticked);
+        resetSimulation(filteredSimulation);
     }
    
     function startSimulation(){
         // set up the simulation and event to update locations after each tick
         simulation
             .nodes(graph.nodes)
-            .on("tick", ticked);
+        
+        simulation.restart()
     }
 
     function resetSimulation(newSim){
@@ -668,8 +677,7 @@
             .force("center", d3.forceCenter())
             .force("forceX", d3.forceX())
             .force("forceY", d3.forceY());
-        // apply properties to each of the forces
-        updateForces();
+        // apply properties to each of the force
     }
 
     function reInitializeForce(){
@@ -813,8 +821,6 @@
 			    });
 		    }
 	    });
-
-        console.log('after_filter',graph)
     }
 
     // update filter condition to node and link
@@ -884,9 +890,6 @@
         
         startTime = Date.now();
         endTime = startTime + simulationDurationInMs;
-
-        startSimulation()
-        initializeForces();
 
     }
 
