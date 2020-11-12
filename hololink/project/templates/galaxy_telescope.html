@@ -524,17 +524,17 @@
                   -> initialDisplay() -> updateDisplay()                                       
     */
 
-    loadData()
+    loadData(filtered=true)
 
 
     // load the data
-    function loadData(){
+    function loadData(filtered){
         d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
             if (error) throw error;
             
             graph = data.graph;
             console.log('initial', graph)
-            initializeOrUpdateDisplay(graph);
+            //initializeOrUpdateDisplay(graph);
             initialSimulation();
             initializeForces();
             startSimulation();
@@ -569,9 +569,13 @@
 
             // copy graph data for further usage
             store = $.extend(true, {}, graph);
-            graph2 = graph
-            console.log(graph, store)
-
+            
+            if (filtered){
+                filterKeywordLevel.push('stellar');
+                filter()
+            }
+            initializeOrUpdateDisplay(graph);
+            reheatSimulation();
         });
     }
 
