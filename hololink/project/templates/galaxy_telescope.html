@@ -587,10 +587,14 @@
             }
             filter()
             initializeOrUpdateDisplay();
-            //reheatSimulation();
-
-            
+            reheatSimulation();
         } else {
+            resetData()
+            graph.nodes = $.extend(true, [], store.nodes)
+            graph.links = $.extend(true, [], store.links)
+
+            initializeOrUpdateDisplay();
+            startSimulation();
 
         }
         console.log(graph)
@@ -622,15 +626,19 @@
     function reheatSimulation(){
         simulation
             .alphaDecay(0.01)
-            .alpha(0.8).restart()
-            .restart();
+            .alpha(0.8)
+            .restart()
     }
    
     function startSimulation(){
         // set up the simulation and event to update locations after each tick
         simulation
-            .nodes(graph.nodes)
+            .nodes(graph.nodes);
         
+        simulation.force("link")
+            .id(function(d) {return d.id;})
+            .links(graph.links)
+
         simulation
             .alphaDecay(0.01)
             .alpha(0.8).restart()
@@ -701,11 +709,6 @@
         // apply properties to each of the force
     }
 
-    function reInitializeForce(){
-        simulation.force("collide", null)
-        simulation.force("link", null)
-    }
-    
     // apply new force properties
     function updateForces() {
         // get each force by name and update the properties
@@ -839,35 +842,37 @@
         //	UPDATE
         node = node.data(graph.nodes, function(d) { return d.id;})
         //	EXIT
-	    node.exit().remove();
+	    node.exit().transition()
+            .attr("r", 0)
+            .remove();
         //	ENTER
 	    var newNode = node
             .enter()
             .append("g")
         
-            newNode
-                .append("circle")
-                .attr('connection', function(d){
-                    return d.connection
-                })
-                .attr('r', getNodeSize)
-                .on('mouseover.fade', fade(0.2))
-                .on('mouseout.fade', fade(1));
-            
-            newNode
-                .append("text")
-                .text(node => node.id)
-                .attr('dy', '.5rem')
-                .style('font-weight', '500')
-                .style('font-size', nominal_text_size + "px")
-                .style('opacity', 0)
-                .attr('text-anchor', 'middle')
-                .on('mouseover.fade', fade(0.2))
-                .on('mouseout.fade', fade(1));
+        newNode
+            .append("circle")
+            .attr('connection', function(d){
+                return d.connection
+            })
+            .attr('r', getNodeSize)
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
         
-            newNode
-                .append("title")
-                .text(function(d) { return d.id; });
+        newNode
+            .append("text")
+            .text(node => node.id)
+            .attr('dy', '.5rem')
+            .style('font-weight', '500')
+            .style('font-size', nominal_text_size + "px")
+            .style('opacity', 0)
+            .attr('text-anchor', 'middle')
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+    
+        newNode
+            .append("title")
+            .text(function(d) { return d.id; });
 
         //	ENTER + UPDATE
 	    node = node.merge(newNode);
@@ -875,8 +880,14 @@
         //	UPDATE second function is essential
         link = link.data(graph.links, function(d) { return d.id;})
 
-        //	EXIT
-	    link.exit().remove();
+        // Keep the exiting links connected to the moving remaining nodes.
+	    link.exit().transition()
+            .attr("stroke-opacity", 0)
+            .attrTween("x1", function(d) { return function() { return d.source.x; }; })
+            .attrTween("x2", function(d) { return function() { return d.target.x; }; })
+            .attrTween("y1", function(d) { return function() { return d.source.y; }; })
+            .attrTween("y2", function(d) { return function() { return d.target.y; }; })
+            .remove();
 
         var newLink = link
             .enter()
@@ -896,6 +907,7 @@
             .on("end", drag_end);	
 
         drag_handler(node);
+
 
         updateDisplay();
     }
