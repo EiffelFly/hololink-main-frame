@@ -524,49 +524,57 @@
                   -> initialDisplay() -> updateDisplay()                                       
     */
 
+    loadData()
 
 
     // load the data
-    d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
-        if (error) throw error;
-        graph = data.graph;
-        console.log('initial', graph)
-        initialSimulation();
-        initializeForces();
-        startSimulation();
-        updateForces();
-        initializeOrUpdateDisplay();
+    function loadData(){
+        d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
+            if (error) throw error;
+            
+            graph = data.graph;
+            console.log('initial', graph)
+            initializeOrUpdateDisplay();
+            initialSimulation();
+            initializeForces();
+            startSimulation();
+            updateForces();
+            
 
-        // create a index to allow constant-time lookup with good performance
-        // This must put after simulation, after that we can access the d3 calculated info
-        
-        graph.links.forEach(d => {
-            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+            // create a index to allow constant-time lookup with good performance
+            // This must put after simulation, after that we can access the d3 calculated info
+            
+            graph.links.forEach(d => {
+                linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+            });
+
+            // create a index to allow constant-time lookup with good performance
+
+
+            graph.nodes.forEach(function(n) {
+                nodeByID[n.id] = n;
+            });
+
+            //alternative way to cope with adding new parameter in d3 graph data
+
+            graph.links.forEach(function(l) {
+                if (!l.sourceLevel){
+                    l['sourceLevel'] = nodeByID[l.source.id].level.toString();
+                }
+
+                if (!l.targetLevel){
+                    l['targetLevel'] = nodeByID[l.target.id].level.toString();
+                } 
+            });
+
+            // copy graph data for further usage
+            store = $.extend(true, {}, graph);
+            
+            console.log(graph, store)
+
         });
+    }
 
-        // create a index to allow constant-time lookup with good performance
-
-
-        graph.nodes.forEach(function(n) {
-            nodeByID[n.id] = n;
-        });
-
-        //alternative way to cope with adding new parameter in d3 graph data
-
-        graph.links.forEach(function(l) {
-            if (!l.sourceLevel){
-                l['sourceLevel'] = nodeByID[l.source.id].level.toString();
-            }
-
-            if (!l.targetLevel){
-                l['targetLevel'] = nodeByID[l.target.id].level.toString();
-            } 
-        });
-
-        // copy graph data for further usage
-        store = $.extend(true, {}, graph);
-
-    });
 
     ////////////  UI INTERACTION ////////////
     $('.filter-checkbox').on("click", function(){
@@ -579,12 +587,11 @@
             }
             filter()
             initializeOrUpdateDisplay();
+            //reheatSimulation();
 
             
         } else {
 
-            graph = store
-            initializeOrUpdateDisplay();
         }
         console.log(graph)
         
@@ -592,6 +599,10 @@
         
     });
 
+    function resetData(){
+        graph.nodes = []
+        graph.links = []
+    }
 
     //////////// FORCE SIMULATION //////////// 
 
@@ -607,13 +618,23 @@
             .on("tick", ticked);
         resetSimulation(filteredSimulation);
     }
+
+    function reheatSimulation(){
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8).restart()
+            .restart();
+    }
    
     function startSimulation(){
         // set up the simulation and event to update locations after each tick
         simulation
             .nodes(graph.nodes)
         
-        simulation.restart()
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8).restart()
+            .restart();
     }
 
     function resetSimulation(newSim){
@@ -681,13 +702,8 @@
     }
 
     function reInitializeForce(){
-        simulation.force("collide").initialize(graph.nodes);
-        simulation.force("charge").initialize(graph.nodes);
-        simulation.force("center").initialize(graph.nodes);
-        simulation.force("forceX").initialize(graph.nodes);
-        simulation.force("forceY").initialize(graph.nodes);
-        simulation.force("link").initialize(graph.links);
-        updateForces();
+        simulation.force("collide", null)
+        simulation.force("link", null)
     }
     
     // apply new force properties
@@ -717,11 +733,6 @@
             .iterations(forceProperties.link.iterations)
             .links(forceProperties.link.enabled ? graph.links : []);
 
-        // updates ignored until this is run
-        // restarts the simulation (important if simulation has already slowed down)
-        simulation
-            .alphaDecay(0.01)
-            .alpha(0.8).restart();
     }
 
     //////////// DISPLAY ////////////
@@ -887,15 +898,11 @@
         drag_handler(node);
 
         updateDisplay();
-        
-        startTime = Date.now();
-        endTime = startTime + simulationDurationInMs;
-
     }
 
     // update the display positions after each simulation tick
     function ticked() {
-        if (Date.now() < endTime) {
+        //if (Date.now() < endTime) {
             link
                 .attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
@@ -917,9 +924,9 @@
 
             //text
                 //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-        } else {
-            simulation.stop();
-        }
+        //} else {
+        //    simulation.stop();
+        //}
         
         
     }
@@ -1029,8 +1036,10 @@
     function updateAll() {
         startTime = Date.now();
         endTime = startTime + simulationDurationInMs;
+        reheatSimulation()
         updateForces();
         updateDisplay();
+        
     }
 </script>
 
