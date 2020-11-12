@@ -499,7 +499,7 @@
 
 
     // the data - an object with nodes and links
-    var graph, store;
+    var graph, store, graph2;
 
     //limit font-size when scaling
     var max_text_size = 18
@@ -534,7 +534,7 @@
             
             graph = data.graph;
             console.log('initial', graph)
-            initializeOrUpdateDisplay();
+            initializeOrUpdateDisplay(graph);
             initialSimulation();
             initializeForces();
             startSimulation();
@@ -569,7 +569,7 @@
 
             // copy graph data for further usage
             store = $.extend(true, {}, graph);
-            
+            graph2 = graph
             console.log(graph, store)
 
         });
@@ -579,25 +579,18 @@
     ////////////  UI INTERACTION ////////////
     $('.filter-checkbox').on("click", function(){
         if (this.checked){
-            var type = $(this).attr("value");
-            if (filterKeywordLevel.includes(type)) {
-                filterKeywordLevel.splice(filterKeywordLevel.indexOf(type), 1)
-            } else {
-                filterKeywordLevel.push(type);
-            }
+            filterKeywordLevel.push('stellar');
             filter()
-            initializeOrUpdateDisplay();
+            initializeOrUpdateDisplay(graph);
             reheatSimulation();
         } else {
-            resetData()
-            graph.nodes = $.extend(true, [], store.nodes)
-            graph.links = $.extend(true, [], store.links)
-
-            initializeOrUpdateDisplay();
-            startSimulation();
-
+            /*We use temporary method to cope with lack of understanding of D3*/
+            filterKeywordLevel.pop()
+            filter()
+            console.log('reset',filterKeywordLevel)
+            loadData()
         }
-        console.log(graph)
+        console.log(graph,store)
         
         
         
@@ -641,8 +634,8 @@
 
         simulation
             .alphaDecay(0.01)
-            .alpha(0.8).restart()
-            .restart();
+            .alpha(0.8)
+            .restart()
     }
 
     function resetSimulation(newSim){
@@ -838,9 +831,9 @@
     }
 
     // update filter condition to node and link
-    function initializeOrUpdateDisplay(){
+    function initializeOrUpdateDisplay(targetGraph){
         //	UPDATE
-        node = node.data(graph.nodes, function(d) { return d.id;})
+        node = node.data(targetGraph.nodes, function(d) { return d.id;})
         //	EXIT
 	    node.exit().transition()
             .attr("r", 0)
@@ -878,15 +871,11 @@
 	    node = node.merge(newNode);
 
         //	UPDATE second function is essential
-        link = link.data(graph.links, function(d) { return d.id;})
+        link = link.data(targetGraph.links, function(d) { return d.id;})
 
         // Keep the exiting links connected to the moving remaining nodes.
 	    link.exit().transition()
             .attr("stroke-opacity", 0)
-            .attrTween("x1", function(d) { return function() { return d.source.x; }; })
-            .attrTween("x2", function(d) { return function() { return d.target.x; }; })
-            .attrTween("y1", function(d) { return function() { return d.source.y; }; })
-            .attrTween("y2", function(d) { return function() { return d.target.y; }; })
             .remove();
 
         var newLink = link
