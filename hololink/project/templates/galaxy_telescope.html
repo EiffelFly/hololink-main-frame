@@ -290,7 +290,14 @@
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="display">
-
+                        <div class="col-12" style="margin-top: 15px;">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Node size</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="nodeSize">
+                            </div>
+                        </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#storage" role="button" aria-expanded="false" aria-controls="storage">Storage</a>
@@ -306,7 +313,7 @@
 {% endblock %}
 
 {% block extrajs %}
-
+<!-- import bootstrap-slider -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" 
     integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous">
 </script>
@@ -479,6 +486,13 @@
     $('#link_StrengthSliderOutput').on("change", function(event){
         d3Properties.linkForce.strength=event.value.newValue; 
         updateAll();
+    });
+
+    $('#nodeSize').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
     });
 
 </script>
@@ -694,7 +708,8 @@
             distance: 50,
             iterations: 1,
             strength: 0.3,
-        }
+        },
+        nodeSize: 1
 
     }
 
