@@ -127,7 +127,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.charge.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.charge.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
                         </div>
                         <div class="col-12">
@@ -165,7 +165,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="collide_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.collide.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.collide.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Prevents nodes from overlapping</div>
                         </div>
                         <div class="col-12">
@@ -197,7 +197,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="x_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" onchange="forceProperties.forceX.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" onchange="d3Properties.forceX.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
                         </div>
                         <div class="col-12">
@@ -221,7 +221,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="y_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" onchange="forceProperties.forceY.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" onchange="d3Properties.forceY.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
                         </div>
                         <div class="col-12">
@@ -245,7 +245,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="link_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="forceProperties.link.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.link.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Sets link length and strength</div>
                         </div>
                         <div class="col-12">
@@ -293,6 +293,10 @@
 
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#storage" role="button" aria-expanded="false" aria-controls="storage">Storage</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="storage">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -316,7 +320,7 @@
     });
 
     $('#center_XSliderOutput').on("change", function(event){
-        forceProperties.center.x=event.value.newValue; 
+        d3Properties.center.x=event.value.newValue; 
         updateAll();
     });
 
@@ -328,7 +332,7 @@
     });
 
     $('#center_YSliderOutput').on("change", function(event){
-        forceProperties.center.y=event.value.newValue; 
+        d3Properties.center.y=event.value.newValue; 
         updateAll();
     });
 
@@ -340,7 +344,7 @@
     });
 
     $('#charge_StrengthSliderOutput').on("change", function(event){
-        forceProperties.charge.strength=event.value.newValue; 
+        d3Properties.charge.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -352,7 +356,7 @@
     });
 
     $('#charge_distanceMinSliderOutput').on("change", function(event){
-        forceProperties.charge.distanceMin=event.value.newValue; 
+        d3Properties.charge.distanceMin=event.value.newValue; 
         updateAll();
     });
 
@@ -364,7 +368,7 @@
     });
 
     $('#charge_distanceMaxSliderOutput').on("change", function(event){
-        forceProperties.charge.distanceMax=event.value.newValue; 
+        d3Properties.charge.distanceMax=event.value.newValue; 
         updateAll();
     });
 
@@ -376,7 +380,7 @@
     });
 
     $('#collide_StrengthSliderOutput').on("change", function(event){
-        forceProperties.collide.strength=event.value.newValue; 
+        d3Properties.collide.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -388,7 +392,7 @@
     });
 
     $('#collide_radiusSliderOutput').on("change", function(event){
-        forceProperties.collide.radius=event.value.newValue; 
+        d3Properties.collide.radius=event.value.newValue; 
         updateAll();
     });
 
@@ -400,7 +404,7 @@
     });
 
     $('#collide_iterationsSliderOutput').on("change", function(event){
-        forceProperties.collide.iterations=event.value.newValue; 
+        d3Properties.collide.iterations=event.value.newValue; 
         updateAll();
     });
 
@@ -412,7 +416,7 @@
     });
 
     $('#forceX_StrengthSliderOutput').on("change", function(event){
-        forceProperties.forceX.strength=event.value.newValue; 
+        d3Properties.forceX.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -424,7 +428,7 @@
     });
 
     $('#forceX_XSliderOutput').on("change", function(event){
-        forceProperties.forceX.x=event.value.newValue; 
+        d3Properties.forceX.x=event.value.newValue; 
         updateAll();
     });
 
@@ -436,7 +440,7 @@
     });
 
     $('#forceY_StrengthSliderOutput').on("change", function(event){
-        forceProperties.forceY.strength=event.value.newValue; 
+        d3Properties.forceY.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -448,7 +452,7 @@
     });
 
     $('#forceY_YSliderOutput').on("change", function(event){
-        forceProperties.forceY.y=event.value.newValue; 
+        d3Properties.forceY.y=event.value.newValue; 
         updateAll();
     });
 
@@ -460,7 +464,7 @@
     });
 
     $('#link_DistanceSliderOutput').on("change", function(event){
-        forceProperties.link.distance=event.value.newValue; 
+        d3Properties.link.distance=event.value.newValue; 
         updateAll();
     });
 
@@ -472,7 +476,7 @@
     });
 
     $('#link_StrengthSliderOutput').on("change", function(event){
-        forceProperties.link.strength=event.value.newValue; 
+        d3Properties.link.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -658,8 +662,44 @@
         }
     }
 
+    // d3-force diagram properties
+    defaultD3Properties = {
+        center: {
+            x: 0.5,
+            y: 0.5,
+        },
+        charge: {
+            enabled: true,
+            strength: -30,
+            distanceMin: 1,
+            distanceMax: 2000
+        },
+        collide: {
+            enabled: true,
+            strength: .7,
+            iterations: 1,
+            radius: 5
+        },
+        forceX: {
+            enabled: false,
+            strength: .1,
+            x: .5
+        },
+        forceY: {
+            enabled: false,
+            strength: .1,
+            y: .5
+        },
+        link: {
+            enabled: true,
+            distance: 50,
+            iterations: 1,
+            strength: 0.3,
+        }
+    }
+
     // values for all forces
-    forceProperties = {
+    d3Properties = {
         center: {
             x: 0.5,
             y: 0.5,
@@ -716,28 +756,28 @@
     function updateForces() {
         // get each force by name and update the properties
         simulation.force("center")
-            .x(width * forceProperties.center.x)
-            .y(height * forceProperties.center.y);
+            .x(width * d3Properties.center.x)
+            .y(height * d3Properties.center.y);
         simulation.force("charge")
-            .strength(forceProperties.charge.strength * forceProperties.charge.enabled)
-            .distanceMin(forceProperties.charge.distanceMin)
-            .distanceMax(forceProperties.charge.distanceMax);
+            .strength(d3Properties.charge.strength * d3Properties.charge.enabled)
+            .distanceMin(d3Properties.charge.distanceMin)
+            .distanceMax(d3Properties.charge.distanceMax);
         simulation.force("collide")
-            .strength(forceProperties.collide.strength * forceProperties.collide.enabled)
-            .radius(forceProperties.collide.radius)
-            .iterations(forceProperties.collide.iterations);
+            .strength(d3Properties.collide.strength * d3Properties.collide.enabled)
+            .radius(d3Properties.collide.radius)
+            .iterations(d3Properties.collide.iterations);
         simulation.force("forceX")
-            .strength(forceProperties.forceX.strength * forceProperties.forceX.enabled)
-            .x(width * forceProperties.forceX.x);
+            .strength(d3Properties.forceX.strength * d3Properties.forceX.enabled)
+            .x(width * d3Properties.forceX.x);
         simulation.force("forceY")
-            .strength(forceProperties.forceY.strength * forceProperties.forceY.enabled)
-            .y(height * forceProperties.forceY.y);
+            .strength(d3Properties.forceY.strength * d3Properties.forceY.enabled)
+            .y(height * d3Properties.forceY.y);
         simulation.force("link")
             .id(function(d) {return d.id;})
-            .distance(forceProperties.link.distance)
-            .strength(forceProperties.link.strength)
-            .iterations(forceProperties.link.iterations)
-            .links(forceProperties.link.enabled ? graph.links : []);
+            .distance(d3Properties.link.distance)
+            .strength(d3Properties.link.strength)
+            .iterations(d3Properties.link.iterations)
+            .links(d3Properties.link.enabled ? graph.links : []);
 
     }
 
@@ -803,8 +843,8 @@
     // update the display based on the forces (but not positions)
     function updateDisplay() {
         link
-            .attr("stroke-width", forceProperties.link.enabled ? 0.5 : .2)
-            .attr("opacity", forceProperties.link.enabled ? 1 : 0)
+            .attr("stroke-width", d3Properties.link.enabled ? 0.5 : .2)
+            .attr("opacity", d3Properties.link.enabled ? 1 : 0)
             .style("stroke", 'grey');
     }
 
