@@ -281,7 +281,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="filter">
                         <div class="col-12 d-flex">
-                            <input class="filter-checkbox" type="checkbox" value="stellar">
+                            <input class="filter-checkbox" type="checkbox" value="stellar" checked>
                             <div class="filter-instruction">
                                 Filter out stellar keywords
                             </div>
@@ -533,6 +533,20 @@
             if (error) throw error;
             
             graph = data.graph;
+
+            // recreate id reference to cope with duplicate node different keyword_type issue
+            if (graph.links[0].targetLevel) {
+                graph.nodes.forEach(function(n) {
+                    n.id = n.id + "-" + n.level
+                    nodeByID[n.id+"-"+n.level] = n;
+                });
+
+                graph.links.forEach(function(l){
+                    l.source = l.source + "-" + l.sourceLevel
+                    l.target = l.target + "-" + l.targetLevel
+                });
+            }
+
             console.log('initial', graph)
             //initializeOrUpdateDisplay(graph);
             initialSimulation();
@@ -548,14 +562,9 @@
                 linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
             });
 
-            // create a index to allow constant-time lookup with good performance
+            
 
-
-            graph.nodes.forEach(function(n) {
-                nodeByID[n.id] = n;
-            });
-
-            //alternative way to cope with adding new parameter in d3 graph data
+            /*alternative way to cope with adding new parameter in d3 graph data
 
             graph.links.forEach(function(l) {
                 if (!l.sourceLevel){
@@ -566,6 +575,7 @@
                     l['targetLevel'] = nodeByID[l.target.id].level.toString();
                 } 
             });
+            */
 
             // copy graph data for further usage
             store = $.extend(true, {}, graph);
@@ -576,6 +586,8 @@
             }
             initializeOrUpdateDisplay(graph);
             reheatSimulation();
+
+            console.log(graph,store)
         });
     }
 
@@ -590,14 +602,8 @@
         } else {
             /*We use temporary method to cope with lack of understanding of D3*/
             filterKeywordLevel.pop()
-            filter()
-            console.log('reset',filterKeywordLevel)
-            loadData()
+            loadData(filtered=false)
         }
-        console.log(graph,store)
-        
-        
-        
     });
 
     function resetData(){
@@ -743,7 +749,7 @@
         link 
             .data(graph.links)
             .enter()
-            .append("line")
+            .append("line")   
 
         // set the data and properties of node circles
         node
@@ -774,7 +780,7 @@
 
         // node tooltip
         node.append("title")
-            .text(function(d) { return d.id; });
+            .text(function(d) { return d.id});
         // visualize the graph
         
 
@@ -810,6 +816,10 @@
                 graph.nodes.push($.extend(true, {}, n));
             } else if (filterKeywordLevel.includes(n.level) && !n.filtered ){
                 n.filtered = true;
+                if (n.id == "美"){
+                    console.log(n)
+                }
+                
                 graph.nodes.forEach(function(d, i) {
                     if (n.id === d.id) {
                         graph.nodes.splice(i, 1);
@@ -820,10 +830,10 @@
 
         //	add and remove links from data based on availability of nodes
 	    store.links.forEach(function(l) {
-		    if (!(filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && l.filtered) {
+		    if (!(filterKeywordLevel.includes(l.source.level) || filterKeywordLevel.includes(l.target.level)) && l.filtered) {
 			    l.filtered = false;
 			    graph.links.push($.extend(true, {}, l));
-		    } else if ((filterKeywordLevel.includes(l.sourceLevel) || filterKeywordLevel.includes(l.targetLevel)) && !l.filtered) {
+		    } else if ((filterKeywordLevel.includes(l.source.level) || filterKeywordLevel.includes(l.target.level)) && !l.filtered) {
 			    l.filtered = true;
 			    graph.links.forEach(function(d, i) {
 				    if (l.index === d.index) {
@@ -837,7 +847,7 @@
     // update filter condition to node and link
     function initializeOrUpdateDisplay(targetGraph){
         //	UPDATE
-        node = node.data(targetGraph.nodes, function(d) { return d.id;})
+        node = node.data(targetGraph.nodes, function(d) { return d.id + d.level;})
         //	EXIT
 	    node.exit().transition()
             .attr("r", 0)
@@ -869,13 +879,13 @@
     
         newNode
             .append("title")
-            .text(function(d) { return d.id; });
+            .text(function(d) { return d.id + " - " + d.level; ; });
 
         //	ENTER + UPDATE
 	    node = node.merge(newNode);
 
         //	UPDATE second function is essential
-        link = link.data(targetGraph.links, function(d) { return d.id;})
+        link = link.data(targetGraph.links, function(d) { return d.id + d.level;})
 
         // Keep the exiting links connected to the moving remaining nodes.
 	    link.exit().transition()
@@ -885,6 +895,10 @@
         var newLink = link
             .enter()
             .append('line')
+        
+        newLink.append("title")
+            .text(function(d){ 
+                return d.index + " : " + d.source.id + " -> " + d.target.id + "-" + d.targetLevel; }) 
         
         link = link.merge(newLink);
 
