@@ -534,7 +534,7 @@
 
     var linkedByIndex = {};
 
-    const simulationDurationInMs = 10000; // 2 seconds
+    const simulationDurationInMs = 5000; // 2 seconds
 
     var startTime = Date.now();
     var endTime = startTime + simulationDurationInMs;
@@ -619,6 +619,9 @@
             initializeOrUpdateDisplay(graph);
             reheatSimulation();
 
+            startTime = Date.now();
+            endTime = startTime + simulationDurationInMs;
+
             console.log(graph,store)
         });
     }
@@ -663,6 +666,9 @@
             .alphaDecay(0.01)
             .alpha(0.8)
             .restart()
+        
+        startTime = Date.now();
+        endTime = startTime + simulationDurationInMs;
     }
    
     function startSimulation(){
@@ -997,7 +1003,7 @@
 
     // update the display positions after each simulation tick
     function ticked() {
-        //if (Date.now() < endTime) {
+        if (Date.now() < endTime) {
             link
                 .attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
@@ -1019,9 +1025,9 @@
 
             //text
                 //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-        //} else {
-        //    simulation.stop();
-        //}
+        } else {
+            simulation.stop();
+        }
         
         
     }
