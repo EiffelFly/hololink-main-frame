@@ -127,7 +127,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.charge.enabled = this.checked; updateAll();">
+                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.chargeForce.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
                         </div>
                         <div class="col-12">
@@ -297,6 +297,7 @@
                     <div class="row collapse multi-collapse collapse-controller-container" id="storage">
 
                     </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                 </div>
             </div>
         </div>
@@ -320,7 +321,7 @@
     });
 
     $('#center_XSliderOutput').on("change", function(event){
-        d3Properties.center.x=event.value.newValue; 
+        d3Properties.centerForce.x=event.value.newValue; 
         updateAll();
     });
 
@@ -332,7 +333,7 @@
     });
 
     $('#center_YSliderOutput').on("change", function(event){
-        d3Properties.center.y=event.value.newValue; 
+        d3Properties.centerForce.y=event.value.newValue; 
         updateAll();
     });
 
@@ -344,7 +345,7 @@
     });
 
     $('#charge_StrengthSliderOutput').on("change", function(event){
-        d3Properties.charge.strength=event.value.newValue; 
+        d3Properties.chargeForce.strength=event.value.newValue; 
         updateAll();
     });
 
@@ -356,7 +357,7 @@
     });
 
     $('#charge_distanceMinSliderOutput').on("change", function(event){
-        d3Properties.charge.distanceMin=event.value.newValue; 
+        d3Properties.chargeForce.distanceMin=event.value.newValue; 
         updateAll();
     });
 
@@ -368,7 +369,7 @@
     });
 
     $('#charge_distanceMaxSliderOutput').on("change", function(event){
-        d3Properties.charge.distanceMax=event.value.newValue; 
+        d3Properties.chargeForce.distanceMax=event.value.newValue; 
         updateAll();
     });
 
@@ -662,11 +663,11 @@
 
     // d3-force diagram properties
     defaultD3Properties = {
-        center: {
+        centerForce: {
             x: 0.5,
             y: 0.5,
         },
-        charge: {
+        chargeForce: {
             enabled: true,
             strength: -30,
             distanceMin: 1,
@@ -694,15 +695,16 @@
             iterations: 1,
             strength: 0.3,
         }
+
     }
 
     // values for all forces
     d3Properties = {
-        center: {
+        centerForce: {
             x: 0.5,
             y: 0.5,
         },
-        charge: {
+        chargeForce: {
             enabled: true,
             strength: -30,
             distanceMin: 1,
@@ -754,12 +756,12 @@
     function updateForces() {
         // get each force by name and update the properties
         simulation.force("center")
-            .x(width * d3Properties.center.x)
-            .y(height * d3Properties.center.y);
+            .x(width * d3Properties.centerForce.x)
+            .y(height * d3Properties.centerForce.y);
         simulation.force("charge")
-            .strength(d3Properties.charge.strength * d3Properties.charge.enabled)
-            .distanceMin(d3Properties.charge.distanceMin)
-            .distanceMax(d3Properties.charge.distanceMax);
+            .strength(d3Properties.chargeForce.strength * d3Properties.chargeForce.enabled)
+            .distanceMin(d3Properties.chargeForce.distanceMin)
+            .distanceMax(d3Properties.chargeForce.distanceMax);
         simulation.force("collide")
             .strength(d3Properties.collide.strength * d3Properties.collide.enabled)
             .radius(d3Properties.collide.radius)
