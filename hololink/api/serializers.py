@@ -476,7 +476,9 @@ def merge_article_into_galaxy(ner_result):
             project.project_d3_json['links'].append(
                 {
                     "source":article_name,
+                    "sourceLevel":"article",
                     "target":article_node['title'],
+                    "targetLevel":article_node['level']
                 }    
             )
 
