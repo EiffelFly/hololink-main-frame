@@ -489,11 +489,18 @@
     });
 
     $('#nodeSize').slider({
-        min:0,
-        max:1,
-        value:0.5,
+        min:1,
+        max:2,
+        value:1,
         step:0.01,
     });
+
+    $('#nodeSize').on("change", function(event){
+        d3Properties.nodeSize=event.value.newValue; 
+        updateAll();
+    });
+
+
 
 </script>
 
@@ -716,7 +723,8 @@
             iterations: 1,
             strength: 0.3,
         },
-        nodeSize: 1
+        nodeSize: 1,
+        zoom_threshhold_of_displaying_label:1
 
     }
 
@@ -754,13 +762,10 @@
             iterations: 1,
             strength: 0.3,
         },
-        nodeSize: 1
-    }
-
-    // other properties
-    otherProperties = {
+        nodeSize: 1,
         zoom_threshhold_of_displaying_label:1
     }
+
 
     // add forces to the simulation
     function initializeForces() {
@@ -869,6 +874,12 @@
             .attr("stroke-width", d3Properties.linkForce.enabled ? 0.5 : .2)
             .attr("opacity", d3Properties.linkForce.enabled ? 1 : 0)
             .style("stroke", 'grey');
+
+        node.selectAll('circle')
+            .attr("r", getNodeSize);
+
+        node.selectAll('text')
+            .attr("dy", getTextDy)
     }
 
     // Filter function
@@ -995,7 +1006,7 @@
             node
                 // we use transform is because we group circle and text together in g, and transform is g's position 
                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; }) 
-                .attr("r", getNodeSize)
+                //.attr("r", getNodeSize)
 
             /*
             node
@@ -1063,10 +1074,11 @@
         g.attr("transform", d3.event.transform)
         transform = d3.event.transform
 
-        if (transform.k < otherProperties.zoom_threshhold_of_displaying_label){
+        // setup threshhold of displaying node's text
+        if (transform.k < d3Properties.zoom_threshhold_of_displaying_label){
             svg.selectAll('text').style("opacity",0)
-        } else if ( otherProperties.zoom_threshhold_of_displaying_label += 0.5 > transform.k >= otherProperties.zoom_threshhold_of_displaying_label) {
-            svg.selectAll('text').style("opacity",transform.k - otherProperties.zoom_threshhold_of_displaying_label)
+        } else if ( d3Properties.zoom_threshhold_of_displaying_label += 0.5 > transform.k >= d3Properties.zoom_threshhold_of_displaying_label) {
+            svg.selectAll('text').style("opacity",transform.k - d3Properties.zoom_threshhold_of_displaying_label)
         } else {
             svg.selectAll('text').style("opacity",1)
         }
@@ -1092,9 +1104,10 @@
 
         if (node.level == 'article'){
             totalkeywordNum = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
+            console.log(d3Properties.nodeSize)
             return nodeSizeScaleforArticle(totalkeywordNum)*d3Properties.nodeSize
         } else {
-            return nodeSizeScaleforKeyword(node.connection)
+            return nodeSizeScaleforKeyword(node.connection)*d3Properties.nodeSize
         }   
     }
 
@@ -1109,9 +1122,9 @@
 
     function getNodeColor(node){
         if (node.level == "article"){
-            return "grey"
+            return "#777777"
         } else {
-            return "black"
+            return "#333333"
         }
     }
 
