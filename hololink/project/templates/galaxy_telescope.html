@@ -543,6 +543,9 @@
                   -> initialDisplay() -> updateDisplay()                                       
     */
 
+    var biggestNode_article = 0
+        biggestNode_keyword = 0;
+
     loadData(filtered=true)
 
 
@@ -593,6 +596,10 @@
                 filterKeywordLevel.push('stellar');
                 filter()
             }
+
+            calculateBiggestNum(graph=graph)
+
+            console.log(biggestNode_article, biggestNode_keyword)
 
             // create a index to allow constant-time lookup with good performance
             // This must put after simulation, after that we can access the d3 calculated info
@@ -746,7 +753,8 @@
             distance: 50,
             iterations: 1,
             strength: 0.3,
-        }
+        },
+        nodeSize: 1
     }
 
     // other properties
@@ -918,13 +926,14 @@
                 return d.connection
             })
             .attr('r', getNodeSize)
+            .attr("fill", getNodeColor)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
         
         newNode
             .append("text")
             .text(node => node.id)
-            .attr('dy', '.5rem')
+            .attr('dy', getTextDy)
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
             .style('opacity', 0)
@@ -1005,6 +1014,28 @@
         
     }
 
+    //calculate biggest Num
+    
+    function calculateBiggestNum(graph){
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'article'){
+                    totalkeywordNum = parseInt(obj.basestoneNum) + parseInt(obj.stellarNum)
+                    if (totalkeywordNum > biggestNode_article){
+                        biggestNode_article = totalkeywordNum
+                    }
+                }
+                
+            });
+
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'stellar' || obj.level == 'basestone'){
+                    if (obj.connection > biggestNode_keyword){
+                        biggestNode_keyword = obj.connection
+                    }
+                }
+            });     
+        };
+
 
     //DRAG FUNCTION
     function drag_start(d) {
@@ -1049,7 +1080,39 @@
     }
 
     function getNodeSize(node){
-        return 2
+        var nodeSizeScaleforKeyword = d3.scalePow()
+            .exponent(2)
+            .range([2, 8])
+            .domain([0, biggestNode_keyword])
+
+        var nodeSizeScaleforArticle = d3.scalePow()
+            .exponent(2)
+            .range([10, 15])
+            .domain([0, biggestNode_article])
+
+        if (node.level == 'article'){
+            totalkeywordNum = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
+            return nodeSizeScaleforArticle(totalkeywordNum)*d3Properties.nodeSize
+        } else {
+            return nodeSizeScaleforKeyword(node.connection)
+        }   
+    }
+
+    function getTextDy(node){
+        var node_size = getNodeSize(node)
+        if (node_size > 6 ){
+            return node_size + 10 + "px"
+        } else {
+            return node_size + 6 + "px" 
+        }
+    }
+
+    function getNodeColor(node){
+        if (node.level == "article"){
+            return "grey"
+        } else {
+            return "black"
+        }
     }
 
     function getTextWrapperXSpace(node){
