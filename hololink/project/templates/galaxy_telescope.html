@@ -557,16 +557,6 @@
             initializeForces();
             startSimulation();
             updateForces();
-            
-
-            // create a index to allow constant-time lookup with good performance
-            // This must put after simulation, after that we can access the d3 calculated info
-            
-            graph.links.forEach(d => {
-                linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
-            });
-
-            
 
             /*alternative way to cope with adding new parameter in d3 graph data
 
@@ -588,6 +578,14 @@
                 filterKeywordLevel.push('stellar');
                 filter()
             }
+
+            // create a index to allow constant-time lookup with good performance
+            // This must put after simulation, after that we can access the d3 calculated info
+            
+            graph.links.forEach(d => {
+                linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+            });
+
             initializeOrUpdateDisplay(graph);
             reheatSimulation();
 
