@@ -847,7 +847,7 @@
     // update filter condition to node and link
     function initializeOrUpdateDisplay(targetGraph){
         //	UPDATE
-        node = node.data(targetGraph.nodes, function(d) { return d.id + d.level;})
+        node = node.data(targetGraph.nodes, function(d) { return d.id;})
         //	EXIT
 	    node.exit().transition()
             .attr("r", 0)
@@ -879,13 +879,13 @@
     
         newNode
             .append("title")
-            .text(function(d) { return d.id + " - " + d.level; ; });
+            .text(function(d) { return d.id; });
 
         //	ENTER + UPDATE
 	    node = node.merge(newNode);
 
         //	UPDATE second function is essential
-        link = link.data(targetGraph.links, function(d) { return d.id + d.level;})
+        link = link.data(targetGraph.links, function(d) { return d.id;})
 
         // Keep the exiting links connected to the moving remaining nodes.
 	    link.exit().transition()
@@ -898,7 +898,7 @@
         
         newLink.append("title")
             .text(function(d){ 
-                return d.index + " : " + d.source.id + " -> " + d.target.id + "-" + d.targetLevel; }) 
+                return d.index + " : " + d.source.id + " -> " + d.target.id; }) 
         
         link = link.merge(newLink);
 
