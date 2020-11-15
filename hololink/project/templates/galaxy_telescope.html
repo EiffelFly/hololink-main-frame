@@ -127,7 +127,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="radial_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.radial_force.enabled = this.checked; updateAll();">
+                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3Properties.radial_force.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
                         </div>
                         <div class="col-12">
@@ -175,7 +175,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.chargeForce.enabled = this.checked; updateAll();">
+                            <input id="charge_force_checkbox" class="force-checkbox" checked type="checkbox" onchange="d3Properties.chargeForce.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
                         </div>
                         <div class="col-12">
@@ -213,7 +213,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="collide_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.collideForce.enabled = this.checked; updateAll();">
+                            <input id="collide_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3Properties.collideForce.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Prevents nodes from overlapping</div>
                         </div>
                         <div class="col-12">
@@ -245,7 +245,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="x_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" onchange="d3Properties.xForce.enabled = this.checked; updateAll();">
+                            <input id="x_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3Properties.xForce.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
                         </div>
                         <div class="col-12">
@@ -269,7 +269,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="y_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" onchange="d3Properties.forceY.enabled = this.checked; updateAll();">
+                            <input id="y_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3Properties.forceY.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
                         </div>
                         <div class="col-12">
@@ -293,7 +293,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="link_force">
                         <div class="col-12 d-flex">
-                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.linkForce.enabled = this.checked; updateAll();">
+                            <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3Properties.linkForce.enabled = this.checked; updateAll();">
                             <div class="force-instruction">Sets link length and strength</div>
                         </div>
                         <div class="col-12">
@@ -315,7 +315,6 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                 </div>
-                
             </div>
             <div class="col-12 col-sm-8">
                 <div class="row h-100" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
@@ -326,6 +325,11 @@
             </div>
             <div class="col-12 col-sm-2">
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
+                    <div style="margin: 15px 0 0 15px;">
+                        <button id="restore_default_settings" type="button" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Restore default settings" style="padding: 0;">
+                            <img src="{% static 'img/sync.svg' %}" class="d-inline-block">
+                        </button>
+                    </div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="filter">
                         <div class="col-12 d-flex">
@@ -368,6 +372,46 @@
 </script>
 
 <script>
+    
+    //Activate all tooltip on this page
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $('#restore_default_settings').on('click', function(){
+        d3Properties = {}
+        d3Properties = $.extend(true, default_d3_properties)
+        // reset all slider values
+        $('#center_XSliderOutput').slider('refresh');
+        $('#center_YSliderOutput').slider('refresh');
+        $('#charge_StrengthSliderOutput').slider('refresh');
+        $('#charge_distanceMinSliderOutput').slider('refresh');
+        $('#charge_distanceMaxSliderOutput').slider('refresh');
+        $('#collide_StrengthSliderOutput').slider('refresh');
+        $('#collide_radiusSliderOutput').slider('refresh');
+        $('#collide_iterationsSliderOutput').slider('refresh');
+        $('#forceX_StrengthSliderOutput').slider('refresh');
+        $('#forceX_XSliderOutput').slider('refresh');
+        $('#forceY_StrengthSliderOutput').slider('refresh');
+        $('#forceY_YSliderOutput').slider('refresh');
+        $('#link_DistanceSliderOutput').slider('refresh');
+        $('#link_StrengthSliderOutput').slider('refresh');
+        $('#nodeSize').slider('refresh');
+        $('#radial_strength_slider_output').slider('refresh');
+        $('#radial_articles_orbit_slider_output').slider('refresh');
+        $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
+        $('#radial_not_connecting_keywords_orbit_slider_output').slider('refresh');
+
+        //reset all slider checkbox
+        $("#radial_force_checkbox").prop("checked", true);
+        $("#charge_force_checkbox").prop("checked", true);
+        $("#collide_force_checkbox").prop("checked", true);
+        $("#x_force_checkbox").prop("checked", false);
+        $("#y_force_checkbox").prop("checked", false);
+        $("#link_force_checkbox").prop("checked", true);
+
+        updateAll()
+    });
 
     $('#center_XSliderOutput').slider({
         min:0,
@@ -800,7 +844,7 @@
     }
 
     // d3-force diagram properties
-    defaultD3Properties = {
+    default_d3_properties = {
         centerForce: {
             x: 0.5,
             y: 0.5,
@@ -832,6 +876,13 @@
             distance: 50,
             iterations: 1,
             strength: 0.3,
+        },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
         },
         nodeSize: 1,
         zoom_threshhold_of_displaying_label:1
