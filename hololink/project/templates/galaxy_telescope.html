@@ -169,6 +169,15 @@
                         <div class="col-12 collapse-inner-container">
                             <div class="silder-instruction" style="font-size: 14px;">Old telescope settings</div>
                         </div>
+                        <div class="col-12 collapse-inner-container">
+                            {% for key, value in profile.d3_diagram_properties.items %}
+                            <div class="row">
+                                <div class="col">
+                                    {{key}}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">

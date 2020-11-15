@@ -303,11 +303,13 @@ def deliver_D3(request, projectnameslug, **kwargs):
 def galaxy_telescope(request, projectnameslug, usernameslug):
     user = get_object_or_404(User, username=usernameslug)
     project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
+    print(user.profile.d3_diagram_properties)
 
     context = {
         'user':user,
         'project':project,
         'profile':user.profile,
+        
     }
 
     return render(request, 'galaxy_telescope.html', context)

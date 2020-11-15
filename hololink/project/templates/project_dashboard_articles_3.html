@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+
+    @media (min-width: 440px) {
+        .articles-sub-container{
+            height: 140px !important;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .articles-sub-container{
+            height: 110px !important;
+        }
+    }
+    @media (min-width: 768px) {
+        .sub-container{
+            height: 60vw !important;
+        }
+    }
+    @media (min-width: 992px) {
+        .sub-container{
+            width: 45vw;
+            height: 600px !important;
+        }
+        .articles-sub-container{
+            height: 125px !important;
+        }
+        .articles-container{
+            margin: 0 !important;
+        }
+    }
+    @media (min-width: 1200px) {}
+
+    .dashboard-articles-container-badges{
+        border: #BFB9B8; 
+        border-style: dashed; 
+        border-width: 1px; 
+        border-radius: 3px;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+
+    .table{
+        border:1px solid #BFB9B8;
+        border-radius: 5px;
+        border-spacing: 0px;
+        border-collapse: separate;
+    }
+
+</style>
+<div class="container-fluid d-flex flex-column" style="padding:0">
+    {% include 'project_dashboard_navbar_2.html' %}
+    <div class="row flex-grow-1" style="margin: 20px auto;">
+        <div class="col-12 col-lg-6">
+            <div class="row h-100 sub-container" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
+                <div class="col" style="padding: 0;">
+                    <svg width="100%" height="100%"></svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 articles-container" style="margin: 20px 0 0 0;">
+            <div class="row sub-container" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; padding: 0px 0px 0px 0px; overflow:auto; height: 100%;">
+                {% if not articles %}
+                        <div class="col">
+                            <p>{% trans "You don't have any article to show. " %}</p>
+                        </div>
+                    {% else %}
+                        {% for article in articles %}
+                        <div class="col-12 articles-sub-container" style="border-bottom:#BFB9B8 1px solid; height: 220px; margin-top: 20px; padding-bottom: 20px;">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="article-title" style="font-weight: bold;font-size: 18px; margin-bottom: 0;"><a href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=profile.slug %}" style="color: #222626;"> {{ article.name }} </a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 d-flex">
+                                    <form method="post" novalidate style="margin: 0 0 0 auto;">
+                                        {% csrf_token %}
+                                        <button type="submit" name="action" value="deleteArticle_delete_{{ article.name }}" id="delete_article" class="btn btn-outline-danger d-flex justify-content-center" style="margin: 0 0 0 auto; width: 30px; height: 30px;" >
+                                            <img src="{% static 'img/trashcan.svg' %}" style="margin: auto;">
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" style="font-size: 10px; color: gray;">{{ article.from_url|truncatechars:60 }}</a>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 1rem;">
+                                <div class="col-4 d-flex">
+                                    <div class="article_created_at" style="font-size: 10px; color: gray; margin: auto 0">
+                                        {{ article.created_at|date:"Y/m/d" }} - {{ article.created_at|time:"H:i" }}
+                                    </div>
+                                </div>
+                                {% load index %}
+                                <div class="col-8 d-flex">
+                                    <p style="margin: 0 0 0 auto; font-size: clamp(12px, 2vw, 16px);">
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                            <img src="{% static 'img/basestone.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                            <span>basestone -</span>
+                                            <span style="color: #2e1760;">{{count_article_basestone|indexforloop:forloop.counter0}}</span>
+                                        </span>
+                                        <span class="d-inline-block mr-2 dashboard-articles-container-badges">
+                                            <img src="{% static 'img/stellar.svg' %}" class="d-inline-block text-center" width="15" height="15" style="margin-right:10px; margin-bottom: 4px;">
+                                            <span>stellar -</span>
+                                            <span style="color: #2e1760;">{{count_article_stellar|indexforloop:forloop.counter0}}</span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                                           
+                        {% endfor %}
+
+                        
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block extrajs %}
+
+
+{% endblock %}
+
+
