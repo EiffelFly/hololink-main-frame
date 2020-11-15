@@ -301,7 +301,7 @@
                                 <div class="silder-instruction">distance</div>
                             </div>
                             <div class="d-flex">
-                                <input id="link_DistanceSliderOutput">
+                                <input id="link_distance_slider_output">
                             </div>
                         </div>
                         <div class="col-12">
@@ -309,7 +309,7 @@
                                 <div class="silder-instruction">strength</div>
                             </div>
                             <div class="d-flex">
-                                <input id="link_StrengthSliderOutput">
+                                <input id="link_strength_slider_output">
                             </div>
                         </div>
                     </div>
@@ -348,7 +348,7 @@
                                 <p style="font-size: 10px;">If your node is ovelapping, you can adjust the radius of Collide force.</p>
                             </div>
                             <div class="d-flex">
-                                <input id="nodeSize">
+                                <input id="node_size">
                             </div>
                         </div>
                     </div>
@@ -391,9 +391,9 @@
         $('#forcex_x_slider_output').slider('refresh');
         $('#forcey_strength_slider_output').slider('refresh');
         $('#forcey_y_slider_output').slider('refresh');
-        $('#link_DistanceSliderOutput').slider('refresh');
-        $('#link_StrengthSliderOutput').slider('refresh');
-        $('#nodeSize').slider('refresh');
+        $('#link_distance_slider_output').slider('refresh');
+        $('#link_strength_slider_output').slider('refresh');
+        $('#node_size').slider('refresh');
         $('#radial_strength_slider_output').slider('refresh');
         $('#radial_articles_orbit_slider_output').slider('refresh');
         $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
@@ -554,39 +554,39 @@
         updateAll();
     });
 
-    $('#link_DistanceSliderOutput').slider({
+    $('#link_distance_slider_output').slider({
         min:0,
         max:100,
         value:50,
         step:1,
     });
 
-    $('#link_DistanceSliderOutput').on("change", function(event){
+    $('#link_distance_slider_output').on("change", function(event){
         d3Properties.linkForce.distance=event.value.newValue; 
         updateAll();
     });
 
-    $('#link_StrengthSliderOutput').slider({
+    $('#link_strength_slider_output').slider({
         min:0,
         max:1,
         value:0.5,
         step:0.01,
     });
 
-    $('#link_StrengthSliderOutput').on("change", function(event){
+    $('#link_strength_slider_output').on("change", function(event){
         d3Properties.linkForce.strength=event.value.newValue; 
         updateAll();
     });
 
-    $('#nodeSize').slider({
+    $('#node_size').slider({
         min:1,
         max:2,
         value:1,
         step:0.01,
     });
 
-    $('#nodeSize').on("change", function(event){
-        d3Properties.nodeSize=event.value.newValue; 
+    $('#node_size').on("change", function(event){
+        d3Properties.node_size=event.value.newValue; 
         updateAll();
     });
 
@@ -885,7 +885,7 @@
             connecting_keywords_orbit:100,
             not_connecting_keywords_orbit:500,
         },
-        nodeSize: 1,
+        node_size: 1,
         zoom_threshhold_of_displaying_label:1
 
     }
@@ -931,7 +931,7 @@
             connecting_keywords_orbit:100,
             not_connecting_keywords_orbit:500,
         },
-        nodeSize: 1,
+        node_size: 1,
         zoom_threshhold_of_displaying_label:1
     }
 
@@ -1309,10 +1309,10 @@
 
         if (node.level == 'article'){
             totalkeywordNum = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
-            console.log(d3Properties.nodeSize)
-            return nodeSizeScaleforArticle(totalkeywordNum)*d3Properties.nodeSize
+            console.log(d3Properties.node_size)
+            return nodeSizeScaleforArticle(totalkeywordNum)*d3Properties.node_size
         } else {
-            return nodeSizeScaleforKeyword(node.connection)*d3Properties.nodeSize
+            return nodeSizeScaleforKeyword(node.connection)*d3Properties.node_size
         }   
     }
 
