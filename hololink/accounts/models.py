@@ -16,6 +16,51 @@ import random
     further information: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 '''
 
+def get_d3_diagram_properties_default():
+    return {"universal_default":{
+        'center_force': {
+            'x': 0.5,
+            'y': 0.5,
+        },
+        'charge_force': {
+            'enabled': True,
+            'strength': -30,
+            'distanceMin': 1,
+            'distanceMax': 2000
+        },
+        'collide_force': {
+            'enabled': True,
+            'strength': .7,
+            'iterations': 1,
+            'radius': 5
+        },
+        'x_force': {
+            'enabled': False,
+            'strength': .1,
+            'x': .5
+        },
+        'y_force': {
+            'enabled': False,
+            'strength': .1,
+            'y': .5
+        },
+        'link_force': {
+            'enabled': True,
+            'distance': 50,
+            'iterations': 1,
+            'strength': 0.3,
+        },
+        'radial_force':{
+            'enabled': True,
+            'strength':1,
+            'articles_orbit':300,
+            'connecting_keywords_orbit':100,
+            'not_connecting_keywords_orbit':500,
+        },
+        'node_size': 1,
+        'text_fade_threshhold':1
+    }}
+
 def random_num():
     return User.objects.make_random_password(length=8, allowed_chars='123456789')
 
@@ -86,6 +131,13 @@ class Profile(models.Model):
         related_name='owned_by_user',
         verbose_name=_('Source')
     )
+
+    
+    d3_diagram_properties = models.JSONField(
+        verbose_name=_("D3 disagram's properties"),
+        default=get_d3_diagram_properties_default,
+    )
+    
 
     def get_absolute_url(self):
         return reverse('user_dashboard', args=(self.slug,))
