@@ -373,10 +373,7 @@
 
 <script>
     
-    //Activate all tooltip on this page
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+    
 
     $('#restore_default_settings').on('click', function(){
         d3Properties = {}
@@ -770,6 +767,8 @@
             endTime = startTime + simulationDurationInMs;
 
             console.log(graph,store)
+
+            activate_tooltip();
         });
     }
 
@@ -1146,10 +1145,15 @@
             .attr('text-anchor', 'middle')
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
-    
+
         newNode
-            .append("title")
-            .text(function(d) { return d.id; });
+            //.append("title")
+            //.text(function(d) { return d.id; });
+            .attr('data-toggle', 'tooltip')
+            .attr('data-placement', 'bottom')
+            .attr('title', function(node){
+                return node.id
+            })
 
         //	ENTER + UPDATE
 	    node = node.merge(newNode);
@@ -1381,6 +1385,10 @@
 
     function isConnected(a, b) {
         return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+    }
+
+    function activate_tooltip(){
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     // convenience function to update everything (run after UI input)
