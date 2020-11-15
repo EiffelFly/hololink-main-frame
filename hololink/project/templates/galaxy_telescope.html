@@ -184,7 +184,7 @@
                             </div>
                             <div>
                                 <div class="d-flex">
-                                    <input id="charge_StrengthSliderOutput">
+                                    <input id="charge_strength_slider_output">
                                 </div>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                             </div>
                             <div>
                                 <div class="d-flex">
-                                    <input id="charge_distanceMinSliderOutput">
+                                    <input id="charge_distance_min_slider_output">
                                 </div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@
                             </div>
                             <div>
                                 <div class="d-flex">
-                                    <input id="charge_distanceMaxSliderOutput">
+                                    <input id="charge_distance_max_slider_output">
                                 </div>
                             </div>
                         </div>
@@ -381,9 +381,9 @@
         // reset all slider values
         $('#center_x_slider_output').slider('refresh');
         $('#center_y_slider_output').slider('refresh');
-        $('#charge_StrengthSliderOutput').slider('refresh');
-        $('#charge_distanceMinSliderOutput').slider('refresh');
-        $('#charge_distanceMaxSliderOutput').slider('refresh');
+        $('#charge_strength_slider_output').slider('refresh');
+        $('#charge_distance_min_slider_output').slider('refresh');
+        $('#charge_distance_max_slider_output').slider('refresh');
         $('#collide_StrengthSliderOutput').slider('refresh');
         $('#collide_radiusSliderOutput').slider('refresh');
         $('#collide_iterationsSliderOutput').slider('refresh');
@@ -434,38 +434,38 @@
         updateAll();
     });
 
-    $('#charge_StrengthSliderOutput').slider({
+    $('#charge_strength_slider_output').slider({
         min:-200,
         max:50,
         value:-30,
         step:1,
     });
 
-    $('#charge_StrengthSliderOutput').on("change", function(event){
+    $('#charge_strength_slider_output').on("change", function(event){
         d3Properties.chargeForce.strength=event.value.newValue; 
         updateAll();
     });
 
-    $('#charge_distanceMinSliderOutput').slider({
+    $('#charge_distance_min_slider_output').slider({
         min:0,
         max:50,
         value:1,
         step:1,
     });
 
-    $('#charge_distanceMinSliderOutput').on("change", function(event){
+    $('#charge_distance_min_slider_output').on("change", function(event){
         d3Properties.chargeForce.distanceMin=event.value.newValue; 
         updateAll();
     });
 
-    $('#charge_distanceMaxSliderOutput').slider({
+    $('#charge_distance_max_slider_output').slider({
         min:0,
         max:2000,
         value:2000,
         step:1,
     });
 
-    $('#charge_distanceMaxSliderOutput').on("change", function(event){
+    $('#charge_distance_max_slider_output').on("change", function(event){
         d3Properties.chargeForce.distanceMax=event.value.newValue; 
         updateAll();
     });
