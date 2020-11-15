@@ -351,6 +351,14 @@
                                 <input id="node_size">
                             </div>
                         </div>
+                        <div class="col-12" style="margin-top: 15px;">
+                            <div class="d-flex flex-column">
+                                <div class="silder-instruction" style="font-size: 14px;">Text fade threshold</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="text_fade_threshhold_slider">
+                            </div>
+                        </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#storage" role="button" aria-expanded="false" aria-controls="storage">Storage</a>
@@ -638,10 +646,26 @@
         update_all();
     });
 
-    
+    $('#text_fade_threshhold_slider').slider({
+        min:0.1,
+        max:2,
+        value:1,
+        step:0.01,
+    });
 
+    $('#text_fade_threshhold_slider').on("change", function(event){
+        d3_diagram_properties.text_fade_threshhold=event.value.newValue; 
 
-    
+        console.log(zoom_level)
+        if (zoom_level < d3_diagram_properties.text_fade_threshhold){
+            svg.selectAll('text').style("opacity",0)
+        } else if ( d3_diagram_properties.text_fade_threshhold += 0.2 > zoom_level >= d3_diagram_properties.text_fade_threshhold) {
+            svg.selectAll('text').style("opacity",(zoom_level - d3_diagram_properties.text_fade_threshhold)*2)
+        } else {
+            svg.selectAll('text').style("opacity",1)
+        }
+        update_all();
+    });
 
 </script>
 
@@ -687,6 +711,18 @@
     var filter_by_keyword_level = []
 
     var node_by_id = {};
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions)
+        .scaleExtent([0.1, 10]); //set zoom in and out limit
+
+    var zoom_level = 1;
+
+    var drag_handler = d3.drag()
+        .on("start", drag_start)
+        .on("drag", drag_drag)
+        .on("end", drag_end);	
+
     /*
         load data -> initializeSimulation()
                                             simulation.nodes()
@@ -878,7 +914,7 @@
             not_connecting_keywords_orbit:500,
         },
         node_size: 1,
-        zoom_threshhold_of_displaying_label:1
+        text_fade_threshhold:1
 
     }
 
@@ -924,7 +960,7 @@
             not_connecting_keywords_orbit:500,
         },
         node_size: 1,
-        zoom_threshhold_of_displaying_label:1
+        text_fade_threshhold:1
     }
 
 
@@ -1100,17 +1136,7 @@
         
         link = link.merge(new_link);
 
-        var zoom_handler = d3.zoom()
-            .on("zoom", zoom_actions)
-            .scaleExtent([0.1, 10]); //set zoom in and out limit
-
         zoom_handler(svg);
-
-        var drag_handler = d3.drag()
-            .on("start", drag_start)
-            .on("drag", drag_drag)
-            .on("end", drag_end);	
-
         drag_handler(node);
 
 
@@ -1183,12 +1209,12 @@
     function zoom_actions(){
         g.attr("transform", d3.event.transform)
         transform = d3.event.transform
-
+        zoom_level = transform.k
         // setup threshhold of displaying node's text
-        if (transform.k < d3_diagram_properties.zoom_threshhold_of_displaying_label){
+        if (transform.k < d3_diagram_properties.text_fade_threshhold){
             svg.selectAll('text').style("opacity",0)
-        } else if ( d3_diagram_properties.zoom_threshhold_of_displaying_label += 0.5 > transform.k >= d3_diagram_properties.zoom_threshhold_of_displaying_label) {
-            svg.selectAll('text').style("opacity",transform.k - d3_diagram_properties.zoom_threshhold_of_displaying_label)
+        } else if ( d3_diagram_properties.text_fade_threshhold += 0.2 > transform.k >= d3_diagram_properties.text_fade_threshhold) {
+            svg.selectAll('text').style("opacity",(transform.k - d3_diagram_properties.text_fade_threshhold)*2)
         } else {
             svg.selectAll('text').style("opacity",1)
         }
