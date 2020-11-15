@@ -75,7 +75,7 @@
     }
 
     .silder-instruction{
-        font-size: 16px;
+        font-size: 12px;
         font-weight: 700;
     }
 
@@ -120,6 +120,54 @@
                             </div>
                             <div class="d-flex">
                                 <input id="center_YSliderOutput">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
+                    <div class="row collapse multi-collapse collapse-controller-container" id="radial_force">
+                        <div class="col-12 d-flex">
+                            <input class="force-checkbox" type="checkbox" checked onchange="d3Properties.radial_force.enabled = this.checked; updateAll();">
+                            <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_strength_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of connecting keywords</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_connecting_keywords_orbit_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of articles</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_articles_orbit_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of not connecting keywords</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_not_connecting_keywords_orbit_slider_output">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -292,7 +340,7 @@
                     <div class="row collapse multi-collapse collapse-controller-container" id="display">
                         <div class="col-12" style="margin-top: 15px;">
                             <div class="d-flex flex-column">
-                                <div class="silder-instruction">Node size</div>
+                                <div class="silder-instruction" style="font-size: 14px;">Node size</div>
                                 <p style="font-size: 10px;">If your node is ovelapping, you can adjust the radius of Collide force.</p>
                             </div>
                             <div class="d-flex">
@@ -501,7 +549,58 @@
         updateAll();
     });
 
+    $('#radial_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:1,
+        step:0.01,
+    });
 
+    $('#radial_strength_slider_output').on("change", function(event){
+        d3Properties.radial_force.strength=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#radial_articles_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:300,
+        step:10,
+    });
+
+    $('#radial_articles_orbit_slider_output').on("change", function(event){
+        d3Properties.radial_force.articles_orbit=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#radial_connecting_keywords_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:100,
+        step:10,
+    });
+
+    $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
+        d3Properties.radial_force.connecting_keywords_orbit=event.value.newValue; 
+        updateAll();
+    });
+
+    $('#radial_not_connecting_keywords_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:500,
+        step:10,
+    });
+
+    $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
+        d3Properties.radial_force.not_connecting_keywords_orbit=event.value.newValue; 
+        updateAll();
+    });
+
+    
+
+
+    
 
 </script>
 
@@ -621,7 +720,7 @@
             });
 
             initializeOrUpdateDisplay(graph);
-            reheatSimulation();
+            updateAll();
 
             startTime = Date.now();
             endTime = startTime + simulationDurationInMs;
@@ -773,6 +872,13 @@
             iterations: 1,
             strength: 0.3,
         },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
+        },
         nodeSize: 1,
         zoom_threshhold_of_displaying_label:1
     }
@@ -787,7 +893,8 @@
             .force("collide", d3.forceCollide())
             .force("center", d3.forceCenter())
             .force("forceX", d3.forceX())
-            .force("forceY", d3.forceY());
+            .force("forceY", d3.forceY())
+            .force('radial_force', d3.forceRadial());
         // apply properties to each of the force
     }
 
@@ -816,7 +923,24 @@
             .distance(d3Properties.linkForce.distance)
             .strength(d3Properties.linkForce.strength)
             .iterations(d3Properties.linkForce.iterations)
-            .links(d3Properties.linkForce.enabled ? graph.links : []);
+            .links(d3Properties.linkForce.enabled ? graph.links : [])
+        simulation.force('radial_force')
+            .strength(d3Properties.radial_force.strength * d3Properties.radial_force.enabled)
+            .x(width * d3Properties.centerForce.x)
+            .y(height * d3Properties.centerForce.y)
+            .radius(function(node){
+                if (node.level == 'stellar' || node.level == 'basestone'){
+                    if (node.connection >= 2){
+                        return d3Properties.radial_force.connecting_keywords_orbit
+                    }
+                    else {
+                        return d3Properties.radial_force.not_connecting_keywords_orbit
+                    }
+                }
+                else if (node.level == 'article'){
+                    return d3Properties.radial_force.articles_orbit
+                }
+            })
 
     }
 
@@ -847,6 +971,13 @@
         
         node
             .append("text")
+            .attr("class", function(node){
+                if (node.level=="article"){
+                    return "article-text"
+                } else {
+                    return "keyword-text"
+                }
+            })
             .text(node => node.id)
             .attr('dy', '.5rem')
             .style('font-weight', '500')
@@ -1206,7 +1337,6 @@
         reheatSimulation()
         updateForces();
         updateDisplay();
-        
     }
 </script>
 
