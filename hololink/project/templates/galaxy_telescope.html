@@ -40,13 +40,17 @@
     }
 
     .collapse-controller-container {
-        padding: 0 15px;
         width: 100%;
+        padding: 0;
+    }
+
+    .collapse-inner-container{
+        width: 100%;
+        padding: 15px 0 0 30px;
     }
 
     .force-instruction {
-        font-size: 14px;
-        margin-bottom: 15px;    
+        font-size: 14px;    
     }
 
     .force-checkbox {
@@ -87,6 +91,7 @@
         padding-right: 0;
     }
 
+
 </style>
 
 
@@ -99,14 +104,80 @@
     {% include 'project_dashboard_navbar_2.html' %}
     <div class="row flex-grow-1" style="margin: 20px auto; width: 90%;">
         <div class="row flex-grow-1" style="margin: auto; overflow: auto;">
-            <div class="slider-container col-12 col-sm-2">
-                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
+            <div class="col-12 col-sm-8">
+                <div class="row h-100" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
+                    <div class="col" style="padding: 0;">
+                        <svg width="100%" height="100%"></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4 flex-row" style="overflow: auto; height: 600px;">
+                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; margin-bottom: 20px;">
+                    <div style="margin: 15px 0 0 15px;">
+                        <button id="restore_default_settings" type="button" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Restore default settings" style="padding: 0;">
+                            <img src="{% static 'img/sync.svg' %}" class="d-inline-block">
+                        </button>
+                    </div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
+                    <div class="row collapse collapse-controller-container" id="filter">
+                        <div class="collapse-inner-container col-12 d-flex">
+                            <div>
+                                <input class="filter-checkbox" type="checkbox" value="stellar" checked>
+                            </div>
+                            <div class="filter-instruction">
+                                Filter out stellar keywords
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
+                    <div class="row collapse collapse-controller-container" id="display">
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex flex-column">
+                                <div class="silder-instruction" style="font-size: 14px;">Node size</div>
+                                <p style="font-size: 10px;">If your node is ovelapping, you can adjust the radius of Collide force.</p>
+                            </div>
+                            <div class="d-flex">
+                                <input id="node_size">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex flex-column">
+                                <div class="silder-instruction" style="font-size: 14px;">Text fade threshold</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="text_fade_threshhold_slider">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope settings</a>
+                    <div class="row collapse collapse-controller-container" id="telescope_settings">
+                        <div class="col-12 collapse-inner-container">
+                            <div class="silder-instruction" style="font-size: 14px;">New telescope settings</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="row" style="width: 100%; padding: 0 15px;">
+                                <div class="col-9" style="padding: 0;">
+                                    <input class="new_telescope_settings_input" id="new_telescope_settings" style="width:100%; padding: 0 10px; height: 100%;">
+                                </div>
+                                <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px;">
+                                    <button type="submit" class="btn btn-outline-dark" style="padding:5px;">save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="silder-instruction" style="font-size: 14px;">Old telescope settings</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="center_force">
-                        <div class="col-12">
+                    <div class="row collapse collapse-controller-container" id="center_force">
+                        <div class="col-12 collapse-inner-container">
                             <div class="force-instruction">{% trans 'Shifts the view, so the graph is centered at this location.' %}</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">x</div>
                             </div>
@@ -114,7 +185,7 @@
                                 <input id="center_x_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">y</div>
                             </div>
@@ -125,12 +196,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="radial_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="radial_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.radial_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -140,7 +211,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">Orbit of connecting keywords</div>
                             </div>
@@ -150,7 +221,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">Orbit of articles</div>
                             </div>
@@ -160,7 +231,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">Orbit of not connecting keywords</div>
                             </div>
@@ -173,12 +244,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="charge_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="charge_force_checkbox" class="force-checkbox" checked type="checkbox" onchange="d3_diagram_properties.charge_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -188,7 +259,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">distanceMin</div>
                             </div>
@@ -198,7 +269,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">distanceMax</div>
                             </div>
@@ -211,12 +282,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="collide_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="collide_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="collide_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.collide_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Prevents nodes from overlapping</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -224,7 +295,7 @@
                                 <input id="collide_strength_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">radius</div>
                             </div>
@@ -232,7 +303,7 @@
                                 <input id="collide_radius_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">iterations</div>
                             </div>
@@ -243,12 +314,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="x_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="x_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="x_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.x_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -256,7 +327,7 @@
                                 <input id="x_force_strength_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">x</div>
                             </div>
@@ -267,12 +338,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="y_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="y_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="y_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.y_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -280,7 +351,7 @@
                                 <input id="y_force_strength_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">y</div>
                             </div>
@@ -291,12 +362,12 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="link_force">
-                        <div class="col-12 d-flex">
+                    <div class="row collapse collapse-controller-container" id="link_force">
+                        <div class="col-12 d-flex collapse-inner-container">
                             <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.link_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Sets link length and strength</div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">distance</div>
                             </div>
@@ -304,7 +375,7 @@
                                 <input id="link_distance_slider_output">
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 collapse-inner-container">
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
@@ -312,58 +383,6 @@
                                 <input id="link_strength_slider_output">
                             </div>
                         </div>
-                    </div>
-                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-8">
-                <div class="row h-100" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
-                    <div class="col" style="padding: 0;">
-                        <svg width="100%" height="100%"></svg>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-2">
-                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; overflow:auto; height: 600px;">
-                    <div style="margin: 15px 0 0 15px;">
-                        <button id="restore_default_settings" type="button" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Restore default settings" style="padding: 0;">
-                            <img src="{% static 'img/sync.svg' %}" class="d-inline-block">
-                        </button>
-                    </div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="filter">
-                        <div class="col-12 d-flex">
-                            <input class="filter-checkbox" type="checkbox" value="stellar" checked>
-                            <div class="filter-instruction">
-                                Filter out stellar keywords
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="display">
-                        <div class="col-12" style="margin-top: 15px;">
-                            <div class="d-flex flex-column">
-                                <div class="silder-instruction" style="font-size: 14px;">Node size</div>
-                                <p style="font-size: 10px;">If your node is ovelapping, you can adjust the radius of Collide force.</p>
-                            </div>
-                            <div class="d-flex">
-                                <input id="node_size">
-                            </div>
-                        </div>
-                        <div class="col-12" style="margin-top: 15px;">
-                            <div class="d-flex flex-column">
-                                <div class="silder-instruction" style="font-size: 14px;">Text fade threshold</div>
-                            </div>
-                            <div class="d-flex">
-                                <input id="text_fade_threshhold_slider">
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#storage" role="button" aria-expanded="false" aria-controls="storage">Storage</a>
-                    <div class="row collapse multi-collapse collapse-controller-container" id="storage">
-
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                 </div>
@@ -417,6 +436,9 @@
 
         update_all()
     });
+    $(document).ready(function() {
+        $('#new_telescope_settings').prop('disabled', true)
+    });
 
     $('#center_x_slider_output').slider({
         min:0,
@@ -426,6 +448,7 @@
     });
 
     $('#center_x_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.center_force.x=event.value.newValue; 
         update_all();
     });
@@ -438,6 +461,7 @@
     });
 
     $('#center_y_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.center_force.y=event.value.newValue; 
         update_all();
     });
@@ -450,6 +474,7 @@
     });
 
     $('#charge_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.charge_force.strength=event.value.newValue; 
         update_all();
     });
@@ -462,6 +487,7 @@
     });
 
     $('#charge_distance_min_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.charge_force.distanceMin=event.value.newValue; 
         update_all();
     });
@@ -474,6 +500,7 @@
     });
 
     $('#charge_distance_max_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.charge_force.distanceMax=event.value.newValue; 
         update_all();
     });
@@ -486,6 +513,7 @@
     });
 
     $('#collide_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.collide_force.strength=event.value.newValue; 
         update_all();
     });
@@ -498,6 +526,7 @@
     });
 
     $('#collide_radius_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.collide_force.radius=event.value.newValue; 
         update_all();
     });
@@ -510,6 +539,7 @@
     });
 
     $('#collide_iterations_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.collide_force.iterations=event.value.newValue; 
         update_all();
     });
@@ -522,6 +552,7 @@
     });
 
     $('#x_force_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.x_force.strength=event.value.newValue; 
         update_all();
     });
@@ -534,6 +565,7 @@
     });
 
     $('#x_force_x_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.x_force.x=event.value.newValue; 
         update_all();
     });
@@ -546,6 +578,7 @@
     });
 
     $('#y_force_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.y_force.strength=event.value.newValue; 
         update_all();
     });
@@ -558,6 +591,7 @@
     });
 
     $('#y_force_y_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.y_force.y=event.value.newValue; 
         update_all();
     });
@@ -570,6 +604,7 @@
     });
 
     $('#link_distance_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.link_force.distance=event.value.newValue; 
         update_all();
     });
@@ -582,6 +617,7 @@
     });
 
     $('#link_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.link_force.strength=event.value.newValue; 
         update_all();
     });
@@ -594,6 +630,7 @@
     });
 
     $('#node_size').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.node_size=event.value.newValue; 
         update_all();
     });
@@ -606,6 +643,7 @@
     });
 
     $('#radial_strength_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.radial_force.strength=event.value.newValue; 
         update_all();
     });
@@ -618,6 +656,7 @@
     });
 
     $('#radial_articles_orbit_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.radial_force.articles_orbit=event.value.newValue; 
         update_all();
     });
@@ -630,6 +669,7 @@
     });
 
     $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.radial_force.connecting_keywords_orbit=event.value.newValue; 
         update_all();
     });
@@ -642,6 +682,7 @@
     });
 
     $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.radial_force.not_connecting_keywords_orbit=event.value.newValue; 
         update_all();
     });
@@ -654,6 +695,7 @@
     });
 
     $('#text_fade_threshhold_slider').on("change", function(event){
+        get_time_and_insert_into_telescope_saving_input();
         d3_diagram_properties.text_fade_threshhold=event.value.newValue; 
 
         console.log(zoom_level)
@@ -666,6 +708,13 @@
         }
         update_all();
     });
+
+    function get_time_and_insert_into_telescope_saving_input (){
+        time = new Date()
+        iso_time = time.toISOString().split('.')[0]+"Z"
+        $('#new_telescope_settings').prop('disabled', false)
+        $('#new_telescope_settings').val(iso_time)
+    }
 
 </script>
 
