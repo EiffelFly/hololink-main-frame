@@ -127,7 +127,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="radial_force">
                         <div class="col-12 d-flex">
-                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.radial_force.enabled = this.checked; updateAll();">
+                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.radial_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
                         </div>
                         <div class="col-12">
@@ -175,7 +175,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="charge_force">
                         <div class="col-12 d-flex">
-                            <input id="charge_force_checkbox" class="force-checkbox" checked type="checkbox" onchange="d3_diagram_properties.charge_force.enabled = this.checked; updateAll();">
+                            <input id="charge_force_checkbox" class="force-checkbox" checked type="checkbox" onchange="d3_diagram_properties.charge_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
                         </div>
                         <div class="col-12">
@@ -213,7 +213,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="collide_force">
                         <div class="col-12 d-flex">
-                            <input id="collide_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.collide_force.enabled = this.checked; updateAll();">
+                            <input id="collide_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.collide_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Prevents nodes from overlapping</div>
                         </div>
                         <div class="col-12">
@@ -245,7 +245,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="x_force">
                         <div class="col-12 d-flex">
-                            <input id="x_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.x_force.enabled = this.checked; updateAll();">
+                            <input id="x_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.x_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
                         </div>
                         <div class="col-12">
@@ -269,7 +269,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="y_force">
                         <div class="col-12 d-flex">
-                            <input id="y_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.y_force.enabled = this.checked; updateAll();">
+                            <input id="y_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.y_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
                         </div>
                         <div class="col-12">
@@ -293,7 +293,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
                     <div class="row collapse multi-collapse collapse-controller-container" id="link_force">
                         <div class="col-12 d-flex">
-                            <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.link_force.enabled = this.checked; updateAll();">
+                            <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.link_force.enabled = this.checked; update_all();">
                             <div class="force-instruction">Sets link length and strength</div>
                         </div>
                         <div class="col-12">
@@ -407,7 +407,7 @@
         $("#y_force_checkbox").prop("checked", false);
         $("#link_force_checkbox").prop("checked", true);
 
-        updateAll()
+        update_all()
     });
 
     $('#center_x_slider_output').slider({
@@ -419,7 +419,7 @@
 
     $('#center_x_slider_output').on("change", function(event){
         d3_diagram_properties.center_force.x=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#center_y_slider_output').slider({
@@ -431,7 +431,7 @@
 
     $('#center_y_slider_output').on("change", function(event){
         d3_diagram_properties.center_force.y=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#charge_strength_slider_output').slider({
@@ -443,7 +443,7 @@
 
     $('#charge_strength_slider_output').on("change", function(event){
         d3_diagram_properties.charge_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#charge_distance_min_slider_output').slider({
@@ -455,7 +455,7 @@
 
     $('#charge_distance_min_slider_output').on("change", function(event){
         d3_diagram_properties.charge_force.distanceMin=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#charge_distance_max_slider_output').slider({
@@ -467,7 +467,7 @@
 
     $('#charge_distance_max_slider_output').on("change", function(event){
         d3_diagram_properties.charge_force.distanceMax=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#collide_strength_slider_output').slider({
@@ -479,7 +479,7 @@
 
     $('#collide_strength_slider_output').on("change", function(event){
         d3_diagram_properties.collide_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#collide_radius_slider_output').slider({
@@ -491,7 +491,7 @@
 
     $('#collide_radius_slider_output').on("change", function(event){
         d3_diagram_properties.collide_force.radius=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#collide_iterations_slider_output').slider({
@@ -503,7 +503,7 @@
 
     $('#collide_iterations_slider_output').on("change", function(event){
         d3_diagram_properties.collide_force.iterations=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#x_force_strength_slider_output').slider({
@@ -515,7 +515,7 @@
 
     $('#x_force_strength_slider_output').on("change", function(event){
         d3_diagram_properties.x_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#x_force_x_slider_output').slider({
@@ -527,7 +527,7 @@
 
     $('#x_force_x_slider_output').on("change", function(event){
         d3_diagram_properties.x_force.x=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#y_force_strength_slider_output').slider({
@@ -539,7 +539,7 @@
 
     $('#y_force_strength_slider_output').on("change", function(event){
         d3_diagram_properties.y_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#y_force_y_slider_output').slider({
@@ -551,7 +551,7 @@
 
     $('#y_force_y_slider_output').on("change", function(event){
         d3_diagram_properties.y_force.y=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#link_distance_slider_output').slider({
@@ -563,7 +563,7 @@
 
     $('#link_distance_slider_output').on("change", function(event){
         d3_diagram_properties.link_force.distance=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#link_strength_slider_output').slider({
@@ -575,7 +575,7 @@
 
     $('#link_strength_slider_output').on("change", function(event){
         d3_diagram_properties.link_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#node_size').slider({
@@ -587,7 +587,7 @@
 
     $('#node_size').on("change", function(event){
         d3_diagram_properties.node_size=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#radial_strength_slider_output').slider({
@@ -599,7 +599,7 @@
 
     $('#radial_strength_slider_output').on("change", function(event){
         d3_diagram_properties.radial_force.strength=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#radial_articles_orbit_slider_output').slider({
@@ -611,7 +611,7 @@
 
     $('#radial_articles_orbit_slider_output').on("change", function(event){
         d3_diagram_properties.radial_force.articles_orbit=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#radial_connecting_keywords_orbit_slider_output').slider({
@@ -623,7 +623,7 @@
 
     $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
         d3_diagram_properties.radial_force.connecting_keywords_orbit=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     $('#radial_not_connecting_keywords_orbit_slider_output').slider({
@@ -635,7 +635,7 @@
 
     $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
         d3_diagram_properties.radial_force.not_connecting_keywords_orbit=event.value.newValue; 
-        updateAll();
+        update_all();
     });
 
     
@@ -676,67 +676,67 @@
     var max_link_stroke_width = 0.8
         nominal_link_stroke_width = 0.5
 
-    var linkedByIndex = {};
+    var linked_by_index = {};
 
-    const simulationDurationInMs = 5000; // 2 seconds
+    const simulation_duration_in_ms = 5000; // 2 seconds
 
-    var startTime = Date.now();
-    var endTime = startTime + simulationDurationInMs;
+    var start_time = Date.now();
+    var end_time = start_time + simulation_duration_in_ms;
 
     // filter keyword type
-    var filterKeywordLevel = []
+    var filter_by_keyword_level = []
 
-    var nodeByID = {};
+    var node_by_id = {};
     /*
         load data -> initializeSimulation()
                                             simulation.nodes()
                                             simulation.on('tick')
-                                            -> initializeForces() -> updateForces() -> simulation.restart()
-                  -> initialDisplay() -> updateDisplay()                                       
+                                            -> initialize_forces() -> update_forces() -> simulation.restart()
+                  -> initialDisplay() -> update_display()                                       
     */
 
-    var biggestNode_article = 0
-        biggestNode_keyword = 0;
+    var article_biggest_node_keywords_num = 0
+        keyword_biggest_node_connection_num = 0;
 
-    loadData(filtered=true)
+    load_data(filtered=true)
 
 
     // load the data
-    function loadData(filtered){
+    function load_data(filtered){
         d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
             if (error) throw error;
             
             graph = data.graph;
 
             // recreate id reference to cope with duplicate node different keyword_type issue
-            if (graph.links[0].targetLevel) {
+            if (graph.links[0].target_level) {
                 graph.nodes.forEach(function(n) {
                     n.id = n.id + "-" + n.level
-                    nodeByID[n.id+"-"+n.level] = n;
+                    node_by_id[n.id+"-"+n.level] = n;
                 });
 
                 graph.links.forEach(function(l){
-                    l.source = l.source + "-" + l.sourceLevel
-                    l.target = l.target + "-" + l.targetLevel
+                    l.source = l.source + "-" + l.source_level
+                    l.target = l.target + "-" + l.target_level
                 });
             }
 
             console.log('initial', graph)
-            //initializeOrUpdateDisplay(graph);
-            initialSimulation();
-            initializeForces();
-            startSimulation();
-            updateForces();
+            //initialize_or_update_display(graph);
+            initial_simulation();
+            initialize_forces();
+            start_simulation();
+            update_forces();
 
             /*alternative way to cope with adding new parameter in d3 graph data
 
             graph.links.forEach(function(l) {
-                if (!l.sourceLevel){
-                    l['sourceLevel'] = nodeByID[l.source.id].level.toString();
+                if (!l.source_level){
+                    l['source_level'] = node_by_id[l.source.id].level.toString();
                 }
 
-                if (!l.targetLevel){
-                    l['targetLevel'] = nodeByID[l.target.id].level.toString();
+                if (!l.target_level){
+                    l['target_level'] = node_by_id[l.target.id].level.toString();
                 } 
             });
             */
@@ -745,26 +745,24 @@
             store = $.extend(true, {}, graph);
             
             if (filtered){
-                filterKeywordLevel.push('stellar');
+                filter_by_keyword_level.push('stellar');
                 filter()
             }
 
-            calculateBiggestNum(graph=graph)
-
-            console.log(biggestNode_article, biggestNode_keyword)
+            calculate_biggest_node(graph=graph)
 
             // create a index to allow constant-time lookup with good performance
             // This must put after simulation, after that we can access the d3 calculated info
             
             graph.links.forEach(d => {
-                linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+                linked_by_index[`${d.source.index},${d.target.index}`] = 1;
             });
 
-            initializeOrUpdateDisplay(graph);
-            updateAll();
+            initialize_or_update_display(graph);
+            update_all();
 
-            startTime = Date.now();
-            endTime = startTime + simulationDurationInMs;
+            start_time = Date.now();
+            end_time = start_time + simulation_duration_in_ms;
 
             console.log(graph,store)
 
@@ -776,20 +774,20 @@
     ////////////  UI INTERACTION ////////////
     $('.filter-checkbox').on("click", function(){
         if (this.checked){
-            filterKeywordLevel.push('stellar');
+            filter_by_keyword_level.push('stellar');
             filter()
-            initializeOrUpdateDisplay(graph);
-            reheatSimulation();
+            initialize_or_update_display(graph);
+            reheat_simulation();
         } else {
             /*We use temporary method to cope with lack of understanding of D3*/
-            filterKeywordLevel.pop()
-            loadData(filtered=false)
+            filter_by_keyword_level.pop()
+            load_data(filtered=false)
             
         }
-        updateAll();
+        update_all();
     });
 
-    function resetData(){
+    function reset_data(){
         graph.nodes = []
         graph.links = []
     }
@@ -797,29 +795,23 @@
     //////////// FORCE SIMULATION //////////// 
 
     // force simulator
-    function initialSimulation(){
-        var firstSimulation = d3.forceSimulation()
+    function initial_simulation(){
+        var first_simulation = d3.forceSimulation()
             .on("tick", ticked);
-        resetSimulation(firstSimulation);
+        resetSimulation(first_simulation);
     }
 
-    function initialFilteredSimulation(){
-        var filteredSimulation = d3.forceSimulation()
-            .on("tick", ticked);
-        resetSimulation(filteredSimulation);
-    }
-
-    function reheatSimulation(){
+    function reheat_simulation(){
         simulation
             .alphaDecay(0.01)
             .alpha(0.8)
             .restart()
         
-        startTime = Date.now();
-        endTime = startTime + simulationDurationInMs;
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
     }
    
-    function startSimulation(){
+    function start_simulation(){
         // set up the simulation and event to update locations after each tick
         simulation
             .nodes(graph.nodes);
@@ -834,13 +826,13 @@
             .restart()
     }
 
-    function resetSimulation(newSim){
+    function resetSimulation(new_sim){
         if (simulation){
             simulation.stop();
         }
 
-        if (newSim != undefined) {
-            simulation = newSim;
+        if (new_sim != undefined) {
+            simulation = new_sim;
         }
     }
 
@@ -937,7 +929,7 @@
 
 
     // add forces to the simulation
-    function initializeForces() {
+    function initialize_forces() {
         // add forces and associate each with a name
         simulation
             .force("link", d3.forceLink())
@@ -951,7 +943,7 @@
     }
 
     // apply new force properties
-    function updateForces() {
+    function update_forces() {
         // get each force by name and update the properties
         simulation.force("center")
             .x(width * d3_diagram_properties.center_force.x)
@@ -998,96 +990,28 @@
 
     //////////// DISPLAY ////////////
 
-    // generate the svg objects and force simulation
-    function initializeDisplay() {
-        // set the data and properties of link lines
-        link 
-            .data(graph.links)
-            .enter()
-            .append("line")   
-
-        // set the data and properties of node circles
-        node
-            .data(graph.nodes)
-            .enter().append("g")
-            
-
-        node
-            .append("circle")
-            .attr('connection', function(d){
-                return d.connection
-            })
-            .attr('r', getNodeSize)
-            .on('mouseover.fade', fade(0.2))
-            .on('mouseout.fade', fade(1));
-        
-        node
-            .append("text")
-            .attr("class", function(node){
-                if (node.level=="article"){
-                    return "article-text"
-                } else {
-                    return "keyword-text"
-                }
-            })
-            .text(node => node.id)
-            .attr('dy', '.5rem')
-            .style('font-weight', '500')
-            .style('font-size', nominal_text_size + "px")
-            .style('opacity', 0)
-            .attr('text-anchor', 'middle')
-            .on('mouseover.fade', fade(0.2))
-            .on('mouseout.fade', fade(1));
-            //.style('fill', 'black')
-
-        // node tooltip
-        node.append("title")
-            .text(function(d) { return d.id});
-        // visualize the graph
-        
-
-        var zoom_handler = d3.zoom()
-            .on("zoom", zoom_actions)
-            .scaleExtent([0.1, 10]); //set zoom in and out limit
-
-        zoom_handler(svg);
-
-        var drag_handler = d3.drag()
-            .on("start", drag_start)
-            .on("drag", drag_drag)
-            .on("end", drag_end);	
-
-        drag_handler(node);
-
-        updateDisplay();
-    }
-
     // update the display based on the forces (but not positions)
-    function updateDisplay() {
+    function update_display() {
         link
             .attr("stroke-width", d3_diagram_properties.link_force.enabled ? 0.5 : .2)
             .attr("opacity", d3_diagram_properties.link_force.enabled ? 1 : 0)
             .style("stroke", 'grey');
 
         node.selectAll('circle')
-            .attr("r", getNodeSize);
+            .attr("r", get_node_size);
 
         node.selectAll('text')
-            .attr("dy", getTextDy)
+            .attr("dy", get_text_dy)
     }
 
     // Filter function
     function filter(){
         store.nodes.forEach(function(n){
-            if (!filterKeywordLevel.includes(n.level) && n.filtered){
+            if (!filter_by_keyword_level.includes(n.level) && n.filtered){
                 n.filtered = false
                 graph.nodes.push($.extend(true, {}, n));
-            } else if (filterKeywordLevel.includes(n.level) && !n.filtered ){
-                n.filtered = true;
-                if (n.id == "美"){
-                    console.log(n)
-                }
-                
+            } else if (filter_by_keyword_level.includes(n.level) && !n.filtered ){
+                n.filtered = true; 
                 graph.nodes.forEach(function(d, i) {
                     if (n.id === d.id) {
                         graph.nodes.splice(i, 1);
@@ -1098,10 +1022,10 @@
 
         //	add and remove links from data based on availability of nodes
 	    store.links.forEach(function(l) {
-		    if (!(filterKeywordLevel.includes(l.source.level) || filterKeywordLevel.includes(l.target.level)) && l.filtered) {
+		    if (!(filter_by_keyword_level.includes(l.source.level) || filter_by_keyword_level.includes(l.target.level)) && l.filtered) {
 			    l.filtered = false;
 			    graph.links.push($.extend(true, {}, l));
-		    } else if ((filterKeywordLevel.includes(l.source.level) || filterKeywordLevel.includes(l.target.level)) && !l.filtered) {
+		    } else if ((filter_by_keyword_level.includes(l.source.level) || filter_by_keyword_level.includes(l.target.level)) && !l.filtered) {
 			    l.filtered = true;
 			    graph.links.forEach(function(d, i) {
 				    if (l.index === d.index) {
@@ -1113,7 +1037,7 @@
     }
 
     // update filter condition to node and link
-    function initializeOrUpdateDisplay(targetGraph){
+    function initialize_or_update_display(targetGraph){
         //	UPDATE
         node = node.data(targetGraph.nodes, function(d) { return d.id;})
         //	EXIT
@@ -1121,24 +1045,24 @@
             .attr("r", 0)
             .remove();
         //	ENTER
-	    var newNode = node
+	    var new_node = node
             .enter()
             .append("g")
         
-        newNode
+        new_node
             .append("circle")
             .attr('connection', function(d){
                 return d.connection
             })
-            .attr('r', getNodeSize)
-            .attr("fill", getNodeColor)
+            .attr('r', get_node_size)
+            .attr("fill", get_node_color)
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
         
-        newNode
+        new_node
             .append("text")
             .text(node => node.id)
-            .attr('dy', getTextDy)
+            .attr('dy', get_text_dy)
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
             .style('opacity', 0)
@@ -1146,7 +1070,7 @@
             .on('mouseover.fade', fade(0.2))
             .on('mouseout.fade', fade(1));
 
-        newNode
+        new_node
             //.append("title")
             //.text(function(d) { return d.id; });
             .attr('data-toggle', 'tooltip')
@@ -1156,7 +1080,7 @@
             })
 
         //	ENTER + UPDATE
-	    node = node.merge(newNode);
+	    node = node.merge(new_node);
 
         //	UPDATE second function is essential
         link = link.data(targetGraph.links, function(d) { return d.id;})
@@ -1166,15 +1090,15 @@
             .attr("stroke-opacity", 0)
             .remove();
 
-        var newLink = link
+        var new_link = link
             .enter()
             .append('line')
         
-        newLink.append("title")
+        new_link.append("title")
             .text(function(d){ 
                 return d.index + " : " + d.source.id + " -> " + d.target.id; }) 
         
-        link = link.merge(newLink);
+        link = link.merge(new_link);
 
         var zoom_handler = d3.zoom()
             .on("zoom", zoom_actions)
@@ -1190,12 +1114,12 @@
         drag_handler(node);
 
 
-        updateDisplay();
+        update_display();
     }
 
     // update the display positions after each simulation tick
     function ticked() {
-        if (Date.now() < endTime) {
+        if (Date.now() < end_time) {
             link
                 .attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
@@ -1205,33 +1129,20 @@
             node
                 // we use transform is because we group circle and text together in g, and transform is g's position 
                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; }) 
-                //.attr("r", getNodeSize)
-
-            /*
-            node
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; })
-                .attr("r", getNodeSize)
-                //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-            */
-
-            //text
-                //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+                //.attr("r", get_node_size)
         } else {
             simulation.stop();
         }
-        
-        
-    }
+    };
 
     //calculate biggest Num
     
-    function calculateBiggestNum(graph){
+    function calculate_biggest_node(graph){
             graph.nodes.forEach(function(obj){
                 if (obj.level == 'article'){
-                    totalkeywordNum = parseInt(obj.basestoneNum) + parseInt(obj.stellarNum)
-                    if (totalkeywordNum > biggestNode_article){
-                        biggestNode_article = totalkeywordNum
+                    total_keyword_num = parseInt(obj.basestoneNum) + parseInt(obj.stellarNum)
+                    if (total_keyword_num > article_biggest_node_keywords_num){
+                        article_biggest_node_keywords_num = total_keyword_num
                     }
                 }
                 
@@ -1239,8 +1150,8 @@
 
             graph.nodes.forEach(function(obj){
                 if (obj.level == 'stellar' || obj.level == 'basestone'){
-                    if (obj.connection > biggestNode_keyword){
-                        biggestNode_keyword = obj.connection
+                    if (obj.connection > keyword_biggest_node_connection_num){
+                        keyword_biggest_node_connection_num = obj.connection
                     }
                 }
             });     
@@ -1264,8 +1175,8 @@
         if (!d3.event.active) simulation.alphaTarget(0);
         d.fx = d.x; //sticky node
         d.fy = d.y; //sticky node
-        startTime = Date.now();
-        endTime = startTime + simulationDurationInMs;
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
     }
 
     //ZOOM FUNCTION
@@ -1296,28 +1207,27 @@
         
     }
 
-    function getNodeSize(node){
-        var nodeSizeScaleforKeyword = d3.scalePow()
+    function get_node_size(node){
+        var node_size_scale_for_keyword = d3.scalePow()
             .exponent(2)
             .range([1, 3])
-            .domain([0, biggestNode_keyword])
+            .domain([0, keyword_biggest_node_connection_num])
 
-        var nodeSizeScaleforArticle = d3.scalePow()
+        var node_size_scale_for_article = d3.scalePow()
             .exponent(2)
             .range([5, 8])
-            .domain([0, biggestNode_article])
+            .domain([0, article_biggest_node_keywords_num])
 
         if (node.level == 'article'){
-            totalkeywordNum = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
-            console.log(d3_diagram_properties.node_size)
-            return nodeSizeScaleforArticle(totalkeywordNum)*d3_diagram_properties.node_size
+            total_keyword_num = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
+            return node_size_scale_for_article(total_keyword_num)*d3_diagram_properties.node_size
         } else {
-            return nodeSizeScaleforKeyword(node.connection)*d3_diagram_properties.node_size
+            return node_size_scale_for_keyword(node.connection)*d3_diagram_properties.node_size
         }   
     }
 
-    function getTextDy(node){
-        var node_size = getNodeSize(node)
+    function get_text_dy(node){
+        var node_size = get_node_size(node)
         if (node_size > 6 ){
             return node_size + 10 + "px"
         } else {
@@ -1325,7 +1235,7 @@
         }
     }
 
-    function getNodeColor(node){
+    function get_node_color(node){
         if (node.level == "article"){
             return "#777777"
         } else {
@@ -1333,19 +1243,11 @@
         }
     }
 
-    function getTextWrapperXSpace(node){
-        return 50
-    }
-
-    function getTextWrapperYSpace(node){
-        return 20
-    }
-
     // update size-related forces
     d3.select(window).on("resize", function(){
         width = +svg.node().getBoundingClientRect().width;
         height = +svg.node().getBoundingClientRect().height;
-        updateForces();
+        update_forces();
     });
 
     //Implement FADE IN and OUT EFFECT ------------
@@ -1359,7 +1261,7 @@
                     .ease(d3.easeLinear)
                     .style('opacity', function (o) { 
                         //console.log(d,o)
-                        return isConnected(d, o) ? 1 : opacity 
+                        return is_connected(d, o) ? 1 : opacity 
                     });
                 //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
                 link
@@ -1383,8 +1285,8 @@
             };
         }
 
-    function isConnected(a, b) {
-        return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+    function is_connected(a, b) {
+        return linked_by_index[`${a.index},${b.index}`] || linked_by_index[`${b.index},${a.index}`] || a.index === b.index;
     }
 
     function activate_tooltip(){
@@ -1392,12 +1294,12 @@
     }
 
     // convenience function to update everything (run after UI input)
-    function updateAll() {
-        startTime = Date.now();
-        endTime = startTime + simulationDurationInMs;
-        reheatSimulation()
-        updateForces();
-        updateDisplay();
+    function update_all() {
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
+        reheat_simulation()
+        update_forces();
+        update_display();
     }
 </script>
 
