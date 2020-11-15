@@ -221,7 +221,7 @@
                                 <div class="silder-instruction">strength</div>
                             </div>
                             <div class="d-flex">
-                                <input id="collide_StrengthSliderOutput">
+                                <input id="collide_strength_slider_output">
                             </div>
                         </div>
                         <div class="col-12">
@@ -229,7 +229,7 @@
                                 <div class="silder-instruction">radius</div>
                             </div>
                             <div class="d-flex">
-                                <input id="collide_radiusSliderOutput">
+                                <input id="collide_radius_slider_output">
                             </div>
                         </div>
                         <div class="col-12">
@@ -237,7 +237,7 @@
                                 <div class="silder-instruction">iterations</div>
                             </div>
                             <div class="d-flex">
-                                <input id="collide_iterationsSliderOutput">
+                                <input id="collide_iterations_slider_output">
                             </div>
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                                 <div class="silder-instruction">strength</div>
                             </div>
                             <div class="d-flex">
-                                <input id="forceX_StrengthSliderOutput">
+                                <input id="forcex_strength_slider_output">
                             </div>
                         </div>
                         <div class="col-12">
@@ -261,7 +261,7 @@
                                 <div class="silder-instruction">x</div>
                             </div>
                             <div class="d-flex">
-                                <input id="forceX_XSliderOutput">
+                                <input id="forcex_x_slider_output">
                             </div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                                 <div class="silder-instruction">strength</div>
                             </div>
                             <div class="d-flex">
-                                <input id="forceY_StrengthSliderOutput">
+                                <input id="forcey_strength_slider_output">
                             </div>
                         </div>
                         <div class="col-12">
@@ -285,7 +285,7 @@
                                 <div class="silder-instruction">y</div>
                             </div>
                             <div class="d-flex">
-                                <input id="forceY_YSliderOutput">
+                                <input id="forcey_y_slider_output">
                             </div>
                         </div>
                     </div>
@@ -384,13 +384,13 @@
         $('#charge_strength_slider_output').slider('refresh');
         $('#charge_distance_min_slider_output').slider('refresh');
         $('#charge_distance_max_slider_output').slider('refresh');
-        $('#collide_StrengthSliderOutput').slider('refresh');
-        $('#collide_radiusSliderOutput').slider('refresh');
-        $('#collide_iterationsSliderOutput').slider('refresh');
-        $('#forceX_StrengthSliderOutput').slider('refresh');
-        $('#forceX_XSliderOutput').slider('refresh');
-        $('#forceY_StrengthSliderOutput').slider('refresh');
-        $('#forceY_YSliderOutput').slider('refresh');
+        $('#collide_strength_slider_output').slider('refresh');
+        $('#collide_radius_slider_output').slider('refresh');
+        $('#collide_iterations_slider_output').slider('refresh');
+        $('#forcex_strength_slider_output').slider('refresh');
+        $('#forcex_x_slider_output').slider('refresh');
+        $('#forcey_strength_slider_output').slider('refresh');
+        $('#forcey_y_slider_output').slider('refresh');
         $('#link_DistanceSliderOutput').slider('refresh');
         $('#link_StrengthSliderOutput').slider('refresh');
         $('#nodeSize').slider('refresh');
@@ -470,86 +470,86 @@
         updateAll();
     });
 
-    $('#collide_StrengthSliderOutput').slider({
+    $('#collide_strength_slider_output').slider({
         min:0,
         max:2,
         value:0.7,
         step:0.05,
     });
 
-    $('#collide_StrengthSliderOutput').on("change", function(event){
+    $('#collide_strength_slider_output').on("change", function(event){
         d3Properties.collideForce.strength=event.value.newValue; 
         updateAll();
     });
 
-    $('#collide_radiusSliderOutput').slider({
+    $('#collide_radius_slider_output').slider({
         min:0,
         max:100,
         value:5,
         step:1,
     });
 
-    $('#collide_radiusSliderOutput').on("change", function(event){
+    $('#collide_radius_slider_output').on("change", function(event){
         d3Properties.collideForce.radius=event.value.newValue; 
         updateAll();
     });
 
-    $('#collide_iterationsSliderOutput').slider({
+    $('#collide_iterations_slider_output').slider({
         min:1,
         max:10,
         value:1,
         step:1,
     });
 
-    $('#collide_iterationsSliderOutput').on("change", function(event){
+    $('#collide_iterations_slider_output').on("change", function(event){
         d3Properties.collideForce.iterations=event.value.newValue; 
         updateAll();
     });
 
-    $('#forceX_StrengthSliderOutput').slider({
+    $('#forcex_strength_slider_output').slider({
         min:0,
         max:1,
         value:0.1,
         step:0.01,
     });
 
-    $('#forceX_StrengthSliderOutput').on("change", function(event){
+    $('#forcex_strength_slider_output').on("change", function(event){
         d3Properties.xForce.strength=event.value.newValue; 
         updateAll();
     });
 
-    $('#forceX_XSliderOutput').slider({
+    $('#forcex_x_slider_output').slider({
         min:0,
         max:1,
         value:0.5,
         step:0.01,
     });
 
-    $('#forceX_XSliderOutput').on("change", function(event){
+    $('#forcex_x_slider_output').on("change", function(event){
         d3Properties.xForce.x=event.value.newValue; 
         updateAll();
     });
 
-    $('#forceY_StrengthSliderOutput').slider({
+    $('#forcey_strength_slider_output').slider({
         min:0,
         max:1,
         value:0.1,
         step:0.01,
     });
 
-    $('#forceY_StrengthSliderOutput').on("change", function(event){
+    $('#forcey_strength_slider_output').on("change", function(event){
         d3Properties.forceY.strength=event.value.newValue; 
         updateAll();
     });
 
-    $('#forceY_YSliderOutput').slider({
+    $('#forcey_y_slider_output').slider({
         min:0,
         max:1,
         value:0.5,
         step:0.01,
     });
 
-    $('#forceY_YSliderOutput').on("change", function(event){
+    $('#forcey_y_slider_output').on("change", function(event){
         d3Properties.forceY.y=event.value.newValue; 
         updateAll();
     });
