@@ -532,6 +532,10 @@
     var max_text_size = 18
         nominal_text_size = 8;
 
+    //limit link stroke-width when scaling
+    var max_link_stroke_width = 0.8
+        nominal_link_stroke_width = 0.5
+
     var linkedByIndex = {};
 
     const simulationDurationInMs = 5000; // 2 seconds
@@ -1095,7 +1099,13 @@
             text_size = max_text_size/transform.k
         }
         svg.selectAll('text').style('font-size', text_size)
-
+        
+        var link_stroke_width = nominal_link_stroke_width
+        if (nominal_link_stroke_width*transform.k > max_link_stroke_width){
+            link_stroke_width = max_link_stroke_width/transform.k
+        }
+        svg.selectAll('line').attr("stroke-width", link_stroke_width)
+        
     }
 
     function getNodeSize(node){
