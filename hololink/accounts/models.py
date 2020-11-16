@@ -135,7 +135,6 @@ class Profile(models.Model):
     
     d3_diagram_properties = models.JSONField(
         verbose_name=_("D3 disagram's properties"),
-        default=get_d3_diagram_properties_default,
     )
     
 
