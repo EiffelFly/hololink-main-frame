@@ -1,0 +1,1623 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" 
+        integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ==" crossorigin="anonymous" />
+<style>
+
+
+    @media (min-width: 440px) {
+
+    }
+
+    @media (min-width: 576px) {
+
+    }
+    @media (min-width: 768px) {
+
+    }
+    @media (min-width: 992px) {
+
+    }
+    @media (min-width: 1200px) {}
+
+    .collapse-controller-title:hover {
+        text-decoration: none;
+        color: black;
+        opacity: 1;
+        background-color: rgba(61, 61, 61, 0.1);
+    }
+
+    .collapse-controller-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: black;
+        padding-left: 15px;
+    }
+
+    .collapse-controller-container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .collapse-inner-container{
+        width: 100%;
+        padding: 15px 0 0 30px;
+    }
+
+    .force-instruction {
+        font-size: 14px;    
+    }
+
+    .force-checkbox {
+        margin: 2.5px 5px 0 0;
+    }
+
+    .filter-instruction {
+        font-size: 14px;
+        margin-bottom: 5px;    
+    }
+
+    .filter-checkbox {
+        margin: 2.5px 5px 0 0;
+    }
+ 
+    .slider-selection {
+        background: lightgray;
+    }
+
+    .slider-handle {
+        background-color: grey;
+        background-image: none;
+        height: 15px;
+        width: 15px;
+        top: 2px;
+    }
+
+    .silder-instruction{
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .slider-track {
+        height: 8px !important;
+    }
+
+    .collapse-controller-element{
+        padding-right: 0;
+    }
+
+
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid d-flex flex-column" style="padding:0">
+    {% include 'project_dashboard_navbar_2.html' %}
+    <div class="row flex-grow-1" style="margin: 20px auto; width: 90%;">
+        <div class="row flex-grow-1" style="margin: auto; overflow: auto;">
+            <div class="col-12 col-sm-8">
+                <div class="row h-100" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
+                    <div class="col" style="padding: 0;">
+                        <svg width="100%" height="100%"></svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4 flex-row" style="overflow: auto; height: 600px;">
+                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0; margin-bottom: 20px;">
+                    <div style="margin: 15px 0 0 15px;">
+                        <button id="restore_default_settings" type="button" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Restore default settings" style="padding: 0;">
+                            <img src="{% static 'img/sync.svg' %}" class="d-inline-block">
+                        </button>
+                    </div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="filter" style="margin-top: 15px;">Filter</a>
+                    <div class="row collapse collapse-controller-container" id="filter">
+                        <div class="collapse-inner-container col-12 d-flex">
+                            <div>
+                                <input class="filter-checkbox" type="checkbox" value="stellar" checked>
+                            </div>
+                            <div class="filter-instruction">
+                                Filter out stellar keywords
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter" style="margin-bottom: 15px;">Display</a>
+                    <div class="row collapse collapse-controller-container" id="display">
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex flex-column">
+                                <div class="silder-instruction" style="font-size: 14px;">Node size</div>
+                                <p style="font-size: 10px;">If your node is ovelapping, you can adjust the radius of Collide force.</p>
+                            </div>
+                            <div class="d-flex">
+                                <input id="node_size">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container" style="margin-bottom: 15px;">
+                            <div class="d-flex flex-column">
+                                <div class="silder-instruction" style="font-size: 14px;">Text fade threshold</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="text_fade_threshhold_slider">
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
+                    <div class="row collapse collapse-controller-container" id="telescope_settings">
+                        <div class="col-12 collapse-inner-container">
+                            <div class="silder-instruction" style="font-size: 14px;">New telescope configuration</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <form action="/add_telescope_configuration/" method="POST" id="post-form">
+                                {% csrf_token %}
+                                <div class="row d-flex" style="width: 100%; margin: 0;" >
+                                    <div class="col-9" style="padding: 0;">
+                                        <input class="new_telescope_configurations_input" id="new_telescope_configuration" style="width:100%; padding: 0 10px; height: 100%;">
+                                    </div>
+                                    <div class="col-2 d-flex" style="padding: 0; height: 100%; margin-left: auto;">
+                                        <button id="submit_new_telescope_configuration" type="submit" class="btn btn-outline-dark" style="padding:5px 10px; margin-left: auto;">save</button>
+                                    </div>
+                                </div>
+                                <div class="row" style="width: 100%;">
+                                    <div class="col numof_changed_properties" style="font-size: 12px;"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="silder-instruction" style="font-size: 14px;">Your telescope configurations</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            {% for key, value in profile.d3_diagram_properties.items %}
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col">
+                                    <div class="card shadow-sm" style="padding: 10px">
+                                        <div class="row d-flex flex-row">
+                                            <div class="col d-flex" style="font-size: 14px;">
+                                                <div style="margin: auto 0">{{key}}</div>
+                                            </div>
+                                            <div class="col d-flex" style="margin-left: auto;">
+                                                <div style="margin-left: auto;">
+                                                    <button type="button" id="use_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="delete_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
+                    <div class="row collapse collapse-controller-container" id="center_force">
+                        <div class="col-12 collapse-inner-container">
+                            <div class="force-instruction">{% trans 'Shifts the view, so the graph is centered at this location.' %}</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">x</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="center_x_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">y</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="center_y_slider_output">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
+                    <div class="row collapse collapse-controller-container" id="radial_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="">
+                            <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_strength_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of connecting keywords</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_connecting_keywords_orbit_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of articles</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_articles_orbit_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">Orbit of not connecting keywords</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="radial_not_connecting_keywords_orbit_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#charge_force" role="button" aria-expanded="false" aria-controls="charge_force">Charge force</a>
+                    <div class="row collapse collapse-controller-container" id="charge_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="charge_force_checkbox" class="force-checkbox" checked type="checkbox" onchange="d3_diagram_properties.charge_force.enabled = this.checked; update_all();">
+                            <div class="force-instruction">Attracts (+) or repels (-) nodes to/from each other.</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="charge_strength_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">distanceMin</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="charge_distance_min_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">distanceMax</div>
+                            </div>
+                            <div>
+                                <div class="d-flex">
+                                    <input id="charge_distance_max_slider_output">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#collide_force" role="button" aria-expanded="false" aria-controls="collide_force">Collide force</a>
+                    <div class="row collapse collapse-controller-container" id="collide_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="collide_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.collide_force.enabled = this.checked; update_all();">
+                            <div class="force-instruction">Prevents nodes from overlapping</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="collide_strength_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">radius</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="collide_radius_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">iterations</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="collide_iterations_slider_output">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#x_force" role="button" aria-expanded="false" aria-controls="x_force">X force</a>
+                    <div class="row collapse collapse-controller-container" id="x_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="x_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.x_force.enabled = this.checked; update_all();">
+                            <div class="force-instruction">Acts like gravity. Pulls all points towards an X location.</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="x_force_strength_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">x</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="x_force_x_slider_output">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#y_force" role="button" aria-expanded="false" aria-controls="y_force">Y force</a>
+                    <div class="row collapse collapse-controller-container" id="y_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="y_force_checkbox" class="force-checkbox" type="checkbox" onchange="d3_diagram_properties.y_force.enabled = this.checked; update_all();">
+                            <div class="force-instruction">Acts like gravity. Pulls all points towards a Y location.</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="y_force_strength_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">y</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="y_force_y_slider_output">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force" style="margin-bottom: 15px;">Link force</a>
+                    <div class="row collapse collapse-controller-container" id="link_force">
+                        <div class="col-12 d-flex collapse-inner-container">
+                            <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.link_force.enabled = this.checked; update_all();">
+                            <div class="force-instruction">Sets link length and strength</div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">distance</div>
+                            </div>
+                            <div class="d-flex">
+                                <input id="link_distance_slider_output">
+                            </div>
+                        </div>
+                        <div class="col-12 collapse-inner-container">
+                            <div class="d-flex">
+                                <div class="silder-instruction">strength</div>
+                            </div>
+                            <div class="d-flex" style="margin-bottom: 15px;">
+                                <input id="link_strength_slider_output">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<!-- import bootstrap-slider -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" 
+    integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous">
+</script>
+
+<script>
+    
+    
+
+    $('#restore_default_settings').on('click', function(){
+        d3_diagram_properties = {}
+        d3_diagram_properties = $.extend(true, default_d3_properties)
+        // reset all slider values
+        $('#center_x_slider_output').slider('refresh');
+        $('#center_y_slider_output').slider('refresh');
+        $('#charge_strength_slider_output').slider('refresh');
+        $('#charge_distance_min_slider_output').slider('refresh');
+        $('#charge_distance_max_slider_output').slider('refresh');
+        $('#collide_strength_slider_output').slider('refresh');
+        $('#collide_radius_slider_output').slider('refresh');
+        $('#collide_iterations_slider_output').slider('refresh');
+        $('#x_force_strength_slider_output').slider('refresh');
+        $('#x_force_x_slider_output').slider('refresh');
+        $('#y_force_strength_slider_output').slider('refresh');
+        $('#y_force_y_slider_output').slider('refresh');
+        $('#link_distance_slider_output').slider('refresh');
+        $('#link_strength_slider_output').slider('refresh');
+        $('#node_size').slider('refresh');
+        $('#radial_strength_slider_output').slider('refresh');
+        $('#radial_articles_orbit_slider_output').slider('refresh');
+        $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
+        $('#radial_not_connecting_keywords_orbit_slider_output').slider('refresh');
+
+        //reset all slider checkbox
+        $("#radial_force_checkbox").prop("checked", true);
+        $("#charge_force_checkbox").prop("checked", true);
+        $("#collide_force_checkbox").prop("checked", true);
+        $("#x_force_checkbox").prop("checked", false);
+        $("#y_force_checkbox").prop("checked", false);
+        $("#link_force_checkbox").prop("checked", true);
+
+        update_all()
+    });
+
+    $(document).ready(function() {
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+    });
+
+    $('#center_x_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#center_x_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.center_force.x){
+            d3_diagram_changed_properties.center_force_x = true;
+        } else {
+            d3_diagram_changed_properties.center_force_x = false;
+        }       
+        d3_diagram_properties.center_force.x=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#center_y_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#center_y_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.center_force.y){
+            d3_diagram_changed_properties.center_force_y = true;
+        } else {
+            d3_diagram_changed_properties.center_force_y = false;
+        }       
+        d3_diagram_properties.center_force.y=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#radial_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.radial_force.enabled){
+            d3_diagram_changed_properties.center_force_y = true
+        } else {
+            d3_diagram_changed_properties.center_force_y = false
+        }   
+        d3_diagram_properties.radial_force.enabled = this.checked; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
+    $('#radial_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:1,
+        step:0.01,
+    });
+
+    $('#radial_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.radial_force.strength){
+            d3_diagram_changed_properties.radial_force_strength = true
+        } else {
+            d3_diagram_changed_properties.radial_force_strength = false
+        }   
+        d3_diagram_properties.radial_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
+    $('#radial_articles_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:300,
+        step:10,
+    });
+
+    $('#radial_articles_orbit_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.radial_force.articles_orbit){
+            d3_diagram_changed_properties.radial_force_articles_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_articles_orbit = false
+        }   
+        d3_diagram_properties.radial_force.articles_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
+    $('#radial_connecting_keywords_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:100,
+        step:10,
+    });
+
+    $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.radial_force.connecting_keywords_orbit){
+            d3_diagram_changed_properties.radial_force_connecting_keywords_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_connecting_keywords_orbit = false
+        }   
+        d3_diagram_properties.radial_force.connecting_keywords_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
+    $('#radial_not_connecting_keywords_orbit_slider_output').slider({
+        min:0,
+        max:1000,
+        value:500,
+        step:10,
+    });
+
+    $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.radial_force.not_connecting_keywords_orbit){
+            d3_diagram_changed_properties.radial_force_not_connecting_keywords_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_not_connecting_keywords_orbit = false
+        }   
+        d3_diagram_properties.radial_force.not_connecting_keywords_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
+    $('#text_fade_threshhold_slider').slider({
+        min:0.1,
+        max:2,
+        value:1,
+        step:0.01,
+    });
+
+    $('#charge_strength_slider_output').slider({
+        min:-200,
+        max:50,
+        value:-30,
+        step:1,
+    });
+
+    $('#charge_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.strength){
+            d3_diagram_changed_properties.charge_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_strength = false;
+        }   
+        d3_diagram_properties.charge_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#charge_distance_min_slider_output').slider({
+        min:0,
+        max:50,
+        value:1,
+        step:1,
+    });
+
+    $('#charge_distance_min_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.distanceMin){
+            d3_diagram_changed_properties.charge_force_distance_min = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_distance_min = false;
+        }   
+        d3_diagram_properties.charge_force.distanceMin=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#charge_distance_max_slider_output').slider({
+        min:0,
+        max:2000,
+        value:2000,
+        step:1,
+    });
+
+    $('#charge_distance_max_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.distanceMax){
+            d3_diagram_changed_properties.charge_force_distance_max = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_distance_max = false;
+        }   
+        d3_diagram_properties.charge_force.distanceMax=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_strength_slider_output').slider({
+        min:0,
+        max:2,
+        value:0.7,
+        step:0.05,
+    });
+
+    $('#collide_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.strength){
+            d3_diagram_changed_properties.collide_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_strength = false;
+        }   
+        d3_diagram_properties.collide_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_radius_slider_output').slider({
+        min:0,
+        max:100,
+        value:5,
+        step:1,
+    });
+
+    $('#collide_radius_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.radius){
+            d3_diagram_changed_properties.collide_force_radius = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_radius = false;
+        }   
+        d3_diagram_properties.collide_force.radius=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_iterations_slider_output').slider({
+        min:1,
+        max:10,
+        value:1,
+        step:1,
+    });
+
+    $('#collide_iterations_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.iterations){
+            d3_diagram_changed_properties.collide_force_iterations = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_iterations = false;
+        }   
+        d3_diagram_properties.collide_force.iterations=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#x_force_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#x_force_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.x_force.strength){
+            d3_diagram_changed_properties.x_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.x_force_strength = false;
+        }   
+        d3_diagram_properties.x_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#x_force_x_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#x_force_x_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.x_force.x){
+            d3_diagram_changed_properties.x_force_x = true;
+        } else {
+            d3_diagram_changed_properties.x_force_x = false;
+        }   
+        d3_diagram_properties.x_force.x=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#y_force_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#y_force_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.y_force.strength){
+            d3_diagram_changed_properties.y_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.y_force_strength = false;
+        }   
+        d3_diagram_properties.y_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#y_force_y_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#y_force_y_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.y_force.y){
+            d3_diagram_changed_properties.y_force_y = true;
+        } else {
+            d3_diagram_changed_properties.y_force_y = false;
+        }  
+        d3_diagram_properties.y_force.y=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#link_distance_slider_output').slider({
+        min:0,
+        max:100,
+        value:50,
+        step:1,
+    });
+
+    $('#link_distance_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.link_force.distance){
+            d3_diagram_changed_properties.link_force_distance = true;
+        } else {
+            d3_diagram_changed_properties.link_force_distance = false;
+        }  
+        d3_diagram_properties.link_force.distance=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#link_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#link_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.link_force.strength){
+            d3_diagram_changed_properties.link_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.link_force_strength = false;
+        }  
+        d3_diagram_properties.link_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#node_size').slider({
+        min:1,
+        max:2,
+        value:1,
+        step:0.01,
+    });
+
+    $('#node_size').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.node_size){
+            d3_diagram_changed_properties.node_size = true;
+        } else {
+            d3_diagram_changed_properties.node_size = false;
+        }  
+        d3_diagram_properties.node_size=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#text_fade_threshhold_slider').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.text_fade_threshhold){
+            d3_diagram_changed_properties.text_fade_threshhold = true;
+        } else {
+            d3_diagram_changed_properties.text_fade_threshhold = false;
+        }  
+        d3_diagram_properties.text_fade_threshhold=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+
+        if (zoom_level < d3_diagram_properties.text_fade_threshhold){
+            svg.selectAll('text').style("opacity",0)
+        } else if ( d3_diagram_properties.text_fade_threshhold += 0.2 > zoom_level >= d3_diagram_properties.text_fade_threshhold) {
+            svg.selectAll('text').style("opacity",(zoom_level - d3_diagram_properties.text_fade_threshhold)*2)
+        } else {
+            svg.selectAll('text').style("opacity",1)
+        }
+        update_all();
+    });
+
+    $('#post-form').on('submit', function(event){
+        event.preventDefault();
+        add_telescope_configuration();
+    });
+
+    function add_telescope_configuration(){
+        var user_set_configuration_name = $('#new_telescope_configuration').val()
+
+        post_data = JSON.stringify({
+            [user_set_configuration_name]: d3_diagram_properties
+        });
+
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'post_data':post_data,
+            },
+            success: function(json){
+                console.log(json)
+            }
+        });
+
+
+    }
+
+    function get_time_and_insert_into_telescope_saving_input (){
+        time = new Date()
+        iso_time = time.toISOString().split('.')[0]+"Z"
+        $('#new_telescope_configuration').prop('disabled', false)
+        $('#new_telescope_configuration').val(iso_time)
+        $('#submit_new_telescope_configuration').prop('disabled', false);
+    }
+
+    function get_numof_changed_d3_diagram_properties_and_insert(){
+        var numof_changed_d3_diagram_properties = 0
+
+        Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
+            if (v == true){
+                numof_changed_d3_diagram_properties += 1
+            }
+        });
+        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
+        
+        if (numof_changed_d3_diagram_properties == 0){
+            $('#new_telescope_configuration').val('')
+            $('#new_telescope_configuration').prop('disabled', true)
+            $('#submit_new_telescope_configuration').prop('disabled', true);
+        }
+    }
+
+
+    
+
+</script>
+
+<script>
+    var svg = d3.select("svg"),
+        width = +svg.node().getBoundingClientRect().width,
+        height = +svg.node().getBoundingClientRect().height;
+
+    // for zoom 
+    var g = svg.append("g")
+        .attr("class", "everything");
+
+    var simulation;
+
+    // svg objects
+    var link = g.append("g")
+                .attr("class", "links") 
+                .selectAll('.line')
+    var node = g.append("g")
+                .attr("class", "nodes")
+                .selectAll('g')
+
+
+    // the data - an object with nodes and links
+    var graph, store, graph2;
+
+    //limit font-size when scaling
+    var max_text_size = 18
+        nominal_text_size = 8;
+
+    //limit link stroke-width when scaling
+    var max_link_stroke_width = 0.8
+        nominal_link_stroke_width = 0.5
+
+    var linked_by_index = {};
+
+    const simulation_duration_in_ms = 5000; // 2 seconds
+
+    var start_time = Date.now();
+    var end_time = start_time + simulation_duration_in_ms;
+
+    // filter keyword type
+    var filter_by_keyword_level = []
+
+    var node_by_id = {};
+
+    var d3_diagram_changed_properties  = {
+        center_force_x : false,
+        center_force_y : false,
+        charge_force_enabled: false,
+        charge_force_strength: false,
+        charge_force_distance_min: false,
+        charge_force_distance_max: false,
+        collide_force_enabled: false,
+        collide_force_strength: false,
+        collide_force_iterations: false,
+        collide_force_radius: false,
+        x_force_enabled: false,
+        x_force_strength: false,
+        x_force_x: false,
+        y_force_enabled: false,
+        y_force_strength: false,
+        y_force_y: false,
+        link_force_enabled: false,
+        link_force_distance: false,
+        link_force_iterations: false,
+        link_force_strength: false,
+        radial_force_enabled: false,
+        radial_force_strength: false,
+        radial_force_articles_orbit: false,
+        radial_force_connecting_keywords_orbit: false,
+        radial_force_not_connecting_keywords_orbit: false,
+        node_size: false,
+        text_fade_threshhold: false
+    }
+
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions)
+        .scaleExtent([0.1, 10]); //set zoom in and out limit
+
+    var zoom_level = 1;
+
+    var drag_handler = d3.drag()
+        .on("start", drag_start)
+        .on("drag", drag_drag)
+        .on("end", drag_end);	
+
+    /*
+        load data -> initializeSimulation()
+                                            simulation.nodes()
+                                            simulation.on('tick')
+                                            -> initialize_forces() -> update_forces() -> simulation.restart()
+                  -> initialDisplay() -> update_display()                                       
+    */
+
+    var article_biggest_node_keywords_num = 0
+        keyword_biggest_node_connection_num = 0;
+
+    load_data(filtered=true)
+
+
+    // load the data
+    function load_data(filtered){
+        d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
+            if (error) throw error;
+            
+            graph = data.graph;
+
+            // recreate id reference to cope with duplicate node different keyword_type issue
+            if (graph.links[0].target_level) {
+                graph.nodes.forEach(function(n) {
+                    n.id = n.id + "-" + n.level
+                    node_by_id[n.id+"-"+n.level] = n;
+                });
+
+                graph.links.forEach(function(l){
+                    l.source = l.source + "-" + l.source_level
+                    l.target = l.target + "-" + l.target_level
+                });
+            }
+
+            console.log('initial', graph)
+            //initialize_or_update_display(graph);
+            initial_simulation();
+            initialize_forces();
+            start_simulation();
+            update_forces();
+
+            /*alternative way to cope with adding new parameter in d3 graph data
+
+            graph.links.forEach(function(l) {
+                if (!l.source_level){
+                    l['source_level'] = node_by_id[l.source.id].level.toString();
+                }
+
+                if (!l.target_level){
+                    l['target_level'] = node_by_id[l.target.id].level.toString();
+                } 
+            });
+            */
+
+            // copy graph data for further usage
+            store = $.extend(true, {}, graph);
+            
+            if (filtered){
+                filter_by_keyword_level.push('stellar');
+                filter()
+            }
+
+            calculate_biggest_node(graph=graph)
+
+            // create a index to allow constant-time lookup with good performance
+            // This must put after simulation, after that we can access the d3 calculated info
+            
+            graph.links.forEach(d => {
+                linked_by_index[`${d.source.index},${d.target.index}`] = 1;
+            });
+
+            initialize_or_update_display(graph);
+            update_all();
+
+            start_time = Date.now();
+            end_time = start_time + simulation_duration_in_ms;
+
+            console.log(graph,store)
+
+            activate_tooltip();
+        });
+    }
+
+
+    ////////////  UI INTERACTION ////////////
+    $('.filter-checkbox').on("click", function(){
+        if (this.checked){
+            filter_by_keyword_level.push('stellar');
+            filter()
+            initialize_or_update_display(graph);
+            reheat_simulation();
+        } else {
+            /*We use temporary method to cope with lack of understanding of D3*/
+            filter_by_keyword_level.pop()
+            load_data(filtered=false)
+            
+        }
+        update_all();
+    });
+
+    function reset_data(){
+        graph.nodes = []
+        graph.links = []
+    }
+
+    //////////// FORCE SIMULATION //////////// 
+
+    // force simulator
+    function initial_simulation(){
+        var first_simulation = d3.forceSimulation()
+            .on("tick", ticked);
+        resetSimulation(first_simulation);
+    }
+
+    function reheat_simulation(){
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8)
+            .restart()
+        
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
+    }
+   
+    function start_simulation(){
+        // set up the simulation and event to update locations after each tick
+        simulation
+            .nodes(graph.nodes);
+        
+        simulation.force("link")
+            .id(function(d) {return d.id;})
+            .links(graph.links)
+
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8)
+            .restart()
+    }
+
+    function resetSimulation(new_sim){
+        if (simulation){
+            simulation.stop();
+        }
+
+        if (new_sim != undefined) {
+            simulation = new_sim;
+        }
+    }
+
+    // d3-force diagram properties
+    default_d3_properties = {
+        center_force: {
+            x: 0.5,
+            y: 0.5,
+        },
+        charge_force: {
+            enabled: true,
+            strength: -30,
+            distanceMin: 1,
+            distanceMax: 2000
+        },
+        collide_force: {
+            enabled: true,
+            strength: .7,
+            iterations: 1,
+            radius: 5
+        },
+        x_force: {
+            enabled: false,
+            strength: .1,
+            x: .5
+        },
+        y_force: {
+            enabled: false,
+            strength: .1,
+            y: .5
+        },
+        link_force: {
+            enabled: true,
+            distance: 50,
+            iterations: 1,
+            strength: 0.3,
+        },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
+        },
+        node_size: 1,
+        text_fade_threshhold:1
+
+    }
+
+    // values for all forces
+    d3_diagram_properties = {
+        center_force: {
+            x: 0.5,
+            y: 0.5,
+        },
+        charge_force: {
+            enabled: true,
+            strength: -30,
+            distanceMin: 1,
+            distanceMax: 2000
+        },
+        collide_force: {
+            enabled: true,
+            strength: .7,
+            iterations: 1,
+            radius: 5
+        },
+        x_force: {
+            enabled: false,
+            strength: .1,
+            x: .5
+        },
+        y_force: {
+            enabled: false,
+            strength: .1,
+            y: .5
+        },
+        link_force: {
+            enabled: true,
+            distance: 50,
+            iterations: 1,
+            strength: 0.3,
+        },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
+        },
+        node_size: 1,
+        text_fade_threshhold:1
+    }
+
+
+    // add forces to the simulation
+    function initialize_forces() {
+        // add forces and associate each with a name
+        simulation
+            .force("link", d3.forceLink())
+            .force("charge", d3.forceManyBody())
+            .force("collide", d3.forceCollide())
+            .force("center", d3.forceCenter())
+            .force("x_force", d3.forceX())
+            .force("y_force", d3.forceY())
+            .force('radial_force', d3.forceRadial());
+        // apply properties to each of the force
+    }
+
+    // apply new force properties
+    function update_forces() {
+        // get each force by name and update the properties
+        simulation.force("center")
+            .x(width * d3_diagram_properties.center_force.x)
+            .y(height * d3_diagram_properties.center_force.y);
+        simulation.force("charge")
+            .strength(d3_diagram_properties.charge_force.strength * d3_diagram_properties.charge_force.enabled)
+            .distanceMin(d3_diagram_properties.charge_force.distanceMin)
+            .distanceMax(d3_diagram_properties.charge_force.distanceMax);
+        simulation.force("collide")
+            .strength(d3_diagram_properties.collide_force.strength * d3_diagram_properties.collide_force.enabled)
+            .radius(d3_diagram_properties.collide_force.radius)
+            .iterations(d3_diagram_properties.collide_force.iterations);
+        simulation.force("x_force")
+            .strength(d3_diagram_properties.x_force.strength * d3_diagram_properties.x_force.enabled)
+            .x(width * d3_diagram_properties.x_force.x);
+        simulation.force("y_force")
+            .strength(d3_diagram_properties.y_force.strength * d3_diagram_properties.y_force.enabled)
+            .y(height * d3_diagram_properties.y_force.y);
+        simulation.force("link")
+            .id(function(d) {return d.id;})
+            .distance(d3_diagram_properties.link_force.distance)
+            .strength(d3_diagram_properties.link_force.strength)
+            .iterations(d3_diagram_properties.link_force.iterations)
+            .links(d3_diagram_properties.link_force.enabled ? graph.links : [])
+        simulation.force('radial_force')
+            .strength(d3_diagram_properties.radial_force.strength * d3_diagram_properties.radial_force.enabled)
+            .x(width * d3_diagram_properties.center_force.x)
+            .y(height * d3_diagram_properties.center_force.y)
+            .radius(function(node){
+                if (node.level == 'stellar' || node.level == 'basestone'){
+                    if (node.connection >= 2){
+                        return d3_diagram_properties.radial_force.connecting_keywords_orbit
+                    }
+                    else {
+                        return d3_diagram_properties.radial_force.not_connecting_keywords_orbit
+                    }
+                }
+                else if (node.level == 'article'){
+                    return d3_diagram_properties.radial_force.articles_orbit
+                }
+            })
+
+    }
+
+    //////////// DISPLAY ////////////
+
+    // update the display based on the forces (but not positions)
+    function update_display() {
+        link
+            .attr("stroke-width", d3_diagram_properties.link_force.enabled ? 0.5 : .2)
+            .attr("opacity", d3_diagram_properties.link_force.enabled ? 1 : 0)
+            .style("stroke", 'grey');
+
+        node.selectAll('circle')
+            .attr("r", get_node_size);
+
+        node.selectAll('text')
+            .attr("dy", get_text_dy)
+    }
+
+    // Filter function
+    function filter(){
+        store.nodes.forEach(function(n){
+            if (!filter_by_keyword_level.includes(n.level) && n.filtered){
+                n.filtered = false
+                graph.nodes.push($.extend(true, {}, n));
+            } else if (filter_by_keyword_level.includes(n.level) && !n.filtered ){
+                n.filtered = true; 
+                graph.nodes.forEach(function(d, i) {
+                    if (n.id === d.id) {
+                        graph.nodes.splice(i, 1);
+                    }
+                });
+            }
+        });
+
+        //	add and remove links from data based on availability of nodes
+	    store.links.forEach(function(l) {
+		    if (!(filter_by_keyword_level.includes(l.source.level) || filter_by_keyword_level.includes(l.target.level)) && l.filtered) {
+			    l.filtered = false;
+			    graph.links.push($.extend(true, {}, l));
+		    } else if ((filter_by_keyword_level.includes(l.source.level) || filter_by_keyword_level.includes(l.target.level)) && !l.filtered) {
+			    l.filtered = true;
+			    graph.links.forEach(function(d, i) {
+				    if (l.index === d.index) {
+					    graph.links.splice(i, 1);
+				    }
+			    });
+		    }
+	    });
+    }
+
+    // update filter condition to node and link
+    function initialize_or_update_display(targetGraph){
+        //	UPDATE
+        node = node.data(targetGraph.nodes, function(d) { return d.id;})
+        //	EXIT
+	    node.exit().transition()
+            .attr("r", 0)
+            .remove();
+        //	ENTER
+	    var new_node = node
+            .enter()
+            .append("g")
+        
+        new_node
+            .append("circle")
+            .attr('connection', function(d){
+                return d.connection
+            })
+            .attr('r', get_node_size)
+            .attr("fill", get_node_color)
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+        
+        new_node
+            .append("text")
+            .text(node => node.id)
+            .attr('dy', get_text_dy)
+            .style('font-weight', '500')
+            .style('font-size', nominal_text_size + "px")
+            .style('opacity', 0)
+            .attr('text-anchor', 'middle')
+            .on('mouseover.fade', fade(0.2))
+            .on('mouseout.fade', fade(1));
+
+        new_node
+            //.append("title")
+            //.text(function(d) { return d.id; });
+            .attr('data-toggle', 'tooltip')
+            .attr('data-placement', 'bottom')
+            .attr('title', function(node){
+                return node.id
+            })
+
+        //	ENTER + UPDATE
+	    node = node.merge(new_node);
+
+        //	UPDATE second function is essential
+        link = link.data(targetGraph.links, function(d) { return d.id;})
+
+        // Keep the exiting links connected to the moving remaining nodes.
+	    link.exit().transition()
+            .attr("stroke-opacity", 0)
+            .remove();
+
+        var new_link = link
+            .enter()
+            .append('line')
+        
+        new_link.append("title")
+            .text(function(d){ 
+                return d.index + " : " + d.source.id + " -> " + d.target.id; }) 
+        
+        link = link.merge(new_link);
+
+        zoom_handler(svg);
+        drag_handler(node);
+
+
+        update_display();
+    }
+
+    // update the display positions after each simulation tick
+    function ticked() {
+        if (Date.now() < end_time) {
+            link
+                .attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+            node
+                // we use transform is because we group circle and text together in g, and transform is g's position 
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; }) 
+                //.attr("r", get_node_size)
+        } else {
+            simulation.stop();
+        }
+    };
+
+    //calculate biggest Num
+    
+    function calculate_biggest_node(graph){
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'article'){
+                    total_keyword_num = parseInt(obj.basestoneNum) + parseInt(obj.stellarNum)
+                    if (total_keyword_num > article_biggest_node_keywords_num){
+                        article_biggest_node_keywords_num = total_keyword_num
+                    }
+                }
+                
+            });
+
+            graph.nodes.forEach(function(obj){
+                if (obj.level == 'stellar' || obj.level == 'basestone'){
+                    if (obj.connection > keyword_biggest_node_connection_num){
+                        keyword_biggest_node_connection_num = obj.connection
+                    }
+                }
+            });     
+        };
+
+
+    //DRAG FUNCTION
+    function drag_start(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    //make sure you can't drag the circle outside the box
+    function drag_drag(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function drag_end(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d.fx = d.x; //sticky node
+        d.fy = d.y; //sticky node
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
+    }
+
+    //ZOOM FUNCTION
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+        transform = d3.event.transform
+        zoom_level = transform.k
+        // setup threshhold of displaying node's text
+        if (transform.k < d3_diagram_properties.text_fade_threshhold){
+            svg.selectAll('text').style("opacity",0)
+        } else if ( d3_diagram_properties.text_fade_threshhold += 0.2 > transform.k >= d3_diagram_properties.text_fade_threshhold) {
+            svg.selectAll('text').style("opacity",(transform.k - d3_diagram_properties.text_fade_threshhold)*2)
+        } else {
+            svg.selectAll('text').style("opacity",1)
+        }
+
+        var text_size = nominal_text_size
+        if (nominal_text_size*transform.k > max_text_size){
+            text_size = max_text_size/transform.k
+        }
+        svg.selectAll('text').style('font-size', text_size)
+        
+        var link_stroke_width = nominal_link_stroke_width
+        if (nominal_link_stroke_width*transform.k > max_link_stroke_width){
+            link_stroke_width = max_link_stroke_width/transform.k
+        }
+        svg.selectAll('line').attr("stroke-width", link_stroke_width)
+        
+    }
+
+    function get_node_size(node){
+        var node_size_scale_for_keyword = d3.scalePow()
+            .exponent(2)
+            .range([1, 3])
+            .domain([0, keyword_biggest_node_connection_num])
+
+        var node_size_scale_for_article = d3.scalePow()
+            .exponent(2)
+            .range([5, 8])
+            .domain([0, article_biggest_node_keywords_num])
+
+        if (node.level == 'article'){
+            total_keyword_num = parseInt(node.basestoneNum) + parseInt(node.stellarNum)
+            return node_size_scale_for_article(total_keyword_num)*d3_diagram_properties.node_size
+        } else {
+            return node_size_scale_for_keyword(node.connection)*d3_diagram_properties.node_size
+        }   
+    }
+
+    function get_text_dy(node){
+        var node_size = get_node_size(node)
+        if (node_size > 6 ){
+            return node_size + 10 + "px"
+        } else {
+            return node_size + 6 + "px" 
+        }
+    }
+
+    function get_node_color(node){
+        if (node.level == "article"){
+            return "#777777"
+        } else {
+            return "#333333"
+        }
+    }
+
+    // update size-related forces
+    d3.select(window).on("resize", function(){
+        width = +svg.node().getBoundingClientRect().width;
+        height = +svg.node().getBoundingClientRect().height;
+        update_forces();
+    });
+
+    //Implement FADE IN and OUT EFFECT ------------
+
+    function fade(opacity){
+            return d => {
+                //判斷 node 是否相連，若沒有則套用 opacity
+                node
+                    .transition()
+                    .duration(300)
+                    .ease(d3.easeLinear)
+                    .style('opacity', function (o) { 
+                        //console.log(d,o)
+                        return is_connected(d, o) ? 1 : opacity 
+                    });
+                //判斷連結的 source 或 target 是否為 d 若沒有則套用 opacity
+                link
+                    .transition()
+                    .duration(300)
+                    .ease(d3.easeLinear)
+                    .style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+                //When mouseout reset opacity
+                if(opacity === 1){
+                    node
+                        .transition()
+                        .duration(300)
+                        .ease(d3.easeLinear)
+                        .style('opacity', 1)
+                    link
+                        .transition()
+                        .duration(300)
+                        .ease(d3.easeLinear)
+                        .style('stroke-opacity', 0.5)
+                }
+            };
+        }
+
+    function is_connected(a, b) {
+        return linked_by_index[`${a.index},${b.index}`] || linked_by_index[`${b.index},${a.index}`] || a.index === b.index;
+    }
+
+    function activate_tooltip(){
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+    // convenience function to update everything (run after UI input)
+    function update_all() {
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
+        reheat_simulation()
+        update_forces();
+        update_display();
+    }
+</script>
+
+{% endblock %}

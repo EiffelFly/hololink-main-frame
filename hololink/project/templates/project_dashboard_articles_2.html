@@ -56,7 +56,7 @@
 <div class="container-fluid d-flex flex-column" style="padding:0">
     {% include 'project_dashboard_navbar_2.html' %}
     <div class="row flex-grow-1" style="margin: 20px auto;">
-        <div class="col-12 col-lg-6" >
+        <div class="col-12 col-lg-6">
             <div class="row h-100 sub-container" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
                 <div class="col" style="padding: 0;">
                     <svg width="100%" height="100%"></svg>
@@ -201,9 +201,7 @@
                 .enter()
                 .filter( function(d){
                     if (d.target.level == 'basestone'){
-                        return d.target.connection >= parseInt(amount_of_articles/5)
-                    } else if (d.target.level == 'stellar'){
-                        return d.target.connection > (amount_of_articles/2)
+                        return d
                     }
                 })
                 .append("line")
@@ -222,9 +220,7 @@
                         return d
                     } else {
                         if (d.level == 'basestone'){
-                            return d.connection >= parseInt(amount_of_articles/5)
-                        } else if (d.level == 'stellar'){
-                            return d.connection > (amount_of_articles/2)
+                            return d
                         }
                     }
                 })
@@ -249,9 +245,7 @@
                         return d
                     } else {
                         if (d.level == 'basestone'){
-                            return d.connection > parseInt(amount_of_articles/5)
-                        } else if (d.level == 'stellar'){
-                            return d.connection > (amount_of_articles/2)
+                            return d
                         }
                     }
                 })

@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from accounts.models import Profile
 from django.contrib.auth.models import User
+import json 
 
 
 def now():
@@ -138,7 +139,7 @@ def project_articles(request, projectnameslug, **kwargs):
         'count_article_stellar':count_article_stellar,
     }  
 
-    return render(request, 'project_dashboard_articles_2.html', context)
+    return render(request, 'project_dashboard_articles_3.html', context)
 
 def project_dashboard(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:
@@ -299,3 +300,38 @@ def deliver_D3(request, projectnameslug, **kwargs):
     amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
 
     return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
+
+def galaxy_telescope(request, projectnameslug, usernameslug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    user = get_object_or_404(User, username=usernameslug)
+    project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
+    print(user.profile.d3_diagram_properties)
+
+    context = {
+        'user':user,
+        'project':project,
+        'profile':user.profile,
+        
+    }
+
+    return render(request, 'galaxy_telescope.html', context)
+
+def add_telescope_configuration(request, usernameslug):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login'))
+
+    if request.method == 'POST':
+        response_data = {}
+        new_telescope_configuration = request.POST.get('post_data','')
+        new_telescope_configuration = json.loads(new_telescope_configuration)    
+        user = get_object_or_404(User, username=request.user)
+        user.profile.d3_diagram_properties.update(new_telescope_configuration)
+        user.save()
+        response_data['result'] = 'Create post successful!'
+        response_data['data'] = user.profile.d3_diagram_properties
+
+        return JsonResponse(response_data)
+
+

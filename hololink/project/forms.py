@@ -3,7 +3,7 @@ from .models import Project
 from article.models import Article
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-
+from accounts.models import Profile
 
 class DeleteArticleForm(forms.ModelForm):
 
@@ -151,4 +151,4 @@ class GalaxySettingsForm(forms.ModelForm):
         model = Project
         fields = ['name', 'galaxy_description', 'galaxy_visibility', 'change_galaxy_visibility_confirmation', 'delete_galaxy_confirmation']
 
-
+    

@@ -16,6 +16,9 @@ import random
     further information: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 '''
 
+def get_d3_diagram_properties_default():
+    return {}
+
 def random_num():
     return User.objects.make_random_password(length=8, allowed_chars='123456789')
 
@@ -86,6 +89,12 @@ class Profile(models.Model):
         related_name='owned_by_user',
         verbose_name=_('Source')
     )
+
+    
+    d3_diagram_properties = models.JSONField(
+        verbose_name=_("D3 disagram's properties"),
+    )
+    
 
     def get_absolute_url(self):
         return reverse('user_dashboard', args=(self.slug,))
