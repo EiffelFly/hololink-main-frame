@@ -79,7 +79,7 @@
     }
 
     .silder-instruction{
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 700;
     }
 
@@ -157,13 +157,16 @@
                             <div class="silder-instruction" style="font-size: 14px;">New telescope settings</div>
                         </div>
                         <div class="col-12 collapse-inner-container">
-                            <div class="row" style="width: 100%; padding: 0 15px;">
+                            <div class="row d-flex" style="width: 100%; padding: 0 15px;">
                                 <div class="col-9" style="padding: 0;">
                                     <input class="new_telescope_settings_input" id="new_telescope_settings" style="width:100%; padding: 0 10px; height: 100%;">
                                 </div>
-                                <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px;">
+                                <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px; margin-left: auto;">
                                     <button type="submit" class="btn btn-outline-dark" style="padding:5px;">save</button>
                                 </div>
+                            </div>
+                            <div class="row" style="width: 100%;">
+                                <div class="col numof_changed_properties" style="font-size: 12px;"></div>
                             </div>
                         </div>
                         <div class="col-12 collapse-inner-container">
@@ -445,6 +448,7 @@
 
         update_all()
     });
+
     $(document).ready(function() {
         $('#new_telescope_settings').prop('disabled', true)
     });
@@ -458,6 +462,22 @@
 
     $('#center_x_slider_output').on("change", function(event){
         get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.center_force.x){
+            d3_diagram_changed_properties.center_force_x = true
+        } else {
+            d3_diagram_changed_properties.center_force_x = false
+        }
+
+        var numof_changed_d3_diagram_properties = 0
+
+        Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
+            if (v == true){
+                numof_changed_d3_diagram_properties += 1
+            }
+        });
+
+        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
+        
         d3_diagram_properties.center_force.x=event.value.newValue; 
         update_all();
     });
@@ -769,6 +789,36 @@
     var filter_by_keyword_level = []
 
     var node_by_id = {};
+
+    var d3_diagram_changed_properties  = {
+        center_force_x : false,
+        center_force_y : false,
+        charge_force_enabled: false,
+        charge_force_strength: false,
+        charge_force_distance_min: false,
+        charge_force_distance_max: false,
+        collide_force_enabled: false,
+        collide_force_strength: false,
+        collide_force_iterations: false,
+        collide_force_radius: false,
+        x_force_enabled: false,
+        x_force_strength: false,
+        x_force_x: false,
+        y_force_enabled: false,
+        y_force_strength: false,
+        y_force_y: false,
+        link_force_enabled: false,
+        link_force_distance: false,
+        link_force_iterations: false,
+        link_force_strength: false,
+        radial_force_enabled: false,
+        radial_force_strength: false,
+        radial_force_articles_orbit: false,
+        radial_force_connecting_keywords_orbit: false,
+        radial_force_not_connecting_keywords_orbit: false,
+        node_size: false,
+        text_fade_threshhold: false
+    }
 
     var zoom_handler = d3.zoom()
         .on("zoom", zoom_actions)
