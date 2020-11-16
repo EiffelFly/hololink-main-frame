@@ -139,7 +139,7 @@ def project_articles(request, projectnameslug, **kwargs):
         'count_article_stellar':count_article_stellar,
     }  
 
-    return render(request, 'project_dashboard_articles_2.html', context)
+    return render(request, 'project_dashboard_articles_3.html', context)
 
 def project_dashboard(request, projectnameslug, **kwargs):
     if not request.user.is_authenticated:

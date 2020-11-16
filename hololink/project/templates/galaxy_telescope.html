@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter" style="margin-bottom: 15px;">Display</a>
                     <div class="row collapse collapse-controller-container" id="display">
                         <div class="col-12 collapse-inner-container">
                             <div class="d-flex flex-column">
@@ -141,7 +141,7 @@
                                 <input id="node_size">
                             </div>
                         </div>
-                        <div class="col-12 collapse-inner-container">
+                        <div class="col-12 collapse-inner-container" style="margin-bottom: 15px;">
                             <div class="d-flex flex-column">
                                 <div class="silder-instruction" style="font-size: 14px;">Text fade threshold</div>
                             </div>
@@ -150,6 +150,7 @@
                             </div>
                         </div>
                     </div>
+                    <!--
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
                     <div class="row collapse collapse-controller-container" id="telescope_settings">
@@ -198,6 +199,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    -->
                 </div>
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin: 0;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
@@ -389,7 +391,7 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force">Link force</a>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#link_force" role="button" aria-expanded="false" aria-controls="link_force" style="margin-bottom: 15px;">Link force</a>
                     <div class="row collapse collapse-controller-container" id="link_force">
                         <div class="col-12 d-flex collapse-inner-container">
                             <input id="link_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.link_force.enabled = this.checked; update_all();">
@@ -407,12 +409,11 @@
                             <div class="d-flex">
                                 <div class="silder-instruction">strength</div>
                             </div>
-                            <div class="d-flex">
+                            <div class="d-flex" style="margin-bottom: 15px;">
                                 <input id="link_strength_slider_output">
                             </div>
                         </div>
                     </div>
-                    <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                 </div>
             </div>
         </div>
