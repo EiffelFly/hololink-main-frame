@@ -151,26 +151,29 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope settings</a>
+                    <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
                     <div class="row collapse collapse-controller-container" id="telescope_settings">
                         <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">New telescope settings</div>
+                            <div class="silder-instruction" style="font-size: 14px;">New telescope configuration</div>
                         </div>
                         <div class="col-12 collapse-inner-container">
-                            <div class="row d-flex" style="width: 100%; padding: 0 15px;">
-                                <div class="col-9" style="padding: 0;">
-                                    <input class="new_telescope_settings_input" id="new_telescope_settings" style="width:100%; padding: 0 10px; height: 100%;">
+                            <form action="/add_telescope_configuration/" method="POST" id="post-form">
+                                {% csrf_token %}
+                                <div class="row d-flex" style="width: 100%; padding: 0 15px;">
+                                    <div class="col-9" style="padding: 0;">
+                                        <input class="new_telescope_configurations_input" id="new_telescope_configuration" style="width:100%; padding: 0 10px; height: 100%;">
+                                    </div>
+                                    <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px; margin-left: auto;">
+                                        <button id="submit_new_telescope_configuration" type="submit" class="btn btn-outline-dark" style="padding:5px;">save</button>
+                                    </div>
                                 </div>
-                                <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px; margin-left: auto;">
-                                    <button type="submit" class="btn btn-outline-dark" style="padding:5px;">save</button>
+                                <div class="row" style="width: 100%;">
+                                    <div class="col numof_changed_properties" style="font-size: 12px;"></div>
                                 </div>
-                            </div>
-                            <div class="row" style="width: 100%;">
-                                <div class="col numof_changed_properties" style="font-size: 12px;"></div>
-                            </div>
+                            </form>
                         </div>
                         <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">Old telescope settings</div>
+                            <div class="silder-instruction" style="font-size: 14px;">Your telescope configurations</div>
                         </div>
                         <div class="col-12 collapse-inner-container">
                             {% for key, value in profile.d3_diagram_properties.items %}
@@ -450,7 +453,8 @@
     });
 
     $(document).ready(function() {
-        $('#new_telescope_settings').prop('disabled', true)
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
     });
 
     $('#center_x_slider_output').slider({
@@ -462,14 +466,13 @@
 
     $('#center_x_slider_output').on("change", function(event){
         if (event.value.newValue != default_d3_properties.center_force.x){
-            d3_diagram_changed_properties.center_force_x = true
+            d3_diagram_changed_properties.center_force_x = true;
         } else {
-            d3_diagram_changed_properties.center_force_x = false
+            d3_diagram_changed_properties.center_force_x = false;
         }       
         d3_diagram_properties.center_force.x=event.value.newValue; 
         get_time_and_insert_into_telescope_saving_input();
-        get_numof_changed_d3_diagram_properties_and_insert()
-        
+        get_numof_changed_d3_diagram_properties_and_insert();
         update_all();
     });
 
@@ -482,187 +485,13 @@
 
     $('#center_y_slider_output').on("change", function(event){
         if (event.value.newValue != default_d3_properties.center_force.y){
-            d3_diagram_changed_properties.center_force_y = true
+            d3_diagram_changed_properties.center_force_y = true;
         } else {
-            d3_diagram_changed_properties.center_force_y = false
+            d3_diagram_changed_properties.center_force_y = false;
         }       
         d3_diagram_properties.center_force.y=event.value.newValue; 
         get_time_and_insert_into_telescope_saving_input();
-        get_numof_changed_d3_diagram_properties_and_insert()
-        update_all();
-    });
-
-    $('#charge_strength_slider_output').slider({
-        min:-200,
-        max:50,
-        value:-30,
-        step:1,
-    });
-
-    $('#charge_strength_slider_output').on("change", function(event){
-        if (event.value.newValue != default_d3_properties.center_force.y){
-            d3_diagram_changed_properties.center_force_y = true
-        } else {
-            d3_diagram_changed_properties.center_force_y = false
-        }   
-        d3_diagram_properties.charge_force.strength=event.value.newValue; 
-        get_time_and_insert_into_telescope_saving_input();
-        update_all();
-    });
-
-    $('#charge_distance_min_slider_output').slider({
-        min:0,
-        max:50,
-        value:1,
-        step:1,
-    });
-
-    $('#charge_distance_min_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.charge_force.distanceMin=event.value.newValue; 
-        update_all();
-    });
-
-    $('#charge_distance_max_slider_output').slider({
-        min:0,
-        max:2000,
-        value:2000,
-        step:1,
-    });
-
-    $('#charge_distance_max_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.charge_force.distanceMax=event.value.newValue; 
-        update_all();
-    });
-
-    $('#collide_strength_slider_output').slider({
-        min:0,
-        max:2,
-        value:0.7,
-        step:0.05,
-    });
-
-    $('#collide_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.collide_force.strength=event.value.newValue; 
-        update_all();
-    });
-
-    $('#collide_radius_slider_output').slider({
-        min:0,
-        max:100,
-        value:5,
-        step:1,
-    });
-
-    $('#collide_radius_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.collide_force.radius=event.value.newValue; 
-        update_all();
-    });
-
-    $('#collide_iterations_slider_output').slider({
-        min:1,
-        max:10,
-        value:1,
-        step:1,
-    });
-
-    $('#collide_iterations_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.collide_force.iterations=event.value.newValue; 
-        update_all();
-    });
-
-    $('#x_force_strength_slider_output').slider({
-        min:0,
-        max:1,
-        value:0.1,
-        step:0.01,
-    });
-
-    $('#x_force_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.x_force.strength=event.value.newValue; 
-        update_all();
-    });
-
-    $('#x_force_x_slider_output').slider({
-        min:0,
-        max:1,
-        value:0.5,
-        step:0.01,
-    });
-
-    $('#x_force_x_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.x_force.x=event.value.newValue; 
-        update_all();
-    });
-
-    $('#y_force_strength_slider_output').slider({
-        min:0,
-        max:1,
-        value:0.1,
-        step:0.01,
-    });
-
-    $('#y_force_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.y_force.strength=event.value.newValue; 
-        update_all();
-    });
-
-    $('#y_force_y_slider_output').slider({
-        min:0,
-        max:1,
-        value:0.5,
-        step:0.01,
-    });
-
-    $('#y_force_y_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.y_force.y=event.value.newValue; 
-        update_all();
-    });
-
-    $('#link_distance_slider_output').slider({
-        min:0,
-        max:100,
-        value:50,
-        step:1,
-    });
-
-    $('#link_distance_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.link_force.distance=event.value.newValue; 
-        update_all();
-    });
-
-    $('#link_strength_slider_output').slider({
-        min:0,
-        max:1,
-        value:0.5,
-        step:0.01,
-    });
-
-    $('#link_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.link_force.strength=event.value.newValue; 
-        update_all();
-    });
-
-    $('#node_size').slider({
-        min:1,
-        max:2,
-        value:1,
-        step:0.01,
-    });
-
-    $('#node_size').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.node_size=event.value.newValue; 
+        get_numof_changed_d3_diagram_properties_and_insert();
         update_all();
     });
 
@@ -686,8 +515,14 @@
     });
 
     $('#radial_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.radial_force.strength){
+            d3_diagram_changed_properties.radial_force_strength = true
+        } else {
+            d3_diagram_changed_properties.radial_force_strength = false
+        }   
         d3_diagram_properties.radial_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
@@ -699,8 +534,14 @@
     });
 
     $('#radial_articles_orbit_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.radial_force.articles_orbit){
+            d3_diagram_changed_properties.radial_force_articles_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_articles_orbit = false
+        }   
         d3_diagram_properties.radial_force.articles_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
@@ -712,8 +553,14 @@
     });
 
     $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.radial_force.connecting_keywords_orbit){
+            d3_diagram_changed_properties.radial_force_connecting_keywords_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_connecting_keywords_orbit = false
+        }   
         d3_diagram_properties.radial_force.connecting_keywords_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
@@ -725,8 +572,14 @@
     });
 
     $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.radial_force.not_connecting_keywords_orbit){
+            d3_diagram_changed_properties.radial_force_not_connecting_keywords_orbit = true
+        } else {
+            d3_diagram_changed_properties.radial_force_not_connecting_keywords_orbit = false
+        }   
         d3_diagram_properties.radial_force.not_connecting_keywords_orbit=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
@@ -737,11 +590,263 @@
         step:0.01,
     });
 
-    $('#text_fade_threshhold_slider').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
-        d3_diagram_properties.text_fade_threshhold=event.value.newValue; 
+    $('#charge_strength_slider_output').slider({
+        min:-200,
+        max:50,
+        value:-30,
+        step:1,
+    });
 
-        console.log(zoom_level)
+    $('#charge_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.strength){
+            d3_diagram_changed_properties.charge_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_strength = false;
+        }   
+        d3_diagram_properties.charge_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#charge_distance_min_slider_output').slider({
+        min:0,
+        max:50,
+        value:1,
+        step:1,
+    });
+
+    $('#charge_distance_min_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.distanceMin){
+            d3_diagram_changed_properties.charge_force_distance_min = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_distance_min = false;
+        }   
+        d3_diagram_properties.charge_force.distanceMin=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#charge_distance_max_slider_output').slider({
+        min:0,
+        max:2000,
+        value:2000,
+        step:1,
+    });
+
+    $('#charge_distance_max_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.charge_force.distanceMax){
+            d3_diagram_changed_properties.charge_force_distance_max = true;
+        } else {
+            d3_diagram_changed_properties.charge_force_distance_max = false;
+        }   
+        d3_diagram_properties.charge_force.distanceMax=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_strength_slider_output').slider({
+        min:0,
+        max:2,
+        value:0.7,
+        step:0.05,
+    });
+
+    $('#collide_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.strength){
+            d3_diagram_changed_properties.collide_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_strength = false;
+        }   
+        d3_diagram_properties.collide_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_radius_slider_output').slider({
+        min:0,
+        max:100,
+        value:5,
+        step:1,
+    });
+
+    $('#collide_radius_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.radius){
+            d3_diagram_changed_properties.collide_force_radius = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_radius = false;
+        }   
+        d3_diagram_properties.collide_force.radius=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#collide_iterations_slider_output').slider({
+        min:1,
+        max:10,
+        value:1,
+        step:1,
+    });
+
+    $('#collide_iterations_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.collide_force.iterations){
+            d3_diagram_changed_properties.collide_force_iterations = true;
+        } else {
+            d3_diagram_changed_properties.collide_force_iterations = false;
+        }   
+        d3_diagram_properties.collide_force.iterations=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#x_force_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#x_force_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.x_force.strength){
+            d3_diagram_changed_properties.x_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.x_force_strength = false;
+        }   
+        d3_diagram_properties.x_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#x_force_x_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#x_force_x_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.x_force.x){
+            d3_diagram_changed_properties.x_force_x = true;
+        } else {
+            d3_diagram_changed_properties.x_force_x = false;
+        }   
+        d3_diagram_properties.x_force.x=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#y_force_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.1,
+        step:0.01,
+    });
+
+    $('#y_force_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.y_force.strength){
+            d3_diagram_changed_properties.y_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.y_force_strength = false;
+        }   
+        d3_diagram_properties.y_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#y_force_y_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#y_force_y_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.y_force.y){
+            d3_diagram_changed_properties.y_force_y = true;
+        } else {
+            d3_diagram_changed_properties.y_force_y = false;
+        }  
+        d3_diagram_properties.y_force.y=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#link_distance_slider_output').slider({
+        min:0,
+        max:100,
+        value:50,
+        step:1,
+    });
+
+    $('#link_distance_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.link_force.distance){
+            d3_diagram_changed_properties.link_force_distance = true;
+        } else {
+            d3_diagram_changed_properties.link_force_distance = false;
+        }  
+        d3_diagram_properties.link_force.distance=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#link_strength_slider_output').slider({
+        min:0,
+        max:1,
+        value:0.5,
+        step:0.01,
+    });
+
+    $('#link_strength_slider_output').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.link_force.strength){
+            d3_diagram_changed_properties.link_force_strength = true;
+        } else {
+            d3_diagram_changed_properties.link_force_strength = false;
+        }  
+        d3_diagram_properties.link_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#node_size').slider({
+        min:1,
+        max:2,
+        value:1,
+        step:0.01,
+    });
+
+    $('#node_size').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.node_size){
+            d3_diagram_changed_properties.node_size = true;
+        } else {
+            d3_diagram_changed_properties.node_size = false;
+        }  
+        d3_diagram_properties.node_size=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#text_fade_threshhold_slider').on("change", function(event){
+        if (event.value.newValue != default_d3_properties.text_fade_threshhold){
+            d3_diagram_changed_properties.text_fade_threshhold = true;
+        } else {
+            d3_diagram_changed_properties.text_fade_threshhold = false;
+        }  
+        d3_diagram_properties.text_fade_threshhold=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert();
+
         if (zoom_level < d3_diagram_properties.text_fade_threshhold){
             svg.selectAll('text').style("opacity",0)
         } else if ( d3_diagram_properties.text_fade_threshhold += 0.2 > zoom_level >= d3_diagram_properties.text_fade_threshhold) {
@@ -752,11 +857,46 @@
         update_all();
     });
 
+    $('#post-form').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!")  // sanity check
+        add_telescope_configuration();
+    });
+
+    function add_telescope_configuration(){
+        console.log("create post is working!") // sanity check
+        var user_set_configuration_name = $('#new_telescope_configuration').val()
+        console.log(user_set_configuration_name)
+
+        post_data = JSON.stringify({
+            [user_set_configuration_name]: d3_diagram_properties
+        });
+
+        console.log(post_data)
+
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'post_data':post_data,
+            },
+            success: function(json){
+                console.log(json)
+            }
+        });
+
+
+    }
+
     function get_time_and_insert_into_telescope_saving_input (){
         time = new Date()
         iso_time = time.toISOString().split('.')[0]+"Z"
-        $('#new_telescope_settings').prop('disabled', false)
-        $('#new_telescope_settings').val(iso_time)
+        $('#new_telescope_configuration').prop('disabled', false)
+        $('#new_telescope_configuration').val(iso_time)
+        $('#submit_new_telescope_configuration').prop('disabled', false);
     }
 
     function get_numof_changed_d3_diagram_properties_and_insert(){
@@ -770,8 +910,9 @@
         $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
         
         if (numof_changed_d3_diagram_properties == 0){
-            $('#new_telescope_settings').val('')
-            $('#new_telescope_settings').prop('disabled', true)
+            $('#new_telescope_configuration').val('')
+            $('#new_telescope_configuration').prop('disabled', true)
+            $('#submit_new_telescope_configuration').prop('disabled', true);
         }
     }
 
