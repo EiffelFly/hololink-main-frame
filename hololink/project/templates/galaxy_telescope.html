@@ -159,12 +159,12 @@
                         <div class="col-12 collapse-inner-container">
                             <form action="/add_telescope_configuration/" method="POST" id="post-form">
                                 {% csrf_token %}
-                                <div class="row d-flex" style="width: 100%; padding: 0 15px;">
+                                <div class="row d-flex" style="width: 100%; margin: 0;" >
                                     <div class="col-9" style="padding: 0;">
                                         <input class="new_telescope_configurations_input" id="new_telescope_configuration" style="width:100%; padding: 0 10px; height: 100%;">
                                     </div>
-                                    <div class="col-2" style="padding: 0; height: 100%; margin-left: 10px; margin-left: auto;">
-                                        <button id="submit_new_telescope_configuration" type="submit" class="btn btn-outline-dark" style="padding:5px;">save</button>
+                                    <div class="col-2 d-flex" style="padding: 0; height: 100%; margin-left: auto;">
+                                        <button id="submit_new_telescope_configuration" type="submit" class="btn btn-outline-dark" style="padding:5px 10px; margin-left: auto;">save</button>
                                     </div>
                                 </div>
                                 <div class="row" style="width: 100%;">
@@ -177,9 +177,22 @@
                         </div>
                         <div class="col-12 collapse-inner-container">
                             {% for key, value in profile.d3_diagram_properties.items %}
-                            <div class="row">
+                            <div class="row" style="margin-bottom: 15px;">
                                 <div class="col">
-                                    {{key}}
+                                    <div class="card shadow-sm" style="padding: 10px">
+                                        <div class="row d-flex flex-row">
+                                            <div class="col d-flex" style="font-size: 14px;">
+                                                <div style="margin: auto 0">{{key}}</div>
+                                            </div>
+                                            <div class="col d-flex" style="margin-left: auto;">
+                                                <div style="margin-left: auto;">
+                                                    <button type="button" id="use_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="delete_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             {% endfor %}
@@ -859,20 +872,15 @@
 
     $('#post-form').on('submit', function(event){
         event.preventDefault();
-        console.log("form submitted!")  // sanity check
         add_telescope_configuration();
     });
 
     function add_telescope_configuration(){
-        console.log("create post is working!") // sanity check
         var user_set_configuration_name = $('#new_telescope_configuration').val()
-        console.log(user_set_configuration_name)
 
         post_data = JSON.stringify({
             [user_set_configuration_name]: d3_diagram_properties
         });
-
-        console.log(post_data)
 
         $.ajax({
             type:"POST",
