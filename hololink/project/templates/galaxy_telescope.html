@@ -1035,7 +1035,7 @@
             
             graph = data.graph;
 
-            // recreate id reference to cope with duplicate node different keyword_type issue
+            // recreate id reference to cope with duplicate node with different keyword_type issue
             if (graph.links[0].target_level) {
                 graph.nodes.forEach(function(n) {
                     n.id = n.id + "-" + n.level
