@@ -210,7 +210,7 @@
                     <a class="collapse-controller-title" data-toggle="collapse" href="#radial_force" role="button" aria-expanded="false" aria-controls="charge_force">Radial force</a>
                     <div class="row collapse collapse-controller-container" id="radial_force">
                         <div class="col-12 d-flex collapse-inner-container">
-                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="d3_diagram_properties.radial_force.enabled = this.checked; update_all();">
+                            <input id="radial_force_checkbox" class="force-checkbox" type="checkbox" checked onchange="">
                             <div class="force-instruction">Make articles and keywords stick on certain orbit</div>
                         </div>
                         <div class="col-12 collapse-inner-container">
@@ -461,24 +461,15 @@
     });
 
     $('#center_x_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
         if (event.value.newValue != default_d3_properties.center_force.x){
             d3_diagram_changed_properties.center_force_x = true
         } else {
             d3_diagram_changed_properties.center_force_x = false
-        }
-
-        var numof_changed_d3_diagram_properties = 0
-
-        Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
-            if (v == true){
-                numof_changed_d3_diagram_properties += 1
-            }
-        });
-
-        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
-        
+        }       
         d3_diagram_properties.center_force.x=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        
         update_all();
     });
 
@@ -490,8 +481,14 @@
     });
 
     $('#center_y_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.center_force.y){
+            d3_diagram_changed_properties.center_force_y = true
+        } else {
+            d3_diagram_changed_properties.center_force_y = false
+        }       
         d3_diagram_properties.center_force.y=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
@@ -503,8 +500,13 @@
     });
 
     $('#charge_strength_slider_output').on("change", function(event){
-        get_time_and_insert_into_telescope_saving_input();
+        if (event.value.newValue != default_d3_properties.center_force.y){
+            d3_diagram_changed_properties.center_force_y = true
+        } else {
+            d3_diagram_changed_properties.center_force_y = false
+        }   
         d3_diagram_properties.charge_force.strength=event.value.newValue; 
+        get_time_and_insert_into_telescope_saving_input();
         update_all();
     });
 
@@ -664,6 +666,18 @@
         update_all();
     });
 
+    $('#radial_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.radial_force.enabled){
+            d3_diagram_changed_properties.center_force_y = true
+        } else {
+            d3_diagram_changed_properties.center_force_y = false
+        }   
+        d3_diagram_properties.radial_force.enabled = this.checked; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
     $('#radial_strength_slider_output').slider({
         min:0,
         max:1,
@@ -744,6 +758,25 @@
         $('#new_telescope_settings').prop('disabled', false)
         $('#new_telescope_settings').val(iso_time)
     }
+
+    function get_numof_changed_d3_diagram_properties_and_insert(){
+        var numof_changed_d3_diagram_properties = 0
+
+        Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
+            if (v == true){
+                numof_changed_d3_diagram_properties += 1
+            }
+        });
+        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
+        
+        if (numof_changed_d3_diagram_properties == 0){
+            $('#new_telescope_settings').val('')
+            $('#new_telescope_settings').prop('disabled', true)
+        }
+    }
+
+
+    
 
 </script>
 
