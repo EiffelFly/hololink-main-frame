@@ -308,8 +308,8 @@ def galaxy_telescope(request, projectnameslug, usernameslug):
     user = get_object_or_404(User, username=usernameslug)
     project = get_object_or_404(Project, slug=projectnameslug, created_by=request.user)
     print(user.profile.d3_diagram_properties)
-    count_project_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
-    count_project_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
+    count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_project=project).count()
+    count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
     countArticles = project.articles_project_owned.all().count()
 
     context = {
