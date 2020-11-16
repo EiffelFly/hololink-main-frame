@@ -485,7 +485,7 @@
         
         new_node
             .append("text")
-            .text(node => node.id)
+            .text(node => node.id.split('-')[0])
             .attr('dy', get_text_dy)
             .style('font-weight', '500')
             .style('font-size', nominal_text_size + "px")
