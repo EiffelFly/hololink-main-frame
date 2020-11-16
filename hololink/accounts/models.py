@@ -93,6 +93,7 @@ class Profile(models.Model):
     
     d3_diagram_properties = models.JSONField(
         verbose_name=_("D3 disagram's properties"),
+        null=True,
     )
     
 
