@@ -150,7 +150,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
                     <div class="row collapse collapse-controller-container" id="telescope_settings">
@@ -187,8 +186,8 @@
                                             </div>
                                             <div class="col d-flex" style="margin-left: auto;">
                                                 <div style="margin-left: auto;">
-                                                    <button type="button" id="use_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">Use</button>
-                                                    <button type="button" id="delete_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -199,7 +198,6 @@
                             {% endfor %}
                         </div>
                     </div>
-                    -->
                 </div>
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin:0;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
@@ -429,7 +427,11 @@
 
 <script>
     
-    
+    $('.use_this_telescope_configuration').on('click', function(){
+        configuration_id = this.id
+        configuration_value = this.value
+        console.log(configuration_id,configuration_value)
+    });
 
     $('#restore_default_settings').on('click', function(){
         d3_diagram_properties = {}
@@ -1205,8 +1207,8 @@
             not_connecting_keywords_orbit:500,
         },
         node_size: 1,
-        text_fade_threshhold:1
-
+        text_fade_threshhold:1,
+        universal: true
     }
 
     // values for all forces
