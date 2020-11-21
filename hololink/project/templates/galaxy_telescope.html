@@ -976,7 +976,7 @@
                 console.log(response)
                 $('.telescope-configuration-container').html(response['html']);
                 if (response['delete_universal_configuration']){
-                    load_data(filtered=true)
+                    load_data(set_d3_diagram_properties=true)
                 }
             }
         });
@@ -998,7 +998,7 @@
                 $('.telescope-configuration-container').html(response['html']);
             }
         });
-        load_data(filtered=true) 
+        load_data(set_d3_diagram_properties=true) 
     }
 
     function get_time_and_insert_into_telescope_saving_input (){
@@ -1102,207 +1102,8 @@
         radial_force_connecting_keywords_orbit: false,
         radial_force_not_connecting_keywords_orbit: false,
         node_size: false,
-        text_fade_threshhold: false
-    }
-
-    var zoom_handler = d3.zoom()
-        .on("zoom", zoom_actions)
-        .scaleExtent([0.1, 10]); //set zoom in and out limit
-
-    var zoom_level = 1;
-
-    var drag_handler = d3.drag()
-        .on("start", drag_start)
-        .on("drag", drag_drag)
-        .on("end", drag_end);	
-
-    /*
-        load data -> initializeSimulation()
-                                            simulation.nodes()
-                                            simulation.on('tick')
-                                            -> initialize_forces() -> update_forces() -> simulation.restart()
-                  -> initialDisplay() -> update_display()                                       
-    */
-
-    var article_biggest_node_keywords_num = 0
-        keyword_biggest_node_connection_num = 0;
-
-    load_data(filtered=true)
-
-
-    // load the data
-    function load_data(filtered){
-        d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
-            if (error) throw error;
-            
-            if (data.universal_d3_properties){
-                d3_diagram_properties = data.universal_d3_properties;
-                set_d3_daigram_properties_slider(d3_diagram_properties);
-                set_d3_daigram_properties_checkbox(d3_diagram_properties);
-            }
-
-            graph = data.graph;
-
-            // recreate id reference to cope with duplicate node with different keyword_type issue
-            if (graph.links[0].target_level) {
-                graph.nodes.forEach(function(n) {
-                    n.id = n.id + "-" + n.level
-                    node_by_id[n.id+"-"+n.level] = n;
-                });
-
-                graph.links.forEach(function(l){
-                    l.source = l.source + "-" + l.source_level
-                    l.target = l.target + "-" + l.target_level
-                });
-            }
-
-            console.log('initial', graph)
-            //initialize_or_update_display(graph);
-            initial_simulation();
-            initialize_forces();
-            start_simulation();
-            update_forces();
-
-            /*alternative way to cope with adding new parameter in d3 graph data
-
-            graph.links.forEach(function(l) {
-                if (!l.source_level){
-                    l['source_level'] = node_by_id[l.source.id].level.toString();
-                }
-
-                if (!l.target_level){
-                    l['target_level'] = node_by_id[l.target.id].level.toString();
-                } 
-            });
-            */
-
-            // copy graph data for further usage
-            store = $.extend(true, {}, graph);
-            
-            if (filtered){
-                filter_by_keyword_level.push('stellar');
-                filter()
-            }
-
-            calculate_biggest_node(graph=graph)
-
-            // create a index to allow constant-time lookup with good performance
-            // This must put after simulation, after that we can access the d3 calculated info
-            
-            graph.links.forEach(d => {
-                linked_by_index[`${d.source.index},${d.target.index}`] = 1;
-            });
-
-            initialize_or_update_display(graph);
-            update_all();
-
-            start_time = Date.now();
-            end_time = start_time + simulation_duration_in_ms;
-
-            console.log(graph,store)
-
-            activate_tooltip();
-        });
-    }
-
-    function set_d3_daigram_properties_slider(target_d3_diagram_properties){
-        $('#center_x_slider_output').slider('setValue', target_d3_diagram_properties.center_force.x);
-        $('#center_y_slider_output').slider('setValue', target_d3_diagram_properties.center_force.y);
-        $('#charge_strength_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.strength);
-        $('#charge_distance_min_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMin);
-        $('#charge_distance_max_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMax);
-        $('#collide_strength_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.strength);
-        $('#collide_radius_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.radius);
-        $('#collide_iterations_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.iterations);
-        $('#x_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.x_force.strength);
-        $('#x_force_x_slider_output').slider('setValue', target_d3_diagram_properties.x_force.x);
-        $('#y_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.y_force.strength);
-        $('#y_force_y_slider_output').slider('setValue', target_d3_diagram_properties.y_force.y);
-        $('#link_distance_slider_output').slider('setValue', target_d3_diagram_properties.link_force.distance);
-        $('#link_strength_slider_output').slider('setValue', target_d3_diagram_properties.link_force.strength);
-        $('#node_size').slider('setValue', target_d3_diagram_properties.node_size);
-        $('#text_fade_threshhold_slider').slider('setValue', target_d3_diagram_properties.text_fade_threshhold);
-        $('#radial_strength_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.strength);
-        $('#radial_articles_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.articles_orbit);
-        $('#radial_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.connecting_keywords_orbit);
-        $('#radial_not_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.not_connecting_keywords_orbit);
-    }
-
-    function set_d3_daigram_properties_checkbox(target_d3_diagram_properties){
-
-        $("#radial_force_checkbox").prop("checked", target_d3_diagram_properties.radial_force.enabled);
-        $("#charge_force_checkbox").prop("checked", target_d3_diagram_properties.charge_force.enabled);
-        $("#collide_force_checkbox").prop("checked", target_d3_diagram_properties.collide_force.enabled);
-        $("#x_force_checkbox").prop("checked", target_d3_diagram_properties.x_force.enabled);
-        $("#y_force_checkbox").prop("checked", target_d3_diagram_properties.y_force.enabled);
-        $("#link_force_checkbox").prop("checked", target_d3_diagram_properties.link_force.enabled);
-        $(".filter-checkbox").prop("checked", target_d3_diagram_properties.filter_stellar);
-    }
-
-
-    ////////////  UI INTERACTION ////////////
-    $('.filter-checkbox').on("click", function(){
-        if (this.checked){
-            filter_by_keyword_level.push('stellar');
-            filter()
-            initialize_or_update_display(graph);
-            reheat_simulation();
-        } else {
-            /*We use temporary method to cope with lack of understanding of D3*/
-            filter_by_keyword_level.pop()
-            load_data(filtered=false)
-            
-        }
-        update_all();
-    });
-
-    function reset_data(){
-        graph.nodes = []
-        graph.links = []
-    }
-
-    //////////// FORCE SIMULATION //////////// 
-
-    // force simulator
-    function initial_simulation(){
-        var first_simulation = d3.forceSimulation()
-            .on("tick", ticked);
-        resetSimulation(first_simulation);
-    }
-
-    function reheat_simulation(){
-        simulation
-            .alphaDecay(0.01)
-            .alpha(0.8)
-            .restart()
-        
-        start_time = Date.now();
-        end_time = start_time + simulation_duration_in_ms;
-    }
-   
-    function start_simulation(){
-        // set up the simulation and event to update locations after each tick
-        simulation
-            .nodes(graph.nodes);
-        
-        simulation.force("link")
-            .id(function(d) {return d.id;})
-            .links(graph.links)
-
-        simulation
-            .alphaDecay(0.01)
-            .alpha(0.8)
-            .restart()
-    }
-
-    function resetSimulation(new_sim){
-        if (simulation){
-            simulation.stop();
-        }
-
-        if (new_sim != undefined) {
-            simulation = new_sim;
-        }
+        text_fade_threshhold: false,
+        filter_stellar:false
     }
 
     // d3-force diagram properties
@@ -1401,6 +1202,213 @@
         filter_stellar: true
     }
 
+    var zoom_handler = d3.zoom()
+        .on("zoom", zoom_actions)
+        .scaleExtent([0.1, 10]); //set zoom in and out limit
+
+    var zoom_level = 1;
+
+    var drag_handler = d3.drag()
+        .on("start", drag_start)
+        .on("drag", drag_drag)
+        .on("end", drag_end);	
+
+    /*
+        load data -> initializeSimulation()
+                                            simulation.nodes()
+                                            simulation.on('tick')
+                                            -> initialize_forces() -> update_forces() -> simulation.restart()
+                  -> initialDisplay() -> update_display()                                       
+    */
+
+    var article_biggest_node_keywords_num = 0
+        keyword_biggest_node_connection_num = 0;
+
+    load_data(set_d3_diagram_properties=true)
+
+
+    // load the data
+    function load_data(set_d3_diagram_properties){
+        d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
+            if (error) throw error;
+            console.log(data.universal_d3_properties)
+            if (data.universal_d3_properties && set_d3_diagram_properties==true){
+                d3_diagram_properties = data.universal_d3_properties;
+                set_d3_daigram_properties_slider(d3_diagram_properties);
+                set_d3_daigram_properties_checkbox(d3_diagram_properties);
+            }
+
+            graph = data.graph;
+
+            // recreate id reference to cope with duplicate node with different keyword_type issue
+            if (graph.links[0].target_level) {
+                graph.nodes.forEach(function(n) {
+                    n.id = n.id + "-" + n.level
+                    node_by_id[n.id+"-"+n.level] = n;
+                });
+
+                graph.links.forEach(function(l){
+                    l.source = l.source + "-" + l.source_level
+                    l.target = l.target + "-" + l.target_level
+                });
+            }
+
+            console.log('initial', graph)
+            //initialize_or_update_display(graph);
+            initial_simulation();
+            initialize_forces();
+            start_simulation();
+            update_forces();
+
+            /*alternative way to cope with adding new parameter in d3 graph data
+
+            graph.links.forEach(function(l) {
+                if (!l.source_level){
+                    l['source_level'] = node_by_id[l.source.id].level.toString();
+                }
+
+                if (!l.target_level){
+                    l['target_level'] = node_by_id[l.target.id].level.toString();
+                } 
+            });
+            */
+
+            // copy graph data for further usage
+            store = $.extend(true, {}, graph);
+            console.log(d3_diagram_properties.filter_stellar)
+            if (d3_diagram_properties.filter_stellar == true){
+                filter_by_keyword_level.push('stellar');
+                console.log('filter')
+                filter()
+            }
+
+            calculate_biggest_node(graph=graph)
+
+            // create a index to allow constant-time lookup with good performance
+            // This must put after simulation, after that we can access the d3 calculated info
+            
+            graph.links.forEach(d => {
+                linked_by_index[`${d.source.index},${d.target.index}`] = 1;
+            });
+
+            initialize_or_update_display(graph);
+            update_all();
+
+            start_time = Date.now();
+            end_time = start_time + simulation_duration_in_ms;
+
+            console.log(graph,store)
+
+            activate_tooltip();
+        });
+    }
+
+    function set_d3_daigram_properties_slider(target_d3_diagram_properties){
+        $('#center_x_slider_output').slider('setValue', target_d3_diagram_properties.center_force.x);
+        $('#center_y_slider_output').slider('setValue', target_d3_diagram_properties.center_force.y);
+        $('#charge_strength_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.strength);
+        $('#charge_distance_min_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMin);
+        $('#charge_distance_max_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMax);
+        $('#collide_strength_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.strength);
+        $('#collide_radius_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.radius);
+        $('#collide_iterations_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.iterations);
+        $('#x_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.x_force.strength);
+        $('#x_force_x_slider_output').slider('setValue', target_d3_diagram_properties.x_force.x);
+        $('#y_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.y_force.strength);
+        $('#y_force_y_slider_output').slider('setValue', target_d3_diagram_properties.y_force.y);
+        $('#link_distance_slider_output').slider('setValue', target_d3_diagram_properties.link_force.distance);
+        $('#link_strength_slider_output').slider('setValue', target_d3_diagram_properties.link_force.strength);
+        $('#node_size').slider('setValue', target_d3_diagram_properties.node_size);
+        $('#text_fade_threshhold_slider').slider('setValue', target_d3_diagram_properties.text_fade_threshhold);
+        $('#radial_strength_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.strength);
+        $('#radial_articles_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.articles_orbit);
+        $('#radial_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.connecting_keywords_orbit);
+        $('#radial_not_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.not_connecting_keywords_orbit);
+    }
+
+    function set_d3_daigram_properties_checkbox(target_d3_diagram_properties){
+
+        $("#radial_force_checkbox").prop("checked", target_d3_diagram_properties.radial_force.enabled);
+        $("#charge_force_checkbox").prop("checked", target_d3_diagram_properties.charge_force.enabled);
+        $("#collide_force_checkbox").prop("checked", target_d3_diagram_properties.collide_force.enabled);
+        $("#x_force_checkbox").prop("checked", target_d3_diagram_properties.x_force.enabled);
+        $("#y_force_checkbox").prop("checked", target_d3_diagram_properties.y_force.enabled);
+        $("#link_force_checkbox").prop("checked", target_d3_diagram_properties.link_force.enabled);
+        $(".filter-checkbox").prop("checked", target_d3_diagram_properties.filter_stellar);
+    }
+
+
+    ////////////  UI INTERACTION ////////////
+    $('.filter-checkbox').on("click", function(){
+        if (this.checked){
+            filter_by_keyword_level.push('stellar');
+            filter()
+            initialize_or_update_display(graph);
+            reheat_simulation();
+            d3_diagram_properties.filter_stellar = true
+            d3_diagram_changed_properties.filter_stellar = false
+            get_time_and_insert_into_telescope_saving_input();
+            get_numof_changed_d3_diagram_properties_and_insert();
+        } else {
+            /*We use temporary method to cope with lack of understanding of D3*/
+            filter_by_keyword_level.pop()
+            d3_diagram_properties.filter_stellar = false
+            load_data(set_d3_diagram_properties=false)
+            d3_diagram_changed_properties.filter_stellar = true
+            get_time_and_insert_into_telescope_saving_input();
+            get_numof_changed_d3_diagram_properties_and_insert();
+        }
+        update_all();
+    });
+
+    function reset_data(){
+        graph.nodes = []
+        graph.links = []
+    }
+
+    //////////// FORCE SIMULATION //////////// 
+
+    // force simulator
+    function initial_simulation(){
+        var first_simulation = d3.forceSimulation()
+            .on("tick", ticked);
+        resetSimulation(first_simulation);
+    }
+
+    function reheat_simulation(){
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8)
+            .restart()
+        
+        start_time = Date.now();
+        end_time = start_time + simulation_duration_in_ms;
+    }
+   
+    function start_simulation(){
+        // set up the simulation and event to update locations after each tick
+        simulation
+            .nodes(graph.nodes);
+        
+        simulation.force("link")
+            .id(function(d) {return d.id;})
+            .links(graph.links)
+
+        simulation
+            .alphaDecay(0.01)
+            .alpha(0.8)
+            .restart()
+    }
+
+    function resetSimulation(new_sim){
+        if (simulation){
+            simulation.stop();
+        }
+
+        if (new_sim != undefined) {
+            simulation = new_sim;
+        }
+    }
 
     // add forces to the simulation
     function initialize_forces() {
