@@ -15,6 +15,8 @@ from django.http import JsonResponse
 from accounts.models import Profile
 from django.contrib.auth.models import User
 import json 
+from django.template import loader, Context
+
 
 
 def now():
@@ -327,15 +329,36 @@ def add_telescope_configuration(request, usernameslug):
         return redirect(reverse('login'))
 
     if request.method == 'POST':
-        response_data = {}
-        new_telescope_configuration = request.POST.get('post_data','')
-        new_telescope_configuration = json.loads(new_telescope_configuration)    
-        user = get_object_or_404(User, username=request.user)
-        user.profile.d3_diagram_properties.update(new_telescope_configuration)
-        user.save()
-        response_data['result'] = 'Create post successful!'
-        response_data['data'] = user.profile.d3_diagram_properties
+        request_action = request.POST.get('action','')
+        if request_action == 'submit_new_telescope_configuration':
+            response_data = {}
+            new_telescope_configuration = request.POST.get('post_data','')
+            new_telescope_configuration = json.loads(new_telescope_configuration)    
+            user = get_object_or_404(User, username=request.user)
+            user.profile.d3_diagram_properties.update(new_telescope_configuration)
+            user.save()
+            
+            response_data['result'] = 'success'
+            response_data['data'] = user.profile.d3_diagram_properties
 
-        return JsonResponse(response_data)
+            context = {
+                'profile': user.profile
+            }
 
+            return render('galaxy_telescope.html', context)
+        elif request_action == 'delete_this_telescope_configuration':
+            response_data = {}
+            id = request.POST.get('telescope_configuration_id','')
+            user = get_object_or_404(User, username=request.user)
+            user.profile.d3_diagram_properties.pop(id)
+            user.save()
+            response_data['result'] = 'success'
+            response_data['data'] = user.profile.d3_diagram_properties
+
+            context = {
+                'profile': user.profile
+            }
+
+            return JsonResponse(response_data)
+       
 
