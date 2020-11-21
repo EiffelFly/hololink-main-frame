@@ -472,12 +472,6 @@
 </script>
 
 <script>
-    
-    $('.use-this-telescope-configuration').on('click', function(){
-        configuration_id = this.id
-        configuration_value = this.value
-        console.log(configuration_id,configuration_value)
-    });
 
     $('#restore_default_settings').on('click', function(){
         d3_diagram_properties = {}
@@ -957,6 +951,12 @@
                 $('.telescope-configuration-container').html(response['html']);
             }
         });
+
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+
     }
 
     function delete_telescope_configuration(telescope_id){
