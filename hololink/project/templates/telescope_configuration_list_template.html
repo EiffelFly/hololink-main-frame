@@ -12,7 +12,7 @@
                 <div class="d-flex" style="margin-left: auto; padding: 10px 0;">
                     {% if key == 'universal_default' %}
                         {% if value.universal == True %}
-                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;" disabled>Use</button>
+                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
                         <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
                         {% else %}
                         <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
@@ -20,7 +20,7 @@
                         {% endif %}
                     {% else %}
                         {% if value.universal == True %}
-                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;" disabled>Use</button>
+                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
                         <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
                         {% else %}
                         <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
