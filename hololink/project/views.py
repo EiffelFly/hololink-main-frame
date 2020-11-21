@@ -305,6 +305,8 @@ def deliver_D3(request, projectnameslug, **kwargs):
         print(value)
         if value['universal'] == True:
             universal_d3_properties = value
+        else:
+            universal_d3_properties = user.profile.d3_diagram_properties['universal_default']
 
     return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles, "universal_d3_properties":universal_d3_properties}, safe=False)
 
