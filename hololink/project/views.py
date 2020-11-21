@@ -359,6 +359,7 @@ def add_telescope_configuration(request, usernameslug):
             id = request.POST.get('telescope_configuration_id','')
 
             user = get_object_or_404(User, username=request.user)
+            delete_universal_configuration = False
 
             if user.profile.d3_diagram_properties[f'{id}']['universal'] == True:
                 user.profile.d3_diagram_properties['universal_default']['universal'] = True

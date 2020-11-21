@@ -762,6 +762,19 @@
         update_all();
     });
 
+    $('#x_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.x_force.enabled){
+            d3_diagram_changed_properties.x_force_enabled = true
+        } else {
+            d3_diagram_changed_properties.x_force_enabled = false
+        }   
+        d3_diagram_properties.x_force.enabled = this.checked; 
+        console.log('3dd',d3_diagram_changed_properties.x_force_enabled)
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
     $('#x_force_strength_slider_output').slider({
         min:0,
         max:1,
@@ -797,6 +810,18 @@
         d3_diagram_properties.x_force.x=event.value.newValue; 
         get_time_and_insert_into_telescope_saving_input();
         get_numof_changed_d3_diagram_properties_and_insert();
+        update_all();
+    });
+
+    $('#y_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.y_force.enabled){
+            d3_diagram_changed_properties.y_force_enabled = true
+        } else {
+            d3_diagram_changed_properties.y_force_enabled = false
+        }   
+        d3_diagram_properties.y_force.enabled = this.checked; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
         update_all();
     });
 
