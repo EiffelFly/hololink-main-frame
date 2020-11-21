@@ -336,7 +336,6 @@ def add_telescope_configuration(request, usernameslug):
     if request.method == 'POST':
         request_action = request.POST.get('action','')
         if request_action == 'submit_new_telescope_configuration':
-            response_data = {}
             new_telescope_configuration = request.POST.get('post_data','')
             new_telescope_configuration = json.loads(new_telescope_configuration)    
             user = get_object_or_404(User, username=request.user)
@@ -347,9 +346,6 @@ def add_telescope_configuration(request, usernameslug):
 
             user.profile.d3_diagram_properties.update(new_telescope_configuration)
             user.save()
-            
-            response_data['result'] = 'success'
-            response_data['data'] = user.profile.d3_diagram_properties
 
             context = {
                 'profile': user.profile
@@ -357,16 +353,11 @@ def add_telescope_configuration(request, usernameslug):
             
             html_rendered = render_to_string('telescope_configuration_list_template.html', context)
             return JsonResponse({'html': html_rendered})
-
-            
         elif request_action == 'delete_this_telescope_configuration':
-            response_data = {}
             id = request.POST.get('telescope_configuration_id','')
             user = get_object_or_404(User, username=request.user)
             user.profile.d3_diagram_properties.pop(id)
             user.save()
-            response_data['result'] = 'success'
-            response_data['data'] = user.profile.d3_diagram_properties
 
             context = {
                 'profile': user.profile
@@ -374,5 +365,20 @@ def add_telescope_configuration(request, usernameslug):
 
             html_rendered = render_to_string('telescope_configuration_list_template.html', context)
             return JsonResponse({'html': html_rendered})
-       
+        elif request_action == 'use_this_telescope_configuration':
+            id = request.POST.get('telescope_configuration_id','')
+            user = get_object_or_404(User, username=request.user)
 
+            for key,value in user.profile.d3_diagram_properties.items():
+                if value['universal'] == True:
+                    user.profile.d3_diagram_properties[f'{key}']['universal'] = False
+
+            user.profile.d3_diagram_properties[f'{id}']['universal'] = True
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})

@@ -929,6 +929,11 @@
         delete_telescope_configuration(this.id)
     });
 
+    $('.telescope-configuration-container').on('click', '.use-this-telescope-configuration', function(){
+        console.log(this.id)
+        use_telescope_configuration(this.id, this.value)
+    });
+
 
     function add_telescope_configuration(){
         var user_set_configuration_name = $('#new_telescope_configuration').val()
@@ -972,8 +977,23 @@
         });
     }
 
-    function use_telescope_configuration(){
-
+    function use_telescope_configuration(telescope_id, telescope_properties){
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'telescope_configuration_id':telescope_id,
+                'action':'use_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+            }
+        });
+        load_data(filtered=true) 
     }
 
     function get_time_and_insert_into_telescope_saving_input (){
