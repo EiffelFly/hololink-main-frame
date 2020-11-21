@@ -934,6 +934,8 @@
     function add_telescope_configuration(){
         var user_set_configuration_name = $('#new_telescope_configuration').val()
 
+        d3_diagram_properties.properties_status = d3_diagram_changed_properties
+
         post_data = JSON.stringify({
             [user_set_configuration_name]: d3_diagram_properties
         });
@@ -1009,14 +1011,18 @@
         $('#submit_new_telescope_configuration').prop('disabled', false);
     }
 
-    function get_numof_changed_d3_diagram_properties_and_insert(){
-        var numof_changed_d3_diagram_properties = 0
+    
 
+    function get_numof_changed_d3_diagram_properties_and_insert(){
+
+        var numof_changed_d3_diagram_properties = 0
+        
         Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
             if (v == true){
                 numof_changed_d3_diagram_properties += 1
             }
         });
+
         $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
         d3_diagram_properties.numof_changed_d3_diagram_properties = numof_changed_d3_diagram_properties
 
@@ -1075,7 +1081,7 @@
 
     var node_by_id = {};
 
-    var d3_diagram_changed_properties  = {
+    var d3_diagram_changed_properties = {
         center_force_x : false,
         center_force_y : false,
         charge_force_enabled: false,
@@ -1151,7 +1157,37 @@
         text_fade_threshhold:1,
         universal: true,
         numof_changed_d3_diagram_properties: 0,
-        filter_stellar: true
+        filter_stellar: true,
+        properties_status: {
+            center_force_x : false,
+            center_force_y : false,
+            charge_force_enabled: false,
+            charge_force_strength: false,
+            charge_force_distance_min: false,
+            charge_force_distance_max: false,
+            collide_force_enabled: false,
+            collide_force_strength: false,
+            collide_force_iterations: false,
+            collide_force_radius: false,
+            x_force_enabled: false,
+            x_force_strength: false,
+            x_force_x: false,
+            y_force_enabled: false,
+            y_force_strength: false,
+            y_force_y: false,
+            link_force_enabled: false,
+            link_force_distance: false,
+            link_force_iterations: false,
+            link_force_strength: false,
+            radial_force_enabled: false,
+            radial_force_strength: false,
+            radial_force_articles_orbit: false,
+            radial_force_connecting_keywords_orbit: false,
+            radial_force_not_connecting_keywords_orbit: false,
+            node_size: false,
+            text_fade_threshhold: false,
+            filter_stellar:false
+        }
     }
 
     // values for all forces
@@ -1199,7 +1235,37 @@
         text_fade_threshhold:1,
         universal: false,
         numof_changed_d3_diagram_properties: 0,
-        filter_stellar: true
+        filter_stellar: true,
+        properties_status: {
+            center_force_x : false,
+            center_force_y : false,
+            charge_force_enabled: false,
+            charge_force_strength: false,
+            charge_force_distance_min: false,
+            charge_force_distance_max: false,
+            collide_force_enabled: false,
+            collide_force_strength: false,
+            collide_force_iterations: false,
+            collide_force_radius: false,
+            x_force_enabled: false,
+            x_force_strength: false,
+            x_force_x: false,
+            y_force_enabled: false,
+            y_force_strength: false,
+            y_force_y: false,
+            link_force_enabled: false,
+            link_force_distance: false,
+            link_force_iterations: false,
+            link_force_strength: false,
+            radial_force_enabled: false,
+            radial_force_strength: false,
+            radial_force_articles_orbit: false,
+            radial_force_connecting_keywords_orbit: false,
+            radial_force_not_connecting_keywords_orbit: false,
+            node_size: false,
+            text_fade_threshhold: false,
+            filter_stellar:false
+        }
     }
 
     var zoom_handler = d3.zoom()
@@ -1233,10 +1299,13 @@
             if (error) throw error;
             console.log(data.universal_d3_properties)
             if (data.universal_d3_properties && set_d3_diagram_properties==true){
+                d3_diagram_changed_properties = data.universal_d3_properties.properties_status;
                 d3_diagram_properties = data.universal_d3_properties;
                 set_d3_daigram_properties_slider(d3_diagram_properties);
                 set_d3_daigram_properties_checkbox(d3_diagram_properties);
             }
+
+
 
             graph = data.graph;
 

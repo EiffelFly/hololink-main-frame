@@ -63,7 +63,37 @@ def get_d3_diagram_properties_default():
             'text_fade_threshhold':1,
             'universal': True,
             'numof_changed_d3_diagram_properties': 0,
-            'filter_stellar': True
+            'filter_stellar': True,
+            'properties_status': {
+                'center_force_x' : False,
+                'center_force_y' : False,
+                'charge_force_enabled': False,
+                'charge_force_strength': False,
+                'charge_force_distance_min': False,
+                'charge_force_distance_max': False,
+                'collide_force_enabled': False,
+                'collide_force_strength': False,
+                'collide_force_iterations': False,
+                'collide_force_radius': False,
+                'x_force_enabled': False,
+                'x_force_strength': False,
+                'x_force_x': False,
+                'y_force_enabled': False,
+                'y_force_strength': False,
+                'y_force_y': False,
+                'link_force_enabled': False,
+                'link_force_distance': False,
+                'link_force_iterations': False,
+                'link_force_strength': False,
+                'radial_force_enabled': False,
+                'radial_force_strength': False,
+                'radial_force_articles_orbit': False,
+                'radial_force_connecting_keywords_orbit': False,
+                'radial_force_not_connecting_keywords_orbit': False,
+                'node_size': False,
+                'text_fade_threshhold': False,
+                'filter_stellar':False
+            }
         }
     }
 
