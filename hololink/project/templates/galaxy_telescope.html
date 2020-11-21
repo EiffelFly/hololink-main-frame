@@ -186,8 +186,13 @@
                                             </div>
                                             <div class="col d-flex" style="margin-left: auto;">
                                                 <div style="margin-left: auto;">
+                                                    {% if key == 'universal_default' %}
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
+                                                    {% else %}
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
