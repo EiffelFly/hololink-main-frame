@@ -10,12 +10,12 @@ from .forms import ProjectForm, GalaxySettingsForm, DeleteArticleForm
 from article.models import Article, Keyword
 from django.db.models import Sum
 import hashlib
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from accounts.models import Profile
 from django.contrib.auth.models import User
 import json 
-from django.template import loader, Context
 
 
 
@@ -344,8 +344,11 @@ def add_telescope_configuration(request, usernameslug):
             context = {
                 'profile': user.profile
             }
+            
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
 
-            return render('galaxy_telescope.html', context)
+            
         elif request_action == 'delete_this_telescope_configuration':
             response_data = {}
             id = request.POST.get('telescope_configuration_id','')
@@ -359,6 +362,7 @@ def add_telescope_configuration(request, usernameslug):
                 'profile': user.profile
             }
 
-            return JsonResponse(response_data)
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
        
 

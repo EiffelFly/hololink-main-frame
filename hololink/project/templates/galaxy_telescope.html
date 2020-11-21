@@ -90,10 +90,9 @@
     .collapse-controller-element{
         padding-right: 0;
     }
-
+    
 
 </style>
-
 
 {% endblock %}
 
@@ -130,7 +129,7 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter" style="margin-bottom: 15px;">Display</a>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
                     <div class="row collapse collapse-controller-container" id="display">
                         <div class="col-12 collapse-inner-container">
                             <div class="d-flex flex-column">
@@ -152,11 +151,11 @@
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
-                    <div class="row collapse collapse-controller-container" id="telescope_settings">
-                        <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">New telescope configuration</div>
+                    <div class="row collapse collapse-controller-container" id="telescope_settings" style="width: 100%; padding: 0 0 0 15px;">
+                        <div class="col-12">
+                            <div class="silder-instruction" style="font-size: 14px; margin-bottom: 10px;">New telescope configuration</div>
                         </div>
-                        <div class="col-12 collapse-inner-container">
+                        <div class="col-12">
                             <form action="/add_telescope_configuration/" method="POST" id="post-form">
                                 {% csrf_token %}
                                 <div class="row d-flex" style="width: 100%; margin: 0;" >
@@ -172,34 +171,30 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">Your telescope configurations</div>
+                        <div class="col-12">
+                            <div class="silder-instruction" style="font-size: 14px; margin: 10px 0;">Your telescope configurations</div>
                         </div>
-                        <div class="col-12 collapse-inner-container telescope-configuration-container">
+                        <div class="col-12 telescope-configuration-container" style="overflow: auto; width: 100%;">
                             {% for key, value in profile.d3_diagram_properties.items %}
-                            <div class="row" style="margin-bottom: 15px;">
-                                <div class="col">
-                                    <div class="card shadow-sm" style="padding: 10px">
-                                        <div class="row d-flex flex-row">
-                                            <div class="col d-flex" style="font-size: 14px;">
-                                                <div style="margin: auto 0">{{key}}</div>
-                                            </div>
-                                            <div class="col d-flex" style="margin-left: auto;">
-                                                <div style="margin-left: auto;">
-                                                    {% if key == 'universal_default' %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
-                                                    {% else %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
-                                                    {% endif %}
-                                                </div>
+                                <div class="card shadow-sm" style="margin-bottom: 15px;">
+                                    <div class="row d-flex flex-row" style="height: 60px;">
+                                        <div class="col d-flex flex-row" style="font-size: 14px;">
+                                            <div style="margin: auto 0; padding-left: 10px;">{{key}}</div>
+                                            <div class="badge badge-primary" style="margin: auto 0 auto 5px;">{{value.numof_changed_d3_diagram_properties}}</div>
+                                        </div>
+                                        <div class="col d-flex" style="margin-left: auto;">
+                                            <div class="d-flex" style="margin-left: auto; padding: 10px 0;">
+                                                {% if key == 'universal_default' %}
+                                                <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                                                <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
+                                                {% else %}
+                                                <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                                                <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
-                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -904,9 +899,9 @@
                 'post_data':post_data,
                 'action':'submit_new_telescope_configuration'
             },
-            success: function(template_html){
-                console.log(template_html)
-                $('.telescope-configuration-container').html(json);
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
             }
         });
     }
@@ -922,8 +917,9 @@
                 'telescope_configuration_id':telescope_id,
                 'action':'delete_this_telescope_configuration'
             },
-            success: function(template_html){
-                console.log(template_html)
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
             }
         });
     }
@@ -945,7 +941,8 @@
             }
         });
         $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
-        
+        d3_diagram_properties.numof_changed_d3_diagram_properties = numof_changed_d3_diagram_properties
+
         if (numof_changed_d3_diagram_properties == 0){
             $('#new_telescope_configuration').val('')
             $('#new_telescope_configuration').prop('disabled', true)
@@ -1280,7 +1277,8 @@
         },
         node_size: 1,
         text_fade_threshhold:1,
-        universal: false
+        universal: false,
+        numof_changed_d3_diagram_properties: 0
     }
 
 

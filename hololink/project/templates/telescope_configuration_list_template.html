@@ -1,20 +1,20 @@
 {% for key, value in profile.d3_diagram_properties.items %}
-<div class="row" style="margin-bottom: 15px;">
-    <div class="col">
-        <div class="card shadow-sm" style="padding: 10px">
-            <div class="row d-flex flex-row">
-                <div class="col d-flex" style="font-size: 14px;">
-                    <div style="margin: auto 0">{{key}}</div>
-                </div>
-                <div class="col d-flex" style="margin-left: auto;">
-                    <div style="margin-left: auto;">
-                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
-                        <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
-                    </div>
+    <div class="card shadow-sm" style="margin-bottom: 15px;">
+        <div class="row d-flex flex-row" style="height: 60px;">
+            <div class="col d-flex" style="font-size: 14px;">
+                <div style="margin: auto 0; padding-left: 10px;">{{key}}</div>
+            </div>
+            <div class="col d-flex" style="margin-left: auto;">
+                <div class="d-flex" style="margin-left: auto; margin-right: 10px; padding: 10px 0;">
+                    {% if key == 'universal_default' %}
+                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
+                    {% else %}
+                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use_this_telescope_configuration" style="border: lightgray;">Use</button>
+                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        
     </div>
-</div>
 {% endfor %}
