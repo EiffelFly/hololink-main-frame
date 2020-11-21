@@ -975,6 +975,9 @@
             success: function(response){
                 console.log(response)
                 $('.telescope-configuration-container').html(response['html']);
+                if (response['delete_universal_configuration']){
+                    load_data(filtered=true)
+                }
             }
         });
     }

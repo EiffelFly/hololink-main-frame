@@ -355,7 +355,14 @@ def add_telescope_configuration(request, usernameslug):
             return JsonResponse({'html': html_rendered})
         elif request_action == 'delete_this_telescope_configuration':
             id = request.POST.get('telescope_configuration_id','')
+
             user = get_object_or_404(User, username=request.user)
+
+            if user.profile.d3_diagram_properties[f'{id}']['universal'] == True:
+                user.profile.d3_diagram_properties['universal_default']['universal'] = True
+                print(user.profile.d3_diagram_properties['universal_default'])
+                delete_universal_configuration = True
+
             user.profile.d3_diagram_properties.pop(id)
             user.save()
 
@@ -364,7 +371,7 @@ def add_telescope_configuration(request, usernameslug):
             }
 
             html_rendered = render_to_string('telescope_configuration_list_template.html', context)
-            return JsonResponse({'html': html_rendered})
+            return JsonResponse({'html': html_rendered, 'delete_universal_configuration':delete_universal_configuration})
         elif request_action == 'use_this_telescope_configuration':
             id = request.POST.get('telescope_configuration_id','')
             user = get_object_or_404(User, username=request.user)
