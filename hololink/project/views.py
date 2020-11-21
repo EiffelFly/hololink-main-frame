@@ -300,8 +300,13 @@ def deliver_D3(request, projectnameslug, **kwargs):
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
     amount_of_keywords = count_basestone + count_stellar
     amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
+    user = get_object_or_404(User, username=request.user)
+    for key,value in user.profile.d3_diagram_properties.items():
+        print(value)
+        if value['universal'] == True:
+            universal_d3_properties = value
 
-    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
+    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles, "universal_d3_properties":universal_d3_properties}, safe=False)
 
 def galaxy_telescope(request, projectnameslug, usernameslug):
     if not request.user.is_authenticated:
@@ -335,6 +340,11 @@ def add_telescope_configuration(request, usernameslug):
             new_telescope_configuration = request.POST.get('post_data','')
             new_telescope_configuration = json.loads(new_telescope_configuration)    
             user = get_object_or_404(User, username=request.user)
+
+            for key,value in user.profile.d3_diagram_properties.items():
+                if value['universal'] == True:
+                    user.profile.d3_diagram_properties[f'{key}']['universal'] = False
+
             user.profile.d3_diagram_properties.update(new_telescope_configuration)
             user.save()
             
