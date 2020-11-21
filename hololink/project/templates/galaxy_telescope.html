@@ -492,6 +492,7 @@
         $('#link_distance_slider_output').slider('refresh');
         $('#link_strength_slider_output').slider('refresh');
         $('#node_size').slider('refresh');
+        $('#text_fade_threshhold_slider').slider('refresh');
         $('#radial_strength_slider_output').slider('refresh');
         $('#radial_articles_orbit_slider_output').slider('refresh');
         $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
@@ -504,6 +505,7 @@
         $("#x_force_checkbox").prop("checked", false);
         $("#y_force_checkbox").prop("checked", false);
         $("#link_force_checkbox").prop("checked", true);
+        $(".filter-checkbox").prop("checked", true);
 
         update_all()
     });
@@ -1131,7 +1133,9 @@
             if (error) throw error;
             
             if (data.universal_d3_properties){
-                d3_diagram_properties = data.universal_d3_properties
+                d3_diagram_properties = data.universal_d3_properties;
+                set_d3_daigram_properties_slider(d3_diagram_properties);
+                set_d3_daigram_properties_checkbox(d3_diagram_properties);
             }
 
             graph = data.graph;
@@ -1196,6 +1200,40 @@
 
             activate_tooltip();
         });
+    }
+
+    function set_d3_daigram_properties_slider(target_d3_diagram_properties){
+        $('#center_x_slider_output').slider('setValue', target_d3_diagram_properties.center_force.x);
+        $('#center_y_slider_output').slider('setValue', target_d3_diagram_properties.center_force.y);
+        $('#charge_strength_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.strength);
+        $('#charge_distance_min_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMin);
+        $('#charge_distance_max_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMax);
+        $('#collide_strength_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.strength);
+        $('#collide_radius_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.radius);
+        $('#collide_iterations_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.iterations);
+        $('#x_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.x_force.strength);
+        $('#x_force_x_slider_output').slider('setValue', target_d3_diagram_properties.x_force.x);
+        $('#y_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.y_force.strength);
+        $('#y_force_y_slider_output').slider('setValue', target_d3_diagram_properties.y_force.y);
+        $('#link_distance_slider_output').slider('setValue', target_d3_diagram_properties.link_force.distance);
+        $('#link_strength_slider_output').slider('setValue', target_d3_diagram_properties.link_force.strength);
+        $('#node_size').slider('setValue', target_d3_diagram_properties.node_size);
+        $('#text_fade_threshhold_slider').slider('setValue', target_d3_diagram_properties.text_fade_threshhold);
+        $('#radial_strength_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.strength);
+        $('#radial_articles_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.articles_orbit);
+        $('#radial_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.connecting_keywords_orbit);
+        $('#radial_not_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.not_connecting_keywords_orbit);
+    }
+
+    function set_d3_daigram_properties_checkbox(target_d3_diagram_properties){
+
+        $("#radial_force_checkbox").prop("checked", target_d3_diagram_properties.radial_force.enabled);
+        $("#charge_force_checkbox").prop("checked", target_d3_diagram_properties.charge_force.enabled);
+        $("#collide_force_checkbox").prop("checked", target_d3_diagram_properties.collide_force.enabled);
+        $("#x_force_checkbox").prop("checked", target_d3_diagram_properties.x_force.enabled);
+        $("#y_force_checkbox").prop("checked", target_d3_diagram_properties.y_force.enabled);
+        $("#link_force_checkbox").prop("checked", target_d3_diagram_properties.link_force.enabled);
+        $(".filter-checkbox").prop("checked", target_d3_diagram_properties.filter_stellar);
     }
 
 
@@ -1308,7 +1346,8 @@
         node_size: 1,
         text_fade_threshhold:1,
         universal: true,
-        numof_changed_d3_diagram_properties: 0
+        numof_changed_d3_diagram_properties: 0,
+        filter_stellar: true
     }
 
     // values for all forces
@@ -1355,7 +1394,8 @@
         node_size: 1,
         text_fade_threshhold:1,
         universal: false,
-        numof_changed_d3_diagram_properties: 0
+        numof_changed_d3_diagram_properties: 0,
+        filter_stellar: true
     }
 
 

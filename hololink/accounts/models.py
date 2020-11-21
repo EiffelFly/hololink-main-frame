@@ -62,7 +62,8 @@ def get_d3_diagram_properties_default():
             'node_size': 1,
             'text_fade_threshhold':1,
             'universal': True,
-            'numof_changed_d3_diagram_properties': 0
+            'numof_changed_d3_diagram_properties': 0,
+            'filter_node': True
         }
     }
 
