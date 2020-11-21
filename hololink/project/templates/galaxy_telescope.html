@@ -90,7 +90,40 @@
     .collapse-controller-element{
         padding-right: 0;
     }
-    
+
+    /* 
+        Pulse effect red dot
+        contribute: https://www.florin-pop.com/blog/2019/03/css-pulse-effect/
+    */
+
+    .blob.red {
+        background: rgba(255, 82, 82, 1);
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(255, 82, 82, 1);
+        margin: 10px;
+        height: 20px;
+        width: 20px;
+        transform: scale(1);
+        animation: pulse-red 2s infinite;
+    }
+
+    @keyframes pulse-red {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+        }
+    }
+
 
 </style>
 
@@ -179,6 +212,9 @@
                                 <div class="card shadow-sm" style="margin-bottom: 15px;">
                                     <div class="row d-flex flex-row" style="height: 60px;">
                                         <div class="col d-flex flex-row" style="font-size: 14px;">
+                                            {% if value.universal == 'True'%}
+                                            <div class="blob red"></div>
+                                            {% endif %}
                                             <div style="margin: auto 0; padding-left: 10px;">{{key}}</div>
                                             <div class="badge badge-primary" style="margin: auto 0 auto 5px;">{{value.numof_changed_d3_diagram_properties}}</div>
                                         </div>
@@ -1231,7 +1267,8 @@
         },
         node_size: 1,
         text_fade_threshhold:1,
-        universal: true
+        universal: true,
+        numof_changed_d3_diagram_properties: 0
     }
 
     // values for all forces

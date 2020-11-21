@@ -19,7 +19,7 @@ import random
 def get_d3_diagram_properties_default():
 
     default = {
-        'default_d3_properties' : {
+        'universal_default' : {
             'center_force': {
                 'x': 0.5,
                 'y': 0.5,
@@ -61,7 +61,8 @@ def get_d3_diagram_properties_default():
             },
             'node_size': 1,
             'text_fade_threshhold':1,
-            'universal': True
+            'universal': True,
+            'numof_changed_d3_diagram_properties': 0
         }
     }
 
