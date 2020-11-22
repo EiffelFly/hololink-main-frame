@@ -223,17 +223,21 @@
                                                 {% if key == 'universal_default' %}
                                                     {% if value.universal == True %}
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;" disabled>edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
                                                     {% else %}
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
                                                     {% endif %}
                                                 {% else %}
                                                     {% if value.universal == True %}
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
                                                     {% else %}
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" >delete</button>
                                                     {% endif %}
                                                 {% endif %}
@@ -474,8 +478,29 @@
 <script>
 
     $('#restore_default_settings').on('click', function(){
-        d3_diagram_properties = {}
-        d3_diagram_properties = $.extend(true, default_d3_properties)
+        
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'telescope_configuration_id':'universal_default',
+                'action':'use_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+            }
+        });
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+        load_data(set_d3_diagram_properties=true) 
+
+
         // reset all slider values
         $('#center_x_slider_output').slider('refresh');
         $('#center_y_slider_output').slider('refresh');
@@ -506,6 +531,11 @@
         $("#y_force_checkbox").prop("checked", false);
         $("#link_force_checkbox").prop("checked", true);
         $(".filter-checkbox").prop("checked", true);
+
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
 
         update_all()
     });
@@ -1025,6 +1055,10 @@
                 $('.telescope-configuration-container').html(response['html']);
             }
         });
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
         load_data(set_d3_diagram_properties=true) 
     }
 
