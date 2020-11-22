@@ -301,12 +301,15 @@ def deliver_D3(request, projectnameslug, **kwargs):
     amount_of_keywords = count_basestone + count_stellar
     amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
     user = get_object_or_404(User, username=request.user)
+    has_universal_properties = False
     for key,value in user.profile.d3_diagram_properties.items():
         print(value)
         if value['universal'] == True:
             universal_d3_properties = value
-        else:
-            universal_d3_properties = user.profile.d3_diagram_properties['universal_default']
+            has_universal_properties = True
+
+    if has_universal_properties == False:        
+        universal_d3_properties = user.profile.d3_diagram_properties['universal_default']
 
     return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles, "universal_d3_properties":universal_d3_properties}, safe=False)
 
@@ -341,6 +344,8 @@ def add_telescope_configuration(request, usernameslug):
             new_telescope_configuration = request.POST.get('post_data','')
             new_telescope_configuration = json.loads(new_telescope_configuration)    
             user = get_object_or_404(User, username=request.user)
+
+            print(new_telescope_configuration)
 
             for key,value in user.profile.d3_diagram_properties.items():
                 if value['universal'] == True:
