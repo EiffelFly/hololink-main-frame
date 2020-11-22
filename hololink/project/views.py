@@ -397,3 +397,20 @@ def add_telescope_configuration(request, usernameslug):
 
             html_rendered = render_to_string('telescope_configuration_list_template.html', context)
             return JsonResponse({'html': html_rendered})
+        elif request_action == 'update_this_telescope_configuration':
+            user = get_object_or_404(User, username=request.user)
+            new_telescope_configuration = request.POST.get('post_data','')
+            new_telescope_configuration = json.loads(new_telescope_configuration) 
+            for key,value in new_telescope_configuration.items():
+                user.profile.d3_diagram_properties[f'{key}'] = value
+
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
+
+

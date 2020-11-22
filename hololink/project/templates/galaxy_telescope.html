@@ -226,21 +226,21 @@
                                             <div class="d-flex" style="margin-left: auto; padding: 10px 15px 10px 0;">
                                                 {% if key == 'universal_default' %}
                                                     {% if value.universal == True %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;" disabled>edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
                                                     {% else %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;" disabled>edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
                                                     {% endif %}
                                                 {% else %}
                                                     {% if value.universal == True %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
                                                     {% else %}
-                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">Use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
                                                     <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" >delete</button>
                                                     {% endif %}
@@ -1009,6 +1009,46 @@
         use_telescope_configuration(this.id, this.value)
     });
 
+    $('.telescope-configuration-container').on('click', '.edit-this-telescope-configuration', function(){
+        console.log(this.id)
+        use_telescope_configuration(this.id, this.value, edit_mode=true)
+    });
+
+    $('.telescope-configuration-container').on('click', '.update-this-telescope-configuration', function(){
+        console.log(this.id)
+        update_telescope_configuration(this.id);
+        $('#' + this.id.replace(/:/g, "\\:") + '.edit-this-telescope-configuration').prop('disabled', false);
+    });
+
+    function update_telescope_configuration(telescope_id){
+        d3_diagram_properties.properties_status = d3_diagram_changed_properties
+
+        post_data = JSON.stringify({
+            [telescope_id]: d3_diagram_properties
+        });
+
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'post_data':post_data,
+                'action':'update_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+            }
+        });
+
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+
+    }
 
     function add_telescope_configuration(){
         var user_set_configuration_name = $('#new_telescope_configuration').val()
@@ -1030,8 +1070,12 @@
                 'action':'submit_new_telescope_configuration'
             },
             success: function(response){
-                console.log(response)
+                console.log(response);
                 $('.telescope-configuration-container').html(response['html']);
+                $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').addClass('delete-this-telescope-configuration');
+                $('#' + telescope_id.replace(/:/g, "\\:") + '.delete-this-telescope-configuration').removeClass('update-this-telescope-configuration');
+                $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').html('Delete');
+
             }
         });
 
@@ -1063,7 +1107,7 @@
         });
     }
 
-    function use_telescope_configuration(telescope_id, telescope_properties){
+    function use_telescope_configuration(telescope_id, telescope_properties, edit_mode){
         $.ajax({
             type:"POST",
             url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
@@ -1077,13 +1121,22 @@
             success: function(response){
                 console.log(response)
                 $('.telescope-configuration-container').html(response['html']);
+
+                if (edit_mode==true){
+                    $('#' + telescope_id.replace(/:/g, "\\:") + '.delete-this-telescope-configuration').addClass('update-this-telescope-configuration');
+                    $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').removeClass('delete-this-telescope-configuration');
+                    $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').html('Update');
+                    $('#' + telescope_id.replace(/:/g, "\\:") + '.edit-this-telescope-configuration').prop('disabled', true);
+                }
             }
         });
         $('#new_telescope_configuration').val('');
         $('#new_telescope_configuration').prop('disabled', true);
         $('#submit_new_telescope_configuration').prop('disabled', true);
         $('.numof_changed_properties').text('')
+
         load_data(set_d3_diagram_properties=true) 
+
     }
 
     function get_time_and_insert_into_telescope_saving_input (){
