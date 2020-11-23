@@ -65,6 +65,10 @@
     .filter-checkbox {
         margin: 2.5px 5px 0 0;
     }
+
+    /* 
+        Slider styling
+    */
  
     .slider-selection {
         background: lightgray;
@@ -527,7 +531,7 @@
         $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
         $('#radial_not_connecting_keywords_orbit_slider_output').slider('refresh');
 
-        //reset all slider checkbox
+        // reset all slider checkbox
         $("#radial_force_checkbox").prop("checked", true);
         $("#charge_force_checkbox").prop("checked", true);
         $("#collide_force_checkbox").prop("checked", true);
@@ -536,6 +540,7 @@
         $("#link_force_checkbox").prop("checked", true);
         $(".filter-checkbox").prop("checked", true);
 
+        // reset submit input and num of changed properties
         $('#new_telescope_configuration').val('');
         $('#new_telescope_configuration').prop('disabled', true);
         $('#submit_new_telescope_configuration').prop('disabled', true);
@@ -548,6 +553,12 @@
         $('#new_telescope_configuration').prop('disabled', true);
         $('#submit_new_telescope_configuration').prop('disabled', true);
     });
+
+    /* 
+    * init bootstrap-slider and slide-event listener
+    * module: seiyria/bootstrap-slider
+    * ref: https://github.com/seiyria/bootstrap-slider
+    */
 
     $('#center_x_slider_output').slider({
         min:0,
@@ -994,10 +1005,18 @@
         update_all();
     });
 
+    /*
+    * Handle ui interaction
+    */
+
     $('#post-form').on('submit', function(event){
         event.preventDefault();
         add_telescope_configuration();
     });
+
+    // Beacause we will change telescope-configuration-container innerHtml, so if we setup listener on class below it
+    // once we change the html, it will lost the listener. To cope with this error we should setup the listener on the 
+    // parent class of target interaction element which is telescope-configuration-container
 
     $('.telescope-configuration-container').on('click', '.delete-this-telescope-configuration', function(){
         console.log(this.id)
@@ -1013,12 +1032,17 @@
         console.log(this.id)
         use_telescope_configuration(this.id, this.value, edit_mode=true)
     });
+    
+    // our default telescope configuration name is 2020-11-23T02:34:23Z, if we use this id with Jquery selector 
+    // it will including persudo method- ssss:aaa, so we need to escape that.
 
     $('.telescope-configuration-container').on('click', '.update-this-telescope-configuration', function(){
         console.log(this.id)
         update_telescope_configuration(this.id);
         $('#' + this.id.replace(/:/g, "\\:") + '.edit-this-telescope-configuration').prop('disabled', false);
     });
+
+    // UPDATE: POST Django -> update properties 
 
     function update_telescope_configuration(telescope_id){
         d3_diagram_properties.properties_status = d3_diagram_changed_properties
@@ -1049,6 +1073,8 @@
         $('.numof_changed_properties').text('')
 
     }
+
+    // SUBMIT NEW: POST Django -> turn all 'universal' properties into false  -> store new properties
 
     function add_telescope_configuration(){
         var user_set_configuration_name = $('#new_telescope_configuration').val()
@@ -1086,6 +1112,8 @@
 
     }
 
+    // DELETE: POST Django -> whether user delete universal one or not -> if yes, use default properties
+
     function delete_telescope_configuration(telescope_id){
         $.ajax({
             type:"POST",
@@ -1106,6 +1134,8 @@
             }
         });
     }
+
+    //USE: POST Django -> turn all 'universal' properties into false  -> set current one 'universal' properties to true
 
     function use_telescope_configuration(telescope_id, telescope_properties, edit_mode){
         $.ajax({
@@ -1147,21 +1177,15 @@
         $('#submit_new_telescope_configuration').prop('disabled', false);
     }
 
-    
-
     function get_numof_changed_d3_diagram_properties_and_insert(){
-
-        var numof_changed_d3_diagram_properties = 0
-        
+        var numof_changed_d3_diagram_properties = 0;
         Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
             if (v == true){
                 numof_changed_d3_diagram_properties += 1
             }
         });
-
-        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
-        d3_diagram_properties.numof_changed_d3_diagram_properties = numof_changed_d3_diagram_properties
-
+        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`);
+        d3_diagram_properties.numof_changed_d3_diagram_properties = numof_changed_d3_diagram_properties;
         if (numof_changed_d3_diagram_properties == 0){
             $('#new_telescope_configuration').val('')
             $('#new_telescope_configuration').prop('disabled', true)
