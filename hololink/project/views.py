@@ -10,11 +10,13 @@ from .forms import ProjectForm, GalaxySettingsForm, DeleteArticleForm
 from article.models import Article, Keyword
 from django.db.models import Sum
 import hashlib
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from accounts.models import Profile
 from django.contrib.auth.models import User
 import json 
+
 
 
 def now():
@@ -298,8 +300,18 @@ def deliver_D3(request, projectnameslug, **kwargs):
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_project=project).count()
     amount_of_keywords = count_basestone + count_stellar
     amount_of_articles = Article.objects.filter(owned_by=request.user, projects=project).count()
+    user = get_object_or_404(User, username=request.user)
+    has_universal_properties = False
+    for key,value in user.profile.d3_diagram_properties.items():
+        print(value)
+        if value['universal'] == True:
+            universal_d3_properties = value
+            has_universal_properties = True
 
-    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles}, safe=False)
+    if has_universal_properties == False:        
+        universal_d3_properties = user.profile.d3_diagram_properties['universal_default']
+
+    return JsonResponse({"graph":project.project_d3_json, "amount_of_keywords":amount_of_keywords, "amount_of_articles":amount_of_articles, "universal_d3_properties":universal_d3_properties}, safe=False)
 
 def galaxy_telescope(request, projectnameslug, usernameslug):
     if not request.user.is_authenticated:
@@ -327,15 +339,78 @@ def add_telescope_configuration(request, usernameslug):
         return redirect(reverse('login'))
 
     if request.method == 'POST':
-        response_data = {}
-        new_telescope_configuration = request.POST.get('post_data','')
-        new_telescope_configuration = json.loads(new_telescope_configuration)    
-        user = get_object_or_404(User, username=request.user)
-        user.profile.d3_diagram_properties.update(new_telescope_configuration)
-        user.save()
-        response_data['result'] = 'Create post successful!'
-        response_data['data'] = user.profile.d3_diagram_properties
+        request_action = request.POST.get('action','')
+        if request_action == 'submit_new_telescope_configuration':
+            new_telescope_configuration = request.POST.get('post_data','')
+            new_telescope_configuration = json.loads(new_telescope_configuration)    
+            user = get_object_or_404(User, username=request.user)
 
-        return JsonResponse(response_data)
+            print(new_telescope_configuration)
+
+            for key,value in user.profile.d3_diagram_properties.items():
+                if value['universal'] == True:
+                    user.profile.d3_diagram_properties[f'{key}']['universal'] = False
+
+            user.profile.d3_diagram_properties.update(new_telescope_configuration)
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+            
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
+        elif request_action == 'delete_this_telescope_configuration':
+            id = request.POST.get('telescope_configuration_id','')
+
+            user = get_object_or_404(User, username=request.user)
+            delete_universal_configuration = False
+
+            if user.profile.d3_diagram_properties[f'{id}']['universal'] == True:
+                user.profile.d3_diagram_properties['universal_default']['universal'] = True
+                print(user.profile.d3_diagram_properties['universal_default'])
+                delete_universal_configuration = True
+
+            user.profile.d3_diagram_properties.pop(id)
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered, 'delete_universal_configuration':delete_universal_configuration})
+        elif request_action == 'use_this_telescope_configuration':
+            id = request.POST.get('telescope_configuration_id','')
+            user = get_object_or_404(User, username=request.user)
+
+            for key,value in user.profile.d3_diagram_properties.items():
+                if value['universal'] == True:
+                    user.profile.d3_diagram_properties[f'{key}']['universal'] = False
+
+            user.profile.d3_diagram_properties[f'{id}']['universal'] = True
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
+        elif request_action == 'update_this_telescope_configuration':
+            user = get_object_or_404(User, username=request.user)
+            new_telescope_configuration = request.POST.get('post_data','')
+            new_telescope_configuration = json.loads(new_telescope_configuration) 
+            for key,value in new_telescope_configuration.items():
+                user.profile.d3_diagram_properties[f'{key}'] = value
+
+            user.save()
+
+            context = {
+                'profile': user.profile
+            }
+
+            html_rendered = render_to_string('telescope_configuration_list_template.html', context)
+            return JsonResponse({'html': html_rendered})
 
 

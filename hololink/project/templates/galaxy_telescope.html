@@ -65,6 +65,10 @@
     .filter-checkbox {
         margin: 2.5px 5px 0 0;
     }
+
+    /* 
+        Slider styling
+    */
  
     .slider-selection {
         background: lightgray;
@@ -91,9 +95,45 @@
         padding-right: 0;
     }
 
+    .slider-rangeHighlight.init_value {
+        background: gray;
+    }
+
+    /* 
+        Pulse effect red dot
+        contribute: https://www.florin-pop.com/blog/2019/03/css-pulse-effect/
+    */
+
+    .blob.red {
+        background: rgba(255, 82, 82, 1);
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(255, 82, 82, 1);
+        margin: 10px;
+        height: 10px;
+        width: 10px;
+        transform: scale(1);
+        animation: pulse-red 2s infinite;
+    }
+
+    @keyframes pulse-red {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+        }
+    }
+
 
 </style>
-
 
 {% endblock %}
 
@@ -130,7 +170,7 @@
                         </div>
                     </div>
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
-                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter" style="margin-bottom: 15px;">Display</a>
+                    <a class="collapse-controller-title" data-toggle="collapse" href="#display" role="button" aria-expanded="false" aria-controls="filter">Display</a>
                     <div class="row collapse collapse-controller-container" id="display">
                         <div class="col-12 collapse-inner-container">
                             <div class="d-flex flex-column">
@@ -150,14 +190,13 @@
                             </div>
                         </div>
                     </div>
-                    <!--
                     <div style="margin: 15px 0; border-bottom: 1px solid #BFB9B8;"></div>
                     <a class="collapse-controller-title" style="margin-bottom: 15px;" data-toggle="collapse" href="#telescope_settings" role="button" aria-expanded="false" aria-controls="storage">Telescope configurations</a>
-                    <div class="row collapse collapse-controller-container" id="telescope_settings">
-                        <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">New telescope configuration</div>
+                    <div class="row collapse collapse-controller-container" id="telescope_settings" style="width: 100%; padding: 0 0 0 15px;">
+                        <div class="col-12">
+                            <div class="silder-instruction" style="font-size: 14px; margin-bottom: 10px;">New telescope configuration</div>
                         </div>
-                        <div class="col-12 collapse-inner-container">
+                        <div class="col-12">
                             <form action="/add_telescope_configuration/" method="POST" id="post-form">
                                 {% csrf_token %}
                                 <div class="row d-flex" style="width: 100%; margin: 0;" >
@@ -173,33 +212,50 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-12 collapse-inner-container">
-                            <div class="silder-instruction" style="font-size: 14px;">Your telescope configurations</div>
+                        <div class="col-12">
+                            <div class="silder-instruction" style="font-size: 14px; margin: 10px 0;">Your telescope configurations</div>
                         </div>
-                        <div class="col-12 collapse-inner-container">
+                        <div class="col-12 telescope-configuration-container" style="overflow: auto; width: 100%;">
                             {% for key, value in profile.d3_diagram_properties.items %}
-                            <div class="row" style="margin-bottom: 15px;">
-                                <div class="col">
-                                    <div class="card shadow-sm" style="padding: 10px">
-                                        <div class="row d-flex flex-row">
-                                            <div class="col d-flex" style="font-size: 14px;">
-                                                <div style="margin: auto 0">{{key}}</div>
-                                            </div>
-                                            <div class="col d-flex" style="margin-left: auto;">
-                                                <div style="margin-left: auto;">
-                                                    <button type="button" id="use_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">Use</button>
-                                                    <button type="button" id="delete_{{key}}" value="{{value}}" class="btn btn-outline-primary" style="border: lightgray;">delete</button>
-                                                </div>
+                                <div class="card shadow-sm" style="margin-bottom: 15px;">
+                                    <div class="row d-flex flex-row" style="height: 60px;">
+                                        <div class="col d-flex flex-row" style="font-size: 14px;">
+                                            {% if value.universal == True%}
+                                            <div class="blob red" style="margin: auto 0 auto 10px;"></div>
+                                            {% endif %}
+                                            <div style="margin: auto 0; padding-left: 10px;">{{key}}</div>
+                                            <div style="margin: auto 0 auto 5px; padding: 0 8px; border-radius: 5px; color: gray; font-size: 10px; font-weight: 700; border: lightgray 0.5px solid;">{{value.numof_changed_d3_diagram_properties}}</div>
+                                        </div>
+                                        <div class="col d-flex" style="margin-left: auto;">
+                                            <div class="d-flex" style="margin-left: auto; padding: 10px 15px 10px 0;">
+                                                {% if key == 'universal_default' %}
+                                                    {% if value.universal == True %}
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;" disabled>edit</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
+                                                    {% else %}
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;" disabled>edit</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" disabled>delete</button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if value.universal == True %}
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;">delete</button>
+                                                    {% else %}
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary use-this-telescope-configuration" style="border: lightgray;">use</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary edit-this-telescope-configuration" style="border: lightgray;">edit</button>
+                                                    <button type="button" id="{{key}}" value="{{value}}" class="btn btn-outline-primary delete-this-telescope-configuration" style="border: lightgray;" >delete</button>
+                                                    {% endif %}
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
-                            </div>
                             {% endfor %}
                         </div>
                     </div>
-                    -->
                 </div>
                 <div class="d-flex flex-column" style="border: 1px solid #BFB9B8; border-radius: 6px; margin:0;">
                     <a class="collapse-controller-title" data-toggle="collapse" href="#center_force" role="button" aria-expanded="false" aria-controls="center_force" style="margin-top: 15px;">Center force</a>
@@ -427,13 +483,37 @@
     integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous">
 </script>
 
+<!--
+    import luxon itl timezone module
+    ref: https://moment.github.io/luxon/index.html
+-->
+<script type="text/javascript" src="{% static 'js/luxon_timezone.min.js' %}"></script>
 <script>
-    
-    
 
     $('#restore_default_settings').on('click', function(){
-        d3_diagram_properties = {}
-        d3_diagram_properties = $.extend(true, default_d3_properties)
+        
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'telescope_configuration_id':'universal_default',
+                'action':'use_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+            }
+        });
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+        load_data(set_d3_diagram_properties=true) 
+
+
         // reset all slider values
         $('#center_x_slider_output').slider('refresh');
         $('#center_y_slider_output').slider('refresh');
@@ -450,18 +530,26 @@
         $('#link_distance_slider_output').slider('refresh');
         $('#link_strength_slider_output').slider('refresh');
         $('#node_size').slider('refresh');
+        $('#text_fade_threshhold_slider').slider('refresh');
         $('#radial_strength_slider_output').slider('refresh');
         $('#radial_articles_orbit_slider_output').slider('refresh');
         $('#radial_connecting_keywords_orbit_slider_output').slider('refresh');
         $('#radial_not_connecting_keywords_orbit_slider_output').slider('refresh');
 
-        //reset all slider checkbox
+        // reset all slider checkbox
         $("#radial_force_checkbox").prop("checked", true);
         $("#charge_force_checkbox").prop("checked", true);
         $("#collide_force_checkbox").prop("checked", true);
         $("#x_force_checkbox").prop("checked", false);
         $("#y_force_checkbox").prop("checked", false);
         $("#link_force_checkbox").prop("checked", true);
+        $(".filter-checkbox").prop("checked", true);
+
+        // reset submit input and num of changed properties
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
 
         update_all()
     });
@@ -471,11 +559,18 @@
         $('#submit_new_telescope_configuration').prop('disabled', true);
     });
 
+    /* 
+    * init bootstrap-slider and slide-event listener
+    * module: seiyria/bootstrap-slider
+    * ref: https://github.com/seiyria/bootstrap-slider
+    */
+
     $('#center_x_slider_output').slider({
         min:0,
         max:1,
         value:0.5,
         step:0.01,
+        rangeHighlights:[{ "start": 0.495, "end": 0.505, "class": "init_value"}]
     });
 
     $('#center_x_slider_output').on("change", function(event){
@@ -495,6 +590,7 @@
         max:1,
         value:0.5,
         step:0.01,
+        rangeHighlights:[{ "start": 0.495, "end": 0.505, "class": "init_value"}]
     });
 
     $('#center_y_slider_output').on("change", function(event){
@@ -526,6 +622,7 @@
         max:1,
         value:1,
         step:0.01,
+        rangeHighlights:[{ "start": 0.99, "end": 1, "class": "init_value"}]
     });
 
     $('#radial_strength_slider_output').on("change", function(event){
@@ -545,6 +642,7 @@
         max:1000,
         value:300,
         step:10,
+        rangeHighlights:[{ "start": 290, "end": 300, "class": "init_value"}]
     });
 
     $('#radial_articles_orbit_slider_output').on("change", function(event){
@@ -564,6 +662,7 @@
         max:1000,
         value:100,
         step:10,
+        rangeHighlights:[{ "start": 90, "end": 100, "class": "init_value"}]
     });
 
     $('#radial_connecting_keywords_orbit_slider_output').on("change", function(event){
@@ -583,6 +682,7 @@
         max:1000,
         value:500,
         step:10,
+        rangeHighlights:[{ "start": 490, "end": 500, "class": "init_value"}]
     });
 
     $('#radial_not_connecting_keywords_orbit_slider_output').on("change", function(event){
@@ -602,6 +702,7 @@
         max:2,
         value:1,
         step:0.01,
+        rangeHighlights:[{ "start": 0.981, "end": 1, "class": "init_value"}]
     });
 
     $('#charge_strength_slider_output').slider({
@@ -609,6 +710,7 @@
         max:50,
         value:-30,
         step:1,
+        rangeHighlights:[{ "start": -27.5, "end": -30, "class": "init_value"}]
     });
 
     $('#charge_strength_slider_output').on("change", function(event){
@@ -628,6 +730,7 @@
         max:50,
         value:1,
         step:1,
+        rangeHighlights:[{ "start": 0.5, "end": 1, "class": "init_value"}]
     });
 
     $('#charge_distance_min_slider_output').on("change", function(event){
@@ -647,6 +750,7 @@
         max:2000,
         value:2000,
         step:1,
+        rangeHighlights:[{ "start": 1980, "end": 2000, "class": "init_value"}]
     });
 
     $('#charge_distance_max_slider_output').on("change", function(event){
@@ -666,6 +770,7 @@
         max:2,
         value:0.7,
         step:0.05,
+        rangeHighlights:[{ "start": 0.68, "end": 0.7, "class": "init_value"}]
     });
 
     $('#collide_strength_slider_output').on("change", function(event){
@@ -685,6 +790,7 @@
         max:100,
         value:5,
         step:1,
+        rangeHighlights:[{ "start": 4, "end": 5, "class": "init_value"}]
     });
 
     $('#collide_radius_slider_output').on("change", function(event){
@@ -704,6 +810,7 @@
         max:10,
         value:1,
         step:1,
+        rangeHighlights:[{ "start": 1, "end": 1.09, "class": "init_value"}]
     });
 
     $('#collide_iterations_slider_output').on("change", function(event){
@@ -718,11 +825,25 @@
         update_all();
     });
 
+    $('#x_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.x_force.enabled){
+            d3_diagram_changed_properties.x_force_enabled = true
+        } else {
+            d3_diagram_changed_properties.x_force_enabled = false
+        }   
+        d3_diagram_properties.x_force.enabled = this.checked; 
+        console.log('3dd',d3_diagram_changed_properties.x_force_enabled)
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
     $('#x_force_strength_slider_output').slider({
         min:0,
         max:1,
         value:0.1,
         step:0.01,
+        rangeHighlights:[{ "start": 0.09, "end": 0.1, "class": "init_value"}]
     });
 
     $('#x_force_strength_slider_output').on("change", function(event){
@@ -742,6 +863,7 @@
         max:1,
         value:0.5,
         step:0.01,
+        rangeHighlights:[{ "start": 0.49, "end": 0.5, "class": "init_value"}]
     });
 
     $('#x_force_x_slider_output').on("change", function(event){
@@ -756,11 +878,24 @@
         update_all();
     });
 
+    $('#y_force_checkbox').on("change", function(event){
+        if (this.checked != default_d3_properties.y_force.enabled){
+            d3_diagram_changed_properties.y_force_enabled = true
+        } else {
+            d3_diagram_changed_properties.y_force_enabled = false
+        }   
+        d3_diagram_properties.y_force.enabled = this.checked; 
+        get_time_and_insert_into_telescope_saving_input();
+        get_numof_changed_d3_diagram_properties_and_insert()
+        update_all();
+    });
+
     $('#y_force_strength_slider_output').slider({
         min:0,
         max:1,
         value:0.1,
         step:0.01,
+        rangeHighlights:[{ "start": 0.09, "end": 0.1, "class": "init_value"}]
     });
 
     $('#y_force_strength_slider_output').on("change", function(event){
@@ -780,6 +915,7 @@
         max:1,
         value:0.5,
         step:0.01,
+        rangeHighlights:[{ "start": 0.49, "end": 0.5, "class": "init_value"}]
     });
 
     $('#y_force_y_slider_output').on("change", function(event){
@@ -797,8 +933,9 @@
     $('#link_distance_slider_output').slider({
         min:0,
         max:100,
-        value:50,
+        value:50, 
         step:1,
+        rangeHighlights:[{ "start": 49, "end": 50, "class": "init_value"}]
     });
 
     $('#link_distance_slider_output').on("change", function(event){
@@ -816,8 +953,9 @@
     $('#link_strength_slider_output').slider({
         min:0,
         max:1,
-        value:0.5,
+        value:0.3,
         step:0.01,
+        rangeHighlights:[{ "start": 0.29, "end": 0.3, "class": "init_value"}]
     });
 
     $('#link_strength_slider_output').on("change", function(event){
@@ -837,6 +975,7 @@
         max:2,
         value:1,
         step:0.01,
+        rangeHighlights:[{ "start": 1, "end": 1.01, "class": "init_value"}]
     });
 
     $('#node_size').on("change", function(event){
@@ -871,13 +1010,81 @@
         update_all();
     });
 
+    /*
+    * Handle ui interaction
+    */
+
     $('#post-form').on('submit', function(event){
         event.preventDefault();
         add_telescope_configuration();
     });
 
+    // Beacause we will change telescope-configuration-container innerHtml, so if we setup listener on class below it
+    // once we change the html, it will lost the listener. To cope with this error we should setup the listener on the 
+    // parent class of target interaction element which is telescope-configuration-container
+
+    $('.telescope-configuration-container').on('click', '.delete-this-telescope-configuration', function(){
+        console.log(this.id)
+        delete_telescope_configuration(this.id)
+    });
+
+    $('.telescope-configuration-container').on('click', '.use-this-telescope-configuration', function(){
+        console.log(this.id)
+        use_telescope_configuration(this.id, this.value, edit_mode=false)
+    });
+
+    $('.telescope-configuration-container').on('click', '.edit-this-telescope-configuration', function(){
+        console.log(this.id)
+        use_telescope_configuration(this.id, this.value, edit_mode=true)
+    });
+    
+    // our default telescope configuration name is 2020-11-23T02:34:23Z, if we use this id with Jquery selector 
+    // it will including persudo method- ssss:aaa, so we need to escape that.
+
+    $('.telescope-configuration-container').on('click', '.update-this-telescope-configuration', function(){
+        console.log(this.id)
+        update_telescope_configuration(this.id);
+        $('[id="' + this.id + '"].edit-this-telescope-configuration').prop('disabled', false);
+    });
+
+    // UPDATE: POST Django -> update properties 
+
+    function update_telescope_configuration(telescope_id){
+        d3_diagram_properties.properties_status = d3_diagram_changed_properties
+
+        post_data = JSON.stringify({
+            [telescope_id]: d3_diagram_properties
+        });
+
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'post_data':post_data,
+                'action':'update_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+            }
+        });
+
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+
+    }
+
+    // SUBMIT NEW: POST Django -> turn all 'universal' properties into false  -> store new properties
+
     function add_telescope_configuration(){
         var user_set_configuration_name = $('#new_telescope_configuration').val()
+
+        d3_diagram_properties.properties_status = d3_diagram_changed_properties
 
         post_data = JSON.stringify({
             [user_set_configuration_name]: d3_diagram_properties
@@ -891,33 +1098,96 @@
             data:{
                 csrfmiddlewaretoken:'{{ csrf_token }}',
                 'post_data':post_data,
+                'action':'submit_new_telescope_configuration'
             },
-            success: function(json){
-                console.log(json)
+            success: function(response){
+                console.log(response);
+                $('.telescope-configuration-container').html(response['html']);
             }
         });
 
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+
+    }
+
+    // DELETE: POST Django -> whether user delete universal one or not -> if yes, use default properties
+
+    function delete_telescope_configuration(telescope_id){
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'telescope_configuration_id':telescope_id,
+                'action':'delete_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+                if (response['delete_universal_configuration']){
+                    load_data(set_d3_diagram_properties=true)
+                }
+            }
+        });
+    }
+
+    //USE: POST Django -> turn all 'universal' properties into false  -> set current one 'universal' properties to true
+
+    function use_telescope_configuration(telescope_id, telescope_properties, edit_mode){
+        $.ajax({
+            type:"POST",
+            url:'/@{{user.username}}/projects/ajax/add_telescope_configuration/',
+            dataType:"json",
+            async:true,
+            data:{
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+                'telescope_configuration_id':telescope_id,
+                'action':'use_this_telescope_configuration'
+            },
+            success: function(response){
+                console.log(response)
+                $('.telescope-configuration-container').html(response['html']);
+
+                if (edit_mode==true){
+                    $('[id="' + telescope_id + '"].delete-this-telescope-configuration').addClass('update-this-telescope-configuration');
+                    $('[id="' + telescope_id + '"].update-this-telescope-configuration').removeClass('delete-this-telescope-configuration');
+                    $('[id="' + telescope_id + '"].update-this-telescope-configuration').html('Update');
+                    $('[id="' + telescope_id + '"].edit-this-telescope-configuration').prop('disabled', true);
+                }
+            }
+        });
+        $('#new_telescope_configuration').val('');
+        $('#new_telescope_configuration').prop('disabled', true);
+        $('#submit_new_telescope_configuration').prop('disabled', true);
+        $('.numof_changed_properties').text('')
+
+        load_data(set_d3_diagram_properties=true) 
 
     }
 
     function get_time_and_insert_into_telescope_saving_input (){
-        time = new Date()
-        iso_time = time.toISOString().split('.')[0]+"Z"
+        var DateTime = luxon.DateTime;
+        date = DateTime.local().toLocaleString(DateTime.DATE_SHORT);
+        time = DateTime.local().toLocaleString(DateTime.TIME_24_SIMPLE);
         $('#new_telescope_configuration').prop('disabled', false)
-        $('#new_telescope_configuration').val(iso_time)
+        $('#new_telescope_configuration').val(`${date}-${time}`)
         $('#submit_new_telescope_configuration').prop('disabled', false);
     }
 
     function get_numof_changed_d3_diagram_properties_and_insert(){
-        var numof_changed_d3_diagram_properties = 0
-
+        var numof_changed_d3_diagram_properties = 0;
         Object.entries(d3_diagram_changed_properties).forEach(([k,v]) => {
             if (v == true){
                 numof_changed_d3_diagram_properties += 1
             }
         });
-        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`)
-        
+        $('.numof_changed_properties').text(`${numof_changed_d3_diagram_properties} properties had changed`);
+        d3_diagram_properties.numof_changed_d3_diagram_properties = numof_changed_d3_diagram_properties;
         if (numof_changed_d3_diagram_properties == 0){
             $('#new_telescope_configuration').val('')
             $('#new_telescope_configuration').prop('disabled', true)
@@ -973,7 +1243,7 @@
 
     var node_by_id = {};
 
-    var d3_diagram_changed_properties  = {
+    var d3_diagram_changed_properties = {
         center_force_x : false,
         center_force_y : false,
         charge_force_enabled: false,
@@ -1000,7 +1270,164 @@
         radial_force_connecting_keywords_orbit: false,
         radial_force_not_connecting_keywords_orbit: false,
         node_size: false,
-        text_fade_threshhold: false
+        text_fade_threshhold: false,
+        filter_stellar:false
+    }
+
+    // d3-force diagram properties
+    default_d3_properties = {
+        center_force: {
+            x: 0.5,
+            y: 0.5,
+        },
+        charge_force: {
+            enabled: true,
+            strength: -30,
+            distanceMin: 1,
+            distanceMax: 2000
+        },
+        collide_force: {
+            enabled: true,
+            strength: .7,
+            iterations: 1,
+            radius: 5
+        },
+        x_force: {
+            enabled: false,
+            strength: .1,
+            x: .5
+        },
+        y_force: {
+            enabled: false,
+            strength: .1,
+            y: .5
+        },
+        link_force: {
+            enabled: true,
+            distance: 50,
+            iterations: 1,
+            strength: 0.3,
+        },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
+        },
+        node_size: 1,
+        text_fade_threshhold:1,
+        universal: true,
+        numof_changed_d3_diagram_properties: 0,
+        filter_stellar: true,
+        properties_status: {
+            center_force_x : false,
+            center_force_y : false,
+            charge_force_enabled: false,
+            charge_force_strength: false,
+            charge_force_distance_min: false,
+            charge_force_distance_max: false,
+            collide_force_enabled: false,
+            collide_force_strength: false,
+            collide_force_iterations: false,
+            collide_force_radius: false,
+            x_force_enabled: false,
+            x_force_strength: false,
+            x_force_x: false,
+            y_force_enabled: false,
+            y_force_strength: false,
+            y_force_y: false,
+            link_force_enabled: false,
+            link_force_distance: false,
+            link_force_iterations: false,
+            link_force_strength: false,
+            radial_force_enabled: false,
+            radial_force_strength: false,
+            radial_force_articles_orbit: false,
+            radial_force_connecting_keywords_orbit: false,
+            radial_force_not_connecting_keywords_orbit: false,
+            node_size: false,
+            text_fade_threshhold: false,
+            filter_stellar:false
+        }
+    }
+
+    // values for all forces
+    d3_diagram_properties = {
+        center_force: {
+            x: 0.5,
+            y: 0.5,
+        },
+        charge_force: {
+            enabled: true,
+            strength: -30,
+            distanceMin: 1,
+            distanceMax: 2000
+        },
+        collide_force: {
+            enabled: true,
+            strength: .7,
+            iterations: 1,
+            radius: 5
+        },
+        x_force: {
+            enabled: false,
+            strength: .1,
+            x: .5
+        },
+        y_force: {
+            enabled: false,
+            strength: .1,
+            y: .5
+        },
+        link_force: {
+            enabled: true,
+            distance: 50,
+            iterations: 1,
+            strength: 0.3,
+        },
+        radial_force:{
+            enabled: true,
+            strength:1,
+            articles_orbit:300,
+            connecting_keywords_orbit:100,
+            not_connecting_keywords_orbit:500,
+        },
+        node_size: 1,
+        text_fade_threshhold:1,
+        universal: false,
+        numof_changed_d3_diagram_properties: 0,
+        filter_stellar: true,
+        properties_status: {
+            center_force_x : false,
+            center_force_y : false,
+            charge_force_enabled: false,
+            charge_force_strength: false,
+            charge_force_distance_min: false,
+            charge_force_distance_max: false,
+            collide_force_enabled: false,
+            collide_force_strength: false,
+            collide_force_iterations: false,
+            collide_force_radius: false,
+            x_force_enabled: false,
+            x_force_strength: false,
+            x_force_x: false,
+            y_force_enabled: false,
+            y_force_strength: false,
+            y_force_y: false,
+            link_force_enabled: false,
+            link_force_distance: false,
+            link_force_iterations: false,
+            link_force_strength: false,
+            radial_force_enabled: false,
+            radial_force_strength: false,
+            radial_force_articles_orbit: false,
+            radial_force_connecting_keywords_orbit: false,
+            radial_force_not_connecting_keywords_orbit: false,
+            node_size: false,
+            text_fade_threshhold: false,
+            filter_stellar:false
+        }
     }
 
     var zoom_handler = d3.zoom()
@@ -1025,14 +1452,23 @@
     var article_biggest_node_keywords_num = 0
         keyword_biggest_node_connection_num = 0;
 
-    load_data(filtered=true)
+    load_data(set_d3_diagram_properties=true)
 
 
     // load the data
-    function load_data(filtered){
+    function load_data(set_d3_diagram_properties){
         d3.json('{% url "project:deliver_D3" projectnameslug=project.slug usernameslug=user.profile.slug%}', function(error, data) {
             if (error) throw error;
-            
+            console.log(data.universal_d3_properties)
+            if (data.universal_d3_properties && set_d3_diagram_properties==true){
+                d3_diagram_changed_properties = data.universal_d3_properties.properties_status;
+                d3_diagram_properties = data.universal_d3_properties;
+                set_d3_daigram_properties_slider(d3_diagram_properties);
+                set_d3_daigram_properties_checkbox(d3_diagram_properties);
+            }
+
+
+
             graph = data.graph;
 
             // recreate id reference to cope with duplicate node with different keyword_type issue
@@ -1070,9 +1506,10 @@
 
             // copy graph data for further usage
             store = $.extend(true, {}, graph);
-            
-            if (filtered){
+            console.log(d3_diagram_properties.filter_stellar)
+            if (d3_diagram_properties.filter_stellar == true){
                 filter_by_keyword_level.push('stellar');
+                console.log('filter')
                 filter()
             }
 
@@ -1097,6 +1534,40 @@
         });
     }
 
+    function set_d3_daigram_properties_slider(target_d3_diagram_properties){
+        $('#center_x_slider_output').slider('setValue', target_d3_diagram_properties.center_force.x);
+        $('#center_y_slider_output').slider('setValue', target_d3_diagram_properties.center_force.y);
+        $('#charge_strength_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.strength);
+        $('#charge_distance_min_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMin);
+        $('#charge_distance_max_slider_output').slider('setValue', target_d3_diagram_properties.charge_force.distanceMax);
+        $('#collide_strength_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.strength);
+        $('#collide_radius_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.radius);
+        $('#collide_iterations_slider_output').slider('setValue', target_d3_diagram_properties.collide_force.iterations);
+        $('#x_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.x_force.strength);
+        $('#x_force_x_slider_output').slider('setValue', target_d3_diagram_properties.x_force.x);
+        $('#y_force_strength_slider_output').slider('setValue', target_d3_diagram_properties.y_force.strength);
+        $('#y_force_y_slider_output').slider('setValue', target_d3_diagram_properties.y_force.y);
+        $('#link_distance_slider_output').slider('setValue', target_d3_diagram_properties.link_force.distance);
+        $('#link_strength_slider_output').slider('setValue', target_d3_diagram_properties.link_force.strength);
+        $('#node_size').slider('setValue', target_d3_diagram_properties.node_size);
+        $('#text_fade_threshhold_slider').slider('setValue', target_d3_diagram_properties.text_fade_threshhold);
+        $('#radial_strength_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.strength);
+        $('#radial_articles_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.articles_orbit);
+        $('#radial_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.connecting_keywords_orbit);
+        $('#radial_not_connecting_keywords_orbit_slider_output').slider('setValue', target_d3_diagram_properties.radial_force.not_connecting_keywords_orbit);
+    }
+
+    function set_d3_daigram_properties_checkbox(target_d3_diagram_properties){
+
+        $("#radial_force_checkbox").prop("checked", target_d3_diagram_properties.radial_force.enabled);
+        $("#charge_force_checkbox").prop("checked", target_d3_diagram_properties.charge_force.enabled);
+        $("#collide_force_checkbox").prop("checked", target_d3_diagram_properties.collide_force.enabled);
+        $("#x_force_checkbox").prop("checked", target_d3_diagram_properties.x_force.enabled);
+        $("#y_force_checkbox").prop("checked", target_d3_diagram_properties.y_force.enabled);
+        $("#link_force_checkbox").prop("checked", target_d3_diagram_properties.link_force.enabled);
+        $(".filter-checkbox").prop("checked", target_d3_diagram_properties.filter_stellar);
+    }
+
 
     ////////////  UI INTERACTION ////////////
     $('.filter-checkbox').on("click", function(){
@@ -1105,11 +1576,18 @@
             filter()
             initialize_or_update_display(graph);
             reheat_simulation();
+            d3_diagram_properties.filter_stellar = true
+            d3_diagram_changed_properties.filter_stellar = false
+            get_time_and_insert_into_telescope_saving_input();
+            get_numof_changed_d3_diagram_properties_and_insert();
         } else {
             /*We use temporary method to cope with lack of understanding of D3*/
             filter_by_keyword_level.pop()
-            load_data(filtered=false)
-            
+            d3_diagram_properties.filter_stellar = false
+            load_data(set_d3_diagram_properties=false)
+            d3_diagram_changed_properties.filter_stellar = true
+            get_time_and_insert_into_telescope_saving_input();
+            get_numof_changed_d3_diagram_properties_and_insert();
         }
         update_all();
     });
@@ -1162,98 +1640,6 @@
             simulation = new_sim;
         }
     }
-
-    // d3-force diagram properties
-    default_d3_properties = {
-        center_force: {
-            x: 0.5,
-            y: 0.5,
-        },
-        charge_force: {
-            enabled: true,
-            strength: -30,
-            distanceMin: 1,
-            distanceMax: 2000
-        },
-        collide_force: {
-            enabled: true,
-            strength: .7,
-            iterations: 1,
-            radius: 5
-        },
-        x_force: {
-            enabled: false,
-            strength: .1,
-            x: .5
-        },
-        y_force: {
-            enabled: false,
-            strength: .1,
-            y: .5
-        },
-        link_force: {
-            enabled: true,
-            distance: 50,
-            iterations: 1,
-            strength: 0.3,
-        },
-        radial_force:{
-            enabled: true,
-            strength:1,
-            articles_orbit:300,
-            connecting_keywords_orbit:100,
-            not_connecting_keywords_orbit:500,
-        },
-        node_size: 1,
-        text_fade_threshhold:1
-
-    }
-
-    // values for all forces
-    d3_diagram_properties = {
-        center_force: {
-            x: 0.5,
-            y: 0.5,
-        },
-        charge_force: {
-            enabled: true,
-            strength: -30,
-            distanceMin: 1,
-            distanceMax: 2000
-        },
-        collide_force: {
-            enabled: true,
-            strength: .7,
-            iterations: 1,
-            radius: 5
-        },
-        x_force: {
-            enabled: false,
-            strength: .1,
-            x: .5
-        },
-        y_force: {
-            enabled: false,
-            strength: .1,
-            y: .5
-        },
-        link_force: {
-            enabled: true,
-            distance: 50,
-            iterations: 1,
-            strength: 0.3,
-        },
-        radial_force:{
-            enabled: true,
-            strength:1,
-            articles_orbit:300,
-            connecting_keywords_orbit:100,
-            not_connecting_keywords_orbit:500,
-        },
-        node_size: 1,
-        text_fade_threshhold:1
-    }
-
 
     // add forces to the simulation
     function initialize_forces() {
