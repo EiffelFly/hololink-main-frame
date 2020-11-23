@@ -483,6 +483,11 @@
     integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous">
 </script>
 
+<!--
+    import luxon itl timezone module
+    ref: https://moment.github.io/luxon/index.html
+-->
+<script type="text/javascript" src="{% static 'js/luxon_timezone.min.js' %}"></script>
 <script>
 
     $('#restore_default_settings').on('click', function(){
@@ -1025,7 +1030,7 @@
 
     $('.telescope-configuration-container').on('click', '.use-this-telescope-configuration', function(){
         console.log(this.id)
-        use_telescope_configuration(this.id, this.value)
+        use_telescope_configuration(this.id, this.value, edit_mode=false)
     });
 
     $('.telescope-configuration-container').on('click', '.edit-this-telescope-configuration', function(){
@@ -1039,7 +1044,7 @@
     $('.telescope-configuration-container').on('click', '.update-this-telescope-configuration', function(){
         console.log(this.id)
         update_telescope_configuration(this.id);
-        $('#' + this.id.replace(/:/g, "\\:") + '.edit-this-telescope-configuration').prop('disabled', false);
+        $('[id="' + this.id + '"].edit-this-telescope-configuration').prop('disabled', false);
     });
 
     // UPDATE: POST Django -> update properties 
@@ -1098,10 +1103,6 @@
             success: function(response){
                 console.log(response);
                 $('.telescope-configuration-container').html(response['html']);
-                $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').addClass('delete-this-telescope-configuration');
-                $('#' + telescope_id.replace(/:/g, "\\:") + '.delete-this-telescope-configuration').removeClass('update-this-telescope-configuration');
-                $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').html('Delete');
-
             }
         });
 
@@ -1153,10 +1154,10 @@
                 $('.telescope-configuration-container').html(response['html']);
 
                 if (edit_mode==true){
-                    $('#' + telescope_id.replace(/:/g, "\\:") + '.delete-this-telescope-configuration').addClass('update-this-telescope-configuration');
-                    $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').removeClass('delete-this-telescope-configuration');
-                    $('#' + telescope_id.replace(/:/g, "\\:") + '.update-this-telescope-configuration').html('Update');
-                    $('#' + telescope_id.replace(/:/g, "\\:") + '.edit-this-telescope-configuration').prop('disabled', true);
+                    $('[id="' + telescope_id + '"].delete-this-telescope-configuration').addClass('update-this-telescope-configuration');
+                    $('[id="' + telescope_id + '"].update-this-telescope-configuration').removeClass('delete-this-telescope-configuration');
+                    $('[id="' + telescope_id + '"].update-this-telescope-configuration').html('Update');
+                    $('[id="' + telescope_id + '"].edit-this-telescope-configuration').prop('disabled', true);
                 }
             }
         });
@@ -1170,10 +1171,11 @@
     }
 
     function get_time_and_insert_into_telescope_saving_input (){
-        time = new Date()
-        iso_time = time.toISOString().split('.')[0]+"Z"
+        var DateTime = luxon.DateTime;
+        date = DateTime.local().toLocaleString(DateTime.DATE_SHORT);
+        time = DateTime.local().toLocaleString(DateTime.TIME_24_SIMPLE);
         $('#new_telescope_configuration').prop('disabled', false)
-        $('#new_telescope_configuration').val(iso_time)
+        $('#new_telescope_configuration').val(`${date}-${time}`)
         $('#submit_new_telescope_configuration').prop('disabled', false);
     }
 
