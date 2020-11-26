@@ -143,10 +143,13 @@ class DataViewforBrowser(viewsets.ViewSet):
 
         highlight_serializer = []
 
-        if target_page_url != None & target_page_title != None:
-            article = Article.objects.get(name=target_page_title, from_url=target_page_url)
-            highlights = Highlight.objects.filter(hightlight_at=article)
-            highlight_serializer = HighlightSerializerForBrowserExtension(highlights, many=True)
+        if target_page_url != None and target_page_title != None:
+            try:
+                article = Article.objects.get(name=target_page_title, from_url=target_page_url)
+                highlights = Highlight.objects.filter(hightlight_at=article)
+                highlight_serializer = HighlightSerializerForBrowserExtension(highlights, many=True)
+            except:
+                highlight_serializer = [{"message":"Hololink doesn't have this article"}]
         
         print(self.request.META.get("HTTP_PAGE_URL"))
 
