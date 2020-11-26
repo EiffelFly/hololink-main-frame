@@ -13,7 +13,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import json
 import threading
-from article.models import Keyword, Domain
+from article.models import Keyword, Domain, Highlight
 from accounts.models import Recommendation
 
 # Notice: tldextract will update the TLD list first time running the module, beware of some limitation.
@@ -77,6 +77,14 @@ class RecommendationSerializerForBrowserExtension(serializers.ModelSerializer):
             'id', 'created_at'
         ]
 
+class HighlightSerializerForBrowserExtension(serializers.ModelSerializer):
+    class Meta:
+        ordering = ['-created_at']
+        model = Highlight
+
+        fields = [
+            'id', 'created_at', 'highlighted_by', 'highlighted_words', 'highlighted_at', 'highlight_comment'
+        ]
 
 
 class ArticleSerializer(serializers.ModelSerializer):

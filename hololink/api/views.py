@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User, Group
-from article.models import Article
+from article.models import Article, Highlight
 from project.models import Project
 from accounts.models import Recommendation
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension, HighlightSerializerForBrowserExtension
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -138,11 +138,24 @@ class DataViewforBrowser(viewsets.ViewSet):
         recommendations_serializer = RecommendationSerializerForBrowserExtension(recommendations, many=True)
         projects_serializer = ProjectSerializerForBrowserExtension(projects, many=True)
 
+        target_page_title = self.request.META.get("HTTP_PAGE_TITLE", None)
+        target_page_url = self.request.META.get("HTTP_PAGE_URL", None)
+
+        highlight_serializer = []
+
+        if target_page_url != None & target_page_title != None:
+            article = Article.objects.get(name=target_page_title, from_url=target_page_url)
+            highlights = Highlight.objects.filter(hightlight_at=article)
+            highlight_serializer = HighlightSerializerForBrowserExtension(highlights, many=True)
+        
+        print(self.request.META.get("HTTP_PAGE_URL"))
+
         return Response(
             {
                 "recommendations": recommendations_serializer.data,
                 "projects" : projects_serializer.data,
-                "user": user.username
+                "user": user.username,
+                "highlight":highlight_serializer
             }
         )
         
