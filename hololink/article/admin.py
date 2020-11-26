@@ -26,8 +26,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class HighlightAdmin(admin.ModelAdmin):
-    list_display = ['highlighted_at', 'created_at', 'highlighted_words']
-    filter_horizontal = ('highlighted_by',)
+    list_display = ['highlighted_at', 'created_at', 'highlighted_words', 'highlighted_by']
 
 class KeywordAdmin(admin.ModelAdmin):
     list_display = ['name', 'keyword_type', 'created_at', 'created_by']

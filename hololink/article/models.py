@@ -225,17 +225,21 @@ def slug_generator(sender, instance, *args, **kwargs):
     
 pre_save.connect(slug_generator, sender=Article, dispatch_uid='generate slug')
 
+#  We make every highlight unique
 class Highlight(models.Model):
+
     created_at = models.DateTimeField(
         verbose_name=_('Created at'),
         auto_now_add=True,
     )
-
-    highlighted_by = models.ManyToManyField(
+    
+    highlighted_by = models.OneToOneField(
         User,
         related_name='highlight',
         verbose_name=_('Highlighted by'),
+        on_delete=models.CASCADE,
         blank=True,
+        null=True
     )
 
     highlighted_words = models.TextField(
@@ -250,4 +254,11 @@ class Highlight(models.Model):
         verbose_name='Highlighted at',
         null=True
     )
+
+    highlight_comment = models.TextField(
+        verbose_name=_('Highlighted comment'),
+        max_length=262144,
+        blank=True,
+    )
+
 
