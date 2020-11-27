@@ -36,6 +36,8 @@ router.register('articles', views.ArticleViewSet, basename='articles')
 router.register('projects', views.ProjectViewSet, basename='projects')
 router.register('ner-result', views.ArticleViewSetForNerResult, basename='nerResult')
 router.register('broswer-extension-data', views.DataViewforBrowser, basename='broswer_extension_data')
+router.register('highlight', views.HighlightViewSetForBrowserExtension, basename='article-highlight')
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
