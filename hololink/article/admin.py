@@ -26,7 +26,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class HighlightAdmin(admin.ModelAdmin):
-    list_display = ['highlighted_at', 'created_at', 'highlighted_words', 'highlighted_by']
+    list_display = ['highlighted_page', 'created_at', 'text', 'highlighted_by', 'comment', 'id_on_page']
 
 class KeywordAdmin(admin.ModelAdmin):
     list_display = ['name', 'keyword_type', 'created_at', 'created_by']

@@ -242,22 +242,28 @@ class Highlight(models.Model):
         null=True
     )
 
-    highlighted_words = models.TextField(
+    text = models.TextField(
         verbose_name=_('Highlighted words'),
         max_length=262144,
         blank=True,
     )
 
-    highlighted_at = models.ForeignKey(
+    highlighted_page = models.ForeignKey(
         Article,
         on_delete=models.CASCADE,
         verbose_name='Highlighted at',
         null=True
     )
 
-    highlight_comment = models.TextField(
+    comment = models.TextField(
         verbose_name=_('Highlighted comment'),
         max_length=262144,
+        blank=True,
+    )
+
+    id_on_page = models.CharField(
+        verbose_name=_('Highlight id on page'),
+        max_length=256,
         blank=True,
     )
 
