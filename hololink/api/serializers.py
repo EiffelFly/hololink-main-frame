@@ -78,13 +78,54 @@ class RecommendationSerializerForBrowserExtension(serializers.ModelSerializer):
         ]
 
 class HighlightSerializerForBrowserExtension(serializers.ModelSerializer):
+    page_title = serializers.ListField(child=serializers.CharField(max_length=500, default=''), write_only=True)
+    page_url = serializers.ListField(child=serializers.CharField(max_length=500, default=''), write_only=True)
+
     class Meta:
         ordering = ['-created_at']
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_by', 'highlighted_words', 'highlighted_at', 'highlight_comment'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'page_title', 'page_url'
         ]
+
+        read_only_fields = [
+            'id', 'created_at', 'highlighted_page'
+        ]
+
+    def validate(self, data):
+        print(data)
+        return data
+
+    def create(self, validated_data):
+        username = self.context['request'].user
+        user = get_object_or_404(User, username=username)
+
+        page_title = validated_data.get['page_title']
+        page_url = validated_data.get['page_url']
+        highlight_id_on_page = validated_data.get['highlight_id_on_page']
+        comment = highlight_data['comment']
+        highlight_text = highlight_data['highlight_text']
+
+        try:
+            article = Article.objects.get(name=page_title, from_url=page_url)
+        except article.DoesNotExist:
+            pass
+
+        try:
+           highlight = Highlight.objects.get(highlighted_at=article, highlighted_comment=comment, highlighted_text=highlighted_text, highlighted_by=user)
+        except:
+            data = {
+                'highlighted_at':article,
+                'highlighted_comment': comment,
+                'highlighted_text':highlight_text,
+                'highlighted_by':user,
+                'id_on_page':highlight_id_on_page
+            }
+            article = super().create(data)
+
+
+        #article = super().create(data)
 
 
 class ArticleSerializer(serializers.ModelSerializer):
