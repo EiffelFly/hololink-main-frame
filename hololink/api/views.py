@@ -121,7 +121,22 @@ class ProjectViewSet(viewsets.ModelViewSet):
             created_by = self.request.user,
             created_at = timezone.localtime(timezone.now())
         )
+
+
+class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
+
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        return HighlightSerializerForBrowserExtension
     
+    def get_queryset(self):
+        user = self.request.user
+        return Highlight.objects.filter(highlighted_by=user)
+    
+    def perform_create(self, serializer):
+        serializer.save()
 
 class DataViewforBrowser(viewsets.ViewSet):
     '''
@@ -131,15 +146,21 @@ class DataViewforBrowser(viewsets.ViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def list(self, request):
+
+    # This is the temp compromise for browser data endpoint
+    def create(self, request):
+
+        target_page_title = request.data.get('page_title')
+        target_page_url = request.data.get('page_url')
+
         user = self.request.user
         recommendations = Recommendation.objects.filter(user=user, created_at__range=(timezone.localtime().replace(hour=0, minute=0, second=0), timezone.localtime().replace(hour=23, minute=59, second=59)))
         projects = Project.objects.filter(created_by=user)
         recommendations_serializer = RecommendationSerializerForBrowserExtension(recommendations, many=True)
         projects_serializer = ProjectSerializerForBrowserExtension(projects, many=True)
 
-        target_page_title = self.request.META.get("HTTP_PAGE_TITLE", None)
-        target_page_url = self.request.META.get("HTTP_PAGE_URL", None)
+        # target_page_title = self.request.META.get("HTTP_PAGE_TITLE", None)
+        # target_page_url = self.request.META.get("HTTP_PAGE_URL", None)
 
         highlight_serializer = []
 
