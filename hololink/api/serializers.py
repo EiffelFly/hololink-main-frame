@@ -83,12 +83,12 @@ class HighlightSerializer(serializers.ModelSerializer):
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object'
         ]
 
 
         read_only_fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object'
         ]
 
 
@@ -101,7 +101,7 @@ class HighlightSerializerForPost(serializers.ModelSerializer):
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_page', 'text', 'comment', 'id_on_page', 'page_title', 'page_url'
+            'id', 'created_at', 'highlighted_page', 'text', 'comment', 'id_on_page', 'page_title', 'page_url', 'range_object'
         ]
 
         read_only_fields = [
@@ -120,6 +120,7 @@ class HighlightSerializerForPost(serializers.ModelSerializer):
         id_on_page = validated_data.get('id_on_page')
         comment = validated_data.get('comment')
         text = validated_data.get('text')
+        range_object = validated_data.get('range_object')
 
         try:
             article = Article.objects.get(name=page_title, from_url=page_url)
@@ -135,7 +136,8 @@ class HighlightSerializerForPost(serializers.ModelSerializer):
                 'comment': comment,
                 'text':text,
                 'highlighted_by':user,
-                'id_on_page':id_on_page
+                'id_on_page':id_on_page,
+                'range_object':range_object
             }
             highlight = super().create(data)
 

@@ -267,4 +267,9 @@ class Highlight(models.Model):
         blank=True,
     )
 
+    range_object = models.JSONField(
+        verbose_name=_('Range object'),
+        blank=True,
+        null=True
+    )
 
