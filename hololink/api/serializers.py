@@ -77,7 +77,22 @@ class RecommendationSerializerForBrowserExtension(serializers.ModelSerializer):
             'id', 'created_at'
         ]
 
-class HighlightSerializerForBrowserExtension(serializers.ModelSerializer):
+class HighlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        ordering = ['-created_at']
+        model = Highlight
+
+        fields = [
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page'
+        ]
+
+
+        read_only_fields = [
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page'
+        ]
+
+
+class HighlightSerializerForPost(serializers.ModelSerializer):
     page_title = serializers.CharField(max_length=500, default='')
     page_url = serializers.CharField(max_length=500, default='')
 

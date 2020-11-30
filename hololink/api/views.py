@@ -3,7 +3,7 @@ from article.models import Article, Highlight
 from project.models import Project
 from accounts.models import Recommendation
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension, HighlightSerializerForBrowserExtension
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension, HighlightSerializerForPost, HighlightSerializer
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -129,7 +129,7 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        return HighlightSerializerForBrowserExtension
+        return HighlightSerializerForPost
     
     def get_queryset(self):
         user = self.request.user
@@ -138,9 +138,9 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
-class DataViewforBrowser(viewsets.ViewSet):
+class DataViewSetforBrowserExtension(viewsets.ViewSet):
     '''
-        This endpoint is especially for chrome extension: with multiple model.
+        This endpoint is sending necessary data back to chrome extension: with multiple model.
     '''
 
     authentication_classes = [SessionAuthentication, BasicAuthentication]
@@ -162,24 +162,24 @@ class DataViewforBrowser(viewsets.ViewSet):
         # target_page_title = self.request.META.get("HTTP_PAGE_TITLE", None)
         # target_page_url = self.request.META.get("HTTP_PAGE_URL", None)
 
-        highlight_serializer = []
+        print(type(target_page_title), target_page_url)
 
         if target_page_url != None and target_page_title != None:
             try:
                 article = Article.objects.get(name=target_page_title, from_url=target_page_url)
-                highlights = Highlight.objects.filter(hightlight_at=article)
-                highlight_serializer = HighlightSerializerForBrowserExtension(highlights, many=True)
-            except:
-                highlight_serializer = [{"message":"Hololink doesn't have this article"}]
+                highlights = Highlight.objects.filter(highlighted_page=article)
+                highlight_serializer = HighlightSerializer(highlights, many=True)
+                print(highlight_serializer)
+            except Article.DoesNotExist:
+                highlight_serializer = {"message":"Hololink doesn't have this article"}
         
-        print(self.request.META.get("HTTP_PAGE_URL"))
 
         return Response(
             {
                 "recommendations": recommendations_serializer.data,
                 "projects" : projects_serializer.data,
                 "user": user.username,
-                "highlight":highlight_serializer
+                "highlight":highlight_serializer.data
             }
         )
         
