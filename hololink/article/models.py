@@ -233,7 +233,7 @@ class Highlight(models.Model):
         auto_now_add=True,
     )
     
-    highlighted_by = models.OneToOneField(
+    highlighted_by = models.ForeignKey(
         User,
         related_name='highlight',
         verbose_name=_('Highlighted by'),
