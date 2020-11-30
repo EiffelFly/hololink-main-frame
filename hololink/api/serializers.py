@@ -78,17 +78,25 @@ class RecommendationSerializerForBrowserExtension(serializers.ModelSerializer):
         ]
 
 class HighlightSerializer(serializers.ModelSerializer):
+
+    # use custom methodField to get username but id 
+    highlighted_by_username = serializers.SerializerMethodField()
+
+    def get_highlighted_by_username(self, obj):
+        return obj.highlighted_by.username
+
+
     class Meta:
         ordering = ['-created_at']
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username'
         ]
 
 
         read_only_fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username'
         ]
 
 

@@ -169,9 +169,10 @@ class DataViewSetforBrowserExtension(viewsets.ViewSet):
                 article = Article.objects.get(name=target_page_title, from_url=target_page_url)
                 highlights = Highlight.objects.filter(highlighted_page=article)
                 highlight_serializer = HighlightSerializer(highlights, many=True)
+                highlight_serializer = highlight_serializer.data
                 print(highlight_serializer)
             except Article.DoesNotExist:
-                highlight_serializer = {"message":"Hololink doesn't have this article"}
+                highlight_serializer = {"data":{"message":"Hololink doesn't have this article"}}
         
 
         return Response(
@@ -179,7 +180,7 @@ class DataViewSetforBrowserExtension(viewsets.ViewSet):
                 "recommendations": recommendations_serializer.data,
                 "projects" : projects_serializer.data,
                 "user": user.username,
-                "highlight":highlight_serializer.data
+                "highlight":highlight_serializer
             }
         )
         
