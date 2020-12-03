@@ -195,19 +195,21 @@ class ArticleSerializerForNerResult(serializers.ModelSerializer):
     
         username = ner_result['username']
         article_name = ner_result['article_name']
-        projects = ner_result['projects']
         from_url = ner_result['from_url']
+
+        # we allow user save article without project
+        # WARNING: this may break
+        projects = ner_result['projects']
         
         d3_nodes_data = json_to_d3_nodes(ner_result)
-
         ner_result['d3_nodes_data']=d3_nodes_data
 
-        article, project = merge_article_into_galaxy(ner_result)
-
+        if projects:
+            article, project = merge_article_into_galaxy(ner_result)
+            setattr(project, 'ml_is_processing', False)
+        
         setattr(article, 'D3_data_format', d3_nodes_data)
         setattr(article, 'ml_is_processing', False)
-        setattr(project, 'ml_is_processing', False)
-
         article.save()
 
         return article
@@ -286,21 +288,23 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             article.owned_by.add(user)
 
         project_name_list = []
-            
-        for project in projects:
-            try:
-                target_project = Project.objects.get(name=project, created_by=user)
-                setattr(target_project, 'ml_is_processing', True)
-                target_project.save()
-                project_name_list.append(target_project.name)
-
+        
+        # we allow user save articles without galaxy
+        if projects:
+            for project in projects:
                 try:
-                    article = Article.objects.get(projects=target_project, name=article_name)
-                except Article.DoesNotExist:
-                    article.projects.add(target_project)
+                    target_project = Project.objects.get(name=project, created_by=user)
+                    setattr(target_project, 'ml_is_processing', True)
+                    target_project.save()
+                    project_name_list.append(target_project.name)
 
-            except Project.DoesNotExist:
-                print('204','There is no such project')
+                    try:
+                        article = Article.objects.get(projects=target_project, name=article_name)
+                    except Article.DoesNotExist:
+                        article.projects.add(target_project)
+
+                except Project.DoesNotExist:
+                    print('204','There is no such project')
 
         if recommended == True:
             get_or_create_recommendation(user, article)
