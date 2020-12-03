@@ -172,7 +172,7 @@ class DataViewSetforBrowserExtension(viewsets.ViewSet):
                 highlight_serializer = highlight_serializer.data
                 print(highlight_serializer)
             except Article.DoesNotExist:
-                highlight_serializer = {"data":{"message":"Hololink doesn't have this article"}}
+                highlight_serializer = [{"message":"Hololink doesn't have this article"}]
         
 
         return Response(
