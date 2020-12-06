@@ -123,7 +123,7 @@ def article_detail(request, usernameslug, articlenameslug):
         'count_basestone':count_basestone,
         'count_stellar':count_stellar,
     }
-    return render(request, 'article/article_detail_ver2.html', context)
+    return render(request, 'article/article_detail_ver3.html', context)
 
 def is_valid_queryparam(param):
     return param != '' and param is not None

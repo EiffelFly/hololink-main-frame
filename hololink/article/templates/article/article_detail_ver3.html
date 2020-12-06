@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    @media (min-width: 440px) {}
+    @media (min-width: 576px) {}
+    @media (min-width: 768px) {}
+    @media (min-width: 992px) {}
+    @media (min-width: 1200px) {
+        .content-container{
+            min-width: 80% !important;
+            
+        }
+    }
+
+    .col {
+        padding: 0;
+        margin: 0;
+    }
+
+    .row {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .content-container{
+        margin: 50px auto 0 auto;
+        
+    }
+
+    .family-button{
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 5px 12px;
+        color: azure;
+        border:none;
+        transition: 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .family-button:hover{
+        color: azure;
+        box-shadow: rgba(10, 10, 10, 0.4) 0px 2px 2px 0px;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+    .article-title{
+        font-size: 36px;
+        font-weight: 900;
+        margin-top: 10px;
+    }
+
+</style>
+
+
+<div class="container-fluid d-flex">
+    <div class="content-container">
+        <div class="row">
+            <div class="col flex-column">
+                <a href="#" class="family-button" style="background-color: #264653;">Articles</a>
+                {% for project in article.projects.all %}
+                <a href="#" class="family-button" style="background-color: #2a9d8f;">{{project.name}}</a>
+                {% endfor %}
+            </div>
+            <div class="row article-title">
+                {{article.name}}
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
