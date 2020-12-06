@@ -168,7 +168,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             'hash', 'name', 'from_url',
             'recommended', 'projects', 'created_by', 'created_at',
-            'article_basestone_keyword_sum','article_stellar_keyword_sum', 'owned_by'
+            'article_basestone_keyword_sum','article_stellar_keyword_sum', 'owned_by', 'article_html'
         ]
         read_only_fields = [
             'hash', 'created_at', 'created_by'
@@ -234,7 +234,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         model = Article
         fields = [
             'name', 'content', 'from_url',
-            'recommended','projects',
+            'recommended','projects', 'article_html'
         ]
 
     def validate(self, data):
@@ -260,6 +260,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
         content = validated_data.get('content', None)
         recommended = validated_data.get('recommended', None)
         projects = validated_data.get('projects', None)
+        article_html = validated_data.get('article_html', None)
 
         print(type(recommended))
 
@@ -270,6 +271,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
             if user not in article.owned_by.all():
                 print('hohohohohohhh')
                 setattr(article, 'ml_is_processing', True)
+                setattr(article, 'article_html', article_html)
                 article.owned_by.add(user)
         except (Article.DoesNotExist, IndexError):
             domain = get_or_create_domain(user, from_url)
@@ -283,6 +285,7 @@ class ArticleSerializerForPost(serializers.ModelSerializer):
                 'created_at':timezone.localtime(timezone.now()),
                 'ml_is_processing':True,
                 'domain':domain,
+                'article_html':article_html
             }
             article = super().create(data)
             article.owned_by.add(user)
