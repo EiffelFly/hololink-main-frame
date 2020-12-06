@@ -207,6 +207,12 @@ class Article(models.Model):
         verbose_name=_('Keyword')
     )
 
+    article_html = models.TextField(
+        verbose_name=_('Article html'),
+        max_length=262144,
+        blank=True,
+    )
+
     slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
 
     def __str__(self):
