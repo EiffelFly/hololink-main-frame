@@ -9,12 +9,7 @@
     @media (min-width: 576px) {}
     @media (min-width: 768px) {}
     @media (min-width: 992px) {}
-    @media (min-width: 1200px) {
-        .content-container{
-            max-width: 1200px !important;
-            
-        }
-    }
+    @media (min-width: 1200px) {}
     .body{
         font-smooth: auto;
         -webkit-font-smoothing: antialiased;
@@ -134,7 +129,7 @@
         <div class="row article-title no-gutters">
             {{article.name}}
         </div>
-        <div class="row no-gutters" style="margin-top: 20px;">
+        <div class="row no-gutters" style="margin-top: 10px;">
             <div class="col">
                 <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" class="article-url">
                     <svg style="margin-bottom: 3px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right" fill="#2a9d8f" xmlns="http://www.w3.org/2000/svg">
@@ -146,11 +141,12 @@
             </div>
         </div>
         <div class="row no-gutters"></div>
-        <div class="row no-gutters" style="margin: 50px 0;">
-            <div class="col-8 article-text-container">
+        <div class="row no-gutters" style="margin: 100px 0;">
+            <div class="col-2 article-header-container"></div>
+            <div class="col-5 article-text-container">
                 {{ article.article_html | safe }}
             </div>
-            <div class="col-4 article-highlight-container">
+            <div class="col-5 article-highlight-container">
 
             </div>
         </div>

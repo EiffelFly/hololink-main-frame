@@ -5,13 +5,14 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
-from .models import Article, Keyword
+from .models import Article, Keyword, Highlight
 from .forms import ArticleForm, ArticleChangeForm
 from django.contrib.auth.models import User
 from unidecode import unidecode
 from django.utils.text import slugify
 from django.http import JsonResponse
 from accounts.models import Profile
+from bs4 import BeautifulSoup
 
 
 
@@ -115,6 +116,7 @@ def article_detail(request, usernameslug, articlenameslug):
     user_selected_project = request.session.get('user_selected_project')
     count_basestone = Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count()
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count()
+    highlights = Highlight.objects.filter(highlighted_by=user, highlighted_page=article)
 
     context = {
         'article':article,
