@@ -170,7 +170,7 @@
     var currentHighlight
     var targetHighlightSets = {}
 
-    var highlightOptions = {
+    var tempHighlightOptions = {
         "element": "hololink-highlight",
         "className": "",
         "exclude": [],
@@ -193,8 +193,9 @@
             // foundTerm is the found search term
             // totalCounter is a counter indicating the total number of all marks
             // at the time of the function call
-            // counter is a counter indicating the number of marks for the found term    
-            return true    
+            // counter is a counter indicating the number of marks for the found term
+            console
+            
         },
         "noMatch": function(term){
             // term is the not found term
@@ -214,6 +215,44 @@
         }
     };
 
+    var highlightOptions = {
+        "element": "hololink-highlight",
+        "className": "",
+        "exclude": [],
+        "separateWordSearch": false,
+        "accuracy": "partially",
+        "diacritics": true,
+        "synonyms": {},
+        "iframes": false,
+        "iframesTimeout": 5000,
+        "acrossElements": true,
+        "caseSensitive": false,
+        "ignoreJoiners": false,
+        "ignorePunctuation": [],
+        "wildcards": "disabled",
+        "each": function(node){
+            console.log(node)
+            // node is the marked DOM element
+        },
+        "filter": function(textNode, foundTerm, totalCounter, counter){
+            // textNode is the text node which contains the found term
+            // foundTerm is the found search term
+            // totalCounter is a counter indicating the total number of all marks
+            // at the time of the function call
+            // counter is a counter indicating the number of marks for the found term
+            console.log(textNode, foundTerm, totalCounter, counter)
+            return true
+        },
+        "noMatch": function(term){
+            // term is the not found term
+        },
+        "done": function(counter){
+            // counter is a counter indicating the total number of all marks
+        },
+        "debug": false,
+        "log": window.console,
+    };
+
     // the django way of delievering data to javascript, meanwhile, prevent xss attacks
     // ref:https://docs.djangoproject.com/en/dev/ref/templates/builtins/#json-script
 
@@ -221,29 +260,22 @@
     //console.log(highlightsData)
     currentHighlight = highlightsData[0].id_on_page
     for (var i=0; i<highlightsData.length; i++){
-        $('.article-text-container')
-            .mark(highlightsData[i].text, highlightOptions);
+        $('.article-text-container').mark(highlightsData[i].text, tempHighlightOptions);
         
         var distanceToOriginalPageHighlight = []
         var targetHighlight = targetHighlightSets[`${highlightsData[i].id_on_page}`]
 
         for (var j=0; j<targetHighlight.length; j++){
-            distanceToOriginalPageHighlight.push( Math.abs(targetHighlight[j].offsetTop - highlightsData[i].range_object.offsetTop))
+            distanceToOriginalPageHighlight.push(Math.abs(targetHighlight[j].offsetTop - highlightsData[i].range_object.offsetTop))
         }
         console.log(distanceToOriginalPageHighlight)
-        targetHighlightIndex = distanceToOriginalPageHighlight.indexOf(Math.min(...distanceToOriginalPageHighlight))
+        var targetHighlightIndex = distanceToOriginalPageHighlight.indexOf(Math.min(...distanceToOriginalPageHighlight))
         console.log(targetHighlightIndex)
 
-    }
+        //$('.article-text-container').unmark();
+        //$('.article-text-container').mark(highlightsData[i].text, highlightOptions);
 
-    for (let [key,value] of Object.entries(targetHighlightSets)){
-        var distanceToOriginalPageHighlight = []
-        for (i=0; i<value.length; i++){
-            //distanceToOriginalPageHighlight.push( value[i].offsetTop - )
-        }
     }
-
-    
     
     console.log(targetHighlightSets)
 
