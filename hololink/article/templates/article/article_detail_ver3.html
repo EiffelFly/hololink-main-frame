@@ -165,6 +165,11 @@
 <script type="text/javascript" src="{% static 'js/article/jquery-3.5.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
+
+    var highlightCounter = 0
+    var currentHighlight
+    var targetHighlightSets = {}
+
     var highlightOptions = {
         "element": "hololink-highlight",
         "className": "",
@@ -187,9 +192,9 @@
             // textNode is the text node which contains the found term
             // foundTerm is the found search term
             // totalCounter is a counter indicating the total number of all marks
-            //              at the time of the function call
-            // counter is a counter indicating the number of marks for the found term
-            return true; // must return either true or false
+            // at the time of the function call
+            // counter is a counter indicating the number of marks for the found term    
+            return true    
         },
         "noMatch": function(term){
             // term is the not found term
@@ -200,24 +205,47 @@
         "debug": false,
         "log": window.console,
         "each": function(node){
-            console.log(node)
+            if (targetHighlightSets[`${highlightsData[i].id_on_page}`]){
+                targetHighlightSets[`${highlightsData[i].id_on_page}`].push(node)
+            } else {
+                targetHighlightSets[`${highlightsData[i].id_on_page}`] = [node]
+            }
             node.setAttribute("data-id", highlightsData[i].id_on_page);
         }
     };
 
-    // the django way of delievering data to javascript, meanwhile, prevent sxx attacks
-    // {{highlights|json_script:"highlights"}} this will generated
-    // <script id="highlights" type="application/json">{{highlights}}>
+    // the django way of delievering data to javascript, meanwhile, prevent xss attacks
     // ref:https://docs.djangoproject.com/en/dev/ref/templates/builtins/#json-script
 
     var highlightsData = JSON.parse(document.getElementById('highlights').textContent);
-    for (i=0; i<highlightsData.length; i++){
-        $('.article-text-container').mark(highlightsData[i].text, highlightOptions)
+    //console.log(highlightsData)
+    currentHighlight = highlightsData[0].id_on_page
+    for (var i=0; i<highlightsData.length; i++){
+        $('.article-text-container')
+            .mark(highlightsData[i].text, highlightOptions);
+        
+        var distanceToOriginalPageHighlight = []
+        var targetHighlight = targetHighlightSets[`${highlightsData[i].id_on_page}`]
+
+        for (var j=0; j<targetHighlight.length; j++){
+            distanceToOriginalPageHighlight.push( Math.abs(targetHighlight[j].offsetTop - highlightsData[i].range_object.offsetTop))
+        }
+        console.log(distanceToOriginalPageHighlight)
+        targetHighlightIndex = distanceToOriginalPageHighlight.indexOf(Math.min(...distanceToOriginalPageHighlight))
+        console.log(targetHighlightIndex)
+
     }
+
+    for (let [key,value] of Object.entries(targetHighlightSets)){
+        var distanceToOriginalPageHighlight = []
+        for (i=0; i<value.length; i++){
+            //distanceToOriginalPageHighlight.push( value[i].offsetTop - )
+        }
+    }
+
     
     
-
-
+    console.log(targetHighlightSets)
 
 
 </script>
