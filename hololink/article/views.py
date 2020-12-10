@@ -118,12 +118,25 @@ def article_detail(request, usernameslug, articlenameslug):
     count_stellar = Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count()
     highlights = Highlight.objects.filter(highlighted_by=user, highlighted_page=article)
 
+    highlights_json_data = []
+    for highlight in highlights:
+        highlight_json = {
+            "highlighted_by":user.username,
+            "created_at":highlight.created_at,
+            "text":highlight.text,
+            "id_on_page":highlight.id_on_page,
+            "range_object":highlight.range_object,
+        }
+        highlights_json_data.append(highlight_json)
+
+
     context = {
         'article':article,
         'user':user,
         'user_selected_project':user_selected_project,
         'count_basestone':count_basestone,
         'count_stellar':count_stellar,
+        'highlights':highlights_json_data,
     }
     return render(request, 'article/article_detail_ver3.html', context)
 
@@ -159,6 +172,7 @@ def articles_list(request, usernameslug):
         print(article)
         count_basestone.append(Keyword.objects.filter(keyword_type='basestone', owned_by_article=article).count())
         count_stellar.append(Keyword.objects.filter(keyword_type='stellar', owned_by_article=article).count())
+    
 
     context = {
         'profile':profile,

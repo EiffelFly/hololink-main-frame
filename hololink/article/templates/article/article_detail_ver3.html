@@ -152,7 +152,17 @@
         </div>
         
     </div>
-    
 </div>
+
+{% endblock %}
+
+{% block extrajs %}
+{{highlights|json_script:"highlights"}}
+<script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
+<script>
+    var highlightsData = JSON.parse(document.getElementById('highlights').textContent);
+    console.log(highlightsData)
+</script>
+
 
 {% endblock %}
