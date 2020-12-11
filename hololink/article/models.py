@@ -279,3 +279,9 @@ class Highlight(models.Model):
         null=True
     )
 
+    highlight_parent_node_text = models.TextField(
+        verbose_name=_('Selection parent node text'),
+        max_length=262144,
+        blank=True,
+    )
+
