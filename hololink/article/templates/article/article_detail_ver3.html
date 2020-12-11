@@ -166,119 +166,23 @@
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
 
-    var highlightCounter = 0
-    var currentHighlight
-    var targetHighlightSets = {}
-
-    var tempHighlightOptions = {
-        "element": "hololink-highlight",
-        "className": "",
-        "exclude": [],
-        "separateWordSearch": false,
-        "accuracy": "partially",
-        "diacritics": true,
-        "synonyms": {},
-        "iframes": false,
-        "iframesTimeout": 5000,
-        "acrossElements": true,
-        "caseSensitive": false,
-        "ignoreJoiners": false,
-        "ignorePunctuation": [],
-        "wildcards": "disabled",
-        "each": function(node){
-            // node is the marked DOM element
-        },
-        "filter": function(textNode, foundTerm, totalCounter, counter){
-            // textNode is the text node which contains the found term
-            // foundTerm is the found search term
-            // totalCounter is a counter indicating the total number of all marks
-            // at the time of the function call
-            // counter is a counter indicating the number of marks for the found term
-            console
-            
-        },
-        "noMatch": function(term){
-            // term is the not found term
-        },
-        "done": function(counter){
-            // counter is a counter indicating the total number of all marks
-        },
-        "debug": false,
-        "log": window.console,
-        "each": function(node){
-            if (targetHighlightSets[`${highlightsData[i].id_on_page}`]){
-                targetHighlightSets[`${highlightsData[i].id_on_page}`].push(node)
-            } else {
-                targetHighlightSets[`${highlightsData[i].id_on_page}`] = [node]
-            }
-            node.setAttribute("data-id", highlightsData[i].id_on_page);
-        }
-    };
-
-    var highlightOptions = {
-        "element": "hololink-highlight",
-        "className": "",
-        "exclude": [],
-        "separateWordSearch": false,
-        "accuracy": "partially",
-        "diacritics": true,
-        "synonyms": {},
-        "iframes": false,
-        "iframesTimeout": 5000,
-        "acrossElements": true,
-        "caseSensitive": false,
-        "ignoreJoiners": false,
-        "ignorePunctuation": [],
-        "wildcards": "disabled",
-        "each": function(node){
-            console.log(node)
-            // node is the marked DOM element
-        },
-        "filter": function(textNode, foundTerm, totalCounter, counter){
-            // textNode is the text node which contains the found term
-            // foundTerm is the found search term
-            // totalCounter is a counter indicating the total number of all marks
-            // at the time of the function call
-            // counter is a counter indicating the number of marks for the found term
-            console.log(textNode, foundTerm, totalCounter, counter)
-            return true
-        },
-        "noMatch": function(term){
-            // term is the not found term
-        },
-        "done": function(counter){
-            // counter is a counter indicating the total number of all marks
-        },
-        "debug": false,
-        "log": window.console,
-    };
-
-    // the django way of delievering data to javascript, meanwhile, prevent xss attacks
-    // ref:https://docs.djangoproject.com/en/dev/ref/templates/builtins/#json-script
-
-    var highlightsData = JSON.parse(document.getElementById('highlights').textContent);
-    //console.log(highlightsData)
-    currentHighlight = highlightsData[0].id_on_page
-    for (var i=0; i<highlightsData.length; i++){
-        $('.article-text-container').mark(highlightsData[i].text, tempHighlightOptions);
-        
-        var distanceToOriginalPageHighlight = []
-        var targetHighlight = targetHighlightSets[`${highlightsData[i].id_on_page}`]
-
-        for (var j=0; j<targetHighlight.length; j++){
-            distanceToOriginalPageHighlight.push(Math.abs(targetHighlight[j].offsetTop - highlightsData[i].range_object.offsetTop))
-        }
-        console.log(distanceToOriginalPageHighlight)
-        var targetHighlightIndex = distanceToOriginalPageHighlight.indexOf(Math.min(...distanceToOriginalPageHighlight))
-        console.log(targetHighlightIndex)
-
-        //$('.article-text-container').unmark();
-        //$('.article-text-container').mark(highlightsData[i].text, highlightOptions);
-
+    var target = document.getElementsByClassName('article-text-container');
+    var textTreeWalker = document.createTreeWalker(target[0], NodeFilter.SHOW_TEXT);
+    var nodeList = {}
+    var currentNode = textTreeWalker.currentNode;
+    while(currentNode) {
+        nodeList[`${currentNode.parentNode.textContent}`] = currentNode.parentNode
+        currentNode = textTreeWalker.nextNode();
     }
-    
-    console.log(targetHighlightSets)
 
+    console.log(nodeList)
+    var highlightsData = JSON.parse(document.getElementById('highlights').textContent);
+    for (var i=0; i<highlightsData.length; i++){
+        console.log(highlightsData[i])
+        if (nodeList[`${highlightsData[i].highlight_parent_node_text}`]){
+            console.log(nodeList[`${highlightsData[i].highlight_parent_node_text}`])
+        }
+    }
 
 </script>
 
