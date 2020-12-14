@@ -12,7 +12,6 @@ from unidecode import unidecode
 from django.utils.text import slugify
 from django.http import JsonResponse
 from accounts.models import Profile
-from bs4 import BeautifulSoup
 
 
 

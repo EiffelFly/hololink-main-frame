@@ -101,8 +101,8 @@ class HighlightSerializer(serializers.ModelSerializer):
 
 
 class HighlightSerializerForPost(serializers.ModelSerializer):
-    page_title = serializers.CharField(max_length=500, default='')
-    page_url = serializers.CharField(max_length=500, default='')
+    page_title = serializers.CharField(max_length=65536, default='')
+    page_url = serializers.CharField(max_length=65536, default='')
 
     class Meta:
         ordering = ['-created_at']
