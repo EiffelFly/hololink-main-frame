@@ -192,10 +192,10 @@
             preCaretRange.selectNodeContents(node.parentNode)
             preCaretRange.setEnd(filteredNodeRange.endContainer, filteredNodeRange.endOffset);
             caretOffset = preCaretRange.toString().length - node.textContent.length; // the data extracted from original page exclude selected text
-            console.log(node.parentNode, filteredNodeRange ,preCaretRange, caretOffset, node.textContent.length)
+            //console.log(node.parentNode, filteredNodeRange ,preCaretRange, caretOffset, node.textContent.length)
 
             if (caretOffset == highlightsData[i].anchor_point_data.character_offset){
-                console.log('ohYA', highlightsData[i].text, node.parentNode)
+                //console.log('ohYA', highlightsData[i].text, node.parentNode)
             } else {
                 //unWrapElement(node)
             }
@@ -237,7 +237,7 @@
         instance.mark(highlightsData[i].text, tempHighlightOptions);
 
         var highlightedElemets = document.querySelectorAll(`[data-id^="${highlightsData[i].id_on_page}"]`);
-        console.log(highlightsData[i], highlightedElemets)
+        //console.log(highlightsData[i], highlightedElemets)
 
         var highlightedTextCollection = ''
         var highlightedNodesCollection = {}
@@ -245,7 +245,7 @@
 
         for (var j=0; j<highlightedElemets.length; j++){
             
-            console.log(highlightedElemets[j])
+            //console.log(highlightedElemets[j])
             if (!highlightedTextCollection !== highlightsData[i].text){
                 highlightedTextCollection = highlightedTextCollection + highlightedElemets[j].textContent
                 if (highlightedNodesCollection[`${collectionGroup}`]){
@@ -270,7 +270,17 @@
             var selectRange = document.createRange()
             selectRange.setStartBefore(value[0])
             selectRange.setEndAfter(value[ value.length - 1 ])
-            console.log(selectRange)
+            var preCaretRange = selectRange.cloneRange();
+            preCaretRange.selectNodeContents(targetNode);
+            preCaretRange.setEnd(selectRange.endContainer, selectRange.endOffset);
+            caretOffset = preCaretRange.toString().length;
+            if (caretOffset-highlightsData[i].text.length != highlightsData[i].anchor_point_data.character_offset){
+                for (k=0; k<value.length; k++){
+                    //unWrapElement(value[k])
+                    
+                }
+                console.log('finished',value)
+            }
         }
 
         
