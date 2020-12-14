@@ -126,7 +126,7 @@ def article_detail(request, usernameslug, articlenameslug):
             "text":highlight.text,
             "id_on_page":highlight.id_on_page,
             "range_object":highlight.range_object,
-            "highlight_parent_node_text":highlight.highlight_parent_node_text
+            "anchor_point_data":highlight.anchor_point_data
         }
         highlights_json_data.append(highlight_json)
 
