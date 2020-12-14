@@ -166,7 +166,7 @@
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
 
-var tempHighlightOptions = {
+    var tempHighlightOptions = {
         "element": "hololink-highlight",
         "className": "",
         "exclude": [],
@@ -178,7 +178,7 @@ var tempHighlightOptions = {
         "iframesTimeout": 5000,
         "acrossElements": true,
         "caseSensitive": false,
-        "ignoreJoiners": false,
+        "ignoreJoiners": true,
         "ignorePunctuation": [],
         "wildcards": "disabled",
         "each": function(node){
@@ -192,12 +192,12 @@ var tempHighlightOptions = {
             preCaretRange.selectNodeContents(node.parentNode)
             preCaretRange.setEnd(filteredNodeRange.endContainer, filteredNodeRange.endOffset);
             caretOffset = preCaretRange.toString().length - node.textContent.length; // the data extracted from original page exclude selected text
-            console.log(node, filteredNodeRange ,preCaretRange, caretOffset, node.textContent.length)
+            console.log(node.parentNode, filteredNodeRange ,preCaretRange, caretOffset, node.textContent.length)
 
             if (caretOffset == highlightsData[i].anchor_point_data.character_offset){
                 console.log('ohYA', highlightsData[i].text, node.parentNode)
             } else {
-                unWrapElement(node)
+                //unWrapElement(node)
             }
         },
         "filter": function(textNode, foundTerm, totalCounter, counter){
@@ -234,9 +234,40 @@ var tempHighlightOptions = {
     for (var i=0; i<highlightsData.length; i++){
         console.log(highlightsData[i].anchor_point_data.highlight_parent_node_text)
         var targetNode = nodeList[`${highlightsData[i].anchor_point_data.highlight_parent_node_text}`]
-        console.log(targetNode)
         var instance = new Mark(targetNode);
         instance.mark(highlightsData[i].text, tempHighlightOptions);
+
+        var highlightedElemets = document.querySelectorAll(`[data-id^="${highlightsData[i].id_on_page}"]`);
+        console.log(highlightsData[i], highlightedElemets)
+
+        var highlightedTextCollection = ''
+        var highlightedNodesCollection = {}
+        var collectionGroup = 0
+
+        for (var j=0; j<highlightedElemets.length; j++){
+            var selectRange = document.createRange()
+            if (!highlightedTextCollection === highlightsData[i].text){
+                highlightedTextCollection = highlightedTextCollection + highlightedElemets[j].textContent
+                if (highlightedNodesCollection[`${collectionGroup}`]){
+                    highlightedNodesCollection[`${collectionGroup}`].push(highlightedElemets[j])
+                } else {
+                    highlightedNodesCollection[`${collectionGroup}`] = highlightedElemets[j]
+                }
+                    
+            } else {
+                highlightedTextCollection = ''
+                collectionGroup = collectionGroup + 1
+                highlightedTextCollection = highlightedTextCollection + highlightedElemets[j].textContent
+                if (highlightedNodesCollection[`${collectionGroup}`]){
+                    highlightedNodesCollection[`${collectionGroup}`].push(highlightedElemets[j])
+                } else {
+                    highlightedNodesCollection[`${collectionGroup}`] = highlightedElemets[j]
+                }
+            }
+        }
+
+        console.log(highlightedNodesCollection)
+
     }
 
     function unWrapElement(target){
