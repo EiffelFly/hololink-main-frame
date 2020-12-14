@@ -229,10 +229,9 @@
         currentNode = textTreeWalker.nextNode();
     }
 
-    console.log(nodeList)
     var highlightsData = JSON.parse(document.getElementById('highlights').textContent);
     for (var i=0; i<highlightsData.length; i++){
-        console.log(highlightsData[i].anchor_point_data.highlight_parent_node_text)
+
         var targetNode = nodeList[`${highlightsData[i].anchor_point_data.highlight_parent_node_text}`]
         var instance = new Mark(targetNode);
         instance.mark(highlightsData[i].text, tempHighlightOptions);
@@ -245,13 +244,14 @@
         var collectionGroup = 0
 
         for (var j=0; j<highlightedElemets.length; j++){
-            var selectRange = document.createRange()
-            if (!highlightedTextCollection === highlightsData[i].text){
+            
+            console.log(highlightedElemets[j])
+            if (!highlightedTextCollection !== highlightsData[i].text){
                 highlightedTextCollection = highlightedTextCollection + highlightedElemets[j].textContent
                 if (highlightedNodesCollection[`${collectionGroup}`]){
                     highlightedNodesCollection[`${collectionGroup}`].push(highlightedElemets[j])
                 } else {
-                    highlightedNodesCollection[`${collectionGroup}`] = highlightedElemets[j]
+                    highlightedNodesCollection[`${collectionGroup}`] = [highlightedElemets[j]]
                 }
                     
             } else {
@@ -261,12 +261,19 @@
                 if (highlightedNodesCollection[`${collectionGroup}`]){
                     highlightedNodesCollection[`${collectionGroup}`].push(highlightedElemets[j])
                 } else {
-                    highlightedNodesCollection[`${collectionGroup}`] = highlightedElemets[j]
+                    highlightedNodesCollection[`${collectionGroup}`] = [highlightedElemets[j]]
                 }
             }
         }
 
-        console.log(highlightedNodesCollection)
+        for (const [key, value] of Object.entries(highlightedNodesCollection)){
+            var selectRange = document.createRange()
+            selectRange.setStartBefore(value[0])
+            selectRange.setEndAfter(value[ value.length - 1 ])
+            console.log(selectRange)
+        }
+
+        
 
     }
 
