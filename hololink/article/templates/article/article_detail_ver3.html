@@ -65,9 +65,9 @@
 
     h1 {
         display: block;
-        font-size: 36px;
+        font-size: 42px;
         margin-top: 54px;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         margin-left: 0;
         margin-right: 0;
         font-weight: 900;
@@ -75,9 +75,9 @@
 
     h2 {
         display: block;
-        font-size: 30px;
+        font-size: 36px;
         margin-top: 45px;
-        margin-bottom: 15px;
+        margin-bottom: 18px;
         margin-left: 0;
         margin-right: 0;
         font-weight: 900;
@@ -85,9 +85,9 @@
 
     h3 {
         display: block;
-        font-size: 24px;
+        font-size: 28px;
         margin-top: 36px;
-        margin-bottom: 15px;
+        margin-bottom: 16px;
         margin-left: 0;
         margin-right: 0;
         font-weight: 700;
@@ -95,9 +95,9 @@
 
     h4 {
         display: block;
-        font-size: 18px;
-        margin-top: 18px;
-        margin-bottom: 15px;
+        font-size: 24px;
+        margin-top: 24px;
+        margin-bottom: 16px;
         margin-left: 0;
         margin-right: 0;
         font-weight: 700;
@@ -105,9 +105,19 @@
 
     h5 {
         display: block;
-        font-size: 16px;
-        margin-top: 16px;
-        margin-bottom: 15px;
+        font-size: 20px;
+        margin-top: 20px;
+        margin-bottom: 16px;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: 700;
+    }
+
+    h6 {
+        display: block;
+        font-size: 18px;
+        margin-top: 18px;
+        margin-bottom: 16px;
         margin-left: 0;
         margin-right: 0;
         font-weight: 700;
@@ -133,39 +143,37 @@
 <div class="container-fluid d-flex" style="background-color: #eeeeee;">
     <div class="content-container">
         <div class="row no-gutters">
-            <div class="col-2"></div>
-            <div class="col-8">
+            <div class="col-3 article-navigation-container"></div>
+            <div class="col-6">
                 <div class="row no-gutters">
-                    <div class="col flex-column">
-                        <a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" class="family-button" style="background-color: #264653;">Articles</a>
-                        {% for project in article.projects.all %}
-                        <a href="#" class="family-button" style="background-color: #2a9d8f;">{{project.name}}</a>
-                        {% endfor %}
-                    </div>
-                    <div class="row article-title no-gutters">
-                        <div class="col">
-                            {{article.name}}
-                        </div>
-                    </div>
-                    <div class="row no-gutters" style="margin-top: 10px;">
-                        <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" class="article-url">
-                            <svg style="margin-bottom: 3px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right" fill="#2a9d8f" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                                <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-                            </svg>
-                            {{ article.from_url|truncatechars:120 }}
-                        </a>
+                    <a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" class="family-button" style="background-color: #264653;">Articles</a>
+                    {% for project in article.projects.all %}
+                    <a href="#" class="family-button" style="background-color: #2a9d8f;">{{project.name}}</a>
+                    {% endfor %}
+                </div>
+                <div class="row article-title no-gutters">
+                    <div class="col">
+                        {{article.name}}
                     </div>
                 </div>
+                <div class="row no-gutters" style="margin-top: 10px;">
+                    <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" class="article-url">
+                        <svg style="margin-bottom: 3px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right" fill="#2a9d8f" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                        </svg>
+                        {{ article.from_url|truncatechars:120 }}
+                    </a>
+                </div>
             </div>
-            <div class="col-2"></div>
+            <div class="col-3"></div>
         </div>
         <div class="row no-gutters" style="margin: 60px 0;">
-            <div class="col-2 article-header-container"></div>
-            <div class="col-5 article-text-container">
+            <div class="col-3 article-header-container"></div>
+            <div class="col-6 article-text-container">
                 {{ article.article_html | safe }}
             </div>
-            <div class="col-5 article-highlight-container">
+            <div class="col-3 article-highlight-container">
 
             </div>
         </div>
@@ -180,6 +188,42 @@
 <script type="text/javascript" src="{% static 'js/article/jquery-3.5.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
+
+    // Build up article-navigation 
+
+    var navigationHeaderStyle = [
+        {fontSize:24, pedding:0},
+        {fontSize:20, pedding:3},
+        {fontSize:18, pedding:6},
+        {fontSize:16, pedding:9},
+        {fontSize:14, pedding:12},
+        {fontSize:12, pedding:15},
+    ]
+
+    var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+    articleHeaders.sort(function(a,b){
+        var aTag = a.nodeName.replace('H', '')
+        var bTag = b.nodeName.replace('H', '')
+        if (aTag > bTag){
+            return 1
+        }
+        if (aTag < bTag){
+            return -1
+        }
+        if (aTag = bTag){
+            return 0
+        }
+    })
+
+    for (var i=0; i<articleHeaders.length; i++){
+        tagNumber = articleHeaders[i].nodeName.replace('H', '')
+
+    }
+
+    
+    
+    
+
 
     var tempHighlightOptions = {
         "element": "hololink-highlight",
