@@ -91,12 +91,12 @@ class HighlightSerializer(serializers.ModelSerializer):
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username', 'anchor_point_data'
         ]
 
 
         read_only_fields = [
-            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username'
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'text', 'comment', 'id_on_page', 'range_object', 'highlighted_by_username', 'anchor_point_data'
         ]
 
 
