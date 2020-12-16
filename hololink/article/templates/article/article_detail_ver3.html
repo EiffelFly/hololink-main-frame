@@ -41,10 +41,10 @@
     }
 
     .article-title{
-        font-size: 48px;
+        font-size: 36px;
         font-weight: 900;
         margin-top: 20px;
-        line-height: 50px;
+        line-height: 52px;
     }
 
     .article-url{
@@ -117,35 +117,44 @@
         background-color: #e9c46a;
     }
 
+    a {
+        color: blue;
+    }
+
 </style>
 
 
 <div class="container-fluid d-flex" style="background-color: #F7F9F9;">
     <div class="content-container">
         <div class="row no-gutters">
-            <div class="col flex-column">
-                <a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" class="family-button" style="background-color: #264653;">Articles</a>
-                {% for project in article.projects.all %}
-                <a href="#" class="family-button" style="background-color: #2a9d8f;">{{project.name}}</a>
-                {% endfor %}
+            <div class="col-2"></div>
+            <div class="col-8">
+                <div class="row no-gutters">
+                    <div class="col flex-column">
+                        <a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" class="family-button" style="background-color: #264653;">Articles</a>
+                        {% for project in article.projects.all %}
+                        <a href="#" class="family-button" style="background-color: #2a9d8f;">{{project.name}}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="row article-title no-gutters">
+                        <div class="col">
+                            {{article.name}}
+                        </div>
+                    </div>
+                    <div class="row no-gutters" style="margin-top: 10px;">
+                        <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" class="article-url">
+                            <svg style="margin-bottom: 3px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right" fill="#2a9d8f" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                                <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                            </svg>
+                            {{ article.from_url|truncatechars:120 }}
+                        </a>
+                    </div>
+                </div>
             </div>
+            <div class="col-2"></div>
         </div>
-        <div class="row article-title no-gutters">
-            {{article.name}}
-        </div>
-        <div class="row no-gutters" style="margin-top: 10px;">
-            <div class="col">
-                <a target="_blank" rel="noopener noreferrer" href="{{ article.from_url }}" class="article-url">
-                    <svg style="margin-bottom: 3px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up-right" fill="#2a9d8f" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                        <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-                    </svg>
-                    {{ article.from_url|truncatechars:120 }}
-                </a>
-            </div>
-        </div>
-        <div class="row no-gutters"></div>
-        <div class="row no-gutters" style="margin: 100px 0;">
+        <div class="row no-gutters" style="margin: 60px 0;">
             <div class="col-2 article-header-container"></div>
             <div class="col-5 article-text-container">
                 {{ article.article_html | safe }}
@@ -268,9 +277,6 @@
             }
             
         }
-
-        
-
     }
 
     function unWrapElement(target){
@@ -285,7 +291,7 @@
         if (target.parentNode){
             target.parentNode.replaceChild(docFrag, target);
         }
-    }
+    };
 </script>
 
 
