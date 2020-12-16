@@ -137,13 +137,31 @@
         color: blue;
     }
 
+    .article-navigator-container{
+        padding-top: 0px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        
+        position: sticky;
+        top: 0;
+    }
+
+    .article-navigator{
+        
+        border: 1px solid #ECF0F1;
+        padding: 10px;
+        background-color: white;
+        border-radius: 5px;
+    }
+
 </style>
 
 
 <div class="container-fluid d-flex" style="background-color: #eeeeee;">
     <div class="content-container">
         <div class="row no-gutters">
-            <div class="col-3 article-navigation-container"></div>
+            <div class="col-3"></div>
             <div class="col-6">
                 <div class="row no-gutters">
                     <a href="{% url 'article:articles_list' usernameslug=user.profile.slug%}" class="family-button" style="background-color: #264653;">Articles</a>
@@ -169,7 +187,13 @@
             <div class="col-3"></div>
         </div>
         <div class="row no-gutters" style="margin: 60px 0;">
-            <div class="col-3 article-header-container"></div>
+            <div class="col-3">
+                <div class="article-navigator-container">
+                    <div class="article-navigator">
+                        dddd
+                    </div>
+                </div>
+            </div>
             <div class="col-6 article-text-container">
                 {{ article.article_html | safe }}
             </div>
@@ -189,7 +213,7 @@
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
 
-    // Build up article-navigation 
+    // Build up article-navigator 
 
     var navigationHeaderStyle = [
         {fontSize:24, pedding:0},
@@ -215,14 +239,28 @@
         }
     })
 
+    const biggestHeader = articleHeaders[0].nodeName.replace('H', '')
+
     for (var i=0; i<articleHeaders.length; i++){
         tagNumber = articleHeaders[i].nodeName.replace('H', '')
 
     }
 
+    const articleNavigatorHeight = $('.article-navigator-container').offset().top
+
+    $(window).scroll(updateArticleNavigator)
     
-    
-    
+    function updateArticleNavigator(){
+        console.log('ddd')
+        $('.article-navigator-container').each(function(){
+            console.log($(window).scrollTop(), articleNavigatorHeight)
+            if ($(window).scrollTop() > articleNavigatorHeight){
+                $(this).css({"padding-top":"20px"})
+            } else {
+                $(this).css({"padding-top":"0px"})
+            }
+        })
+    }
 
 
     var tempHighlightOptions = {
