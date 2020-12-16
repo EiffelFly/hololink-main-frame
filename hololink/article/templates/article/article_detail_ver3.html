@@ -225,6 +225,7 @@
     ]
 
     var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+    /*
     articleHeaders.sort(function(a,b){
         var aTag = a.nodeName.replace('H', '')
         var bTag = b.nodeName.replace('H', '')
@@ -238,18 +239,36 @@
             return 0
         }
     })
+    */
 
     const biggestHeader = articleHeaders[0].nodeName.replace('H', '')
-
+    var articleHeadersNum = []
     for (var i=0; i<articleHeaders.length; i++){
-        tagNumber = articleHeaders[i].nodeName.replace('H', '')
-
+        var tagNumber = articleHeaders[i].nodeName.replace('H', '')
+        articleHeadersNum.push(tagNumber)
+    }
+    var uniqueArticleHeadersNum = [... new Set(articleHeadersNum)]
+    uniqueArticleHeadersNum.sort(function(a,b){
+        if (a > b){
+            return 1
+        }
+        if (a < b){
+            return -1
+        }
+        if (a = b){
+            return 0
+        }
+    });
+    for (var i=0; i<articleHeaders.length; i++){
+        var tagNumber = articleHeaders[i].nodeName.replace('H', '')
+        var index = uniqueArticleHeadersNum.indexOf(tagNumber)
     }
 
-    const articleNavigatorHeight = $('.article-navigator-container').offset().top
+
+    // make article navigator sticky at right position when we scroll up
 
     $(window).scroll(updateArticleNavigator)
-    
+    const articleNavigatorHeight = $('.article-navigator-container').offset().top
     function updateArticleNavigator(){
         console.log('ddd')
         $('.article-navigator-container').each(function(){
@@ -319,7 +338,7 @@
         instance.mark(highlightsData[i].text, tempHighlightOptions);
 
         var highlightedElemets = document.querySelectorAll(`[data-id^="${highlightsData[i].id_on_page}"]`);
-        console.log(highlightsData[i], highlightedElemets)
+        //console.log(highlightsData[i], highlightedElemets)
 
         var highlightedTextCollection = ''
         var highlightedNodesCollection = {}
@@ -343,7 +362,7 @@
                 } else {
                     highlightedNodesCollection[`${collectionGroup}`] = [highlightedElemets[j]]
                 }
-                console.log('hehe')
+                //console.log('hehe')
             }
         }
 
@@ -359,9 +378,9 @@
                 for (k=0; k<value.length; k++){
                     unWrapElement(value[k])
                 }
-                console.log('not match', value, caretOffset, highlightsData[i].text.length)
+                //console.log('not match', value, caretOffset, highlightsData[i].text.length)
             } else {
-                console.log('match',value, caretOffset)
+                //console.log('match',value, caretOffset)
             }
             
         }
