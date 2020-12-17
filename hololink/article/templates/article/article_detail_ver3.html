@@ -163,7 +163,7 @@
     
 
     .nav-link {
-        color: black;
+        color: #264653;
     }
 
 </style>
@@ -225,12 +225,12 @@
     // Build up article-navigator 
 
     var navigationHeaderStyle = [
-        {fontSize:18, padding:0},
-        {fontSize:16, padding:18},
-        {fontSize:14, padding:16},
-        {fontSize:12, padding:14},
-        {fontSize:12, padding:12},
-        {fontSize:12, padding:12},
+        {fontSize:18, padding:0, fontWeight: 900},
+        {fontSize:16, padding:18, fontWeight: 900},
+        {fontSize:14, padding:16, fontWeight: 700},
+        {fontSize:12, padding:14, fontWeight: 700},
+        {fontSize:12, padding:12, fontWeight: 500},
+        {fontSize:12, padding:12, fontWeight: 500},
     ]
 
     var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
@@ -264,8 +264,9 @@
         var index = uniqueArticleHeadersNum.indexOf(tagNumber)
         var fontSize = navigationHeaderStyle[`${index}`].fontSize
         var padding = navigationHeaderStyle[`${index}`].padding
+        var fontWeight = navigationHeaderStyle[`${index}`].fontWeight
 
-        var html = `<div class="row no-gutters" style="font-size:${fontSize}px; padding-left: ${padding}px"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
+        var html = `<div class="row no-gutters" style="font-size:${fontSize}px; padding-left: ${padding}px; font-weight: ${fontWeight}"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
         console.log(html)
         articleNavigatorHtml += html
     }
