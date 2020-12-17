@@ -326,9 +326,30 @@
     hololink_toolbar_inner.appendChild(highlight_button);
     hololink_toolbar_inner.appendChild(annotate_button);
 
+    /*
+        LISTENER
+    */
+
     document.addEventListener('mouseup', function (e) {
         render_toolbar();
     }, false);
+
+    // Close the hololink-toolbar and sidebar when we click on the screen.
+    $(window).on('mousedown', function(e){
+        // check if click event occured inside the hololink-toolbar-container or sidebar
+        var target_array = Array.from(e.target.classList)
+        
+        const check_click_event_occured_inside_toolbar = target_array.some( r => ['hololink-toolbar-button-img', 'hololink-toolbar-button', 'hololink-toolbar-inner', 'hololink-toolbar-inner-with-spinner'].indexOf(r) >= 0 )
+        const check_click_event_occured_inside_sidebar = target_array.some( r => ['hololink-sidebar-container', 'hololink-highlight'].indexOf(r) >= 0 )
+        console.log(target_array, check_click_event_occured_inside_toolbar)
+        if ($('.hololink-toolbar-inner').length ){
+            if (check_click_event_occured_inside_toolbar == false){
+                $('.hololink-toolbar-container').find('.hololink-toolbar-inner').remove();
+            }
+        } else if ($('.hololink-toolbar-inner-with-spinner').length) {
+            $('.hololink-toolbar-container').find('.hololink-toolbar-inner-with-spinner').remove();
+        }
+    });
 
     function render_toolbar(){
         const selection = document.getSelection && document.getSelection();
@@ -418,7 +439,7 @@
         var padding = navigationHeaderStyle[`${index}`].padding
         var fontWeight = navigationHeaderStyle[`${index}`].fontWeight
 
-        var html = `<div class="row no-gutters" style="font-size:${fontSize}px; padding-left: ${padding}px; font-weight: ${fontWeight}"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
+        var html = `<div class="row no-gutters nav-link-container" style="font-size:${fontSize}px; padding-left: ${padding}px; font-weight: ${fontWeight}"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
         console.log(html)
         articleNavigatorHtml += html
     }
