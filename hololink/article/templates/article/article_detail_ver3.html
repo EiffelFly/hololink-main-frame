@@ -10,6 +10,11 @@
     @media (min-width: 768px) {}
     @media (min-width: 992px) {}
     @media (min-width: 1200px) {}
+
+    html {
+        scroll-behavior: smooth;
+    }
+
     .body{
         font-smooth: auto;
         -webkit-font-smoothing: antialiased;
@@ -155,8 +160,10 @@
         border-radius: 5px;
     }
 
-    html {
-        scroll-behavior: smooth;
+    
+
+    .nav-link {
+        color: black;
     }
 
 </style>
@@ -193,14 +200,7 @@
         <div class="row no-gutters" style="margin: 60px 0;">
             <div class="col-3">
                 <div class="article-navigator-container">
-                    <div class="article-navigator">
-                        <div class="row no-gutters" style="font-size: 18px;">
-                            <a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#▌土耳其「西化運動」的興起與反挫">土耳其「西化運動」的興起與反挫</a>
-                        </div>
-                        <div class="row no-gutters" style="font-size: 16px; padding-left: 18px; margin-top: 10px;">
-                            被極化的「言論自由」單選題
-                        </div>
-                    </div>
+                    <div class="article-navigator"></div>
                 </div>
             </div>
             <div class="col-6 article-text-container">
@@ -225,12 +225,12 @@
     // Build up article-navigator 
 
     var navigationHeaderStyle = [
-        {fontSize:18, pedding:0},
-        {fontSize:16, pedding:18},
-        {fontSize:14, pedding:16},
-        {fontSize:12, pedding:14},
-        {fontSize:12, pedding:12},
-        {fontSize:12, pedding:12},
+        {fontSize:18, padding:0},
+        {fontSize:16, padding:18},
+        {fontSize:14, padding:16},
+        {fontSize:12, padding:14},
+        {fontSize:12, padding:12},
+        {fontSize:12, padding:12},
     ]
 
     var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
@@ -256,10 +256,23 @@
             return 0
         }
     });
+
+    var articleNavigatorHtml = ''
+
     for (var i=0; i<articleHeaders.length; i++){
         var tagNumber = articleHeaders[i].nodeName.replace('H', '')
         var index = uniqueArticleHeadersNum.indexOf(tagNumber)
+        var fontSize = navigationHeaderStyle[`${index}`].fontSize
+        var padding = navigationHeaderStyle[`${index}`].padding
+
+        var html = `<div class="row no-gutters" style="font-size:${fontSize}px; padding-left: ${padding}px"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
+        console.log(html)
+        articleNavigatorHtml += html
     }
+
+    var articleNavigatorNode = document.querySelectorAll('.article-navigator')
+    articleNavigatorNode[0].innerHTML = articleNavigatorHtml
+
 
 
     // make article navigator sticky at right position when we scroll up
