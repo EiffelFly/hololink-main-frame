@@ -160,10 +160,12 @@
         border-radius: 5px;
     }
 
-    
-
     .nav-link {
         color: #264653;
+        display: block;
+        white-space: nowrap; /* forces text to single line */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 </style>
@@ -221,6 +223,8 @@
 <script type="text/javascript" src="{% static 'js/article/jquery-3.5.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/article/jquery.mark.min.js' %}"></script>
 <script>
+
+    //TODO: scroll to the header, navigator's header will auto highlight itself
 
     // Build up article-navigator 
 
