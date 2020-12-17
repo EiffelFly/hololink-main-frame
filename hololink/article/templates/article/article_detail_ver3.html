@@ -155,6 +155,10 @@
         border-radius: 5px;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
 </style>
 
 
@@ -190,7 +194,12 @@
             <div class="col-3">
                 <div class="article-navigator-container">
                     <div class="article-navigator">
-                        dddd
+                        <div class="row no-gutters" style="font-size: 18px;">
+                            <a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#▌土耳其「西化運動」的興起與反挫">土耳其「西化運動」的興起與反挫</a>
+                        </div>
+                        <div class="row no-gutters" style="font-size: 16px; padding-left: 18px; margin-top: 10px;">
+                            被極化的「言論自由」單選題
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,37 +225,25 @@
     // Build up article-navigator 
 
     var navigationHeaderStyle = [
-        {fontSize:24, pedding:0},
-        {fontSize:20, pedding:3},
-        {fontSize:18, pedding:6},
-        {fontSize:16, pedding:9},
-        {fontSize:14, pedding:12},
-        {fontSize:12, pedding:15},
+        {fontSize:18, pedding:0},
+        {fontSize:16, pedding:18},
+        {fontSize:14, pedding:16},
+        {fontSize:12, pedding:14},
+        {fontSize:12, pedding:12},
+        {fontSize:12, pedding:12},
     ]
 
     var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
-    /*
-    articleHeaders.sort(function(a,b){
-        var aTag = a.nodeName.replace('H', '')
-        var bTag = b.nodeName.replace('H', '')
-        if (aTag > bTag){
-            return 1
-        }
-        if (aTag < bTag){
-            return -1
-        }
-        if (aTag = bTag){
-            return 0
-        }
-    })
-    */
 
     const biggestHeader = articleHeaders[0].nodeName.replace('H', '')
     var articleHeadersNum = []
     for (var i=0; i<articleHeaders.length; i++){
         var tagNumber = articleHeaders[i].nodeName.replace('H', '')
         articleHeadersNum.push(tagNumber)
+        articleHeaders[i].setAttribute('id', `${articleHeaders[i].textContent}`)
     }
+
+    
     var uniqueArticleHeadersNum = [... new Set(articleHeadersNum)]
     uniqueArticleHeadersNum.sort(function(a,b){
         if (a > b){
@@ -268,9 +265,8 @@
     // make article navigator sticky at right position when we scroll up
 
     $(window).scroll(updateArticleNavigator)
-    const articleNavigatorHeight = $('.article-navigator-container').offset().top
+    const articleNavigatorHeight = $('.article-text-container').offset().top
     function updateArticleNavigator(){
-        console.log('ddd')
         $('.article-navigator-container').each(function(){
             console.log($(window).scrollTop(), articleNavigatorHeight)
             if ($(window).scrollTop() > articleNavigatorHeight){
