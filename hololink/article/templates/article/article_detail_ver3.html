@@ -168,6 +168,10 @@
         text-overflow: ellipsis;
     }
 
+    .nav-link.active{
+        background-color: #2a9d8f;
+    }
+
     .hololink-toolbar-inner {
         position: absolute !important;
         background: white !important;
@@ -407,6 +411,7 @@
     ]
 
     var articleHeaders = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+    
 
     const biggestHeader = articleHeaders[0].nodeName.replace('H', '')
     var articleHeadersNum = []
@@ -414,6 +419,7 @@
         var tagNumber = articleHeaders[i].nodeName.replace('H', '')
         articleHeadersNum.push(tagNumber)
         articleHeaders[i].setAttribute('id', `${articleHeaders[i].textContent}`)
+        articleHeaders[i].setAttribute('class', 'header')
     }
 
     
@@ -439,7 +445,7 @@
         var padding = navigationHeaderStyle[`${index}`].padding
         var fontWeight = navigationHeaderStyle[`${index}`].fontWeight
 
-        var html = `<div class="row no-gutters nav-link-container" style="font-size:${fontSize}px; padding-left: ${padding}px; font-weight: ${fontWeight}"><a class="col nav-link" href="{% url 'article:article_detail' articlenameslug=article.slug usernameslug=user.profile.slug %}#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
+        var html = `<div class="row no-gutters nav-link-container" style="font-size:${fontSize}px; padding-left: ${padding}px; font-weight: ${fontWeight}"><a class="col nav-link" href="#${articleHeaders[i].textContent}">${articleHeaders[i].textContent}</a></div>`
         console.log(html)
         articleNavigatorHtml += html
     }
@@ -450,8 +456,47 @@
 
 
     // make article navigator sticky at right position when we scroll up
+    // In order to highlight current header we use solution from David
+    // ref:https://stackoverflow.com/a/32396543
 
-    $(window).scroll(updateArticleNavigator)
+    // to speed up calculation we iterate reversely
+    var $headersReversed = $($(".header").get().reverse());
+    var $headers = $('.header')
+    var $navigators = $('.nav-link')
+    var articleHeadersToNavigatorId = {}
+    
+
+    $headers.each(function() {
+        var targetId = $(this).attr('id')
+		articleHeadersToNavigatorId[`${targetId}`] = $('.nav-link-container').find(`a[href='#${targetId}']`) 
+    });
+
+    function activateCurrenHeader() {
+        var scrollPosition = $(window).scrollTop();
+
+		$headersReversed.each(function() {
+		    var currentHeader = $(this);
+		    var headerTop = currentHeader.offset().top;
+
+		    if (scrollPosition >= headerTop) {
+		        var id = currentHeader.attr('id');
+		        var $navigator = articleHeadersToNavigatorId[id];
+		        if (!$navigator.hasClass('active')) {
+		            $navigators.removeClass('active');
+		            $navigator.addClass('active');
+		        }
+		        return false;
+		    }
+		});
+    }
+    
+    console.log(articleHeadersToNavigatorId)
+
+    
+    $(window).scroll(function(){
+        updateArticleNavigator()
+        activateCurrenHeader()
+    });
     const articleNavigatorHeight = $('.article-text-container').offset().top
     function updateArticleNavigator(){
         $('.article-navigator-container').each(function(){
