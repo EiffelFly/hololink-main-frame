@@ -3,7 +3,7 @@ from article.models import Article, Highlight
 from project.models import Project
 from accounts.models import Recommendation
 from rest_framework import viewsets
-from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension, HighlightSerializerForPost, HighlightSerializer
+from api.serializers import UserSerializer, GroupSerializer, ArticleSerializer, ArticleSerializerForPost, ProjectSerializer, ProjectSerializerForPost, ArticleSerializerForNerResult, ProjectSerializerForBrowserExtension, RecommendationSerializerForBrowserExtension, HighlightSerializerForPost, HighlightSerializer, HighlightSerializerForRetrieve
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -129,7 +129,13 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        return HighlightSerializerForPost
+        if self.request.method == 'RETRIEVE':
+            serializer_class = HighlightSerializerForRetrieve
+        elif self.request.method == 'POST':
+            serializer_class = HighlightSerializerForPost
+        else:
+            serializer_class = HighlightSerializer
+        return serializer_class
     
     def get_queryset(self):
         user = self.request.user

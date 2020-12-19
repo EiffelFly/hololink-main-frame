@@ -100,6 +100,23 @@ class HighlightSerializer(serializers.ModelSerializer):
         ]
 
 
+class HighlightSerializerForRetrieve(serializers.ModelSerializer):
+    page_title = serializers.CharField(max_length=65536, default='')
+    page_url = serializers.CharField(max_length=65536, default='')
+
+    class Meta:
+        ordering = ['-created_at']
+        model = Highlight
+
+        fields = [
+            'text', 'comment', 'id_on_page', 'page_title', 'page_url'
+        ]
+
+
+        read_only_fields = [
+            'id', 'created_at', 'highlighted_page', 'highlighted_by', 'range_object', 'anchor_point_data'
+        ]
+
 class HighlightSerializerForPost(serializers.ModelSerializer):
     page_title = serializers.CharField(max_length=65536, default='')
     page_url = serializers.CharField(max_length=65536, default='')
@@ -109,7 +126,7 @@ class HighlightSerializerForPost(serializers.ModelSerializer):
         model = Highlight
 
         fields = [
-            'id', 'created_at', 'highlighted_page', 'text', 'comment', 'id_on_page', 'page_title', 'page_url', 'range_object', 'anchor_point_data'
+            'text', 'comment', 'id_on_page', 'page_title', 'page_url', 'range_object', 'anchor_point_data'
         ]
 
         read_only_fields = [
@@ -137,7 +154,7 @@ class HighlightSerializerForPost(serializers.ModelSerializer):
             pass
 
         try:
-           highlight = Highlight.objects.get(highlighted_page=article, comment=comment, text=text, highlighted_by=user)
+           highlight = Highlight.objects.get(highlighted_page=article, id_on_page=id_on_page)
            print('duplicated highlight')
         except Highlight.DoesNotExist:
             data = {
