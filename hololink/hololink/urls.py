@@ -36,7 +36,8 @@ router.register('articles', views.ArticleViewSet, basename='articles')
 router.register('projects', views.ProjectViewSet, basename='projects')
 router.register('ner-result', views.ArticleViewSetForNerResult, basename='nerResult')
 router.register('broswer-extension-data', views.DataViewSetforBrowserExtension, basename='broswer_extension_data')
-router.register('highlight', views.HighlightViewSetForBrowserExtension, basename='article-highlight')
+router.register('highlight', views.HighlightViewSetForBrowserExtension, basename='article_highlights')
+router.register('specific-highlight', views.findSpecificHighlightforBrowserExtension, basename='specific_highlight')
 
 
 # Wire up our API using automatic URL routing.

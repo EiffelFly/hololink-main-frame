@@ -143,6 +143,42 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save()
+    
+    def retrieve(self, *args, **kwargs):
+        print(self)
+
+class findSpecificHighlightforBrowserExtension(viewsets.ViewSet):
+    '''
+        This endpoint let browser get specific highlight id for deletion
+    '''
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    # This is the temp compromise for browser data endpoint
+    def create(self, request):
+        target_page_title = request.data.get('page_title')
+        target_page_url = request.data.get('page_url')
+        id_on_page = request.data.get('id_on_page')
+        user = self.request.user
+        print(target_page_title, target_page_url)
+        try:
+            article = Article.objects.get(name=target_page_title, from_url=target_page_url)
+            try:
+                highlight = Highlight.objects.filter(highlighted_page=article, highlighted_by=user, id_on_page=id_on_page)
+                highlight_serializer = HighlightSerializer(highlight, many=True)
+                highlight_serializer = highlight_serializer.data
+            except Highlight.DoesNotExist:
+                highlight_serializer = [{"message":f"User doesn't have this highlight at {article.name}"}]
+        except Article.DoesNotExist:
+            highlight_serializer = [{"message":"Hololink doesn't have this article"}]
+
+        return Response(
+            {
+                "highlight":highlight_serializer
+            }
+        )
+
+
 
 class DataViewSetforBrowserExtension(viewsets.ViewSet):
     '''

@@ -117,6 +117,9 @@ class HighlightSerializerForRetrieve(serializers.ModelSerializer):
             'id', 'created_at', 'highlighted_page', 'highlighted_by', 'range_object', 'anchor_point_data'
         ]
 
+    def validate(self, data):
+        return data
+
 class HighlightSerializerForPost(serializers.ModelSerializer):
     page_title = serializers.CharField(max_length=65536, default='')
     page_url = serializers.CharField(max_length=65536, default='')
