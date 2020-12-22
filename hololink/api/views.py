@@ -133,6 +133,8 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
             serializer_class = HighlightSerializerForRetrieve
         elif self.request.method == 'POST':
             serializer_class = HighlightSerializerForPost
+        elif self.request.method == 'PATCH':
+            serializer_class = HighlightSerializerForPost
         else:
             serializer_class = HighlightSerializer
         return serializer_class
@@ -143,9 +145,6 @@ class HighlightViewSetForBrowserExtension(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save()
-    
-    def retrieve(self, *args, **kwargs):
-        print(self)
 
 class findSpecificHighlightforBrowserExtension(viewsets.ViewSet):
     '''
